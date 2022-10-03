@@ -1,0 +1,48 @@
+#' Collect genes from MSigDB.
+#'
+#' Collect genes of relevant MSigDB genesets.
+#'
+#' @param species chr, species of interest, available species can be listed by
+#'                [msigdbr::msigdbr_species()]
+#' @param cat chr, category of interest, available collections can be listed by
+#'            [msigdbr::msigdbr_collections()]
+#' @param subcat chr, subcategory of interest, available collections can be
+#'               listed by [msigdbr::msigdbr_collections()]
+#' @param pattern pattern, to be matched the MsigDB gs_name of interest,
+#'                e.g. 'natural_killer_cell_mediated'
+#' @param ignore.case logical, if to ignore the case of terms pattern
+#' @param plot logical, if to plot UpSetR diagram
+#' @param ... params for [grep()], used to match pattern to gs_name
+#'
+#' @return A tibble with MSigDB relevant symbols
+#' @export
+#'
+#' @examples
+#' get_MSig(
+#'   species = "Homo sapiens", cat = "C5", subcat = "GO:BP",
+#'   pattern = "natural_killer_cell_mediated"
+#' )
+get_MSig <- function(species = "Homo sapiens", cat = "C5", subcat = "GO:BP",
+                     pattern, ignore.case = TRUE, plot = FALSE, ...) {
+  msigdb <- msigdbr::msigdbr(species = species, category = cat,
+                             subcategory = subcat)
+  msig_terms <- grep(pattern, msigdb$gs_name, ignore.case = ignore.case,
+                     value = T, ...) |> unique()
+  if(length(msig_terms) == 0){
+    message("No relevant term was found!")
+    return()
+  }
+  msig_set <- msigdb$gene_symbol[msigdb$gs_name %in% msig_terms] |> unique()
+  msig_set <- tibble::tibble(HGNC_Symbol = msig_set, MSig_set = T)
+  msig_set$MSig_set <- msig_set$MSig_set |> as.character()
+
+  tmp <- msigdb[msigdb$gs_name %in% msig_terms, c("gs_name", "gene_symbol")]
+  if (plot) {
+    ls <- split(tmp$gene_symbol, tmp$gs_name)
+    if(length(ls) > 1) {
+      UpSetR::upset(UpSetR::fromList(ls),
+                    nsets = length(msig_terms)) |> print()
+    }else message("Only one gene-set is matched!")
+  }
+  return(msig_set)
+}

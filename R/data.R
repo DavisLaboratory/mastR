@@ -6,9 +6,9 @@
 #' @format A data frame with 375 rows 9 variables:
 #' \describe{
 #'   \item{Gene}{gene symbols}
+#'   \item{Subset}{immune subset of the marker gene}
 #'   \item{B cells}{gene median expression in B cells}
 #'   ...
-#'   \item{Subset}{immune subset of the marker gene}
 #' }
 #' @source \url{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5384348/}
 "LM7"

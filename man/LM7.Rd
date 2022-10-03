@@ -8,9 +8,9 @@
 A data frame with 375 rows 9 variables:
 \describe{
 \item{Gene}{gene symbols}
+\item{Subset}{immune subset of the marker gene}
 \item{B cells}{gene median expression in B cells}
 ...
-\item{Subset}{immune subset of the marker gene}
 }
 }
 \source{
