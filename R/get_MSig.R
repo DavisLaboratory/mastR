@@ -33,8 +33,8 @@ get_MSig <- function(species = "Homo sapiens", cat = "C5", subcat = "GO:BP",
     return()
   }
   msig_set <- msigdb$gene_symbol[msigdb$gs_name %in% msig_terms] |> unique()
-  msig_set <- tibble::tibble(HGNC_Symbol = msig_set, MSig_set = T)
-  msig_set$MSig_set <- msig_set$MSig_set |> as.character()
+  msig_set <- tibble::tibble(HGNC_Symbol = msig_set, MSigDB = T)
+  msig_set$MSigDB <- msig_set$MSigDB |> as.character()
 
   tmp <- msigdb[msigdb$gs_name %in% msig_terms, c("gs_name", "gene_symbol")]
   if (plot) {
