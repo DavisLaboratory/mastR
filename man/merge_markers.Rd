@@ -7,10 +7,10 @@
 merge_markers(markers_list, plot = FALSE)
 }
 \arguments{
-\item{markers_list}{list of tibble, each tibble containing at least one column
-'HGNC_Symbol'}
+\item{markers_list}{list of tibble, each tibble containing at least one common
+column, e.g. 'HGNC_Symbol'}
 
-\item{plot}{logical, if to make UpSetR plot}
+\item{plot}{logical, if to make UpSetR plot for given list}
 }
 \value{
 A data frame with genes symbols and columns indicate where the genes

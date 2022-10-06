@@ -10,12 +10,39 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
 Depends: 
-    R (>= 2.10)
+    R (>= 2.10),
+    Biobase,
+    org.Hs.eg.db
 LazyData: true
 Suggests: 
     rvest,
-    testthat (>= 3.0.0)
+    Seurat,
+    SingleCellExperiment,
+    SummarizedExperiment,
+    testthat (>= 3.0.0),
+    vdiffr
 Config/testthat/edition: 3
 Imports: 
+    AnnotationDbi,
+    depmap,
+    edgeR,
+    ggplot2,
+    ggthemes,
+    limma,
+    Matrix,
     msigdbr,
+    stats,
+    tibble,
     tidyr
+Collate: 
+    'plot.R'
+    'DE_functions.R'
+    'DEGs_generic.R'
+    'DE_table_generic.R'
+    'data.R'
+    'filter_non_tissue.R'
+    'get_LM.R'
+    'get_MSig.R'
+    'get_Panglao.R'
+    'list_Panglao_types.R'
+    'merge_markers.R'

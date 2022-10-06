@@ -34,7 +34,7 @@ get_LM <- function(lm7.pattern = FALSE, lm22.pattern = FALSE, ...){
     markers <- markers_22
   }
   if(lm7.pattern != FALSE & lm22.pattern != FALSE){
-    markers <- Reduce(function(x, y) merge(x, y, all = T), list(markers_7, markers_22)) %>%
+    markers <- Reduce(function(x, y) merge(x, y, all = T), list(markers_7, markers_22)) |>
       dplyr::as_tibble()
     markers$y <- NULL
     markers[is.na(markers)] <- "-"

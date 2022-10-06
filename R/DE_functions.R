@@ -1,0 +1,189 @@
+#helper: use edgeR to filter low counts genes and keep genes in markers
+# use before DE
+filterGenes <- function(dge, ID, filter = c(10,10), counts = TRUE,
+                        markers = NULL, gene_id = "SYMBOL") {
+  if (!is.null(markers))
+    markers <- AnnotationDbi::select(org.Hs.eg.db,
+                                     markers,
+                                     gene_id, "SYMBOL")
+  if(counts){
+    keep <- edgeR::filterByExpr(dge, group = dge$samples[[ID]],
+                                min.count = filter[1],
+                                large.n = filter[2]) |
+      (rownames(dge) %in% markers[[gene_id]])
+  }else keep <- (Matrix::rowSums(dge$counts > filter[1]) > filter[2]) |
+      (rownames(dge) %in% markers[[gene_id]])
+
+  return(keep)
+}
+
+
+#helper: voom and linear regression fit for DE based on limma
+voom_lm_fit <- function(dge, ID, type, method = "RP",
+                        group = FALSE, plot = FALSE, counts = TRUE,
+                        lfc = 0, p = 0.05) {
+  ## group samples into binary groups if group = T, otherwise multiple groups asis
+  if (group & method != "RP") {
+    dge$samples$group <- ifelse(grepl(type, dge$samples[[ID]]),
+                                make.names(type),
+                                "Others") |>
+      factor(levels = c(make.names(type), "Others"))  ## set type to be the first level
+  } else {
+    dge$samples$group <- ifelse(grepl(type, dge$samples[[ID]]),
+                                make.names(type),
+                                dge$samples[[ID]] |> make.names()) |>
+      (\(x) factor(x, levels = c(make.names(type),
+                                 unique(x[x != make.names(type)]))))()  ## set type to be the first level
+  }
+
+  ## make contrast design
+  design <- model.matrix(~ 0 + factor(dge$samples$group))
+  colnames(design) <- levels(factor(dge$samples$group))
+  rownames(design) <- colnames(dge)
+  contrast.mat <- limma::makeContrasts(
+    contrasts = c(paste(levels(factor(dge$samples$group))[1],
+                        levels(factor(dge$samples$group))[-1],
+                        sep = "-"
+    )),  ## type vs all the rest respectively, if group = TRUE, it's type vs Others
+    levels = design
+  )
+
+  ## save normalized data as global variable
+  proc_data <<- dge
+
+  ## set par for plot
+  if (plot & counts) {
+    op <- par(no.readonly = TRUE)
+    par(mfrow = c(1, 2))
+  }
+
+  ## voom fit if data is raw counts data
+  if(counts){
+    v <- limma::voom(dge, design = design,
+                     normalize.method = "quantile", plot = plot)
+    ## save voom fitted counts into global variable
+    proc_data$counts <<- v$E
+  }else v <- dge$counts
+
+  ## linear regression fit
+  fit <- limma::lmFit(v, design = design)
+  tfit <- limma::contrasts.fit(fit, contrasts = contrast.mat) |>
+    limma::treat(lfc = lfc)
+  print(limma::decideTests(tfit, lfc = lfc, p.value = p) |> summary()) ## summarize the total number of DEGs
+  if (plot) limma::plotSA(tfit, main = "Final model: Mean-variance trend")
+  if (plot & counts) par(op)
+  return(tfit)
+}
+
+
+#helper: return DEGs UP and DOWN list based on Rank Product
+DEGs_RP <- function(tfit, lfc = 0, p = 0.05, assemble = "intersect",
+                    Rank = "adj.P.Val", rand = 123, nperm = 1e5,
+                    keep.top = NULL, keep.group = NULL) {
+  DEG <- list()
+  UPs <- list()
+  DWs <- list()
+  DEGs <- list()
+  for (i in 1:ncol(tfit)) {
+    DEG[[i]] <- limma::topTreat(tfit, coef = i, number = Inf,
+                                sort.by = "none") |> na.omit()
+    UPs[[i]] <- subset(DEG[[i]], logFC > lfc & adj.P.Val < p)
+    DWs[[i]] <- subset(DEG[[i]], logFC < -lfc & adj.P.Val < p)
+    DEG[[i]]$lfc <- DEG[[i]]$logFC
+    DEG[[i]]$logFC <- -abs(DEG[[i]]$logFC)
+  }
+
+  ## product of rank distribution for UPs
+  genes <- lapply(UPs, rownames) |> Reduce(f = assemble)
+  genes <- intersect(genes, lapply(DEG, rownames) |>
+                       Reduce(f = intersect))
+  if(!is.null(rand)) set.seed(rand)
+  up_dist <- lapply(UPs, function(x) sample.int(length(genes),
+                                                nperm, replace = T))
+  pr_up_dist <- do.call(cbind, up_dist) |> apply(1, prod)
+  up_pr <- lapply(DEG, function(x) rank(x[genes, Rank])) |>
+    do.call(what = cbind) |> apply(1, prod)
+  names(up_pr) <- genes
+  # up_pr <- up_pr[up_pr < quantile(pr_up_dist, p)]  ## un-adjusted p value
+  up_pr <- sapply(up_pr, function(x) mean(pr_up_dist < x)) |>
+    p.adjust(method = "fdr")
+  up_pr <- up_pr[up_pr < p]  ## adjusted p value
+  DEGs[['UP']] <- names(sort(up_pr))
+
+  ## PR distribution for DWs
+  genes <- lapply(DWs, rownames) |> Reduce(f = assemble)
+  genes <- intersect(genes, lapply(DEG, rownames) |>
+                       Reduce(f = intersect))
+  if(!is.null(rand)) set.seed(rand)
+  dw_dist <- lapply(DWs, function(x) sample.int(length(genes),
+                                                nperm, replace = T))
+  pr_dw_dist <- do.call(cbind, dw_dist) |> apply(1, prod)
+  dw_pr <- lapply(DEG, function(x) rank(x[genes, Rank])) |>
+    do.call(what = cbind) |> apply(1, prod)
+  names(dw_pr) <- genes
+  # dw_pr <- dw_pr[dw_pr < quantile(pr_dw_dist, p)] ## un-adjusted p value
+  dw_pr <- sapply(dw_pr, function(x) mean(pr_dw_dist < x)) |>
+    p.adjust(method = "fdr")
+  dw_pr <- dw_pr[dw_pr < p]  ## adjusted p value
+  DEGs[['DOWN']] <- names(sort(dw_pr))
+
+  ## keep the top DEGs in specified comparison even if they didn't pass RP test
+  if(!is.null(keep.top)){
+    if(length(which(grepl(keep.group, colnames(tfit)))) != 1)
+      stop("Please specify only one comparison for keep.group!")
+    tmp <- DEG[[which(grepl(keep.group, colnames(tfit)))]] |>
+      dplyr::arrange_(.dots = Rank)
+    DEGs[['UP']] <- union(DEGs[['UP']],
+                          rownames(tmp)[tmp$lfc > 0][1:keep.top])
+    DEGs[['DOWN']] <- union(DEGs[['DOWN']],
+                            rownames(tmp)[tmp$lfc < 0][1:keep.top])
+  }
+
+  return(DEGs)
+}
+
+
+#helper: return DEGs UP and DOWN list based on intersection or union of comparisons
+DEGs_Group <- function(tfit, lfc = 0, p = 0.05,
+                       assemble = "intersect", Rank = "adj.P.Val",
+                       keep.top = NULL, keep.group = NULL) {
+  ## screen genes with p value < cutoff
+  DEG <- list()
+  UPs <- list()
+  DWs <- list()
+  DEGs <- list()
+  for (i in 1:ncol(tfit)) {
+    DEG[[i]] <- limma::topTreat(tfit, coef = i, number = Inf) |> na.omit()
+    UPs[[i]] <- subset(DEG[[i]], logFC > lfc & adj.P.Val < p)
+    DWs[[i]] <- subset(DEG[[i]], logFC < -lfc & adj.P.Val < p)
+    DEG[[i]]$lfc <- DEG[[i]]$logFC
+    DEG[[i]]$logFC <- -abs(DEG[[i]]$logFC)
+  }
+  DEGs[["UP"]] <- lapply(UPs, rownames) |> Reduce(f = assemble)
+  DEGs[["DOWN"]] <- lapply(DWs, rownames) |> Reduce(f = assemble)
+  DEGs[["UP"]] <- do.call(function(...) apply(cbind(...), 1, mean, na.rm = T),
+                          lapply(UPs, function(x,g) rank(x[g, Rank]),
+                                 g = DEGs[["UP"]])) |>
+    order() |> (\(x) DEGs[["UP"]][x])()
+  DEGs[["DOWN"]] <- do.call(function(...) apply(cbind(...), 1, mean, na.rm = T),
+                            lapply(DWs, function(x,g) rank(x[g, Rank]),
+                                   g = DEGs[["DOWN"]])) |>
+    order() |> (\(x) DEGs[["DOWN"]][x])()
+
+  ## keep the top DEGs in specified comparison even if they didn't pass RP test
+  if(!is.null(keep.top) & assemble == "intersect"){
+    if(length(which(grepl(keep.group, colnames(tfit)))) != 1)
+      stop("Please specify only one comparison for keep.group!")
+    tmp <- DEG[[which(grepl(keep.group, colnames(tfit)))]] |>
+      dplyr::arrange_(.dots = Rank)
+    DEGs[['UP']] <- union(DEGs[['UP']],
+                          rownames(tmp)[tmp$lfc > 0][1:keep.top])
+    DEGs[['DOWN']] <- union(DEGs[['DOWN']],
+                            rownames(tmp)[tmp$lfc < 0][1:keep.top])
+  }
+
+  return(DEGs)
+}
+
+
+
