@@ -17,120 +17,120 @@ filter_non_tissue(
   data = "CCLE",
   ID,
   type,
+  ...,
   log = FALSE,
   q = 0.25,
   markers = NULL,
   ignore.case = TRUE,
-  slot = "counts",
-  ...
+  slot = "counts"
 )
 
 \S4method{filter_non_tissue}{matrix,vector,character}(
   data = "CCLE",
   ID,
   type,
+  ...,
   log = FALSE,
   q = 0.25,
   markers = NULL,
   ignore.case = TRUE,
-  slot = "counts",
-  ...
+  slot = "counts"
 )
 
 \S4method{filter_non_tissue}{Matrix,vector,character}(
   data = "CCLE",
   ID,
   type,
+  ...,
   log = FALSE,
   q = 0.25,
   markers = NULL,
   ignore.case = TRUE,
-  slot = "counts",
-  ...
+  slot = "counts"
 )
 
 \S4method{filter_non_tissue}{data.frame,vector,character}(
   data = "CCLE",
   ID,
   type,
+  ...,
   log = FALSE,
   q = 0.25,
   markers = NULL,
   ignore.case = TRUE,
-  slot = "counts",
-  ...
+  slot = "counts"
 )
 
 \S4method{filter_non_tissue}{character,missing,character}(
   data = "CCLE",
   ID,
   type,
+  ...,
   log = FALSE,
   q = 0.25,
   markers = NULL,
   ignore.case = TRUE,
-  slot = "counts",
-  ...
+  slot = "counts"
 )
 
 \S4method{filter_non_tissue}{missing,missing,character}(
   data = "CCLE",
   ID,
   type,
+  ...,
   log = FALSE,
   q = 0.25,
   markers = NULL,
   ignore.case = TRUE,
-  slot = "counts",
-  ...
+  slot = "counts"
 )
 
 \S4method{filter_non_tissue}{DGEList,character,character}(
   data = "CCLE",
   ID,
   type,
+  ...,
   log = FALSE,
   q = 0.25,
   markers = NULL,
   ignore.case = TRUE,
-  slot = "counts",
-  ...
+  slot = "counts"
 )
 
 \S4method{filter_non_tissue}{ExpressionSet,character,character}(
   data = "CCLE",
   ID,
   type,
+  ...,
   log = FALSE,
   q = 0.25,
   markers = NULL,
   ignore.case = TRUE,
-  slot = "counts",
-  ...
+  slot = "counts"
 )
 
 \S4method{filter_non_tissue}{SummarizedExperiment,character,character}(
   data = "CCLE",
   ID,
   type,
+  ...,
   log = FALSE,
   q = 0.25,
   markers = NULL,
   ignore.case = TRUE,
-  slot = "counts",
-  ...
+  slot = "counts"
 )
 
 \S4method{filter_non_tissue}{Seurat,character,character}(
   data = "CCLE",
   ID,
   type,
+  ...,
   log = FALSE,
   q = 0.25,
   markers = NULL,
   ignore.case = TRUE,
-  slot = "counts",
-  ...
+  slot = "counts"
 )
 }
 \arguments{
@@ -139,6 +139,8 @@ filter_non_tissue(
 \item{ID}{vector or chr, to specify the group of tumor/tissue types}
 
 \item{type}{pattern, specify the type of interest, e.g. 'colorectal'}
+
+\item{...}{params for \code{\link[=grep]{grep()}} to find matched cell lines in CCLE}
 
 \item{log}{logical, if to do log transformation on expression}
 
@@ -152,8 +154,6 @@ filtered. Default 'NULL' means all genes in data to be filtered}
 
 \item{slot}{chr, specify which slot to use only for sce or seurat object,
 optional, default 'counts'}
-
-\item{...}{params for \code{\link[=grep]{grep()}} to find matched cell lines in CCLE}
 }
 \value{
 a vector of gene symbols

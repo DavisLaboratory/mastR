@@ -12,8 +12,8 @@
 #' @export
 #'
 #' @examples
-#' list_Panglao_types(organ = "Immune system")
-list_Panglao_types <- function(type = "organ", organ) {
+#' list_panglao_types(organ = "Immune system")
+list_panglao_types <- function(type = "organ", organ) {
 
   stopifnot("Please provide a valid type, either 'cell' or 'organ'!" = type %in% c('cell', "organ"))
 

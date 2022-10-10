@@ -13,24 +13,24 @@ NULL
 #' @param type pattern, specify the group of interest, e.g. NK
 #' @param slot chr, specify which slot to use only for sce or seurat object,
 #'             optional, default 'counts'
-#' @param ... params for function [DE_analysis()]
+#' @param ... params for function [de_analysis()]
 #'
 #' @return A list of DE result table of all comparisons.
 #'
 #' @examples
-#' DE_tables <- get_DE_table(im_data_6, ID = "celltype:ch1", type = "NK")
+#' DE_tables <- get_de_table(im_data_6, ID = "celltype:ch1", type = "NK")
 #'
 #'@export
-setGeneric("get_DE_table",
+setGeneric("get_de_table",
            function(data,
                     ID,
                     type,
                     slot = "counts",
                     ...)
-           standardGeneric("get_DE_table"))
+           standardGeneric("get_de_table"))
 
-#' @rdname get_DE_table
-setMethod("get_DE_table", signature(
+#' @rdname get_de_table
+setMethod("get_de_table", signature(
   data = 'DGEList',
   ID = 'character',
   type = 'character'
@@ -45,7 +45,7 @@ function(data,
   rm(data)
 
   ## standard DE analysis with edgeR and limma::voom pipeline
-  tfit <- DE_analysis(dge = DGE,
+  tfit <- de_analysis(dge = DGE,
                       ID = ID,
                       type = type,
                       ...)
@@ -61,8 +61,8 @@ function(data,
   return(DE_table)
 })
 
-#' @rdname get_DE_table
-setMethod("get_DE_table", signature(
+#' @rdname get_de_table
+setMethod("get_de_table", signature(
   data = 'matrix',
   ID = 'vector',
   type = 'character'
@@ -76,13 +76,13 @@ function(data,
   ID <- "group"
   rm(data)
 
-  DE_table <- get_DE_table(data = DGE, ID = ID, type = type, ...)
+  DE_table <- get_de_table(data = DGE, ID = ID, type = type, ...)
 
   return(DE_table)
 })
 
-#' @rdname get_DE_table
-setMethod("get_DE_table", signature(
+#' @rdname get_de_table
+setMethod("get_de_table", signature(
   data = 'Matrix',
   ID = 'vector',
   type = 'character'
@@ -96,13 +96,13 @@ function(data,
   ID <- "group"
   rm(data)
 
-  DE_table <- get_DE_table(data = DGE, ID = ID, type = type, ...)
+  DE_table <- get_de_table(data = DGE, ID = ID, type = type, ...)
 
   return(DE_table)
 })
 
-#' @rdname get_DE_table
-setMethod("get_DE_table", signature(
+#' @rdname get_de_table
+setMethod("get_de_table", signature(
   data = 'ExpressionSet',
   ID = 'character',
   type = 'character'
@@ -121,13 +121,13 @@ function(data,
   ID <- make.names(ID)
   rm(data, expr, coldata)
 
-  DE_table <- get_DE_table(data = DGE, ID = ID, type = type, ...)
+  DE_table <- get_de_table(data = DGE, ID = ID, type = type, ...)
 
   return(DE_table)
 })
 
-#' @rdname get_DE_table
-setMethod("get_DE_table", signature(
+#' @rdname get_de_table
+setMethod("get_de_table", signature(
   data = 'SummarizedExperiment',
   ID = 'character',
   type = 'character'
@@ -147,13 +147,13 @@ function(data,
   ID <- make.names(ID)
   rm(data, expr, coldata)
 
-  DE_table <- get_DE_table(data = DGE, ID = ID, type = type, ...)
+  DE_table <- get_de_table(data = DGE, ID = ID, type = type, ...)
 
   return(DE_table)
 })
 
-#' @rdname get_DE_table
-setMethod("get_DE_table", signature(
+#' @rdname get_de_table
+setMethod("get_de_table", signature(
   data = 'Seurat',
   ID = 'character',
   type = 'character'
@@ -173,7 +173,7 @@ function(data,
   ID <- make.names(ID)
   rm(data, expr, coldata)
 
-  DE_table <- get_DE_table(data = DGE, ID = ID, type = type, ...)
+  DE_table <- get_de_table(data = DGE, ID = ID, type = type, ...)
 
   return(DE_table)
 })

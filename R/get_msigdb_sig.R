@@ -14,15 +14,15 @@
 #' @param plot logical, if to plot UpSetR diagram
 #' @param ... params for [grep()], used to match pattern to gs_name
 #'
-#' @return A tibble with MSigDB relevant symbols
+#' @return A vector of markers
 #' @export
 #'
 #' @examples
-#' get_MSig(
+#' get_msigdb_sig(
 #'   species = "Homo sapiens", cat = "C5", subcat = "GO:BP",
 #'   pattern = "natural_killer_cell_mediated"
 #' )
-get_MSig <- function(species = "Homo sapiens", cat = "C5", subcat = "GO:BP",
+get_msigdb_sig <- function(species = "Homo sapiens", cat = "C5", subcat = "GO:BP",
                      pattern, ignore.case = TRUE, plot = FALSE, ...) {
   msigdb <- msigdbr::msigdbr(species = species, category = cat,
                              subcategory = subcat)
@@ -33,8 +33,6 @@ get_MSig <- function(species = "Homo sapiens", cat = "C5", subcat = "GO:BP",
     return()
   }
   msig_set <- msigdb$gene_symbol[msigdb$gs_name %in% msig_terms] |> unique()
-  msig_set <- tibble::tibble(HGNC_Symbol = msig_set, MSigDB = T)
-  msig_set$MSigDB <- msig_set$MSigDB |> as.character()
 
   tmp <- msigdb[msigdb$gs_name %in% msig_terms, c("gs_name", "gene_symbol")]
   if (plot) {

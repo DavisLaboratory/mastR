@@ -26,23 +26,28 @@ Imports:
     AnnotationDbi,
     depmap,
     edgeR,
+    ggfortify,
     ggplot2,
+    ggplotify,
+    ggpubr,
     ggthemes,
     limma,
     Matrix,
     msigdbr,
+    patchwork,
     stats,
     tibble,
     tidyr
 Collate: 
-    'plot.R'
     'DE_functions.R'
-    'DEGs_generic.R'
-    'DE_table_generic.R'
     'data.R'
+    'plot.R'
+    'de_table_generic.R'
+    'degs_generic.R'
     'filter_non_tissue.R'
-    'get_LM.R'
-    'get_MSig.R'
-    'get_Panglao.R'
-    'list_Panglao_types.R'
+    'get_lm_sig.R'
+    'get_msigdb_sig.R'
+    'get_panglao_sig.R'
+    'list_panglao_types.R'
     'merge_markers.R'
+    'pca_matrix_plot.R'

@@ -1,3 +1,6 @@
+#' @import ggplot2 ggpubr ggplotify
+NULL
+
 ## plot functions for comparing unfiltered and filtered data
 ##---------------------------------------------------------------
 #helper: logCPM density plot between filtered and unfiltered
@@ -158,7 +161,7 @@ plot_MDS <- function(dge, ID, keep = TRUE, counts = TRUE) {
 
 ## matrix plot function for PCA
 ##---------------------------------------------------------------
-PCA_plot_matrix_init <- function(data,
+pca_matrix_plot_init <- function(data,
                                  features = "all",
                                  is.counts = TRUE,
                                  group_by = NULL,
@@ -192,26 +195,26 @@ PCA_plot_matrix_init <- function(data,
   p0 <- summary(tmp)$importance |>
     Matrix::t() |>
     as.data.frame() |> (\(x) {
-      ggplot(data = x,
-             aes(x = reorder(rownames(x), 1:nrow(x)),
-                 y = `Proportion of Variance`, group = 1)) +
-        geom_line() +
-        geom_point() +
-        theme_bw() +
-        labs(x = "PCs") +
-        theme(axis.text.x = element_text(angle = 90))
+      ggplot2::ggplot(data = x,
+                      ggplot2::aes(x = reorder(rownames(x), 1:nrow(x)),
+                                   y = `Proportion of Variance`, group = 1)) +
+        ggplot2::geom_line() +
+        ggplot2::geom_point() +
+        ggplot2::theme_bw() +
+        ggplot2::labs(x = "PCs") +
+        ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90))
     })()
 
   ## top n PCs matrix plot
   p <- list(NA)
   k <- 1
   p1 <- lapply(1:n, function(x) {
-    ggplot() +
-      geom_text(aes(
+    ggplot2::ggplot() +
+      ggplot2::geom_text(ggplot2::aes(
         x = 1, y = 1,
         label = paste("PC", x, round(summary(tmp)$importance[2, x] * 100, 2), "%")
       ), size = 5) +
-      theme_void()
+      ggplot2::theme_void()
   })
   for (i in 1:(n - 1)) {
     for (j in (i + 1):n) {
@@ -220,19 +223,21 @@ PCA_plot_matrix_init <- function(data,
       } else {
         Group <- data.frame(group = group_by)
       }
-      p[[k]] <- autoplot(tmp, loadings = loading, loadings.label = loading,
-                         loadings.col = "grey", loadings.label.col = "black",
-                         loadings.label.size  = 2,
-                         data = Group, colour = 'group',
-                         x = j, y = i) +
-        labs(
+      p[[k]] <- ggplot2::autoplot(tmp, loadings = loading,
+                                  loadings.label = loading,
+                                  loadings.col = "grey",
+                                  loadings.label.col = "black",
+                                  loadings.label.size  = 2,
+                                  data = Group, colour = 'group',
+                                  x = j, y = i) +
+        ggplot2::labs(
           x = paste0("PC", j, "(", round(tmp$importance[2, j] * 100, 2), "%)"),
           y = paste0("PC", i, "(", round(tmp$importance[2, i] * 100, 2), "%)")
         ) +
         ggthemes::scale_color_tableau("Tableau 20") +
-        theme_classic()
+        ggplot2::theme_classic()
       p3 <- ggpubr::get_legend(p[[k]]) |> ggpubr::as_ggplot()
-      p[[k]] <- p[[k]] + guides(col = "none")
+      p[[k]] <- p[[k]] + ggplot2::guides(col = "none")
       k <- k + 1
     }
   }

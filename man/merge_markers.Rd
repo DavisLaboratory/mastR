@@ -7,8 +7,7 @@
 merge_markers(markers_list, plot = FALSE)
 }
 \arguments{
-\item{markers_list}{list of tibble, each tibble containing at least one common
-column, e.g. 'HGNC_Symbol'}
+\item{markers_list}{list of markers to be merged}
 
 \item{plot}{logical, if to make UpSetR plot for given list}
 }
@@ -21,10 +20,12 @@ Merge markers collected from different DB into one tbl with 'TRUE' and '-' to
 indicate which DB each gene is from.
 }
 \examples{
-Msig <- get_MSig(
+Msig <- get_msigdb_sig(
   species = "Homo sapiens", cat = "C5", subcat = "GO:BP",
   pattern = "natural_killer_cell_mediated"
 )
-Panglao <- get_Panglao(species = "Hs", type = "NK cells")
-merge_markers(markers = list(NK_markers, Msig, Panglao))
+Panglao <- get_panglao_sig(species = "Hs", type = "NK cells")
+merge_markers(markers = list(NK_markers = NK_markers$HGNC_Symbol,
+                             MSig = Msig,
+                             PanglaoDB = Panglao))
 }

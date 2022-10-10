@@ -6,6 +6,7 @@
 #' @param data 'CCLE' or expression object
 #' @param ID vector or chr, to specify the group of tumor/tissue types
 #' @param type pattern, specify the type of interest, e.g. 'colorectal'
+#' @param ... params for [grep()] to find matched cell lines in CCLE
 #' @param log logical, if to do log transformation on expression
 #' @param q num, quantile cutoff to screen markers which are not or lowly
 #'          expressed in relevant samples
@@ -14,7 +15,6 @@
 #' @param ignore.case logical, if to ignore the case of tissue pattern
 #' @param slot chr, specify which slot to use only for sce or seurat object,
 #'             optional, default 'counts'
-#' @param ... params for [grep()] to find matched cell lines in CCLE
 #'
 #' @return a vector of gene symbols
 #'
@@ -26,12 +26,12 @@ setGeneric("filter_non_tissue",
            function(data = 'CCLE',
                     ID,
                     type,
+                    ...,
                     log = FALSE,
                     q = 0.25,
                     markers = NULL,
                     ignore.case = TRUE,
-                    slot = "counts",
-                    ...)
+                    slot = "counts")
            standardGeneric("filter_non_tissue"))
 
 #' @rdname filter_non_tissue
@@ -43,11 +43,11 @@ setMethod("filter_non_tissue", signature(
 function(data = 'CCLE',
          ID,
          type,
+         ...,
          log = FALSE,
          q = 0.25,
          markers = NULL,
-         ignore.case = TRUE,
-         ...) {
+         ignore.case = TRUE) {
 
   stopifnot(is.logical(log), is.numeric(q), is.logical(ignore.case))
 
@@ -87,11 +87,11 @@ setMethod("filter_non_tissue", signature(
 function(data = 'CCLE',
          ID,
          type,
+         ...,
          log = FALSE,
          q = 0.25,
          markers = NULL,
-         ignore.case = TRUE,
-         ...) {
+         ignore.case = TRUE) {
 
   stopifnot(is.logical(log), is.numeric(q), is.logical(ignore.case))
 
@@ -131,11 +131,11 @@ setMethod("filter_non_tissue", signature(
 function(data = 'CCLE',
          ID,
          type,
+         ...,
          log = FALSE,
          q = 0.25,
          markers = NULL,
-         ignore.case = TRUE,
-         ...) {
+         ignore.case = TRUE) {
 
   non_tissue_genes <- filter_non_tissue(data = as.matrix(data),
                                         ID = ID, type = type,
@@ -156,11 +156,11 @@ setMethod("filter_non_tissue", signature(
 function(data = 'CCLE',
          ID,
          type,
+         ...,
          log = FALSE,
          q = 0.25,
          markers = NULL,
-         ignore.case = TRUE,
-         ...) {
+         ignore.case = TRUE) {
 
   stopifnot("data can't be character other than 'CCLE'!" = data == 'CCLE')
 
@@ -198,11 +198,11 @@ setMethod("filter_non_tissue", signature(
 function(data = 'CCLE',
          ID,
          type,
+         ...,
          log = FALSE,
          q = 0.25,
          markers = NULL,
-         ignore.case = TRUE,
-         ...) {
+         ignore.case = TRUE) {
 
   non_tissue_genes <- filter_non_tissue(data = 'CCLE',
                                         type = type,
@@ -223,11 +223,11 @@ setMethod("filter_non_tissue", signature(
 function(data = 'CCLE',
          ID,
          type,
+         ...,
          log = FALSE,
          q = 0.25,
          markers = NULL,
-         ignore.case = TRUE,
-         ...) {
+         ignore.case = TRUE) {
 
   non_tissue_genes <- filter_non_tissue(data = data$counts,
                                         ID = data$samples[[ID]],
@@ -249,11 +249,11 @@ setMethod("filter_non_tissue", signature(
 function(data = 'CCLE',
          ID,
          type,
+         ...,
          log = FALSE,
          q = 0.25,
          markers = NULL,
-         ignore.case = TRUE,
-         ...) {
+         ignore.case = TRUE) {
 
   non_tissue_genes <- filter_non_tissue(data = data@assayData$exprs,
                                         ID = data[[ID]],
@@ -275,12 +275,12 @@ setMethod("filter_non_tissue", signature(
 function(data = 'CCLE',
          ID,
          type,
+         ...,
          log = FALSE,
          q = 0.25,
          markers = NULL,
          ignore.case = TRUE,
-         slot = "counts",
-         ...) {
+         slot = "counts") {
 
   stopifnot(is.character(slot))
 
@@ -304,12 +304,12 @@ setMethod("filter_non_tissue", signature(
 function(data = 'CCLE',
          ID,
          type,
+         ...,
          log = FALSE,
          q = 0.25,
          markers = NULL,
          ignore.case = TRUE,
-         slot = "counts",
-         ...) {
+         slot = "counts") {
 
   stopifnot(is.character(slot))
 
