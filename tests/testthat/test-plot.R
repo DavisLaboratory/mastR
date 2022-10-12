@@ -27,3 +27,16 @@ test_that("plot_MDS works", {
 
   expect_doppelganger("basic MDS plot", p)
 })
+
+test_that("scatter_plot_init works", {
+
+  p <- scatter_plot_init(expr = Biobase::exprs(im_data_6),
+                         sigs = NK_markers$HGNC_Symbol,
+                         type = "NK",
+                         by = im_data_6$`celltype:ch1`,
+                         gene_id = "ENSEMBL")
+
+  expect_true(is.ggplot(p))
+})
+
+

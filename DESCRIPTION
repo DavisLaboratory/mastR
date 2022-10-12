@@ -24,20 +24,28 @@ Suggests:
 Config/testthat/edition: 3
 Imports: 
     AnnotationDbi,
+    BiocParallel,
+    clusterProfiler,
     depmap,
     edgeR,
+    enrichplot,
     ggfortify,
     ggplot2,
     ggplotify,
     ggpubr,
+    ggrepel,
     ggthemes,
     limma,
     Matrix,
     msigdbr,
     patchwork,
+    pheatmap,
+    reshape2,
+    singscore,
     stats,
     tibble,
-    tidyr
+    tidyr,
+    UpSetR
 Collate: 
     'DE_functions.R'
     'data.R'
@@ -51,3 +59,8 @@ Collate:
     'list_panglao_types.R'
     'merge_markers.R'
     'pca_matrix_plot.R'
+    'sig_boxplot.R'
+    'sig_gseaplot.R'
+    'sig_heatmap.R'
+    'sig_rankdensity_plot.R'
+    'sig_scatter_plot.R'

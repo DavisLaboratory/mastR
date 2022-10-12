@@ -260,11 +260,12 @@ pca_matrix_plot_init <- function(data,
 }
 
 
-## biplot function
+## scatter_plot function
 ##---------------------------------------------------------------
-biplot_init <- function(expr, sigs, type, by, counts = TRUE,
-                        xint = 1, yint = 1,
-                        gene_id = "SYMBOL") {
+scatter_plot_init <- function(expr, sigs, type, by,
+                              counts = TRUE,
+                              xint = 1, yint = 1,
+                              gene_id = "SYMBOL") {
   stopifnot(is.logical(counts), is.numeric(xint),
             is.numeric(yint), is.character(gene_id))
 
@@ -296,12 +297,13 @@ biplot_init <- function(expr, sigs, type, by, counts = TRUE,
 
   ## biplot of specified type vs all other types
   p <- tidyr::gather(expr, "celltype", "Median Expression", -type) |>
-    ggplot(aes_q(x = as.name("Median Expression"), y = as.name(type))) +
-    geom_point(alpha = 0.4, shape = 1) +
-    geom_vline(xintercept = xint, lty = 2) +
-    geom_hline(yintercept = yint, lty = 2) +
-    facet_wrap(~celltype) +
-    theme_classic()
+    ggplot2::ggplot(ggplot2::aes_q(x = as.name("Median Expression"),
+                                   y = as.name(type))) +
+    ggplot2::geom_point(alpha = 0.4, shape = 1) +
+    ggplot2::geom_vline(xintercept = xint, lty = 2) +
+    ggplot2::geom_hline(yintercept = yint, lty = 2) +
+    ggplot2::facet_wrap(~celltype) +
+    ggplot2::theme_classic()
   return(p)
 }
 
@@ -309,7 +311,7 @@ biplot_init <- function(expr, sigs, type, by, counts = TRUE,
 ## boxplot of expression for signatures
 ##---------------------------------------------------------------
 exp_boxplot_init <- function(expr, sigs, type, by, counts = TRUE,
-                             gene_id = "SYMBOL") {
+                             method = 't.test', gene_id = "SYMBOL") {
 
   stopifnot(is.logical(counts), is.character(gene_id))
 
@@ -330,7 +332,7 @@ exp_boxplot_init <- function(expr, sigs, type, by, counts = TRUE,
   sigs <- sigs[!duplicated(sigs[[gene_id]]), gene_id]
   sigs <- intersect(rownames(expr), sigs)
 
-  ## calculate median expression of sigs by aggregating cells based on by group
+  ## calculate median expression of sigs by aggregating samples based on by group
   group <- ifelse(grepl(type, by), type, by)
   expr <- dplyr::group_by(expr[sigs,] |> Matrix::t() |> as.data.frame(),
                           group |> factor()) |>
@@ -341,16 +343,62 @@ exp_boxplot_init <- function(expr, sigs, type, by, counts = TRUE,
 
   ## boxplot of signature in specified type vs all other types
   p <- tidyr::gather(expr, "Group", "Median Expression", -Gene) |>
-    ggplot(aes_q(x = as.name("Group"), y = as.name("Median Expression"))) +
-    geom_boxplot(aes(col = Group)) +
-    geom_point(aes(col = Group)) +
-    geom_line(aes(group = Gene), col = "grey", alpha = .5) +
-    ggpubr::stat_compare_means(label = "p.signif", method = "t.test",
+    ggplot2::ggplot(ggplot2::aes_q(x = as.name("Group"),
+                                   y = as.name("Median Expression"))) +
+    ggplot2::geom_boxplot(ggplot2::aes(col = Group)) +
+    ggplot2::geom_point(ggplot2::aes(col = Group)) +
+    ggplot2::geom_line(ggplot2::aes(group = Gene), col = "grey", alpha = .5) +
+    ggpubr::stat_compare_means(label = "p.signif",
+                               method = method,
                                ref.group = type) +
-    labs(title = "Signatures Median Expression across Groups",
-         x = "Types", y = "Expression") +
-    theme_classic() +
-    theme(axis.text.x = element_text(angle = 90))
+    ggplot2::labs(title = "Signatures Median Expression across Groups",
+                  x = "Types", y = "Expression") +
+    ggplot2::theme_classic() +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90))
+  return(p)
+}
+
+
+## score boexplot
+##---------------------------------------------------------------
+#helper: calculate singscores
+singscore_init <- function(expr, sigs, by, counts = TRUE,
+                           gene_id = "SYMBOL") {
+  ## calculate log-normalized data if raw counts data
+  if (counts) {
+    expr <- edgeR::DGEList(expr,
+                           group = by)
+    expr <- edgeR::calcNormFactors(expr, method = "TMM")
+    expr <- edgeR::cpm(expr, log = T)
+  }
+
+  ## singscore samples using given signature genes
+  rank_data <- singscore::rankGenes(expr)
+  UP <- AnnotationDbi::select(org.Hs.eg.db, sigs,
+                              columns = gene_id,
+                              keytype = "SYMBOL")
+
+  UP <- UP[!duplicated(UP[[gene_id]]), gene_id]
+  scores <- singscore::simpleScore(rank_data, upSet = UP)
+  return(scores)
+}
+
+#helper: boxplot of comparing scores
+score_boxplot_init <- function(scores, by, type, method) {
+  ## set Group for samples by given factor
+  scores$Group <- ifelse(grepl(type, by), type, by)
+
+  ## plot
+  p <- ggplot2::ggplot(data = scores,
+                       ggplot2::aes(x = Group, y = TotalScore)) +
+    ggplot2::geom_boxplot(ggplot2::aes(col = Group)) +
+    ggplot2::geom_jitter(ggplot2::aes(col = Group), alpha = 0.2) +
+    ggpubr::stat_compare_means(label = "p.signif", method = method,
+                               ref.group = type, label.y.npc = 1) +
+    ggplot2::labs(title = "Scores across Groups") +
+    ggplot2::theme_classic() +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90),
+                   plot.title = ggplot2::element_text(hjust = 0.5))
   return(p)
 }
 
@@ -389,8 +437,8 @@ gsea_plot_init <- function(tDEG, gsets, gene_id = "SYMBOL", digits = 2) {
 heatmap_init <- function(expr, sigs, by, markers, counts = TRUE,
                          scale = "none", min_max = FALSE,
                          gene_id = "SYMBOL", ranks_plot = FALSE,
-                         col = colorRampPalette(colors = c(rgb(1, 1, 0),
-                                                           "red"))(256)) {
+                         col = grDevices::colorRampPalette(colors = c(rgb(1, 1, 0),
+                                                                      "red"))(256)) {
   if (counts) {
     expr <- edgeR::DGEList(expr)
     expr <- edgeR::calcNormFactors(expr, method = "TMM")
@@ -451,49 +499,6 @@ heatmap_init <- function(expr, sigs, by, markers, counts = TRUE,
 }
 
 
-## score boexplot
-##---------------------------------------------------------------
-#helper: calculate singscores
-singscore_init <- function(expr, sigs, by, counts = TRUE,
-                           gene_id = "SYMBOL") {
-  ## calculate log-normalized data if raw counts data
-  if (counts) {
-    expr <- edgeR::DGEList(expr,
-                           group = by)
-    expr <- edgeR::calcNormFactors(expr, method = "TMM")
-    expr <- edgeR::cpm(expr, log = T)
-  }
-
-  ## singscore samples using given signature genes
-  rank_data <- singscore::rankGenes(expr)
-  UP <- AnnotationDbi::select(org.Hs.eg.db, sigs,
-                              columns = gene_id,
-                              keytype = "SYMBOL")
-
-  UP <- UP[!duplicated(UP[[gene_id]]), gene_id]
-  scores <- singscore::simpleScore(rank_data, upSet = UP)
-  return(scores)
-}
-
-#helper: boxplot of comparing scores
-score_boxplot_init <- function(scores, by, type, method) {
-  ## set Group for samples by given factor
-  scores$Group <- ifelse(grepl(type, by), type, by)
-
-  ## plot
-  p <- ggplot(data = scores, aes(x = Group, y = TotalScore)) +
-    geom_boxplot(aes(col = Group)) +
-    geom_jitter(aes(col = Group), alpha = 0.2) +
-    ggpubr::stat_compare_means(label = "p.signif", method = method,
-                               ref.group = type, label.y.npc = 1) +
-    labs(title = "Scores across Groups") +
-    theme_classic() +
-    theme(axis.text.x = element_text(angle = 90),
-          plot.title = element_text(hjust = 0.5))
-  return(p)
-}
-
-
 ## rankdensity plot of signature
 ##---------------------------------------------------------------
 #helper: aggregate samples of the same group to one sample with mean expression
@@ -551,9 +556,10 @@ rankdensity_init <- function(expr, sigs, by, counts = TRUE,
   }
   tags <- lapply(sort(by) |> unique(),
                  function(x) {
-                   ggplot() +
-                     geom_text(aes(x = 1, y = 1, label = x), size = 5) +
-                     theme_void()
+                   ggplot2::ggplot() +
+                     ggplot2::geom_text(ggplot2::aes(x = 1, y = 1, label = x),
+                                        size = 5) +
+                     ggplot2::theme_void()
                  })
   # layout_mat <- split(1:ncol(expr), data[[i]]@phenoData@data[[ID[i]]] %>% sort()) %>% do.call(rbind, args = .)
   # layout_mat[t(apply(layout_mat, 1, duplicated))] <- "#"
@@ -597,19 +603,20 @@ scatter_hdb_cl <- function(sig_matrix, minPts = 2, ...) {
       type <- colnames(sig_matrix)[cl$cluster == flag]
     }
 
-    p <- ggplot(data.frame(Gene = m,
-                           Expression = sig_matrix[m,],
-                           Cluster = cl$cluster,
-                           Type = ifelse(colnames(sig_matrix) %in% type,
-                                         colnames(sig_matrix),
-                                         "")),
-                aes(x = Gene , y = Expression, col = (Type != ""))) +
+    p <- ggplot2::ggplot(data.frame(Gene = m,
+                                    Expression = sig_matrix[m,],
+                                    Cluster = cl$cluster,
+                                    Type = ifelse(colnames(sig_matrix) %in% type,
+                                                  colnames(sig_matrix),
+                                                  "")),
+                         ggplot2::aes(x = Gene , y = Expression,
+                                      col = (Type != ""))) +
       ggrepel::geom_label_repel(aes(label = Type)) +
-      geom_point() +
-      labs(col = "is.marker") +
-      facet_wrap(~Gene) +
-      scale_color_manual(values = c("TRUE" = "red", "FALSE" = "black")) +
-      theme_classic()
+      ggplot2::geom_point() +
+      ggplot2::labs(col = "is.marker") +
+      ggplot2::facet_wrap(~Gene) +
+      ggplot2::scale_color_manual(values = c("TRUE" = "red", "FALSE" = "black")) +
+      ggplot2::theme_classic()
   })
 
   names(p) <- rownames(sig_matrix)
