@@ -271,7 +271,7 @@ function(data,
   p <- list()
   for (i in seq_along(data)) {
     p[[i]] <- sig_heatmap(data = data[[i]],
-                          sigs = sigs, ID = ID[i],
+                          sigs = sigs, ID = ID[[i]],
                           markers = markers, counts = counts[i],
                           scale = scale, min_max = min_max,
                           gene_id = gene_id[i], slot = slot[i],

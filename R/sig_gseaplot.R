@@ -210,7 +210,7 @@ function(data,
   for (i in 1:length(data)) {
     p[[i]] <- sig_gseaplot(data = data[[i]],
                            sigs = sigs,
-                           ID = ID[i],
+                           ID = ID[[i]],
                            type = type[i],
                            gene_id = gene_id[i],
                            digits = digits,

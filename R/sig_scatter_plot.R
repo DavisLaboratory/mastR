@@ -208,7 +208,7 @@ function(data,
   p <- list()
   for (i in 1:length(data)) {
     p[[i]] <- sig_scatter_plot(data = data[[i]], sigs = sigs, counts = counts[i],
-                               type = type[i], slot = slot[i], ID = ID[i],
+                               type = type[i], slot = slot[i], ID = ID[[i]],
                                xint = xint, yint = yint, gene_id = gene_id[i])
     if(!is.null(names(data)))
       p[[i]] <- p[[i]] + labs(subtitle = names(data)[i]) +

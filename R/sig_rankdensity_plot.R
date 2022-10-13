@@ -216,7 +216,7 @@ function(data,
   p <- list()
   for (i in seq_along(data)) {
     p[[i]] <- sig_rankdensity_plot(data = data[[i]], sigs = sigs,
-                                   ID = ID[i], counts = counts[i],
+                                   ID = ID[[i]], counts = counts[i],
                                    slot = slot[i],
                                    aggregate = aggregate[i],
                                    gene_id = gene_id[i])

@@ -289,7 +289,7 @@ function(data,
   for (i in 1:length(data)) {
     p[[i]] <- sig_boxplot(data = data[[i]],
                           sigs = sigs,
-                          ID = ID[i],
+                          ID = ID[[i]],
                           type = type[i],
                           plot.score = plot.score[i],
                           counts = counts[i],

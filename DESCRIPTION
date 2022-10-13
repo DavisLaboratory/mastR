@@ -53,6 +53,7 @@ Collate:
     'de_table_generic.R'
     'degs_generic.R'
     'filter_non_tissue.R'
+    'filter_subset_sig.R'
     'get_lm_sig.R'
     'get_msigdb_sig.R'
     'get_panglao_sig.R'

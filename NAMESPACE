@@ -2,6 +2,7 @@
 
 export(de_analysis)
 export(filter_non_tissue)
+export(filter_subset_sig)
 export(get_de_table)
 export(get_degs)
 export(get_lm_sig)
