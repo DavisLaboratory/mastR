@@ -164,20 +164,20 @@ plot_MDS <- function(dge, ID, keep = TRUE, counts = TRUE) {
 ##---------------------------------------------------------------
 pca_matrix_plot_init <- function(data,
                                  features = "all",
-                                 is.counts = TRUE,
+                                 counts = TRUE,
                                  group_by = NULL,
                                  scale = TRUE,
                                  n = 4,
                                  loading = FALSE,
                                  gene_id = "SYMBOL") {
 
-  stopifnot(is.logical(is.counts), is.vector(features),
+  stopifnot(is.logical(counts), is.vector(features),
             is.null(group_by) | is.vector(group_by),
             is.logical(scale), is.numeric(n),
             is.logical(loading), is.character(gene_id))
 
   ## calculate logCPM for raw counts data
-  if(is.counts){
+  if(counts){
     data <- edgeR::DGEList(counts = data)
     data <- edgeR::calcNormFactors(data)
     data <- edgeR::cpm(data, log = T)
