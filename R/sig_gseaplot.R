@@ -6,14 +6,8 @@ NULL
 #'
 #' Visualize GSEA result with multiple lists of genes by using `clusterProfiler`.
 #'
-#' @param data expression data objects, can be DGEList, eSet, Seurat, sce...
-#' @param sigs list(s) of gene symbols for GSEA
-#' @param ID chr or vector, specify the column name in coldata or factor to compare
-#' @param type pattern, specify the group of interest to be compared
-#' @param gene_id chr, indicate the ID type of expression data's rowname,
-#'                could be one of 'ENSEMBL', 'SYMBOL', ... default 'SYMBOL'
+#' @inheritParams sig_boxplot
 #' @param digits num, specify the number of significant digits of pvalue table
-#' @param slot chr, indicate which slot used for seurat/sce object
 #' @param ... params for function [get_de_table()]
 #'
 #' @return patchwork object for all comparisons

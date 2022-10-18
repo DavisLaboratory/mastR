@@ -23,6 +23,8 @@
 #'              could be `union` or `intersect` or `setdiff` or customed Fun,
 #'              or could be 'RRA' to use Robust Rank Aggregation method for
 #'              integrating multi-lists if DEGs, default 'union'
+#' @param filter vector of num, filter condition to remove low expression
+#'               genes, the 1st for min.counts (if counts = TRUE) or CPM/TPM
 #' @param s_thres num, threshold of score if method = 'RRA'
 #' @param ... other params for [get_degs()]
 #'

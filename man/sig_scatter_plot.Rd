@@ -104,11 +104,11 @@ sig_scatter_plot(
 )
 }
 \arguments{
-\item{data}{expression data objects, can be DGEList, eSet, Seurat, sce...}
+\item{data}{expression data, can be matrix, DGEList, eSet, seurat, sce...}
 
 \item{sigs}{a vector of signature (Symbols)}
 
-\item{ID}{a vector of chr, specify the column name to compare in coldata}
+\item{ID}{chr or vec, specify the column name to compare in coldata}
 
 \item{type}{pattern, specify the group of interest as reference}
 

@@ -7,7 +7,8 @@
 merge_markers(markers_list, plot = FALSE)
 }
 \arguments{
-\item{markers_list}{list of markers to be merged}
+\item{markers_list}{list of markers to be merged, can be list of vectors or
+GeneSetCollection object}
 
 \item{plot}{logical, if to make UpSetR plot for given list}
 }
@@ -22,10 +23,11 @@ indicate which DB each gene is from.
 \examples{
 Msig <- get_msigdb_sig(
   species = "Homo sapiens", cat = "C5", subcat = "GO:BP",
-  pattern = "natural_killer_cell_mediated"
+  pattern = "natural_killer_cell_mediated",
+  ignore.case = TRUE
 )
-Panglao <- get_panglao_sig(species = "Hs", type = "NK cells")
+Panglao <- get_panglao_sig(type = "NK cells")
 merge_markers(markers = list(NK_markers = NK_markers$HGNC_Symbol,
-                             MSig = Msig,
-                             PanglaoDB = Panglao))
+                             MSig = GSEABase::geneIds(Msig),
+                             PanglaoDB = GSEABase::geneIds(Panglao)))
 }

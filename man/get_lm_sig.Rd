@@ -4,21 +4,19 @@
 \alias{get_lm_sig}
 \title{Extract specific subset markers from LM7 or/and LM22}
 \usage{
-get_lm_sig(lm7.pattern = FALSE, lm22.pattern = FALSE, ...)
+get_lm_sig(lm7.pattern, lm22.pattern, ...)
 }
 \arguments{
-\item{lm7.pattern}{character string containing a regular expression
-(or character string for fixed = TRUE), to be matched in
-the given subsets in LM7}
+\item{lm7.pattern}{character string containing a regular expression,
+to be matched in the given subsets in LM7}
 
-\item{lm22.pattern}{character string containing a regular expression
-(or character string for fixed = TRUE), to be matched in
-the given subsets in LM22}
+\item{lm22.pattern}{character string containing a regular expression,
+to be matched in the given subsets in LM22}
 
 \item{...}{params for function \code{\link[=grep]{grep()}}}
 }
 \value{
-A vector of markers
+A GeneSet or GeneSetCollection
 }
 \description{
 Extract specific subset markers from LM7 or/and LM22

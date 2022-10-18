@@ -9,7 +9,6 @@ get_msigdb_sig(
   cat = "C5",
   subcat = "GO:BP",
   pattern,
-  ignore.case = TRUE,
   plot = FALSE,
   ...
 )
@@ -27,14 +26,12 @@ listed by \code{\link[msigdbr:msigdbr_collections]{msigdbr::msigdbr_collections(
 \item{pattern}{pattern, to be matched the MsigDB gs_name of interest,
 e.g. 'natural_killer_cell_mediated'}
 
-\item{ignore.case}{logical, if to ignore the case of terms pattern}
-
 \item{plot}{logical, if to plot UpSetR diagram}
 
 \item{...}{params for \code{\link[=grep]{grep()}}, used to match pattern to gs_name}
 }
 \value{
-A vector of markers
+A GeneSet object
 }
 \description{
 Collect genes of relevant MSigDB genesets.
@@ -42,6 +39,6 @@ Collect genes of relevant MSigDB genesets.
 \examples{
 get_msigdb_sig(
   species = "Homo sapiens", cat = "C5", subcat = "GO:BP",
-  pattern = "natural_killer_cell_mediated"
+  pattern = "natural_killer_cell_mediated", ignore.case = TRUE
 )
 }

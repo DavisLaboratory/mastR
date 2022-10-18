@@ -116,7 +116,7 @@ sig_boxplot(
 )
 }
 \arguments{
-\item{data}{expression data, can be matrix, eSet, seurat...}
+\item{data}{expression data, can be matrix, DGEList, eSet, seurat, sce...}
 
 \item{sigs}{a vector of signature (Symbols)}
 

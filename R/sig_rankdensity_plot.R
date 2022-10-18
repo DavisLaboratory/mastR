@@ -1,15 +1,8 @@
 #' Plot rank density
 #'
-#' @param data list of immune cells expression data,
-#'             default list(im_data_6, im_data_29)
-#' @param sigs vector of gene symbols to calculate rank scores
-#' @param ID chr or vector, specify the column name to compare in coldata
-#' @param counts logical, indicate if data is raw counts data
+#' @inheritParams sig_boxplot
 #' @param aggregate logical, if to aggregate expression according to `ID`,
 #'                  default FALSE
-#' @param slot chr, which slot in scdata to use if data is seurat or sce
-#' @param gene_id chr, indicate the ID type of expression data's rowname,
-#'                could be one of 'ENSEMBL', 'SYMBOL', ... default 'SYMBOL'
 #'
 #' @return ggplot or patchwork
 #'

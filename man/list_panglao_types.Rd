@@ -4,17 +4,13 @@
 \alias{list_panglao_types}
 \title{Show the summary info of available cell types in PanglaoDB.}
 \usage{
-list_panglao_types(type = "organ", organ)
+list_panglao_types(organ)
 }
 \arguments{
-\item{type}{chr, specify if to list all available organ types or cell types
-for specific organ}
-
-\item{organ}{chr, specify the tissue or organ label to list cell types,
-optional when type = 'cell'}
+\item{organ}{chr, specify the tissue or organ label to list cell types}
 }
 \value{
-a vector of available organ types or cell types in PanglaoDB
+a vector of available cell types of the organ in PanglaoDB
 }
 \description{
 Show the name and number of each cell type in PanglaoDB. Help users

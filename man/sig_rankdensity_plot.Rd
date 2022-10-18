@@ -98,21 +98,20 @@ sig_rankdensity_plot(
 )
 }
 \arguments{
-\item{data}{list of immune cells expression data,
-default list(im_data_6, im_data_29)}
+\item{data}{expression data, can be matrix, DGEList, eSet, seurat, sce...}
 
-\item{sigs}{vector of gene symbols to calculate rank scores}
+\item{sigs}{a vector of signature (Symbols)}
 
-\item{ID}{chr or vector, specify the column name to compare in coldata}
+\item{ID}{chr or vec, specify the column name to compare in coldata}
 
 \item{counts}{logical, indicate if data is raw counts data}
 
 \item{aggregate}{logical, if to aggregate expression according to \code{ID},
 default FALSE}
 
-\item{slot}{chr, which slot in scdata to use if data is seurat or sce}
+\item{slot}{chr, indicate which slot used for seurat/sce object}
 
-\item{gene_id}{chr, indicate the ID type of expression data's rowname,
+\item{gene_id}{chr, indicate the ID type of rowname of expression data's ,
 could be one of 'ENSEMBL', 'SYMBOL', ... default 'SYMBOL'}
 }
 \value{

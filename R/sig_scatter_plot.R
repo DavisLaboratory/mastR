@@ -7,16 +7,9 @@ NULL
 #' @description  Biplot depicts mean expression for each signature gene in
 #'   specific subset against other cell types.
 #'
-#' @param data expression data objects, can be DGEList, eSet, Seurat, sce...
-#' @param sigs a vector of signature (Symbols)
-#' @param ID a vector of chr, specify the column name to compare in coldata
-#' @param type pattern, specify the group of interest as reference
-#' @param counts logical, indicate if data is raw counts data
-#' @param slot chr, indicate which slot used for seurat/sce object
+#' @inheritParams sig_boxplot
 #' @param xint intercept of vertical dashed line
 #' @param yint intercept of horizontal dashed line
-#' @param gene_id chr, indicate the ID type of rowname of expression data's ,
-#'                could be one of 'ENSEMBL', 'SYMBOL', ... default 'SYMBOL'
 #'
 #' @return patchwork or ggplot of scatter plot of median expression
 #'

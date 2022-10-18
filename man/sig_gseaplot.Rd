@@ -76,15 +76,15 @@ sig_gseaplot(
 )
 }
 \arguments{
-\item{data}{expression data objects, can be DGEList, eSet, Seurat, sce...}
+\item{data}{expression data, can be matrix, DGEList, eSet, seurat, sce...}
 
-\item{sigs}{list(s) of gene symbols for GSEA}
+\item{sigs}{a vector of signature (Symbols)}
 
-\item{ID}{chr or vector, specify the column name in coldata or factor to compare}
+\item{ID}{chr or vec, specify the column name to compare in coldata}
 
-\item{type}{pattern, specify the group of interest to be compared}
+\item{type}{pattern, specify the group of interest as reference}
 
-\item{gene_id}{chr, indicate the ID type of expression data's rowname,
+\item{gene_id}{chr, indicate the ID type of rowname of expression data's ,
 could be one of 'ENSEMBL', 'SYMBOL', ... default 'SYMBOL'}
 
 \item{digits}{num, specify the number of significant digits of pvalue table}

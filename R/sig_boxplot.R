@@ -6,7 +6,7 @@ NULL
 #'
 #' Make boxplot and show expression or score level of signature across subsets.
 #'
-#' @param data expression data, can be matrix, eSet, seurat...
+#' @param data expression data, can be matrix, DGEList, eSet, seurat, sce...
 #' @param sigs a vector of signature (Symbols)
 #' @param ID chr or vec, specify the column name to compare in coldata
 #' @param type pattern, specify the group of interest as reference

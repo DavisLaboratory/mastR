@@ -35,6 +35,7 @@ Imports:
     ggpubr,
     ggrepel,
     ggthemes,
+    GSEABase,
     limma,
     Matrix,
     msigdbr,
@@ -57,6 +58,7 @@ Collate:
     'get_lm_sig.R'
     'get_msigdb_sig.R'
     'get_panglao_sig.R'
+    'list_panglao_organs.R'
     'list_panglao_types.R'
     'merge_markers.R'
     'pca_matrix_plot.R'

@@ -6,19 +6,13 @@ NULL
 #'
 #' Compare the heatmap before and after screening.
 #'
-#' @param data expression data objects, can be DGEList, eSet, Seurat, sce...
-#' @param sigs a vector of gene symbols
-#' @param ID chr or vector, specify the column name to compare in coldata
+#' @inheritParams sig_boxplot
 #' @param markers a vector of gene names, listed the gene symbols of original
 #'                markers pool
-#' @param counts logical, indicate if data is raw counts data
 #' @param scale could be 'none', 'row' or 'column'
 #' @param min_max logical, if to use min_max to normalize data by rows
-#' @param gene_id chr, indicate the ID type of expression data's rowname,
-#'                could be one of 'ENSEMBL', 'SYMBOL', ... default 'SYMBOL'
 #' @param ranks_plot logical, if to use ranks instead of expression of genes to
 #'                   draw heatmap
-#' @param slot chr, indicate which slot used for seurat/sce object
 #' @param col vactor of color to draw heatmap
 #'
 #' @return patchwork object of pheatmaps

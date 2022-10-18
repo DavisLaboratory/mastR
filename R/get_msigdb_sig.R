@@ -10,24 +10,23 @@
 #'               listed by [msigdbr::msigdbr_collections()]
 #' @param pattern pattern, to be matched the MsigDB gs_name of interest,
 #'                e.g. 'natural_killer_cell_mediated'
-#' @param ignore.case logical, if to ignore the case of terms pattern
 #' @param plot logical, if to plot UpSetR diagram
 #' @param ... params for [grep()], used to match pattern to gs_name
 #'
-#' @return A vector of markers
+#' @return A GeneSet object
 #' @export
 #'
 #' @examples
 #' get_msigdb_sig(
 #'   species = "Homo sapiens", cat = "C5", subcat = "GO:BP",
-#'   pattern = "natural_killer_cell_mediated"
+#'   pattern = "natural_killer_cell_mediated", ignore.case = TRUE
 #' )
-get_msigdb_sig <- function(species = "Homo sapiens", cat = "C5", subcat = "GO:BP",
-                     pattern, ignore.case = TRUE, plot = FALSE, ...) {
+get_msigdb_sig <- function(species = "Homo sapiens", cat = "C5",
+                           subcat = "GO:BP", pattern,
+                           plot = FALSE, ...) {
   msigdb <- msigdbr::msigdbr(species = species, category = cat,
                              subcategory = subcat)
-  msig_terms <- grep(pattern, msigdb$gs_name, ignore.case = ignore.case,
-                     value = T, ...) |> unique()
+  msig_terms <- grep(pattern, msigdb$gs_name, value = T, ...) |> unique()
   if(length(msig_terms) == 0){
     message("No relevant term was found!")
     return()
@@ -42,5 +41,9 @@ get_msigdb_sig <- function(species = "Homo sapiens", cat = "C5", subcat = "GO:BP
                     nsets = length(msig_terms)) |> print()
     }else message("Only one gene-set is matched!")
   }
+
+  msig_set <- GSEABase::GeneSet(msig_set,
+                                setName = paste("MSigDB", pattern, sep = "_"),
+                                geneIdType = GSEABase::SymbolIdentifier())
   return(msig_set)
 }

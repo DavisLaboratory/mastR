@@ -134,11 +134,11 @@ sig_heatmap(
 )
 }
 \arguments{
-\item{data}{expression data objects, can be DGEList, eSet, Seurat, sce...}
+\item{data}{expression data, can be matrix, DGEList, eSet, seurat, sce...}
 
-\item{sigs}{a vector of gene symbols}
+\item{sigs}{a vector of signature (Symbols)}
 
-\item{ID}{chr or vector, specify the column name to compare in coldata}
+\item{ID}{chr or vec, specify the column name to compare in coldata}
 
 \item{markers}{a vector of gene names, listed the gene symbols of original
 markers pool}
@@ -149,7 +149,7 @@ markers pool}
 
 \item{min_max}{logical, if to use min_max to normalize data by rows}
 
-\item{gene_id}{chr, indicate the ID type of expression data's rowname,
+\item{gene_id}{chr, indicate the ID type of rowname of expression data's ,
 could be one of 'ENSEMBL', 'SYMBOL', ... default 'SYMBOL'}
 
 \item{ranks_plot}{logical, if to use ranks instead of expression of genes to

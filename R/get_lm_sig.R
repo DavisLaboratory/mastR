@@ -1,37 +1,42 @@
 #' Extract specific subset markers from LM7 or/and LM22
 #'
-#' @param lm7.pattern character string containing a regular expression
-#'                    (or character string for fixed = TRUE), to be matched in
-#'                    the given subsets in LM7
-#' @param lm22.pattern character string containing a regular expression
-#'                    (or character string for fixed = TRUE), to be matched in
-#'                    the given subsets in LM22
+#' @param lm7.pattern character string containing a regular expression,
+#'                    to be matched in the given subsets in LM7
+#' @param lm22.pattern character string containing a regular expression,
+#'                     to be matched in the given subsets in LM22
 #' @param ... params for function [grep()]
 #'
-#' @return A vector of markers
+#' @return A GeneSet or GeneSetCollection
 #' @export
 #'
 #' @examples
 #' get_lm_sig(lm7.pattern = "NK", lm22.pattern = "NK cells")
-get_lm_sig <- function(lm7.pattern = FALSE, lm22.pattern = FALSE, ...){
+get_lm_sig <- function(lm7.pattern, lm22.pattern, ...){
 
 
-  if(lm7.pattern == FALSE & lm22.pattern == FALSE)
+  if(missing(lm7.pattern) & missing(lm22.pattern))
     stop("Must provide at least one of lm7.pattern and lm22.pattern param!")
 
-  if(lm7.pattern != FALSE){
-    markers_7 <- subset(LM7, grepl(lm7.pattern, Subset, ...))$Gene
-    markers <- markers_7
+  ## retrieve markers from LM7 signature matrix if lm7.pattern is given
+  if(!missing(lm7.pattern)){
+    gs_7 <- subset(LM7, grepl(lm7.pattern, Subset, ...))$Gene
+    gs_7 <- GSEABase::GeneSet(gs_7, setName = "LM7",
+                              geneIdType = GSEABase::SymbolIdentifier())
+    gs <- gs_7
   }
-  if(lm22.pattern != FALSE){
+
+  ## retrieve markers from LM22 signature matrix if lm22.pattern is given
+  if(!missing(lm22.pattern)){
     idx <- grep(lm22.pattern, colnames(LM22)[-1], ...)
     idx <- Reduce(function(x,y){x == 1 | y == 1}, LM22[,-1][,idx]) |>
       as.logical()
-    markers_22 <- LM22$Gene[idx]
-    markers <- markers_22
+    gs_22 <- LM22$Gene[idx]
+    gs_22 <- GSEABase::GeneSet(gs_22, setName = "LM22",
+                              geneIdType = GSEABase::SymbolIdentifier())
+    gs <- gs_22
   }
-  if(lm7.pattern != FALSE & lm22.pattern != FALSE){
-    markers <- union(markers_7, markers_22)
+  if(!missing(lm7.pattern) & !missing(lm22.pattern)){
+    gs <- GSEABase::GeneSetCollection(gs_7, gs_22)
   }
-  return(markers)
+  return(gs)
 }
