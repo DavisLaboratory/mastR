@@ -1,5 +1,6 @@
 #' @include plot.R
-#' @import ggplot2 clusterProfiler enrichplot grid ggplotify
+#' @import ggplot2 clusterProfiler grid ggplotify
+#' @importFrom enrichplot gseaplot2
 NULL
 
 #' Visualize GSEA result with input list of gene symbols.

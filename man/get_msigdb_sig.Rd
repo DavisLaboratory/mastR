@@ -5,15 +5,18 @@
 \title{Collect genes from MSigDB.}
 \usage{
 get_msigdb_sig(
+  pattern,
   species = "Homo sapiens",
   cat = "C5",
   subcat = "GO:BP",
-  pattern,
   plot = FALSE,
   ...
 )
 }
 \arguments{
+\item{pattern}{pattern, to be matched the MsigDB gs_name of interest,
+e.g. 'natural_killer_cell_mediated'}
+
 \item{species}{chr, species of interest, available species can be listed by
 \code{\link[msigdbr:msigdbr_species]{msigdbr::msigdbr_species()}}}
 
@@ -22,9 +25,6 @@ get_msigdb_sig(
 
 \item{subcat}{chr, subcategory of interest, available collections can be
 listed by \code{\link[msigdbr:msigdbr_collections]{msigdbr::msigdbr_collections()}}}
-
-\item{pattern}{pattern, to be matched the MsigDB gs_name of interest,
-e.g. 'natural_killer_cell_mediated'}
 
 \item{plot}{logical, if to plot UpSetR diagram}
 

@@ -27,7 +27,8 @@ get_degs(data, ID, type, counts = TRUE, method = "RP", slot = "counts", ...)
 \arguments{
 \item{data}{expression object}
 
-\item{ID}{vector or chr, to specify the group of DE comparisons}
+\item{ID}{vec or chr, specify the group factor or column name of coldata for
+DE comparisons}
 
 \item{type}{pattern, specify the group of interest, e.g. NK}
 

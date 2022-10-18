@@ -10,13 +10,10 @@ NULL
 #'   limma::voom and limma::treat, and also create an object `proc_data` to store
 #'   processed data.
 #'
+#' @inheritParams de_analysis
 #' @param data expression object
-#' @param ID vector or chr, to specify the group of DE comparisons
-#' @param type pattern, specify the group of interest, e.g. NK
-#' @param counts logical, if the expr in data is raw counts data
-#' @param method either 'RP' or 'Group', choose whether to use rank product or
-#'               group other subsets for multiple comparisons for DE analysis,
-#'               default 'RP'
+#' @param ID vec or chr, specify the group factor or column name of coldata for
+#'           DE comparisons
 #' @param slot chr, specify which slot to use only for sce or seurat object,
 #'             optional, default 'counts'
 #' @param ... params for [de_analysis()] and [DEGs_RP()] or [DEGs_Group()]

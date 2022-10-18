@@ -1,4 +1,5 @@
 #' @import ggplot2 ggpubr ggplotify
+#' @importFrom enrichplot gseaplot2
 NULL
 
 ## plot functions for comparing unfiltered and filtered data

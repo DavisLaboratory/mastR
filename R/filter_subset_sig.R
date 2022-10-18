@@ -4,28 +4,20 @@
 #' and generate proc_data after removing low expression genes and limma::voom
 #' transformation.
 #'
+#' @inheritParams de_analysis
 #' @param data A list of expression data objects
-#' @param ID vector of chr, specify the column name in coldata to compare
-#' @param type vector of pattern, specify the cell type of interest
-#' @param counts logical, if the expr in data is raw counts data
+#' @param ID vec or chr, specify the group factor or column name of coldata for
+#'           DE comparisons
 #' @param dir chr, could be 'UP' or 'DOWN' to use only up- or down-expressed
 #'            genes
-#' @param markers vector, a vector of gene names, listed the gene symbols to be
-#'                kept anyway after filtration. Default 'NULL' means no special
-#'                genes need to be kept.
-#' @param gene_id chr, specify the gene ID type of rownames of expression data
-#'                when markers is not NULL, could be one of 'ENSEMBL', 'SYMBOL',
-#'                'ENTREZ'..., default 'SYMBOL'
-#' @param method either 'RP' or 'GROUP', choose whether to use rank product or
-#'               group other subsets for multiple comparisons for DE analysis,
-#'               default 'RP'
 #' @param comb 'RRA' or Fun, keep all passing genes or only intersected genes,
 #'              could be `union` or `intersect` or `setdiff` or customed Fun,
 #'              or could be 'RRA' to use Robust Rank Aggregation method for
 #'              integrating multi-lists if DEGs, default 'union'
-#' @param filter vector of num, filter condition to remove low expression
-#'               genes, the 1st for min.counts (if counts = TRUE) or CPM/TPM
-#' @param s_thres num, threshold of score if method = 'RRA'
+#' @param filter (list of) vector of 2 numbers, filter condition to remove low
+#'               expression genes, the 1st for min.counts (if counts = TRUE) or
+#'               CPM/TPM (if counts = F), the 2nd for samples size 'large.n'
+#' @param s_thres num, threshold of score if comb = 'RRA'
 #' @param ... other params for [get_degs()]
 #'
 #' @return a vector of gene symbols

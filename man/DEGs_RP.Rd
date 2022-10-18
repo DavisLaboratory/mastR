@@ -34,10 +34,10 @@ default 'adj.P.Val'}
 
 \item{keep.top}{NULL or num, whether to keep top n DEGs of specific comparison}
 
-\item{keep.group}{NULL or pattern, specify the top DEGs of which comparison}
-
-\item{...}{omitted
+\item{keep.group}{NULL or pattern, specify the top DEGs of which comparison
 or group to be kept}
+
+\item{...}{omitted}
 }
 \description{
 return DEGs UP and DOWN list based on Rank Product

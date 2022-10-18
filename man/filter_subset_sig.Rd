@@ -74,9 +74,10 @@ filter_subset_sig(
 kept anyway after filtration. Default 'NULL' means no special
 genes need to be kept.}
 
-\item{ID}{vector of chr, specify the column name in coldata to compare}
+\item{ID}{vec or chr, specify the group factor or column name of coldata for
+DE comparisons}
 
-\item{type}{vector of pattern, specify the cell type of interest}
+\item{type}{pattern, specify the group of interest, e.g. NK}
 
 \item{counts}{logical, if the expr in data is raw counts data}
 
@@ -87,7 +88,7 @@ genes}
 when markers is not NULL, could be one of 'ENSEMBL', 'SYMBOL',
 'ENTREZ'..., default 'SYMBOL'}
 
-\item{method}{either 'RP' or 'GROUP', choose whether to use rank product or
+\item{method}{either 'RP' or 'Group', choose whether to use rank product or
 group other subsets for multiple comparisons for DE analysis,
 default 'RP'}
 
@@ -96,10 +97,11 @@ could be \code{union} or \code{intersect} or \code{setdiff} or customed Fun,
 or could be 'RRA' to use Robust Rank Aggregation method for
 integrating multi-lists if DEGs, default 'union'}
 
-\item{filter}{vector of num, filter condition to remove low expression
-genes, the 1st for min.counts (if counts = TRUE) or CPM/TPM}
+\item{filter}{(list of) vector of 2 numbers, filter condition to remove low
+expression genes, the 1st for min.counts (if counts = TRUE) or
+CPM/TPM (if counts = F), the 2nd for samples size 'large.n'}
 
-\item{s_thres}{num, threshold of score if method = 'RRA'}
+\item{s_thres}{num, threshold of score if comb = 'RRA'}
 
 \item{...}{other params for \code{\link[=get_degs]{get_degs()}}}
 }

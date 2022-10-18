@@ -8,11 +8,7 @@ NULL
 #'   DE statistics by using limma::voom and limma::treat, and also create an
 #'   object `proc_data` to store processed data.
 #'
-#' @param data expression object
-#' @param ID chr, column name of coldata to specify the DE comparisons
-#' @param type pattern, specify the group of interest, e.g. NK
-#' @param slot chr, specify which slot to use only for sce or seurat object,
-#'             optional, default 'counts'
+#' @inheritParams get_degs
 #' @param ... params for function [de_analysis()]
 #'
 #' @return A list of DE result table of all comparisons.

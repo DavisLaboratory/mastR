@@ -2,14 +2,14 @@
 #'
 #' Collect genes of relevant MSigDB genesets.
 #'
+#' @param pattern pattern, to be matched the MsigDB gs_name of interest,
+#'                e.g. 'natural_killer_cell_mediated'
 #' @param species chr, species of interest, available species can be listed by
 #'                [msigdbr::msigdbr_species()]
 #' @param cat chr, category of interest, available collections can be listed by
 #'            [msigdbr::msigdbr_collections()]
 #' @param subcat chr, subcategory of interest, available collections can be
 #'               listed by [msigdbr::msigdbr_collections()]
-#' @param pattern pattern, to be matched the MsigDB gs_name of interest,
-#'                e.g. 'natural_killer_cell_mediated'
 #' @param plot logical, if to plot UpSetR diagram
 #' @param ... params for [grep()], used to match pattern to gs_name
 #'
@@ -21,8 +21,10 @@
 #'   species = "Homo sapiens", cat = "C5", subcat = "GO:BP",
 #'   pattern = "natural_killer_cell_mediated", ignore.case = TRUE
 #' )
-get_msigdb_sig <- function(species = "Homo sapiens", cat = "C5",
-                           subcat = "GO:BP", pattern,
+get_msigdb_sig <- function(pattern,
+                           species = "Homo sapiens",
+                           cat = "C5",
+                           subcat = "GO:BP",
                            plot = FALSE, ...) {
   msigdb <- msigdbr::msigdbr(species = species, category = cat,
                              subcategory = subcat)
