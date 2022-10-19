@@ -22,7 +22,6 @@ indicate which DB each gene is from.
 }
 \examples{
 Msig <- get_msigdb_sig(
-  species = "Homo sapiens", cat = "C5", subcat = "GO:BP",
   pattern = "natural_killer_cell_mediated",
   ignore.case = TRUE
 )

@@ -10,9 +10,8 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
 Depends: 
-    R (>= 2.10),
-    Biobase,
-    org.Hs.eg.db
+    org.Hs.eg.db,
+    R (>= 2.10)
 LazyData: true
 Suggests: 
     rvest,
@@ -24,6 +23,7 @@ Suggests:
 Config/testthat/edition: 3
 Imports: 
     AnnotationDbi,
+    Biobase,
     BiocParallel,
     clusterProfiler,
     depmap,
@@ -38,7 +38,7 @@ Imports:
     GSEABase,
     limma,
     Matrix,
-    msigdbr,
+    msigdb,
     patchwork,
     pheatmap,
     reshape2,

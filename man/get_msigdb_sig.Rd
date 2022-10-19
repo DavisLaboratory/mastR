@@ -6,25 +6,32 @@
 \usage{
 get_msigdb_sig(
   pattern,
-  species = "Homo sapiens",
-  cat = "C5",
-  subcat = "GO:BP",
+  species = c("hs", "mm"),
+  cat = NULL,
+  subcat = NULL,
+  id = c("SYM", "EZID"),
+  version = msigdb::getMsigdbVersions(),
   plot = FALSE,
   ...
 )
 }
 \arguments{
 \item{pattern}{pattern, to be matched the MsigDB gs_name of interest,
-e.g. 'natural_killer_cell_mediated'}
+e.g. 'NATURAL_KILLER_CELL_MEDIATED'}
 
-\item{species}{chr, species of interest, available species can be listed by
-\code{\link[msigdbr:msigdbr_species]{msigdbr::msigdbr_species()}}}
+\item{species}{chr, species of interest, can be 'hs' or 'mm'}
 
-\item{cat}{chr, category of interest, available collections can be listed by
-\code{\link[msigdbr:msigdbr_collections]{msigdbr::msigdbr_collections()}}}
+\item{cat}{chr, stating the category(s) to be retrieved.
+The category(s) must be one from \code{\link[msigdb:listCollections]{msigdb::listCollections()}}}
 
-\item{subcat}{chr, subcategory of interest, available collections can be
-listed by \code{\link[msigdbr:msigdbr_collections]{msigdbr::msigdbr_collections()}}}
+\item{subcat}{chr, stating the sub-category(s) to be retrieved.
+The sub-category(s) must be one from \code{\link[msigdb:listSubCollections]{msigdb::listSubCollections()}}}
+
+\item{id}{a character, representing the ID type to use ("SYM" for gene
+symbols and "EZID" for Entrez IDs)}
+
+\item{version}{a character, stating the version of MSigDB to be retrieved
+(should be >= 7.2). See \code{\link[msigdb:getMsigdbVersions]{msigdb::getMsigdbVersions()}}.}
 
 \item{plot}{logical, if to plot UpSetR diagram}
 
@@ -38,7 +45,9 @@ Collect genes of relevant MSigDB genesets.
 }
 \examples{
 get_msigdb_sig(
-  species = "Homo sapiens", cat = "C5", subcat = "GO:BP",
-  pattern = "natural_killer_cell_mediated", ignore.case = TRUE
+  pattern = "natural_killer_cell_mediated",
+  species = "hs", subcat = "GO:BP",
+  version = '7.4',
+  ignore.case = TRUE
 )
 }
