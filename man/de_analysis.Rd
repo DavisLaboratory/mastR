@@ -9,7 +9,7 @@ de_analysis(
   ID,
   type,
   counts = TRUE,
-  method = "RP",
+  method = c("RP", "Group"),
   group = FALSE,
   filter = c(10, 10),
   plot = FALSE,
@@ -23,7 +23,7 @@ de_analysis(
 \arguments{
 \item{dge}{DGEList object for DE analysis, including expr and samples info}
 
-\item{ID}{chr, column name of coldata to specify the DE comparisons}
+\item{ID}{character, column name of coldata to specify the DE comparisons}
 
 \item{type}{pattern, specify the group of interest, e.g. NK}
 
@@ -51,7 +51,7 @@ method = "RP"}
 kept anyway after filtration. Default 'NULL' means no special
 genes need to be kept.}
 
-\item{gene_id}{chr, specify the gene ID type of rownames of expression data
+\item{gene_id}{character, specify the gene ID type of rownames of expression data
 when markers is not NULL, could be one of 'ENSEMBL', 'SYMBOL',
 'ENTREZ'..., default 'SYMBOL'}
 

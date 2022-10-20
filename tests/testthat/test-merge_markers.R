@@ -14,10 +14,10 @@ test_that("merge_markers works", {
                                           Panglao))
   markers <- merge_markers(markers = gsc)
 
-  expect_s3_class(markers, "tbl")
-  expect_setequal(markers$Gene, list(NK_markers$HGNC_Symbol,
-                                     Msig@geneIds,
-                                     Panglao@geneIds) |>
+  expect_s4_class(markers, "GeneSet")
+  expect_setequal(markers@geneIds, list(NK_markers$HGNC_Symbol,
+                                        Msig@geneIds,
+                                        Panglao@geneIds) |>
                     Reduce(f = union))
 
   ## test markers vector list
@@ -25,10 +25,10 @@ test_that("merge_markers works", {
                                           MSigDB = Msig@geneIds,
                                           PanglaoDB = Panglao@geneIds))
 
-  expect_s3_class(markers, "tbl")
-  expect_setequal(markers$Gene, list(NK_markers$HGNC_Symbol,
-                                     Msig@geneIds,
-                                     Panglao@geneIds) |>
+  expect_s4_class(markers, "GeneSet")
+  expect_setequal(markers@geneIds, list(NK_markers$HGNC_Symbol,
+                                        Msig@geneIds,
+                                        Panglao@geneIds) |>
                     Reduce(f = union))
   ## test un-named list
   expect_error(merge_markers(markers = list(NK_markers, Msig@geneIds, Panglao@geneIds)))

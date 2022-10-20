@@ -1,12 +1,16 @@
 #' Extract specific subset markers from LM7 or/and LM22
 #'
+#' Extract markers for subsets matched to the given pattern from LM7/LM22, and
+#' save the matched genes in 'GeneSet' class object, if both pattern are provided,
+#' the output would be a 'GeneSetCollection' class object with setName: LM7, LM22.
+#'
 #' @param lm7.pattern character string containing a regular expression,
 #'                    to be matched in the given subsets in LM7
 #' @param lm22.pattern character string containing a regular expression,
 #'                     to be matched in the given subsets in LM22
 #' @param ... params for function [grep()]
 #'
-#' @return A GeneSet or GeneSetCollection
+#' @return A GeneSet or GeneSetCollection for matched subsets in LM7 and/or LM22
 #' @export
 #'
 #' @examples
@@ -19,6 +23,8 @@ get_lm_sig <- function(lm7.pattern, lm22.pattern, ...){
 
   ## retrieve markers from LM7 signature matrix if lm7.pattern is given
   if(!missing(lm7.pattern)){
+    stopifnot(is.character(lm7.pattern))
+
     gs_7 <- subset(LM7, grepl(lm7.pattern, Subset, ...))$Gene
     gs_7 <- GSEABase::GeneSet(gs_7, setName = "LM7",
                               geneIdType = GSEABase::SymbolIdentifier())
@@ -27,6 +33,8 @@ get_lm_sig <- function(lm7.pattern, lm22.pattern, ...){
 
   ## retrieve markers from LM22 signature matrix if lm22.pattern is given
   if(!missing(lm22.pattern)){
+    stopifnot(is.character(lm22.pattern))
+
     idx <- grep(lm22.pattern, colnames(LM22)[-1], ...)
     idx <- Reduce(function(x,y){x == 1 | y == 1}, LM22[,-1][,idx]) |>
       as.logical()

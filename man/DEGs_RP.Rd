@@ -27,7 +27,7 @@ method = "RP"}
 \item{assemble}{'intersect' or 'union', whether to select intersected or
 union genes of different comparisons, default 'intersect'}
 
-\item{Rank}{chr, the variable for ranking DEGs, can be 'logFC', 'adj.P.Val'...
+\item{Rank}{character, the variable for ranking DEGs, can be 'logFC', 'adj.P.Val'...
 default 'adj.P.Val'}
 
 \item{nperm}{num, permutation runs of simulating the distribution}

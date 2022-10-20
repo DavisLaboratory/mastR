@@ -138,7 +138,7 @@ sig_heatmap(
 
 \item{sigs}{a vector of signature (Symbols)}
 
-\item{ID}{chr or vec, specify the column name to compare in coldata}
+\item{ID}{character or vector, specify the column name to compare in coldata}
 
 \item{markers}{a vector of gene names, listed the gene symbols of original
 markers pool}
@@ -149,13 +149,13 @@ markers pool}
 
 \item{min_max}{logical, if to use min_max to normalize data by rows}
 
-\item{gene_id}{chr, indicate the ID type of rowname of expression data's ,
+\item{gene_id}{character, indicate the ID type of rowname of expression data's ,
 could be one of 'ENSEMBL', 'SYMBOL', ... default 'SYMBOL'}
 
 \item{ranks_plot}{logical, if to use ranks instead of expression of genes to
 draw heatmap}
 
-\item{slot}{chr, indicate which slot used for seurat/sce object}
+\item{slot}{character, indicate which slot used for seurat/sce object}
 
 \item{col}{vactor of color to draw heatmap}
 }

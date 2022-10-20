@@ -6,9 +6,9 @@
 #'
 #' @inheritParams de_analysis
 #' @param data A list of expression data objects
-#' @param ID vec or chr, specify the group factor or column name of coldata for
+#' @param ID vec or character, specify the group factor or column name of coldata for
 #'           DE comparisons
-#' @param dir chr, could be 'UP' or 'DOWN' to use only up- or down-expressed
+#' @param dir character, could be 'UP' or 'DOWN' to use only up- or down-expressed
 #'            genes
 #' @param comb 'RRA' or Fun, keep all passing genes or only intersected genes,
 #'              could be `union` or `intersect` or `setdiff` or customed Fun,

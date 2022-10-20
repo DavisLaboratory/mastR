@@ -80,16 +80,16 @@ sig_gseaplot(
 
 \item{sigs}{a vector of signature (Symbols)}
 
-\item{ID}{chr or vec, specify the column name to compare in coldata}
+\item{ID}{character or vector, specify the column name to compare in coldata}
 
 \item{type}{pattern, specify the group of interest as reference}
 
-\item{gene_id}{chr, indicate the ID type of rowname of expression data's ,
+\item{gene_id}{character, indicate the ID type of rowname of expression data's ,
 could be one of 'ENSEMBL', 'SYMBOL', ... default 'SYMBOL'}
 
 \item{digits}{num, specify the number of significant digits of pvalue table}
 
-\item{slot}{chr, indicate which slot used for seurat/sce object}
+\item{slot}{character, indicate which slot used for seurat/sce object}
 
 \item{...}{params for function \code{\link[=get_de_table]{get_de_table()}}}
 }

@@ -3,4 +3,6 @@ test_that("get_msigdb_sig works", {
                          ignore.case = TRUE)
 
   expect_s4_class(MSig, "GeneSet")
+  expect_error(get_msigdb_sig(pattern = "natural_killer_cell_mediated"))
+  expect_warning(get_msigdb_sig(pattern = c("NK", "T_CELL")))
 })

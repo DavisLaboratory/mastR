@@ -7,13 +7,13 @@ NULL
 #' @param data expression data, can be matrix, eSet, seurat...
 #' @param features vector of gene symbols or 'all', specify the genes used for
 #'                 PCA, default 'all'
-#' @param slot chr, specify the slot name of seurat or sce object, optional
+#' @param slot character, specify the slot name of seurat or sce object, optional
 #' @param counts logical, TRUE indicates to calculate cpm before PCA
-#' @param group_by chr, specify the column to be grouped and colored, default NULL
+#' @param group_by character, specify the column to be grouped and colored, default NULL
 #' @param scale logical, if to scale data for PCA, default TRUE
 #' @param n num, specify top n PCs to plot
 #' @param loading logical, if to plot and label loadings of PCA, default 'FALSE'
-#' @param gene_id chr, specify which column of IDs used to calculate TPM, also
+#' @param gene_id character, specify which column of IDs used to calculate TPM, also
 #'                indicate the ID type of expression data's rowname, could be
 #'                one of 'ENSEMBL', 'SYMBOL', 'ENTREZ'..., default 'SYMBOL'
 #'

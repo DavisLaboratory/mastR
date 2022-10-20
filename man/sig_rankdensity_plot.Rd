@@ -102,16 +102,16 @@ sig_rankdensity_plot(
 
 \item{sigs}{a vector of signature (Symbols)}
 
-\item{ID}{chr or vec, specify the column name to compare in coldata}
+\item{ID}{character or vector, specify the column name to compare in coldata}
 
 \item{counts}{logical, indicate if data is raw counts data}
 
 \item{aggregate}{logical, if to aggregate expression according to \code{ID},
 default FALSE}
 
-\item{slot}{chr, indicate which slot used for seurat/sce object}
+\item{slot}{character, indicate which slot used for seurat/sce object}
 
-\item{gene_id}{chr, indicate the ID type of rowname of expression data's ,
+\item{gene_id}{character, indicate the ID type of rowname of expression data's ,
 could be one of 'ENSEMBL', 'SYMBOL', ... default 'SYMBOL'}
 }
 \value{

@@ -5,15 +5,20 @@
 #'
 #' @param type character vector, cell type name(s) of interest,
 #'             available subsets could be listed by [list_panglao_types()]
-#' @param species chr, default 'Hs', could be 'Hs', 'Mm' or 'Mm Hs',
+#' @param species character, default 'Hs', could be 'Hs', 'Mm' or 'Mm Hs',
 #'                specify the species of interest
 #'
-#' @return a vector of markers
+#' @return a 'GeneSet' class object containing genes of given type(s)
 #' @export
 #'
 #' @examples
 #' get_panglao_sig(type = "NK cells")
-get_panglao_sig <- function(type, species = "Hs") {
+#' get_panglao_sig(type = c("NK cells", "T cells"))
+get_panglao_sig <- function(type, species = c('Hs', 'Mm', 'Mm Hs')) {
+
+  stopifnot(is.character(type))
+
+  species <- match.arg(species)
 
   web <- rvest::read_html("https://panglaodb.se/markers.html?cell_type='all_cells'")
   table <- rvest::html_table(web)[[1]]

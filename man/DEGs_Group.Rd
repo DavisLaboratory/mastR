@@ -26,7 +26,7 @@ method = "RP"}
 \item{assemble}{'intersect' or 'union', whether to select intersected or
 union genes of different comparisons, default 'intersect'}
 
-\item{Rank}{chr, the variable for ranking DEGs, can be 'logFC', 'adj.P.Val'...
+\item{Rank}{character, the variable for ranking DEGs, can be 'logFC', 'adj.P.Val'...
 default 'adj.P.Val'}
 
 \item{keep.top}{NULL or num, whether to keep top n DEGs of specific comparison}

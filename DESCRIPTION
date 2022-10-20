@@ -36,6 +36,7 @@ Imports:
     ggrepel,
     ggthemes,
     GSEABase,
+    jsonlite,
     limma,
     Matrix,
     msigdb,

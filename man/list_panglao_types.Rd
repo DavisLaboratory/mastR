@@ -7,7 +7,7 @@
 list_panglao_types(organ)
 }
 \arguments{
-\item{organ}{chr, specify the tissue or organ label to list cell types}
+\item{organ}{character, specify the tissue or organ label to list cell types}
 }
 \value{
 a vector of available cell types of the organ in PanglaoDB

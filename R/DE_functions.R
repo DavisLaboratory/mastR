@@ -19,9 +19,12 @@ filterGenes <- function(dge, ID, filter = c(10,10), counts = TRUE,
 
 
 #helper: voom and linear regression fit for DE based on limma
-voom_lm_fit <- function(dge, ID, type, method = "RP",
+voom_lm_fit <- function(dge, ID, type, method = c("RP", "Group"),
                         group = FALSE, plot = FALSE, counts = TRUE,
                         lfc = 0, p = 0.05) {
+
+  method <- match.arg(method)
+
   ## group samples into binary groups if group = T, otherwise multiple groups asis
   if (group & method != "RP") {
     dge$samples$group <- ifelse(grepl(type, dge$samples[[ID]]),
@@ -86,7 +89,7 @@ voom_lm_fit <- function(dge, ID, type, method = "RP",
 #' @param nperm num, permutation runs of simulating the distribution
 #' @param assemble 'intersect' or 'union', whether to select intersected or
 #'                  union genes of different comparisons, default 'intersect'
-#' @param Rank chr, the variable for ranking DEGs, can be 'logFC', 'adj.P.Val'...
+#' @param Rank character, the variable for ranking DEGs, can be 'logFC', 'adj.P.Val'...
 #'             default 'adj.P.Val'
 #' @param keep.top NULL or num, whether to keep top n DEGs of specific comparison
 #' @param keep.group NULL or pattern, specify the top DEGs of which comparison

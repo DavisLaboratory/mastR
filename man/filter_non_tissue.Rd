@@ -136,7 +136,7 @@ filter_non_tissue(
 \arguments{
 \item{data}{'CCLE' or expression object}
 
-\item{ID}{vector or chr, to specify the group of tumor/tissue types}
+\item{ID}{vector or character, to specify the group of tumor/tissue types}
 
 \item{type}{pattern, specify the type of interest, e.g. 'colorectal'}
 
@@ -152,7 +152,7 @@ filtered. Default 'NULL' means all genes in data to be filtered}
 
 \item{ignore.case}{logical, if to ignore the case of tissue pattern}
 
-\item{slot}{chr, specify which slot to use only for sce or seurat object,
+\item{slot}{character, specify which slot to use only for sce or seurat object,
 optional, default 'counts'}
 }
 \value{

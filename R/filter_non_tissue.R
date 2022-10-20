@@ -4,7 +4,7 @@
 #'   and generate CCLE_tpm_new after retrieving specific tissues.
 #'
 #' @param data 'CCLE' or expression object
-#' @param ID vector or chr, to specify the group of tumor/tissue types
+#' @param ID vector or character, to specify the group of tumor/tissue types
 #' @param type pattern, specify the type of interest, e.g. 'colorectal'
 #' @param ... params for [grep()] to find matched cell lines in CCLE
 #' @param log logical, if to do log transformation on expression
@@ -13,7 +13,7 @@
 #' @param markers vector, a vector of gene names, listed the gene symbols to be
 #'                filtered. Default 'NULL' means all genes in data to be filtered
 #' @param ignore.case logical, if to ignore the case of tissue pattern
-#' @param slot chr, specify which slot to use only for sce or seurat object,
+#' @param slot character, specify which slot to use only for sce or seurat object,
 #'             optional, default 'counts'
 #'
 #' @return a vector of gene symbols

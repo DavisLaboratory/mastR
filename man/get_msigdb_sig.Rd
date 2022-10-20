@@ -16,16 +16,18 @@ get_msigdb_sig(
 )
 }
 \arguments{
-\item{pattern}{pattern, to be matched the MsigDB gs_name of interest,
-e.g. 'NATURAL_KILLER_CELL_MEDIATED'}
+\item{pattern}{pattern pass to \code{\link[=grep]{grep()}}, to match the MsigDB gene-set name of
+interest, e.g. 'NATURAL_KILLER_CELL_MEDIATED'}
 
-\item{species}{chr, species of interest, can be 'hs' or 'mm'}
+\item{species}{character, species of interest, can be 'hs' or 'mm'}
 
-\item{cat}{chr, stating the category(s) to be retrieved.
-The category(s) must be one from \code{\link[msigdb:listCollections]{msigdb::listCollections()}}}
+\item{cat}{character, stating the category(s) to be retrieved.
+The category(s) must be one from \code{\link[msigdb:listCollections]{msigdb::listCollections()}},
+see details in \code{\link[msigdb:subsetCollection]{msigdb::subsetCollection()}}}
 
-\item{subcat}{chr, stating the sub-category(s) to be retrieved.
-The sub-category(s) must be one from \code{\link[msigdb:listSubCollections]{msigdb::listSubCollections()}}}
+\item{subcat}{character, stating the sub-category(s) to be retrieved.
+The sub-category(s) must be one from \code{\link[msigdb:listSubCollections]{msigdb::listSubCollections()}},
+see details in \code{\link[msigdb:subsetCollection]{msigdb::subsetCollection()}}}
 
 \item{id}{a character, representing the ID type to use ("SYM" for gene
 symbols and "EZID" for Entrez IDs)}
@@ -38,10 +40,11 @@ symbols and "EZID" for Entrez IDs)}
 \item{...}{params for \code{\link[=grep]{grep()}}, used to match pattern to gs_name}
 }
 \value{
-A GeneSet object
+A GeneSet object containing all matched gene-sets in MSigDB
 }
 \description{
-Collect genes of relevant MSigDB genesets.
+Collect genes of relevant MSigDB gene-sets, of which the gene-set names are
+matched to the given pattern by using \code{\link[=grep]{grep()}} function.
 }
 \examples{
 get_msigdb_sig(

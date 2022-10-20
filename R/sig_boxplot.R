@@ -8,15 +8,15 @@ NULL
 #'
 #' @param data expression data, can be matrix, DGEList, eSet, seurat, sce...
 #' @param sigs a vector of signature (Symbols)
-#' @param ID chr or vec, specify the column name to compare in coldata
+#' @param ID character or vector, specify the column name to compare in coldata
 #' @param type pattern, specify the group of interest as reference
 #' @param plot.score logical, if to plot score instead of expression of signature
 #' @param counts logical, indicate if data is raw counts data
 #' @param method a character string indicating which method to be used for
 #'               `stat_compare_means()` to compare the means across types,
 #'               could be 't.test', 'wilcox.test', 'anova'..., default 't.test'
-#' @param slot chr, indicate which slot used for seurat/sce object
-#' @param gene_id chr, indicate the ID type of rowname of expression data's ,
+#' @param slot character, indicate which slot used for seurat/sce object
+#' @param gene_id character, indicate the ID type of rowname of expression data's ,
 #'                could be one of 'ENSEMBL', 'SYMBOL', ... default 'SYMBOL'
 #'
 #' @return patchwork or ggplot of boxplot

@@ -12,9 +12,9 @@ NULL
 #'
 #' @inheritParams de_analysis
 #' @param data expression object
-#' @param ID vec or chr, specify the group factor or column name of coldata for
+#' @param ID vec or character, specify the group factor or column name of coldata for
 #'           DE comparisons
-#' @param slot chr, specify which slot to use only for sce or seurat object,
+#' @param slot character, specify which slot to use only for sce or seurat object,
 #'             optional, default 'counts'
 #' @param ... params for [de_analysis()] and [DEGs_RP()] or [DEGs_Group()]
 #'
@@ -32,7 +32,7 @@ setGeneric("get_degs",
                     ID,
                     type,
                     counts = TRUE,
-                    method = "RP",
+                    method = c("RP", "Group"),
                     slot = "counts",
                     ...)
            standardGeneric("get_degs"))
@@ -47,8 +47,10 @@ function(data,
          ID,
          type,
          counts = TRUE,
-         method = "RP",
+         method = c("RP", "Group"),
          ...) {
+
+  method <- match.arg(method)
 
   DGE <- data
   DGE$samples$group <- DGE$samples[[ID]]
@@ -82,7 +84,7 @@ function(data,
          ID,
          type,
          counts = TRUE,
-         method = "RP",
+         method = c("RP", "Group"),
          ...) {
 
   DGE <- edgeR::DGEList(counts = data, group = ID)
@@ -105,7 +107,7 @@ function(data,
          ID,
          type,
          counts = TRUE,
-         method = "RP",
+         method = c("RP", "Group"),
          ...) {
 
   DGE <- edgeR::DGEList(counts = data, group = ID)
@@ -128,7 +130,7 @@ function(data,
          ID,
          type,
          counts = TRUE,
-         method = "RP",
+         method = c("RP", "Group"),
          ...) {
 
   expr <- Biobase::exprs(data)
@@ -156,7 +158,7 @@ function(data,
          ID,
          type,
          counts = TRUE,
-         method = "RP",
+         method = c("RP", "Group"),
          slot = "counts",
          ...) {
 
@@ -185,7 +187,7 @@ function(data,
          ID,
          type,
          counts = TRUE,
-         method = "RP",
+         method = c("RP", "Group"),
          slot = "counts",
          ...) {
 
@@ -210,7 +212,7 @@ function(data,
 #' @description Standard DE analysis by using edgeR and limma::voom pipeline
 #'
 #' @param dge DGEList object for DE analysis, including expr and samples info
-#' @param ID chr, column name of coldata to specify the DE comparisons
+#' @param ID character, column name of coldata to specify the DE comparisons
 #' @param type pattern, specify the group of interest, e.g. NK
 #' @param counts logical, if the expr in data is raw counts data
 #' @param method either 'RP' or 'Group', choose whether to use rank product or
@@ -228,7 +230,7 @@ function(data,
 #' @param markers vector, a vector of gene names, listed the gene symbols to be
 #'                kept anyway after filtration. Default 'NULL' means no special
 #'                genes need to be kept.
-#' @param gene_id chr, specify the gene ID type of rownames of expression data
+#' @param gene_id character, specify the gene ID type of rownames of expression data
 #'                when markers is not NULL, could be one of 'ENSEMBL', 'SYMBOL',
 #'                'ENTREZ'..., default 'SYMBOL'
 #' @param ... omitted
@@ -240,7 +242,7 @@ de_analysis <- function(dge,
                         ID,
                         type,
                         counts = TRUE,
-                        method = "RP",
+                        method = c("RP", "Group"),
                         group = FALSE,
                         filter = c(10, 10),
                         plot = FALSE,
@@ -253,6 +255,8 @@ de_analysis <- function(dge,
   stopifnot(is.logical(counts), is.character(method), is.logical(group),
             is.numeric(filter), is.logical(plot), is.numeric(lfc),
             is.numeric(p), is.character(gene_id))
+
+  method <- match.arg(method)
 
   ## filter low counts genes
   keep <- filterGenes(dge = dge, ID = ID, filter = filter, counts = counts,

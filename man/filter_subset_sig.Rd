@@ -74,17 +74,17 @@ filter_subset_sig(
 kept anyway after filtration. Default 'NULL' means no special
 genes need to be kept.}
 
-\item{ID}{vec or chr, specify the group factor or column name of coldata for
+\item{ID}{vec or character, specify the group factor or column name of coldata for
 DE comparisons}
 
 \item{type}{pattern, specify the group of interest, e.g. NK}
 
 \item{counts}{logical, if the expr in data is raw counts data}
 
-\item{dir}{chr, could be 'UP' or 'DOWN' to use only up- or down-expressed
+\item{dir}{character, could be 'UP' or 'DOWN' to use only up- or down-expressed
 genes}
 
-\item{gene_id}{chr, specify the gene ID type of rownames of expression data
+\item{gene_id}{character, specify the gene ID type of rownames of expression data
 when markers is not NULL, could be one of 'ENSEMBL', 'SYMBOL',
 'ENTREZ'..., default 'SYMBOL'}
 

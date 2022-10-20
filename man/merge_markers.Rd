@@ -2,31 +2,26 @@
 % Please edit documentation in R/merge_markers.R
 \name{merge_markers}
 \alias{merge_markers}
-\title{Merge markers tbl into one.}
+\title{Merge markers list into one.}
 \usage{
 merge_markers(markers_list, plot = FALSE)
 }
 \arguments{
-\item{markers_list}{list of markers to be merged, can be list of vectors or
-GeneSetCollection object}
+\item{markers_list}{list of markers to be merged, can be a list of
+'GeneSet'/vector or a 'GeneSetCollection' object}
 
 \item{plot}{logical, if to make UpSetR plot for given list}
 }
 \value{
-A data frame with genes symbols and columns indicate where the genes
-come from
+A GeneSet class of union genes in the given list
 }
 \description{
-Merge markers collected from different DB into one tbl with 'TRUE' and '-' to
-indicate which DB each gene is from.
+Merge markers collected from different DB into one 'GeneSet' object, saved a
+data.frame in json format under \code{longDescription} with 'TRUE' and '-' to
+indicate which DB each gene is from, this can be shown via \code{\link[jsonlite:fromJSON]{jsonlite::fromJSON()}}
 }
 \examples{
-Msig <- get_msigdb_sig(
-  pattern = "natural_killer_cell_mediated",
-  ignore.case = TRUE
-)
 Panglao <- get_panglao_sig(type = "NK cells")
 merge_markers(markers = list(NK_markers = NK_markers$HGNC_Symbol,
-                             MSig = GSEABase::geneIds(Msig),
                              PanglaoDB = GSEABase::geneIds(Panglao)))
 }

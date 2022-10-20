@@ -4,17 +4,17 @@
 \alias{get_panglao_sig}
 \title{Extract immune subset markers from PanglaoDB website.}
 \usage{
-get_panglao_sig(type, species = "Hs")
+get_panglao_sig(type, species = c("Hs", "Mm", "Mm Hs"))
 }
 \arguments{
 \item{type}{character vector, cell type name(s) of interest,
 available subsets could be listed by \code{\link[=list_panglao_types]{list_panglao_types()}}}
 
-\item{species}{chr, default 'Hs', could be 'Hs', 'Mm' or 'Mm Hs',
+\item{species}{character, default 'Hs', could be 'Hs', 'Mm' or 'Mm Hs',
 specify the species of interest}
 }
 \value{
-a vector of markers
+a 'GeneSet' class object containing genes of given type(s)
 }
 \description{
 Extract specific immune subset markers for 'Hs' or 'Mm', the markers are
@@ -22,4 +22,5 @@ retrived from up-to-date PanglaoDB website.
 }
 \examples{
 get_panglao_sig(type = "NK cells")
+get_panglao_sig(type = c("NK cells", "T cells"))
 }

@@ -3,7 +3,7 @@
 #' Show the name and number of each cell type in PanglaoDB. Help users
 #' know which subset(s) marker list(s) could be retrived by PanglaoDB.
 #'
-#' @param organ chr, specify the tissue or organ label to list cell types
+#' @param organ character, specify the tissue or organ label to list cell types
 #'
 #' @return a vector of available cell types of the organ in PanglaoDB
 #' @export
@@ -11,6 +11,8 @@
 #' @examples
 #' list_panglao_types(organ = "Immune system")
 list_panglao_types <- function(organ) {
+
+  organ <- match.arg(organ, choices = list_panglao_organs())
 
   av_organs <- list_panglao_organs()
   stopifnot("Please provide a valid organ!" = organ %in% av_organs)

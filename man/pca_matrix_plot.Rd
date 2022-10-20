@@ -108,11 +108,11 @@ pca_matrix_plot(
 \item{features}{vector of gene symbols or 'all', specify the genes used for
 PCA, default 'all'}
 
-\item{slot}{chr, specify the slot name of seurat or sce object, optional}
+\item{slot}{character, specify the slot name of seurat or sce object, optional}
 
 \item{counts}{logical, TRUE indicates to calculate cpm before PCA}
 
-\item{group_by}{chr, specify the column to be grouped and colored, default NULL}
+\item{group_by}{character, specify the column to be grouped and colored, default NULL}
 
 \item{scale}{logical, if to scale data for PCA, default TRUE}
 
@@ -120,7 +120,7 @@ PCA, default 'all'}
 
 \item{loading}{logical, if to plot and label loadings of PCA, default 'FALSE'}
 
-\item{gene_id}{chr, specify which column of IDs used to calculate TPM, also
+\item{gene_id}{character, specify which column of IDs used to calculate TPM, also
 indicate the ID type of expression data's rowname, could be
 one of 'ENSEMBL', 'SYMBOL', 'ENTREZ'..., default 'SYMBOL'}
 }

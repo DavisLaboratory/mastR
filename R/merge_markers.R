@@ -1,55 +1,72 @@
-#' Merge markers tbl into one.
+#' @importFrom jsonlite toJSON fromJSON
+NULL
+
+#' Merge markers list into one.
 #'
-#' Merge markers collected from different DB into one tbl with 'TRUE' and '-' to
-#' indicate which DB each gene is from.
+#' Merge markers collected from different DB into one 'GeneSet' object, saved a
+#' data.frame in json format under `longDescription` with 'TRUE' and '-' to
+#' indicate which DB each gene is from, this can be shown via [jsonlite::fromJSON()]
 #'
-#' @param markers_list list of markers to be merged, can be list of vectors or
-#'                     GeneSetCollection object
+#' @param markers_list list of markers to be merged, can be a list of
+#'                     'GeneSet'/vector or a 'GeneSetCollection' object
 #' @param plot logical, if to make UpSetR plot for given list
 #'
-#' @return A data frame with genes symbols and columns indicate where the genes
-#'         come from
+#' @return A GeneSet class of union genes in the given list
 #' @export
 #'
 #' @examples
-#' Msig <- get_msigdb_sig(
-#'   pattern = "natural_killer_cell_mediated",
-#'   ignore.case = TRUE
-#' )
 #' Panglao <- get_panglao_sig(type = "NK cells")
 #' merge_markers(markers = list(NK_markers = NK_markers$HGNC_Symbol,
-#'                              MSig = GSEABase::geneIds(Msig),
 #'                              PanglaoDB = GSEABase::geneIds(Panglao)))
 merge_markers <- function(markers_list, plot = FALSE) {
 
-  if(all(sapply(markers_list, \(x) is(x, "GeneSet")))) {
-    markers_list <- GSEABase::GeneSetCollection(markers_list)
-  }else if(any(sapply(markers_list, \(x) is(x, "GeneSet")))) {
-    stop("Elements in the list should all be the same class!")
-  }
-
-  if(is(markers_list, "GeneSetCollection"))
-    markers_list <- GSEABase::geneIds(markers_list)
+  stopifnot("markers_list must be a list!" = is.list(markers_list),
+            "plot is not a logical value!" = is.logical(plot),
+            "provide more than 1 value for plot!" = length(plot) == 1)
 
   if(is.null(names(markers_list)))
     stop("Please provide named list!")
 
+  ## convert list into 'GeneSetCollection'
+  if(all(sapply(markers_list, \(x) is(x, "GeneSet")))) {
+    markers_list <- GSEABase::GeneSetCollection(markers_list)
+  }else if(all(sapply(markers_list, is.vector))) {
+    markers_list <- lapply(names(markers_list),
+                           \(n) GSEABase::GeneSet(markers_list[[n]],
+                                                  setName = n)) |>
+      GSEABase::GeneSetCollection()
+  }else {
+    stop("Elements in the list should all be the same class!")
+  }
+
+  ## merge and get union of all genesets
+  markers <- BiocGenerics::Reduce('|', markers_list)
+  GSEABase::setName(markers) <- "merged_markers_pool"
+
+  markers_list <- GSEABase::geneIds(markers_list)
+
+  ## plot upset diagram for overlapping genes among gene-sets in the list
+  if(plot == TRUE) {
+    UpSetR::upset(UpSetR::fromList(markers_list),
+                  nsets = length(markers_list)) |> print()
+  }
+
+  ## create tibble to show merged genes' origin
   markers_list <- lapply(names(markers_list), \(x) {
     d <- cbind(markers_list[[x]], TRUE)
     colnames(d) <- c("Gene", x)
     d
     })
-
-  markers <- Reduce(function(x, y) merge(x, y, all = TRUE),
-                    markers_list) |>
+  markers_list <- Reduce(function(x, y) merge(x, y, all = TRUE),
+                         markers_list) |>
     tidyr::as_tibble()
 
-  markers$y <- NULL
-  markers[is.na(markers)] <- "-"
+  markers_list$y <- NULL
+  markers_list[is.na(markers_list)] <- "-"
 
-  if (plot == TRUE) UpSetR::upset(ifelse(markers[, -1] == TRUE, 1, 0) |>
-                                    as.data.frame(),
-                                  nsets = dim(markers)[2] - 1) |> print()
+  ## save the tbl into GeneSet
+  GSEABase::longDescription(markers) <- jsonlite::toJSON(markers_list) |>
+    as.character()  ## convert tbl into json character format
 
   return(markers)
 }

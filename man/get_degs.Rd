@@ -10,24 +10,80 @@
 \alias{get_degs,Seurat,character,character-method}
 \title{Get differentially expressed genes by comparing specified groups}
 \usage{
-get_degs(data, ID, type, counts = TRUE, method = "RP", slot = "counts", ...)
+get_degs(
+  data,
+  ID,
+  type,
+  counts = TRUE,
+  method = c("RP", "Group"),
+  slot = "counts",
+  ...
+)
 
-\S4method{get_degs}{DGEList,character,character}(data, ID, type, counts = TRUE, method = "RP", slot = "counts", ...)
+\S4method{get_degs}{DGEList,character,character}(
+  data,
+  ID,
+  type,
+  counts = TRUE,
+  method = c("RP", "Group"),
+  slot = "counts",
+  ...
+)
 
-\S4method{get_degs}{matrix,vector,character}(data, ID, type, counts = TRUE, method = "RP", slot = "counts", ...)
+\S4method{get_degs}{matrix,vector,character}(
+  data,
+  ID,
+  type,
+  counts = TRUE,
+  method = c("RP", "Group"),
+  slot = "counts",
+  ...
+)
 
-\S4method{get_degs}{Matrix,vector,character}(data, ID, type, counts = TRUE, method = "RP", slot = "counts", ...)
+\S4method{get_degs}{Matrix,vector,character}(
+  data,
+  ID,
+  type,
+  counts = TRUE,
+  method = c("RP", "Group"),
+  slot = "counts",
+  ...
+)
 
-\S4method{get_degs}{ExpressionSet,character,character}(data, ID, type, counts = TRUE, method = "RP", slot = "counts", ...)
+\S4method{get_degs}{ExpressionSet,character,character}(
+  data,
+  ID,
+  type,
+  counts = TRUE,
+  method = c("RP", "Group"),
+  slot = "counts",
+  ...
+)
 
-\S4method{get_degs}{SummarizedExperiment,character,character}(data, ID, type, counts = TRUE, method = "RP", slot = "counts", ...)
+\S4method{get_degs}{SummarizedExperiment,character,character}(
+  data,
+  ID,
+  type,
+  counts = TRUE,
+  method = c("RP", "Group"),
+  slot = "counts",
+  ...
+)
 
-\S4method{get_degs}{Seurat,character,character}(data, ID, type, counts = TRUE, method = "RP", slot = "counts", ...)
+\S4method{get_degs}{Seurat,character,character}(
+  data,
+  ID,
+  type,
+  counts = TRUE,
+  method = c("RP", "Group"),
+  slot = "counts",
+  ...
+)
 }
 \arguments{
 \item{data}{expression object}
 
-\item{ID}{vec or chr, specify the group factor or column name of coldata for
+\item{ID}{vec or character, specify the group factor or column name of coldata for
 DE comparisons}
 
 \item{type}{pattern, specify the group of interest, e.g. NK}
@@ -38,7 +94,7 @@ DE comparisons}
 group other subsets for multiple comparisons for DE analysis,
 default 'RP'}
 
-\item{slot}{chr, specify which slot to use only for sce or seurat object,
+\item{slot}{character, specify which slot to use only for sce or seurat object,
 optional, default 'counts'}
 
 \item{...}{params for \code{\link[=de_analysis]{de_analysis()}} and \code{\link[=DEGs_RP]{DEGs_RP()}} or \code{\link[=DEGs_Group]{DEGs_Group()}}}
