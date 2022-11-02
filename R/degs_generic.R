@@ -12,8 +12,8 @@ NULL
 #'
 #' @inheritParams de_analysis
 #' @param data expression object
-#' @param ID vec or character, specify the group factor or column name of coldata for
-#'           DE comparisons
+#' @param ID vector or character, specify the group factor or column name of
+#'           coldata for DE comparisons
 #' @param slot character, specify which slot to use only for sce or seurat object,
 #'             optional, default 'counts'
 #' @param ... params for [de_analysis()] and [DEGs_RP()] or [DEGs_Group()]

@@ -1,7 +1,9 @@
 #' Collect genes from MSigDB.
 #'
 #' Collect genes of relevant MSigDB gene-sets, of which the gene-set names are
-#' matched to the given pattern by using [grep()] function.
+#' matched to the given pattern by using [grep()] function. By setting cat and
+#' subcat, matching can be constrained in the union of given categories and
+#' subcategories.
 #'
 #' @param pattern pattern pass to [grep()], to match the MsigDB gene-set name of
 #'                interest, e.g. 'NATURAL_KILLER_CELL_MEDIATED'
@@ -17,7 +19,7 @@
 #' @param version a character, stating the version of MSigDB to be retrieved
 #'                (should be >= 7.2). See [msigdb::getMsigdbVersions()].
 #' @param plot logical, if to plot UpSetR diagram
-#' @param ... params for [grep()], used to match pattern to gs_name
+#' @param ... params for [grep()], used to match pattern to gene-set names
 #'
 #' @return A GeneSet object containing all matched gene-sets in MSigDB
 #' @export

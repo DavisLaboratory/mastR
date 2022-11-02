@@ -612,7 +612,7 @@ scatter_hdb_cl <- function(sig_matrix, minPts = 2, ...) {
                                                   "")),
                          ggplot2::aes(x = Gene , y = Expression,
                                       col = (Type != ""))) +
-      ggrepel::geom_label_repel(aes(label = Type)) +
+      ggrepel::geom_label_repel(ggplot2::aes(label = Type)) +
       ggplot2::geom_point() +
       ggplot2::labs(col = "is.marker") +
       ggplot2::facet_wrap(~Gene) +

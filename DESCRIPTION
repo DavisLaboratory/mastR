@@ -24,9 +24,12 @@ Config/testthat/edition: 3
 Imports: 
     AnnotationDbi,
     Biobase,
+    BiocGenerics,
     BiocParallel,
     clusterProfiler,
+    dbscan,
     depmap,
+    dplyr,
     edgeR,
     enrichplot,
     ggfortify,
@@ -35,14 +38,18 @@ Imports:
     ggpubr,
     ggrepel,
     ggthemes,
+    gridExtra,
     GSEABase,
     jsonlite,
     limma,
     Matrix,
+    methods,
     msigdb,
     patchwork,
     pheatmap,
     reshape2,
+    RobustRankAggreg,
+    SeuratObject,
     singscore,
     stats,
     tibble,
@@ -63,6 +70,7 @@ Collate:
     'list_panglao_types.R'
     'merge_markers.R'
     'pca_matrix_plot.R'
+    'pseudo_samples.R'
     'sig_boxplot.R'
     'sig_gseaplot.R'
     'sig_heatmap.R'
