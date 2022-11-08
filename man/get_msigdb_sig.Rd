@@ -37,14 +37,16 @@ symbols and "EZID" for Entrez IDs)}
 
 \item{plot}{logical, if to plot UpSetR diagram}
 
-\item{...}{params for \code{\link[=grep]{grep()}}, used to match pattern to gs_name}
+\item{...}{params for \code{\link[=grep]{grep()}}, used to match pattern to gene-set names}
 }
 \value{
 A GeneSet object containing all matched gene-sets in MSigDB
 }
 \description{
 Collect genes of relevant MSigDB gene-sets, of which the gene-set names are
-matched to the given pattern by using \code{\link[=grep]{grep()}} function.
+matched to the given pattern by using \code{\link[=grep]{grep()}} function. By setting cat and
+subcat, matching can be constrained in the union of given categories and
+subcategories.
 }
 \examples{
 get_msigdb_sig(

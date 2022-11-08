@@ -20,8 +20,7 @@ DEGs_Group(
 
 \item{lfc}{num, cutoff of logFC for DE analysis}
 
-\item{p}{num, cutoff of p value for DE analysis and permutation test if
-method = "RP"}
+\item{p}{num, cutoff of p value for DE analysis}
 
 \item{assemble}{'intersect' or 'union', whether to select intersected or
 union genes of different comparisons, default 'intersect'}

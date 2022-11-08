@@ -11,6 +11,7 @@ DEGs_RP(
   assemble = "intersect",
   Rank = "adj.P.Val",
   nperm = 1e+05,
+  thres = 0.05,
   keep.top = NULL,
   keep.group = NULL,
   ...
@@ -21,8 +22,7 @@ DEGs_RP(
 
 \item{lfc}{num, cutoff of logFC for DE analysis}
 
-\item{p}{num, cutoff of p value for DE analysis and permutation test if
-method = "RP"}
+\item{p}{num, cutoff of p value for DE analysis}
 
 \item{assemble}{'intersect' or 'union', whether to select intersected or
 union genes of different comparisons, default 'intersect'}
@@ -31,6 +31,9 @@ union genes of different comparisons, default 'intersect'}
 default 'adj.P.Val'}
 
 \item{nperm}{num, permutation runs of simulating the distribution}
+
+\item{thres}{num, cutoff for rank product permutation test if method = "RP",
+default 0.05}
 
 \item{keep.top}{NULL or num, whether to keep top n DEGs of specific comparison}
 

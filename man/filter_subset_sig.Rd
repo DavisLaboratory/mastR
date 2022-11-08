@@ -74,8 +74,8 @@ filter_subset_sig(
 kept anyway after filtration. Default 'NULL' means no special
 genes need to be kept.}
 
-\item{ID}{vec or character, specify the group factor or column name of coldata for
-DE comparisons}
+\item{ID}{vector or character, specify the group factor or column name of
+coldata for DE comparisons}
 
 \item{type}{pattern, specify the group of interest, e.g. NK}
 

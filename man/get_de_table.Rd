@@ -27,8 +27,8 @@ get_de_table(data, ID, type, slot = "counts", ...)
 \arguments{
 \item{data}{expression object}
 
-\item{ID}{vec or character, specify the group factor or column name of coldata for
-DE comparisons}
+\item{ID}{vector or character, specify the group factor or column name of
+coldata for DE comparisons}
 
 \item{type}{pattern, specify the group of interest, e.g. NK}
 

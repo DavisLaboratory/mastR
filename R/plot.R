@@ -586,28 +586,17 @@ rankdensity_init <- function(expr, sigs, by, counts = TRUE,
 
 ## scatter plot of HDBSCAN cluster result
 ##---------------------------------------------------------------
-scatter_hdb_cl <- function(sig_matrix, minPts = 2, ...) {
+scatter_hdb_cl <- function(sig_matrix, markers_list) {
 
-  stopifnot(is.matrix(sig_matrix) | is.data.frame(sig_matrix))
+  stopifnot("sig_matrix must be a matrix or data.frame!" = is.matrix(sig_matrix) | is.data.frame(sig_matrix),
+            "markers_list is not a list!" = is.list(markers_list))
 
-  p <- BiocParallel::bplapply(rownames(sig_matrix), function(m) {
-    ## cluster cell types based on each gene profile
-    cl <- dbscan::hdbscan(cbind(sig_matrix[m,], sig_matrix[m,]),
-                          minPts = minPts, ...)
+  ml <- reshape2::melt(markers_list) |> (\(x) split(x$L1, x$value))()
 
-    flag <- cl$cluster[which.max(sig_matrix[m,])]  ## which cluster is the max expression
-    if(flag == "0"){
-      ## if max is noise point, assign this gene to the unique cell type
-      type <- colnames(sig_matrix)[which.max(sig_matrix[m,])]
-    }else{
-      ## if max is a cluster, assign this gene to all cell types in the cluster
-      type <- colnames(sig_matrix)[cl$cluster == flag]
-    }
-
+  p <- lapply(rownames(sig_matrix), function(m) {
     p <- ggplot2::ggplot(data.frame(Gene = m,
-                                    Expression = sig_matrix[m,],
-                                    Cluster = cl$cluster,
-                                    Type = ifelse(colnames(sig_matrix) %in% type,
+                                    Expression = sig_matrix[m,] |> as.numeric(),
+                                    Type = ifelse(colnames(sig_matrix) %in% ml[[m]],
                                                   colnames(sig_matrix),
                                                   "")),
                          ggplot2::aes(x = Gene , y = Expression,
