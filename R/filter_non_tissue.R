@@ -5,7 +5,8 @@
 #'
 #' @param data 'CCLE' or expression object
 #' @param ID vector or character, to specify the group of tumor/tissue types
-#' @param type pattern, specify the type of interest, e.g. 'colorectal'
+#' @param type pattern, specify the type of interest, e.g. 'colorectal', match
+#'             to primary_disease of CCLE if data is 'CCLE'
 #' @param ... params for [grep()] to find matched cell lines in CCLE
 #' @param log logical, if to do log transformation on expression
 #' @param q num, quantile cutoff to screen markers which are not or lowly

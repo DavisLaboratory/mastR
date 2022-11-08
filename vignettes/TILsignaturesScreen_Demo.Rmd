@@ -1,0 +1,515 @@
+---
+title: "TILsignaturesScreen_Demo"
+author:
+  - name: Jinjin Chen
+    affiliation:
+      - Bioinformatics Division, Walter and Eliza Hall Institute of Medical Research, Parkville, VIC 3052, Australia
+      - Department of Medical Biology, University of Melbourne, Parkville, VIC 3010, Australia
+    email: chen.j@wehi.edu.au
+date: "`r format(Sys.time(), '%d %b %Y')`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{TILsignaturesScreen_Demo}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+
+-----------------------------
+
+This report demonstrates how to use the functions in R package `TILsignaturesScreen 0.1.0` to screen immune subset signatures in specific tissue and visualize the effects of the curation.
+
+`TILsignaturesScreen` is developed to screen immune cells signature in cancer tissues. So there are several datasets imported into this package for running by default. But users could specify other immune subsets and other tissues by setting the parameters in the R functions. Next, this report will show how the workflow runs to refine NK cells signatures which are specific for CRC, and how to visualize the results effect.
+
+# Installation
+
+-----------------------------
+
+Install `TILsignaturesScreen` R package from [GitHub](https://github.com/Gene233/TILsignaturesScreen).
+The most updated version of `TILsignaturesScreen` is hosted on GitHub and can be easily installed using `devtools::install_github()` function provided by [devtools](https://cran.r-project.org/package=devtools).
+
+```{r installation}
+if (!requireNamespace("devtools", quietly = TRUE)) {
+  install.packages("devtools")
+}
+if (!requireNamespace("TILsignaturesScreen", quietly = TRUE)) {
+  devtools::install_github("Gene233/TILsignaturesScreen")
+}
+```
+
+# Prepare Immune Markers Pool
+
+------------------------------
+
+## Load Datasets
+
+To screen the immune subset signatures, we have to load the example datasets. The datasets used in this report have been built within the package or can be accessed publicly. You can use the following scripts to load them into your R environment.
+
+`NK_markers` dataset is a combination of CIBERSORT LM7, LM22 and human orthologs in mice from [Huntington](https://cancerimmunolres.aacrjournals.org/content/7/7/1162.long). It contains 114 genes in total.
+
+`LM7` and `LM22` are signature matrices, you can get more details by `?TILsignaturesScreen::LM7` or `?TILsignaturesScreen::LM22`.
+
+`im_data_6` is a eSet object, containing RNA-seq TMM normalized counts data of 6 sorted immune subsets. More details in `?TILsignaturesScreen::im_data_6`.
+
+```{r setup}
+library(TILsignaturesScreen)
+library(DT)
+library(viridis)
+```
+
+### NK markers from [Curson's Publication](https://aacrjournals.org/cancerimmunolres/article/7/7/1162/469488/A-Gene-Signature-Predicting-Natural-Killer-Cell)
+
+```{r NK_markers}
+## show what NK_markers looks like:
+NK_markers %>% datatable()
+```
+
+### Markers from LM
+
+Uses can extract markers for subsets matched to the given pattern from imported data `LM7`/`LM22`. 
+
+The matched genes will be saved in 'GeneSet' class object, if both pattern are provided, the output would be a 'GeneSetCollection' class object with setName: LM7, LM22.
+
+```{r LM markers}
+## only retrieve LM7
+get_lm_sig(lm7.pattern = "NK")
+
+## only retrieve LM22
+get_lm_sig(lm22.pattern = "NK cells")
+
+## collect both LM7 and LM22
+LM <- get_lm_sig(lm7.pattern = "NK", lm22.pattern = "NK cells")
+
+LM
+```
+
+### Markers from MSigDB
+
+The users can specify the `species`, `cat`, `subcat` and `pattern` to decide which genesets to be added. 
+
+All genesets with geneset name matched to the `pattern` in the whole MSigDB would be extracted if `cat` and `subcat` are not set, otherwise only the genesets under the union of `cat` and `subcat` would be searched. 
+
+By setting `plot = TRUE`, an UpSetR plot across matched genesets would be printed.
+
+```{r MSigDB genesets, fig.width=12, warning=FALSE}
+## collect all "natural killer mediated" relavent genesets from MSigDB
+MSig <- get_msigdb_sig(pattern = "NATURAL_KILLER_CELL_MEDIATED",
+                       subcat = "GO:BP", version = '7.4',
+                       plot = TRUE)
+
+MSig
+```
+
+### Markers from PanglaoDB
+
+Users can use `list_panglao_organs()` and `list_panglao_types()` functions to list all available organs and cell types on PanglaoDB website and use `get_panglao_sig()` function to retrive them.
+
+```{r PanglaoDB_NK}
+## show availbable organs on PanglaoDB
+list_panglao_organs()
+
+## show available cell types of interest organ on PanglaoDB
+## Number in the bracket represents the number of markers for each cell type (in both Homo and Mus).
+list_panglao_types(organ = "Immune system")
+
+## collect all "NK cells" markers from PanglaoDB website
+Panglao <- get_panglao_sig(type = "NK cells")
+
+Panglao
+## number differs from 'NK cells' under list_panglao_types(organ = "Immune system"), because we only keep 'Hs' markers.
+```
+
+## Integrate Markers Pool
+
+Finally, all markers can be merged into one 'GeneSet' object by using function `merge_markers()`.
+
+The input can be a list of vectors of genes, or a list of GeneSet objects, or a GeneSetCollection object. `plot = TRUE` requires the list to have > 1 elements.
+
+```{r integrate markers}
+Markers <- merge_markers(markers_list = list(
+  NK_markers = NK_markers$HGNC_Symbol |> 
+    GeneSet(geneIdType = SymbolIdentifier(), setName = "NK_markers"),
+  LM7 = LM[["LM7"]],
+  LM22 = LM[["LM22"]],
+  MSigDB = MSig,
+  PanglaoDB = Panglao
+  ), 
+  plot = TRUE)
+
+## can also use on GeneSetCollection
+# merge_markers(markers_list = LM, plot = TRUE)
+
+Markers
+
+## to show the table summary of merged list
+jsonlite::fromJSON(Markers@longDescription)
+```
+
+# Screen Immune Subset Signatures
+
+------------------------------------
+
+## Specify Markers Against Other Immune Subsets {.tabset .tabset-fade .tabset-pills}
+
+The example uses `im_data_6` from [GSE60424](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE60424).
+
+* `im_data_6` consists 6 immune subsets * 4 samples, the data type is 'TMM normalized counts data'.
+
+Only samples from healthy individuals are kept, and 'Whole Blood' or 'PBMC' cells are removed in dataset.
+
+```{r im_data_6}
+im_data_6
+
+edgeR::DGEList(
+  counts = exprs(im_data_6),
+  samples = pData(im_data_6)
+)[["samples"]][, c(
+  "lib.size", "donorid.ch1", "smoker.ch1",
+  "cellcount.ch1", "collectiondate.ch1",
+  "celltype.ch1", "gender.ch1"
+)] %>% datatable()
+```
+
+To find the passing genes, low expression genes filtration needs to be done first. `get_degs()` function can filter low expression genes out from immune dataset, generate a filtered `proc_data` object and return a differentially expressed genes list ('UP' and 'DOWN').
+
+* `data` param can be a bulk RNA-seq expression object with subset labels, can be matrix, eSet, DGEList, ...  
+* `ID` param can specify the column name of groups (labels), can be a vector when `data` is a matrix.  
+* `type` param can specify the cell type name of interest. Users can choose one name in `ID` vector.  
+* `count` param indicates if the input data is raw counts data. If `counts = FALSE`, the function would directly use the expression data *per se* to filter out genes instead of calculating CPM.  
+* `method` param to choose whether to use rank product ('RP') or 'Group' for multiple comparisons for DE analysis, default 'RP'.  
+* `plot = TRUE` would visualize the QC results before and after filtration. It would make log hist plot, RLE plot, MDS plot and SA plot.  
+* `markers` param could specify a geneset to be kept no matter if they pass the filtration. Setting it to `NULL` can skip this.  
+* `gene_id` specify the gene ID type of rownames of data when markers is not NULL, could be one of 'ENSEMBL', 'SYMBOL', 'ENTREZ'..., default 'SYMBOL'.
+
+```{r type names}
+im_data_6$`celltype:ch1` %>% unique()
+```
+
+Get DEGs from immune datasets based on rank-product method.
+
+```{r DEG_6}
+DEG_6 <- get_degs(
+  data = im_data_6,  
+  ID = "celltype:ch1", type = "NK", 
+  plot = T, ## show QC plots after filtration
+  markers = geneIds(Markers), 
+  gene_id = "ENSEMBL"  ## convert ensembl IDs of rownames into symbols if gene_id != "SYMBOL"
+)  
+## `proc_data` object would be generated, saved expr after limma::voom pipeline.
+
+DEG_6[["UP"]] %>% head()
+DEG_6[["DOWN"]] %>% head()
+design <- model.matrix(~ 0 + factor(proc_data$samples$group))
+colnames(design) <- levels(factor(proc_data$samples$group))
+rownames(design) <- colnames(proc_data)
+datatable(design) ## show the design matrix
+```
+
+Then we will only keep those UP regulated genes which are also in our markers pool `Markers`.
+
+There's a wrapped function `filter_subset_sig()` which can directly do this from raw data. The result would be the same as run the workflow separately
+
+```{r markers for cell type}
+library(org.Hs.eg.db)
+## convert ensembl IDs into symbols to match markers pool
+deg_up <- mapIds(org.Hs.eg.db, DEG_6$UP, "SYMBOL", "ENSEMBL")
+## markers specific for NK cells
+m_ct <- intersect(geneIds(Markers), deg_up)
+names(m_ct) <- names(deg_up)[match(m_ct, deg_up)]  ## set ensembl ID as names for downstream visualization
+
+## run by wrapped function in one-step
+m_ct_new <- filter_subset_sig(data = im_data_6, 
+                              markers = geneIds(Markers),
+                              ID = "celltype:ch1",
+                              type = "NK",
+                              gene_id = "ENSEMBL")
+
+setequal(m_ct, m_ct_new)
+```
+
+We can see PCA shows clearer separation between NK cells and other cells by using screened UP DEGs, compared with all genes.
+
+And compared with edgeR normalization only, data after voom can explain more variance in PC1 between NK cells and others, indicating stronger power for cell type discrimination.
+
+```{r PCA for im_data_6, fig.width=10, fig.height=7}
+library(ggfortify)
+
+## PCA on raw counts data with standard edgeR normalization
+pca_matrix_plot(im_data_6, group_by = "celltype:ch1", 
+                counts = TRUE)
+pca_matrix_plot(im_data_6[names(m_ct),], group_by = "celltype:ch1", 
+                counts = TRUE)
+
+## PCA on limma::voomed data after standard edgeR normalization
+pca_matrix_plot(proc_data, group_by = "celltype.ch1", 
+                counts = FALSE)
+pca_matrix_plot(proc_data[names(m_ct),], group_by = "celltype.ch1", 
+                counts = FALSE)
+## PCA show smaller PC1 variance without intersect with markers pool
+pca_matrix_plot(proc_data[DEG_6$UP,], group_by = "celltype.ch1", 
+                counts = FALSE)
+```
+
+
+## Specify Markers Against Tissue
+
+The example uses `CCLE_tpm` from [DepMap CCLE](https://depmap.org/portal/download/), containing RSEM quantified TPM data of 1392 cancer cell lines (until 2022.04).
+
+```{r CCLE_tpm}
+CCLE <- depmap::depmap_TPM()
+CCLE_meta <- depmap::depmap_metadata()
+
+CCLE[1:10,] |> datatable()
+```
+
+To specify NK markers for CRC, use `filter_non_tissue()` function to remove failing genes which are also highly expressed by CRC adherent cell lines *per se*. This function would also generate `CCLE_tpm_new` object, extracting all `type` relevant cell lines.
+
+* `type` param is an expression pattern to specify the tissue of interest, here we choose 'colorectal' to select all colorectal adherent cell lines.  
+* `ignore.case` means whether to ignore the capital or not.  
+* `log = TURE` would do log transformation to the data.  
+* `q` param is the threshold to remove failing genes. 0.25 means removing markers with median expression >= 25% percentile of non-zero expression of all genes.  
+* `markers` param is the updated markers pool.
+
+```{r markers for cancer cell line}
+## convert CCLE from long to wide data format
+CCLE <- tidyr::pivot_wider(CCLE[,c("gene_name", "cell_line", "rna_expression")],
+                           names_from = "cell_line",
+                           values_from = "rna_expression")
+CCLE <- tibble::column_to_rownames(CCLE, "gene_name")
+
+## match depmap ID of CCLE TPM to CCLE meta to get disease names
+idx <- match(colnames(CCLE), CCLE_meta$cell_line)
+cell_lines <- CCLE_meta$primary_disease[idx]
+
+## markers against for CRC cell lines
+m_ccl <- filter_non_tissue(data = CCLE,
+                           ID = cell_lines,
+                           type = "colorectal",
+                           markers = geneIds(Markers))
+## as CCLE is default setting, this can also be easily run without loading CCLE
+# m_ccl <- filter(type = "colorectal",
+#                 markers = geneIds(Markers))
+
+head(m_ccl)
+```
+
+## Final NK Cells Signature for CRC
+
+Select the Signature which pass both criteria: cell type and cancer cell line.
+
+```{r final signatures}
+sig_NK_CRC <- intersect(m_ct, m_ccl)
+sig_NK_CRC
+```
+
+# Visulize The Curation Effect {.tabset .tabset-fade .tabset-pills}
+
+----------------------------------
+
+## PCA matrix plot
+
+To see if curated NK cells signatures have more distinguishable expression pattern from other immune subsets, we can use PCA plot again here to show it.
+
+```{r pca, fig.width=10, fig.height=7}
+## as proc_data shows better discrimination, use it for visualization
+vis_data <- proc_data
+
+pca_matrix_plot(
+  data = vis_data, 
+  features = sig_NK_CRC, 
+  counts = FALSE,
+  group_by = "celltype.ch1",
+  gene_id = "ENSEMBL"
+)
+```
+
+
+## Heatmap
+
+`result_heatmap()` function can plot the original NK cells markers and curated signatures expression pattern heatmaps in immune datasets.
+
+* `sigs` param is the final curated signature symbols, while `markers` param is the original markers pool.  
+* `scale` could specify the `column` or `row` to be scaled or no scaling by `none`.  
+* `min_max` is used to decide if to apply min-max normalization to each row of expression data.
+* `counts` means whether to calculate logCPM or not.    
+* Users are able to specify the color of heatmap by setting `color` param.
+
+
+We can see the expression pattern of cutrated signature is more distinguishable in NK cells.
+
+```{r heatmap, fig.width=12, warning=FALSE}
+sig_heatmap(
+  data = vis_data, 
+  sigs = sig_NK_CRC,
+  counts = FALSE,
+  ID = "celltype.ch1", 
+  markers = geneIds(Markers),
+  gene_id = "ENSEMBL"
+)
+
+## for multiple datasets
+sig_heatmap(
+  data = list(data_6 = im_data_6,
+              proc_data = vis_data), 
+  sigs = sig_NK_CRC,
+  ID = c("celltype:ch1", "celltype.ch1"), 
+  markers = geneIds(Markers),
+  counts = c(TRUE, FALSE),
+  gene_id = "ENSEMBL",
+  col = viridis_pal()(1000)
+)
+```
+
+
+## Rank Density Plot
+
+Use `sig_rankdensity_plot()` function to make rank density plot for all subsets in the data.
+
+By setting `aggregate = TRUE`, only one plot for each cell type with mean expression would be shown.
+
+We might want to see the rank density plot in more than 1 datasets for comparison, this can be done by simply passing a list of datasets to function.
+
+We can find, processed data shows more digstinguishable rankdensity distribution of screened NK signature genes.
+
+```{r rankdensity plot, fig.width=10, fig.height=7, warning=FALSE, results='hide'}
+## visualization on both original and processed data
+sig_rankdensity_plot(
+  data = list(im_data_6 = im_data_6,
+              process_Data = vis_data), 
+  sigs = sig_NK_CRC,
+  counts = c(TRUE, FALSE),
+  ID = c("celltype:ch1", "celltype.ch1"), 
+  gene_id = "ENSEMBL"
+)
+
+## visualization on aggregated data
+sig_rankdensity_plot(
+  data = vis_data, 
+  sigs = sig_NK_CRC,
+  ID = "celltype.ch1", 
+  counts = FALSE,
+  aggregate =  TRUE,
+  gene_id = "ENSEMBL"
+)
+```
+
+
+## NK Score Boxplot
+
+To see if the curated NK cells signatures have evident higher abundance in NK cells than other immune subsets, use `sig_boxplot()` function to make boxplot of the NK scores for all subsets in the data.
+
+NK score is calculated by `singscore` package.
+
+Obviously, our signature always shows significantly higher score in NK cells.
+
+```{r score boxplot, warning=FALSE}
+sig_boxplot(
+  data = vis_data, 
+  sigs = sig_NK_CRC,
+  ID = "celltype.ch1", 
+  type = "NK", 
+  counts = FALSE,
+  gene_id = "ENSEMBL"
+)
+
+## To make boxplots for more than 1 immune datasets at once:
+# result_score_boxplot(data = list(data_6 = im_data_6,
+#                                  proc_data = vis_data), 
+#                      sigs = sig_NK_CRC,
+#                      ID = c("celltype:ch1", "label.main"),
+#                      type = "NK",
+#                      counts = c(TRUE, FALSE),
+#                      gene_id = "ENSEMBL") *
+#   guides(col = "none")
+```
+
+
+## NK Signature Abundance Boxplot
+
+`result_exp_boxplot()` function can also generate boxplot of the NK signature abundance for all subsets in the data by setting `plot.score = FALSE`.
+
+It's clear the score can increase the difference between NK cells and others.
+
+```{r abundance boxplot, warning=FALSE}
+sig_boxplot(
+  data = vis_data, 
+  sigs = sig_NK_CRC,
+  ID = "celltype.ch1", 
+  type = "NK",
+  plot.score = FALSE,
+  counts = FALSE,
+  gene_id = "ENSEMBL"
+)
+```
+
+
+## NK Signature Abundance Scatter Plot
+
+To see if the curated NK cells signature shows higher specificity to NK cells than other immune subsets. Use `sig_scatter_plot()` function to make scatter plot of the NK signature abundance for all subsets in the data.
+
+Based on sactter plot result, we can actually do further filtration to improve signature specificity.
+
+```{r abundance biplot, warning=FALSE}
+sig_scatter_plot(
+  data = vis_data, 
+  sigs = sig_NK_CRC,
+  ID = "celltype.ch1", 
+  type = "NK",
+  counts = FALSE,
+  xint = 2.5, yint = 2.5,
+  gene_id = "ENSEMBL"
+)
+
+## To make boxplots for more than 1 immune datasets at once:
+# result_biplot(
+#   data = list(data_6 = im_data_6,
+#               proc_data = vis_data), 
+#   sigs = sig_NK_CRC,
+#   ID = c("celltype:ch1", "celltype.ch1"),
+#   type = "NK", 
+#   xint = 2.5, yint = 2.5,
+#   counts = c(TRUE, FALSE), 
+#   gene_id = "ENSEMBL")
+```
+
+
+## NK Signature GSEA plot
+
+To see if the curated NK cells signature is enriched in NK cells than other immune subsets. Use `sig_gseaplot()` function to make GSEAplot.
+
+It's clear that our screened signature is enriched in all comparisons.
+
+```{r gseaplot, fig.width=8, fig.height=5, warning=FALSE}
+sig_gseaplot(
+  data = vis_data, 
+  sigs = sig_NK_CRC,
+  ID = "celltype.ch1", 
+  type = "NK",
+  gene_id = "ENSEMBL",
+  counts = FALSE
+)
+```
+
+
+# Session Info
+
+---------------------
+
+```{r session info}
+sessionInfo()
+```
+
+# References
+
+---------------------
+
+>Cursons J, Souza-Fonseca-Guimaraes F, Foroutan M, Anderson A, Hollande F, Hediyeh-Zadeh S, Behren A, Huntington ND, Davis MJ. A Gene Signature Predicting Natural Killer Cell Infiltration and Improved Survival in Melanoma Patients. Cancer Immunol Res. 2019 Jul;7(7):1162-1174. doi: 10.1158/2326-6066.CIR-18-0500. Epub 2019 May 14. PMID: 31088844.
+

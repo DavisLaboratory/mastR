@@ -47,6 +47,7 @@ merge_markers <- function(markers_list, plot = FALSE) {
 
   ## plot upset diagram for overlapping genes among gene-sets in the list
   if(plot == TRUE) {
+    stopifnot("markers_list must contain >= 2 lists when plot = TRUE!" = length(markers_list) > 1)
     UpSetR::upset(UpSetR::fromList(markers_list),
                   nsets = length(markers_list)) |> print()
   }
