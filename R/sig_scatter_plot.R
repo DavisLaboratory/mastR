@@ -116,8 +116,10 @@ function(data,
          yint = 1,
          gene_id = "SYMBOL") {
 
-  p <- scatter_plot_init(expr = Biobase::exprs(data), sigs = sigs, counts = counts,
-                         type = type, by = data[[ID]], xint = xint, yint = yint,
+  p <- scatter_plot_init(expr = Biobase::exprs(data),
+                         sigs = sigs, counts = counts,
+                         type = type, by = data[[ID]],
+                         xint = xint, yint = yint,
                          gene_id = gene_id)
   return(p)
 })
@@ -199,10 +201,12 @@ function(data,
     gene_id <- rep(gene_id, length(data))
 
   p <- list()
-  for (i in 1:length(data)) {
-    p[[i]] <- sig_scatter_plot(data = data[[i]], sigs = sigs, counts = counts[i],
-                               type = type[i], slot = slot[i], ID = ID[[i]],
-                               xint = xint, yint = yint, gene_id = gene_id[i])
+  for (i in seq_along(data)) {
+    p[[i]] <- sig_scatter_plot(data = data[[i]], sigs = sigs,
+                               counts = counts[i], type = type[i],
+                               slot = slot[i], ID = ID[[i]],
+                               xint = xint, yint = yint,
+                               gene_id = gene_id[i])
     if(!is.null(names(data)))
       p[[i]] <- p[[i]] + labs(subtitle = names(data)[i]) +
         theme(plot.subtitle = element_text(hjust = 0.5))

@@ -1,17 +1,26 @@
 Package: TILsignaturesScreen
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: Screen Immune Cells Signature for Specific Cancer or Tissue Type
+Version: 0.9.0
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+    person("Jinjin", "Chen", , "chen.j@wehi.edu.au", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-7923-5723"))
+Description: This package enables screening immune cells signatures for specific 
+    cancer or tissue type. Imported NK cell markers are based on LM22 and LM7
+    and human orthologs in mice. MSigDB genesets of relevant terms and Panglao 
+    DB markers can also be retrieved by this package. Users can choose to use
+    sorted immune cell bulk RNA-seq data and CCLE adherent cell line RNA-seq
+    data (CCLE) to screen signatures or use customized data. This package also
+    provides pseudo bulking function to deal with scRNA-seq data. Multiple 
+    visualization functions are implemented in this package.
+biocViews: Software, GeneExpression, Transcriptomics, 
+    DifferentialExpression, Visualization
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
 Depends: 
     org.Hs.eg.db,
-    R (>= 2.10)
+    R (>= 4.2)
 LazyData: true
 Suggests: 
     knitr,
@@ -21,15 +30,12 @@ Suggests:
     SingleCellExperiment,
     SummarizedExperiment,
     testthat (>= 3.0.0),
-    vdiffr
 Config/testthat/edition: 3
 Imports: 
     AnnotationDbi,
     Biobase,
     BiocGenerics,
-    BiocParallel,
     clusterProfiler,
-    dbscan,
     depmap,
     dplyr,
     edgeR,
@@ -39,7 +45,8 @@ Imports:
     ggplotify,
     ggpubr,
     ggrepel,
-    ggthemes,
+    graphics,
+    grDevices,
     gridExtra,
     GSEABase,
     jsonlite,
@@ -49,16 +56,15 @@ Imports:
     msigdb,
     patchwork,
     pheatmap,
-    reshape2,
     RobustRankAggreg,
-    SeuratObject,
     singscore,
     stats,
-    tibble,
     tidyr,
-    UpSetR
+    UpSetR,
+    utils
 Collate: 
     'DE_functions.R'
+    'TILsignaturesScreen_Package.R'
     'data.R'
     'plot.R'
     'de_table_generic.R'
@@ -78,4 +84,6 @@ Collate:
     'sig_heatmap.R'
     'sig_rankdensity_plot.R'
     'sig_scatter_plot.R'
+URL: https://davislaboratory.github.io/TILsignaturesScreen
+BugReports: https://github.com/DavisLaboratory/TILsignaturesScreen/issues
 VignetteBuilder: knitr

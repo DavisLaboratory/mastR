@@ -20,7 +20,7 @@ list_panglao_types <- function(organ) {
   web <- rvest::read_html("https://panglaodb.se/markers.html?cell_type=%27choose%27")
 
   av_cells <- web |>
-  rvest::html_elements(paste0("optgroup[label='",organ,"'] option")) |>
+  rvest::html_elements(paste0("optgroup[label='", organ, "'] option")) |>
   rvest::html_text()
   return(av_cells)
 }

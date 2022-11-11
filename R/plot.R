@@ -2,13 +2,18 @@
 #' @importFrom enrichplot gseaplot2
 NULL
 
+tableau_20 <-  c("#4E79A7", "#A0CBE8", "#F28E2B", "#FFBE7D", "#59A14F",
+                 "#8CD17D", "#B6992D", "#F1CE63", "#499894", "#86BCB6",
+                 "#E15759", "#FF9D9A", "#79706E", "#BAB0AC", "#D37295",
+                 "#FABFD2", "#B07AA1", "#D4A6C8", "#9D7660", "#D7B5A6")
+
 ## plot functions for comparing unfiltered and filtered data
 ##---------------------------------------------------------------
 #helper: logCPM density plot between filtered and unfiltered
 plot_density <- function(dge, ID, keep = TRUE, counts = TRUE, filter = 10) {
   ## set colors for each cell type
   col <- dge$samples[[ID]] |> as.factor() |> as.numeric()
-  colors <- colorRampPalette(colors = ggthemes::tableau_color_pal("Tableau 20")(20))(unique(dge$samples[[ID]]) |> length())
+  colors <- colorRampPalette(colors = tableau_20)(unique(dge$samples[[ID]]) |> length())
 
   ## set par for plot to make 2 plots in one page
   op <- par(no.readonly = TRUE)
@@ -18,8 +23,8 @@ plot_density <- function(dge, ID, keep = TRUE, counts = TRUE, filter = 10) {
   if(counts) {
     M <- median(dge$samples$lib.size) * 1e-6
     L <- mean(dge$samples$lib.size) * 1e-6
-    lcpm.1 <- edgeR::cpm(dge, log = T)
-    lcpm.2 <- edgeR::cpm(dge[keep,, keep.lib.sizes = F], log = T)
+    lcpm.1 <- edgeR::cpm(dge, log = TRUE)
+    lcpm.2 <- edgeR::cpm(dge[keep,, keep.lib.sizes = FALSE], log = TRUE)
     abl <- log2(filter/M + 2/L)
   }else {
     # lcpm.1 <- log1p(dge$counts)
@@ -31,36 +36,36 @@ plot_density <- function(dge, ID, keep = TRUE, counts = TRUE, filter = 10) {
   }
 
   ## plot unfiltered data
-  plot(density(lcpm.1[,1]), col = colors[col[1]],
-       main = "Unfiltered", xlab = ifelse(counts,"logCPM","logcounts"),
-       ylim = c(0, max(density(lcpm.1)$y)*1.2))
+  plot(stats::density(lcpm.1[,1]), col = colors[col[1]],
+       main = "Unfiltered", xlab = ifelse(counts, "logCPM", "logcounts"),
+       ylim = c(0, max(stats::density(lcpm.1)$y) * 1.2))
   abline(v = abl, lty = 3)
-  t <- lapply(2:ncol(dge), function(i) lines(density(lcpm.1[,i]),
-                                             col = colors[col[i]]))
+  lapply(2:ncol(dge), function(i) lines(stats::density(lcpm.1[,i]),
+                                        col = colors[col[i]]))
   legend("topright", legend = unique(dge$samples[[ID]]),
          text.col = colors[unique(col)], bty = "n", inset = c(-0.3, 0))
 
   ## plot filtered data
-  plot(density(lcpm.2[,1]), col = colors[col[1]],
-       main = "Filtered", xlab = ifelse(counts,"logCPM","logcounts"),
-       ylim = c(0, max(density(lcpm.2)$y)*1.2))
+  plot(stats::density(lcpm.2[,1]), col = colors[col[1]],
+       main = "Filtered", xlab = ifelse(counts, "logCPM", "logcounts"),
+       ylim = c(0, max(stats::density(lcpm.2)$y) * 1.2))
   abline(v = abl, lty = 3)
-  t <- lapply(2:ncol(dge), function(i) lines(density(lcpm.2[,i]),
-                                             col = colors[col[i]]))
+  lapply(2:ncol(dge), function(i) lines(stats::density(lcpm.2[,i]),
+                                        col = colors[col[i]]))
   legend("topright", legend = unique(dge$samples[[ID]]),
          text.col = colors[unique(col)], bty = "n", inset = c(-0.3, 0))
 
-  mtext("Input Dataset", side = 3, line = 0, outer = T)
+  mtext("Input Dataset", side = 3, line = 0, outer = TRUE)
   ## set par back to original setting
   par(op)
 }
 
 #helper: calculate RLE
-rle <- function(expr_mat, log = F) {
+rle <- function(expr_mat, log = FALSE) {
   if (log) {
-    geomeans <- Matrix::rowMeans(log1p(expr_mat), na.rm = T)
+    geomeans <- Matrix::rowMeans(log1p(expr_mat), na.rm = TRUE)
   } else {
-    geomeans <- Matrix::rowMeans(expr_mat, na.rm = T)
+    geomeans <- Matrix::rowMeans(expr_mat, na.rm = TRUE)
   }
   RLE <- function(cnts) {
     return(cnts - geomeans)
@@ -77,42 +82,42 @@ rle <- function(expr_mat, log = F) {
 plot_rle <- function(dge, ID, keep = TRUE, counts = TRUE) {
   ## set colors for each cell type
   col <- dge$samples[[ID]] |> as.factor() |> as.numeric()
-  colors <- colorRampPalette(colors = ggthemes::tableau_color_pal("Tableau 20")(20))(unique(dge$samples[[ID]]) |> length())
+  colors <- colorRampPalette(colors = tableau_20)(unique(dge$samples[[ID]]) |> length())
 
   ## calculate logCPM
   if(counts) {
-    lcpm.1 <- edgeR::cpm(dge, log = T)
-    lcpm.2 <- edgeR::cpm(dge[keep,, keep.lib.sizes = F], log = T)
+    lcpm.1 <- edgeR::cpm(dge, log = TRUE)
+    lcpm.2 <- edgeR::cpm(dge[keep,, keep.lib.sizes = FALSE], log = TRUE)
   }else {
     # lcpm.1 <- log1p(dge$counts)
     # lcpm.2 <- log1p(dge$counts[keep,])
     lcpm.1 <- dge$counts
-    lcpm.2 <- dge$counts[keep,]
+    lcpm.2 <- dge$counts[keep, ]
   }
 
   ## set par for boxplot and legend
-  op <- par(no.readonly = T)
+  op <- par(no.readonly = TRUE)
   par(mfrow = c(3, 1), mar = c(1, 2.5, 2, 1), oma = c(0, 0, 1, 0))
 
   ## plot unfiltered data
   rle(lcpm.1[, order(col)]) |>
     boxplot(
-      outline = F, xaxt = "n", col = sort(col) |> (\(x)colors[x])(),
+      outline = FALSE, xaxt = "n", col = sort(col) |> (\(x) colors[x])(),
       main = "RLE plot before filtration"
     )
   abline(h = 0)
   ##plot filtered data
   rle(lcpm.2[, order(col)]) |>
     boxplot(
-      outline = F, xaxt = "n", col = sort(col) |> (\(x)colors[x])(),
+      outline = FALSE, xaxt = "n", col = sort(col) |> (\(x) colors[x])(),
       main = "RLE plot after filtration"
     )
   abline(h = 0)
   ## add legend
-  plot(0, type = "n", axes = F, xlab = "", ylab = "")
+  plot(0, type = "n", axes = FALSE, xlab = "", ylab = "")
   legend("center",
          legend = unique(dge$samples[[ID]]) |> sort(),
-         fill = colors, xpd = T, ncol = 4
+         fill = colors, xpd = TRUE, ncol = 4
   )
   ## set par back to original
   par(op)
@@ -122,17 +127,17 @@ plot_rle <- function(dge, ID, keep = TRUE, counts = TRUE) {
 plot_MDS <- function(dge, ID, keep = TRUE, counts = TRUE) {
   ## set colors for each cell type
   col <- dge$samples[[ID]] |> as.factor() |> as.numeric()
-  colors <- colorRampPalette(colors = ggthemes::tableau_color_pal("Tableau 20")(20))(unique(dge$samples[[ID]]) |> length())
+  colors <- colorRampPalette(colors = tableau_20)(unique(dge$samples[[ID]]) |> length())
 
   ## calculate logCPM
   if(counts) {
-    lcpm.1 <- edgeR::cpm(dge, log = T)
-    lcpm.2 <- edgeR::cpm(dge[keep,, keep.lib.sizes = F], log = T)
+    lcpm.1 <- edgeR::cpm(dge, log = TRUE)
+    lcpm.2 <- edgeR::cpm(dge[keep,, keep.lib.sizes = FALSE], log = TRUE)
   }else {
     # lcpm.1 <- log1p(dge$counts)
     # lcpm.2 <- log1p(dge$counts[keep,])
     lcpm.1 <- dge$counts
-    lcpm.2 <- dge$counts[keep,]
+    lcpm.2 <- dge$counts[keep, ]
   }
 
   ## set par to make 2 plots in one page
@@ -149,12 +154,12 @@ plot_MDS <- function(dge, ID, keep = TRUE, counts = TRUE) {
                  main = "MDS plot after filtrattion"
   )
   ## add legend
-  plot(0, type = "n", axes = F, xlab = "", ylab = "")
+  plot(0, type = "n", axes = FALSE, xlab = "", ylab = "")
   legend("center",
          legend = unique(dge$samples[[ID]]) |> sort(),
-         fill = colors, xpd = T
+         fill = colors, xpd = TRUE
   )
-  mtext("Input Data", side = 3, line = 0, outer = T)
+  mtext("Input Data", side = 3, line = 0, outer = TRUE)
   ## set par back to original
   par(op)
 }
@@ -177,19 +182,19 @@ pca_matrix_plot_init <- function(data,
             is.logical(loading), is.character(gene_id))
 
   ## calculate logCPM for raw counts data
-  if(counts){
+  if(counts) {
     data <- edgeR::DGEList(counts = data)
     data <- edgeR::calcNormFactors(data)
-    data <- edgeR::cpm(data, log = T)
+    data <- edgeR::cpm(data, log = TRUE)
   }
 
   ## scale and do PCA on selected features
   if (length(features) == 1 & features[1] == "all") {
-    tmp <- prcomp(Matrix::t(data), scale = scale)
-  }else{
+    tmp <- stats::prcomp(Matrix::t(data), scale = scale)
+  }else {
     features <- AnnotationDbi::select(org.Hs.eg.db, features, gene_id, "SYMBOL")
     id <- match(features[[gene_id]], rownames(data)) |> na.omit()
-    tmp <- prcomp(Matrix::t(data[id,]), scale = scale)
+    tmp <- stats::prcomp(Matrix::t(data[id,]), scale = scale)
   }
 
   ## screeplot of importance of PCs
@@ -197,7 +202,7 @@ pca_matrix_plot_init <- function(data,
     Matrix::t() |>
     as.data.frame() |> (\(x) {
       ggplot2::ggplot(data = x,
-                      ggplot2::aes(x = reorder(rownames(x), 1:nrow(x)),
+                      ggplot2::aes(x = reorder(rownames(x), seq_len(nrow(x))),
                                    y = `Proportion of Variance`, group = 1)) +
         ggplot2::geom_line() +
         ggplot2::geom_point() +
@@ -229,13 +234,13 @@ pca_matrix_plot_init <- function(data,
                                   loadings.col = "grey",
                                   loadings.label.col = "black",
                                   loadings.label.size  = 2,
-                                  data = Group, colour = 'group',
+                                  data = Group, colour = "group",
                                   x = j, y = i) +
         ggplot2::labs(
           x = paste0("PC", j, "(", round(tmp$importance[2, j] * 100, 2), "%)"),
           y = paste0("PC", i, "(", round(tmp$importance[2, i] * 100, 2), "%)")
         ) +
-        ggthemes::scale_color_tableau("Tableau 20") +
+        ggplot2::scale_color_manual(values = tableau_20) +
         ggplot2::theme_classic()
       p3 <- ggpubr::get_legend(p[[k]]) |> ggpubr::as_ggplot()
       p[[k]] <- p[[k]] + ggplot2::guides(col = "none")
@@ -246,10 +251,10 @@ pca_matrix_plot_init <- function(data,
   ## add color for group_by factor
   if(!is.null(group_by))
     p0 <- (p0 + patchwork::inset_element(p3, 0.6, 0.2, 0.8, 0.9)) |>
-    patchwork::patchworkGrob()
+      patchwork::patchworkGrob()
 
   layout_mat <- matrix(NA, n, n)
-  layout_mat[lower.tri(layout_mat)] <- 1:length(p)
+  layout_mat[lower.tri(layout_mat)] <- seq_along(p)
   layout_mat <- Matrix::t(layout_mat)
   layout_mat[(ceiling(n / 2) + 1):n, 1:floor(n / 2)] <- length(p) + 1
   diag(layout_mat) <- (length(p) + 2):(length(p) + 1 + n)
@@ -275,7 +280,7 @@ scatter_plot_init <- function(expr, sigs, type, by,
     expr <- edgeR::DGEList(expr,
                            group = by)
     expr <- edgeR::calcNormFactors(expr, method = "TMM")
-    expr <- edgeR::cpm(expr, log = T)
+    expr <- edgeR::cpm(expr, log = TRUE)
   } else {
     expr <- expr
   }
@@ -291,9 +296,9 @@ scatter_plot_init <- function(expr, sigs, type, by,
   group <- ifelse(grepl(type, by), type, by)
   expr <- dplyr::group_by(expr[sigs,] |> Matrix::t() |> as.data.frame(),
                           group |> factor()) |>
-    dplyr::summarise_all(.funs = mean, na.rm = T) |> Matrix::t()
+    dplyr::summarise_all(.funs = mean, na.rm = TRUE) |> Matrix::t()
   colnames(expr) <- expr[1,]
-  expr <- expr[-1,] |> apply(MARGIN = c(1,2), FUN = as.numeric) |>
+  expr <- expr[-1, ] |> apply(MARGIN = c(1, 2), FUN = as.numeric) |>
     as.data.frame()
 
   ## biplot of specified type vs all other types
@@ -312,7 +317,7 @@ scatter_plot_init <- function(expr, sigs, type, by,
 ## boxplot of expression for signatures
 ##---------------------------------------------------------------
 exp_boxplot_init <- function(expr, sigs, type, by, counts = TRUE,
-                             method = 't.test', gene_id = "SYMBOL") {
+                             method = "t.test", gene_id = "SYMBOL") {
 
   stopifnot(is.logical(counts), is.character(gene_id))
 
@@ -321,7 +326,7 @@ exp_boxplot_init <- function(expr, sigs, type, by, counts = TRUE,
     expr <- edgeR::DGEList(expr,
                            group = by)
     expr <- edgeR::calcNormFactors(expr, method = "TMM")
-    expr <- edgeR::cpm(expr, log = T)
+    expr <- edgeR::cpm(expr, log = TRUE)
   } else {
     expr <- expr
   }
@@ -335,12 +340,13 @@ exp_boxplot_init <- function(expr, sigs, type, by, counts = TRUE,
 
   ## calculate median expression of sigs by aggregating samples based on by group
   group <- ifelse(grepl(type, by), type, by)
-  expr <- dplyr::group_by(expr[sigs,] |> Matrix::t() |> as.data.frame(),
+  expr <- dplyr::group_by(expr[sigs, ] |> Matrix::t() |> as.data.frame(),
                           group |> factor()) |>
-    dplyr::summarise_all(.funs = median, na.rm = T) |> Matrix::t()
-  colnames(expr) <- expr[1,]
-  expr <- expr[-1,] |> apply(MARGIN = c(1,2), FUN = as.numeric) |>
-    as.data.frame() |> tibble::rownames_to_column(var = "Gene")
+    dplyr::summarise_all(.funs = median, na.rm = TRUE) |> Matrix::t()
+  colnames(expr) <- expr[1, ]
+  expr <- expr[-1, ] |> apply(MARGIN = c(1, 2), FUN = as.numeric) |>
+    as.data.frame()
+  expr$Gene <- rownames(expr)
 
   ## boxplot of signature in specified type vs all other types
   p <- tidyr::gather(expr, "Group", "Median Expression", -Gene) |>
@@ -370,7 +376,7 @@ singscore_init <- function(expr, sigs, by, counts = TRUE,
     expr <- edgeR::DGEList(expr,
                            group = by)
     expr <- edgeR::calcNormFactors(expr, method = "TMM")
-    expr <- edgeR::cpm(expr, log = T)
+    expr <- edgeR::cpm(expr, log = TRUE)
   }
 
   ## singscore samples using given signature genes
@@ -407,18 +413,18 @@ score_boxplot_init <- function(scores, by, type, method) {
 ## GSEA plot for signatures
 ##---------------------------------------------------------------
 gsea_plot_init <- function(tDEG, gsets, gene_id = "SYMBOL", digits = 2) {
-  p <- lapply(names(tDEG), function(n){
+  p <- lapply(names(tDEG), function(n) {
     glist <- tDEG[[n]][,"logFC"]
     names(glist) <- rownames(tDEG[[n]])
-    glist <- sort(glist, decreasing = T)
+    glist <- sort(glist, decreasing = TRUE)
 
-    gse <- clusterProfiler::GSEA(glist, TERM2GENE = gsets[,c("set", gene_id)])
+    gse <- clusterProfiler::GSEA(glist, TERM2GENE = gsets[, c("set", gene_id)])
     if(nrow(gse) == 0) {
-      cat(paste("No term was found enriched in", n, "."))
+      message(paste("No term was found enriched in", n, "."))
       p <- grid::textGrob(paste("No term was found enriched in", n, "."))
     } else {
-      p <- enrichplot::gseaplot2(gse, geneSetID = 1:nrow(gse),
-                                 pvalue_table = F,
+      p <- enrichplot::gseaplot2(gse, geneSetID = seq_len(nrow(gse)),
+                                 pvalue_table = FALSE,
                                  title = paste("GSEA with signatures in", n))
       p <- p - patchwork::inset_element(gridExtra::tableGrob(
         gse[,c("pvalue", "p.adjust")] |> signif(digits),
@@ -438,13 +444,12 @@ gsea_plot_init <- function(tDEG, gsets, gene_id = "SYMBOL", digits = 2) {
 heatmap_init <- function(expr, sigs, by, markers, counts = TRUE,
                          scale = "none", min_max = FALSE,
                          gene_id = "SYMBOL", ranks_plot = FALSE,
-                         col = grDevices::colorRampPalette(colors = c(rgb(1, 1, 0),
-                                                                      "red"))(256)) {
+                         col = grDevices::colorRampPalette(c("#76B7B2","#E15759"))(256)) {
   if (counts) {
     expr <- edgeR::DGEList(expr)
     expr <- edgeR::calcNormFactors(expr, method = "TMM")
-    expr <- edgeR::cpm(expr, log = T)
-    expr <- expr[,order(by)] ## order samples based on by factor
+    expr <- edgeR::cpm(expr, log = TRUE)
+    expr <- expr[, order(by)] ## order samples based on by factor
   } else {
     expr <- expr[, order(by)]
   }
@@ -463,8 +468,7 @@ heatmap_init <- function(expr, sigs, by, markers, counts = TRUE,
   anno_col <- data.frame(cell_type = sort(by))
   rownames(anno_col) <- colnames(expr)
   ann_colors <- list(cell_type = colorRampPalette(
-    ggthemes::tableau_color_pal("Tableau 20")(min(20,
-                                                  length(unique(by)))))(length(unique(by)))
+    tableau_20[seq_len(min(20, length(unique(by))))])(length(unique(by)))
   )
   names(ann_colors$cell_type) <- sort(unique(by))
 
@@ -476,23 +480,23 @@ heatmap_init <- function(expr, sigs, by, markers, counts = TRUE,
     expr <- apply(expr, 1, function(x) (x - min(x)) / (max(x) - min(x))) |> Matrix::t()
   ## heatmap for markers pool genes
   p1 <- pheatmap::pheatmap(expr[c(setdiff(index.1, index.2), index.2),],
-                           silent = T, scale = scale,
+                           silent = TRUE, scale = scale,
                            border_color = NA, annotation_col = anno_col,
-                           show_rownames = F,
+                           show_rownames = FALSE,
                            gaps_col = table(by) |> cumsum(),
-                           show_colnames = F, main = "Original Markers Pool",
+                           show_colnames = FALSE, main = "Original Markers Pool",
                            gaps_row = length(index.1) - length(index.2),
-                           cluster_cols = F, cluster_rows = F, color = col,
+                           cluster_cols = FALSE, cluster_rows = FALSE, color = col,
                            annotation_colors = ann_colors
   ) |> ggplotify::as.ggplot()
   ## heatmap for final signature genes
   p2 <- pheatmap::pheatmap(expr[index.2,],
-                           silent = T, scale = scale,
+                           silent = TRUE, scale = scale,
                            border_color = NA, annotation_col = anno_col,
-                           show_rownames = F,
+                           show_rownames = FALSE,
                            gaps_col = table(by) |> cumsum(),
-                           show_colnames = F, main = "Screened Signature",
-                           cluster_cols = F, cluster_rows = F, color = col,
+                           show_colnames = FALSE, main = "Screened Signature",
+                           cluster_cols = FALSE, cluster_rows = FALSE, color = col,
                            annotation_colors = ann_colors
   ) |> ggplotify::as.ggplot()
 
@@ -505,16 +509,16 @@ heatmap_init <- function(expr, sigs, by, markers, counts = TRUE,
 #helper: aggregate samples of the same group to one sample with mean expression
 agg_mean <- function(expr, by) {
   expr <- split(colnames(expr), by) |>
-    sapply(FUN = function(x) Matrix::rowMeans(expr[,x], na.rm = T))
+    sapply(FUN = function(x) Matrix::rowMeans(expr[,x], na.rm = TRUE))
   return(expr)
 }
 
 #helper: arrange plot matrix, add plot_spacer() at the end for samples less than max
-add_spacer <- function(x, ns){
+add_spacer <- function(x, ns) {
   if(length(x) < ns) {
     x <- append(x, paste(c("list(",
-                           paste(rep("patchwork::plot_spacer()",ns-length(x)),
-                                 collapse = ","),")"),collapse = "") |>
+                           paste(rep("patchwork::plot_spacer()", ns - length(x)),
+                                 collapse = ","), ")"), collapse = "") |>
                   (\(x) parse(text = x))() |> eval(),
                 length(x))
   }
@@ -529,7 +533,7 @@ rankdensity_init <- function(expr, sigs, by, counts = TRUE,
     expr <- edgeR::DGEList(expr,
                            group = by)
     expr <- edgeR::calcNormFactors(expr, method = "TMM")
-    expr <- edgeR::cpm(expr, log = T)
+    expr <- edgeR::cpm(expr, log = TRUE)
   }
 
   ## aggregate samples based on by group
@@ -545,12 +549,12 @@ rankdensity_init <- function(expr, sigs, by, counts = TRUE,
                               columns = gene_id,
                               keytype = "SYMBOL")
   UP <- UP[!duplicated(UP[[gene_id]]), gene_id]
-  NK_scores <- singscore::simpleScore(rank_data, upSet = UP)
+  # NK_scores <- singscore::simpleScore(rank_data, upSet = UP)
 
   ## plot rankdensity
   p <- list()
-  for (j in 1:ncol(rank_data)) {
-    p[[j]] <- singscore::plotRankDensity(rank_data[, j, drop = F],
+  for (j in seq_len(ncol(rank_data))) {
+    p[[j]] <- singscore::plotRankDensity(rank_data[, j, drop = FALSE],
                                          upSet = UP,
                                          textSize = 1
     )
@@ -577,7 +581,7 @@ rankdensity_init <- function(expr, sigs, by, counts = TRUE,
     do.call(what = c)
   p <- patchwork::wrap_plots(p, ncol = ns)
   tags <- patchwork::wrap_plots(tags, ncol = 1)
-  p <- (tags | p) + patchwork::plot_layout(widths = c(1,ns))
+  p <- (tags | p) + patchwork::plot_layout(widths = c(1, ns))
 
   return(p)
 }
@@ -591,7 +595,7 @@ scatter_hdb_cl <- function(sig_matrix, markers_list) {
   stopifnot("sig_matrix must be a matrix or data.frame!" = is.matrix(sig_matrix) | is.data.frame(sig_matrix),
             "markers_list is not a list!" = is.list(markers_list))
 
-  ml <- reshape2::melt(markers_list) |> (\(x) split(x$L1, x$value))()
+  ml <- utils::stack(markers_list) |> (\(x) split(x$ind, x$values))()
 
   p <- lapply(rownames(sig_matrix), function(m) {
     p <- ggplot2::ggplot(data.frame(Gene = m,
@@ -614,3 +618,5 @@ scatter_hdb_cl <- function(sig_matrix, markers_list) {
   return(p)
 }
 
+utils::globalVariables(c("org.Hs.eg.db", "median", "Gene", "Expression", "Type",
+                         "Group", "TotalScore", "Proportion of Variance"))

@@ -81,8 +81,8 @@ coldata for DE comparisons}
 
 \item{counts}{logical, if the expr in data is raw counts data}
 
-\item{dir}{character, could be 'UP' or 'DOWN' to use only up- or down-expressed
-genes}
+\item{dir}{character, could be 'UP' or 'DOWN' to use only up- or
+down-expressed genes}
 
 \item{gene_id}{character, specify the gene ID type of rownames of expression data
 when markers is not NULL, could be one of 'ENSEMBL', 'SYMBOL',

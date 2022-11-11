@@ -16,8 +16,11 @@ NULL
 #'
 #' @examples
 #' Panglao <- get_panglao_sig(type = "NK cells")
-#' merge_markers(markers = list(NK_markers = NK_markers$HGNC_Symbol,
-#'                              PanglaoDB = GSEABase::geneIds(Panglao)))
+#' Markers <- merge_markers(markers = list(
+#'                            NK_markers = NK_markers$HGNC_Symbol,
+#'                            PanglaoDB = GSEABase::geneIds(Panglao)
+#'                          ))
+#' jsonlite::fromJSON(GSEABase::longDescription(Markers))
 merge_markers <- function(markers_list, plot = FALSE) {
 
   stopifnot("markers_list must be a list!" = is.list(markers_list),
@@ -49,7 +52,7 @@ merge_markers <- function(markers_list, plot = FALSE) {
   if(plot == TRUE) {
     stopifnot("markers_list must contain >= 2 lists when plot = TRUE!" = length(markers_list) > 1)
     UpSetR::upset(UpSetR::fromList(markers_list),
-                  nsets = length(markers_list)) |> print()
+                  nsets = length(markers_list)) |> show()
   }
 
   ## create tibble to show merged genes' origin

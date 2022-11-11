@@ -32,3 +32,5 @@ get_panglao_sig <- function(type, species = c('Hs', 'Mm', 'Mm Hs')) {
                           geneIdType = GSEABase::SymbolIdentifier())
   return(gs)
 }
+
+utils::globalVariables(c("Species", "Cell type"))

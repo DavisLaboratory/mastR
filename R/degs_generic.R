@@ -271,7 +271,7 @@ de_analysis <- function(dge,
   }
 
   ## DE
-  dge <- dge[keep, ,keep.lib.sizes = FALSE]
+  dge <- dge[keep, , keep.lib.sizes = FALSE]
   ## normalization for raw counts data
   if(counts)
     dge <- edgeR::calcNormFactors(dge, method = "TMM")

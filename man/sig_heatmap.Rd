@@ -23,7 +23,7 @@ sig_heatmap(
   gene_id = "SYMBOL",
   ranks_plot = FALSE,
   slot = "counts",
-  col = colorRampPalette(colors = c(rgb(1, 1, 0), "red"))(256)
+  col = colorRampPalette(c("#76B7B2", "#E15759"))(256)
 )
 
 \S4method{sig_heatmap}{matrix,vector,vector,vector}(
@@ -36,7 +36,7 @@ sig_heatmap(
   min_max = FALSE,
   gene_id = "SYMBOL",
   ranks_plot = FALSE,
-  col = colorRampPalette(colors = c(rgb(1, 1, 0), "red"))(256)
+  col = colorRampPalette(c("#76B7B2", "#E15759"))(256)
 )
 
 \S4method{sig_heatmap}{Matrix,vector,vector,vector}(
@@ -49,7 +49,7 @@ sig_heatmap(
   min_max = FALSE,
   gene_id = "SYMBOL",
   ranks_plot = FALSE,
-  col = colorRampPalette(colors = c(rgb(1, 1, 0), "red"))(256)
+  col = colorRampPalette(c("#76B7B2", "#E15759"))(256)
 )
 
 \S4method{sig_heatmap}{data.frame,vector,vector,vector}(
@@ -62,7 +62,7 @@ sig_heatmap(
   min_max = FALSE,
   gene_id = "SYMBOL",
   ranks_plot = FALSE,
-  col = colorRampPalette(colors = c(rgb(1, 1, 0), "red"))(256)
+  col = colorRampPalette(c("#76B7B2", "#E15759"))(256)
 )
 
 \S4method{sig_heatmap}{DGEList,vector,character,vector}(
@@ -75,7 +75,7 @@ sig_heatmap(
   min_max = FALSE,
   gene_id = "SYMBOL",
   ranks_plot = FALSE,
-  col = colorRampPalette(colors = c(rgb(1, 1, 0), "red"))(256)
+  col = colorRampPalette(c("#76B7B2", "#E15759"))(256)
 )
 
 \S4method{sig_heatmap}{ExpressionSet,vector,character,vector}(
@@ -88,7 +88,7 @@ sig_heatmap(
   min_max = FALSE,
   gene_id = "SYMBOL",
   ranks_plot = FALSE,
-  col = colorRampPalette(colors = c(rgb(1, 1, 0), "red"))(256)
+  col = colorRampPalette(c("#76B7B2", "#E15759"))(256)
 )
 
 \S4method{sig_heatmap}{Seurat,vector,character,vector}(
@@ -102,7 +102,7 @@ sig_heatmap(
   gene_id = "SYMBOL",
   ranks_plot = FALSE,
   slot = "counts",
-  col = colorRampPalette(colors = c(rgb(1, 1, 0), "red"))(256)
+  col = colorRampPalette(c("#76B7B2", "#E15759"))(256)
 )
 
 \S4method{sig_heatmap}{SummarizedExperiment,vector,character,vector}(
@@ -116,7 +116,7 @@ sig_heatmap(
   gene_id = "SYMBOL",
   ranks_plot = FALSE,
   slot = "counts",
-  col = colorRampPalette(colors = c(rgb(1, 1, 0), "red"))(256)
+  col = colorRampPalette(c("#76B7B2", "#E15759"))(256)
 )
 
 \S4method{sig_heatmap}{list,vector,character,vector}(
@@ -130,7 +130,7 @@ sig_heatmap(
   gene_id = "SYMBOL",
   ranks_plot = FALSE,
   slot = "counts",
-  col = colorRampPalette(colors = c(rgb(1, 1, 0), "red"))(256)
+  col = colorRampPalette(c("#76B7B2", "#E15759"))(256)
 )
 }
 \arguments{

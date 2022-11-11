@@ -172,8 +172,9 @@ function(data = 'CCLE',
   ## convert CCLE from long to wide data format
   CCLE <- tidyr::pivot_wider(CCLE[,c("gene_name", "cell_line", "rna_expression")],
                              names_from = "cell_line",
-                             values_from = "rna_expression")
-  CCLE <- tibble::column_to_rownames(CCLE, "gene_name")
+                             values_from = "rna_expression") |> data.frame()
+  rownames(CCLE) <- CCLE$gene_name
+  CCLE$gene_name <- NULL
 
   ## match depmap ID of CCLE TPM to CCLE meta to get disease names
   idx <- match(colnames(CCLE), CCLE_meta$cell_line)

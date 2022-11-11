@@ -11,7 +11,6 @@ A data frame with 114 rows and  at least 4 variables:
 \item{LM22}{if included in LM22}
 \item{LM7}{if included in LM7}
 \item{Huntington}{if included in orthologs}
-...
 }
 }
 \source{

@@ -14,7 +14,7 @@ NULL
 #' @param counts logical, indicate if data is raw counts data
 #' @param method a character string indicating which method to be used for
 #'               `stat_compare_means()` to compare the means across types,
-#'               could be 't.test', 'wilcox.test', 'anova'..., default 't.test'
+#'               could be "t.test", 'wilcox.test', 'anova'..., default "t.test"
 #' @param slot character, indicate which slot used for seurat/sce object
 #' @param gene_id character, indicate the ID type of rowname of expression data's ,
 #'                could be one of 'ENSEMBL', 'SYMBOL', ... default 'SYMBOL'
@@ -36,7 +36,7 @@ setGeneric("sig_boxplot",
                     type,
                     plot.score = TRUE,
                     counts = TRUE,
-                    method = 't.test',
+                    method = "t.test",
                     slot = "counts",
                     gene_id = "SYMBOL")
              standardGeneric("sig_boxplot"))
@@ -54,7 +54,7 @@ function(data,
          type,
          plot.score = TRUE,
          counts = TRUE,
-         method = 't.test',
+         method = "t.test",
          gene_id = "SYMBOL") {
 
   stopifnot(is.logical(counts), is.character(method), is.character(gene_id))
@@ -91,7 +91,7 @@ function(data,
          type,
          plot.score = TRUE,
          counts = TRUE,
-         method = 't.test',
+         method = "t.test",
          gene_id = "SYMBOL") {
 
   stopifnot(is.logical(counts), is.character(method), is.character(gene_id))
@@ -128,7 +128,7 @@ function(data,
          type,
          plot.score = TRUE,
          counts = TRUE,
-         method = 't.test',
+         method = "t.test",
          gene_id = "SYMBOL") {
 
   stopifnot(is.logical(counts), is.character(method), is.character(gene_id))
@@ -158,7 +158,7 @@ function(data,
          type,
          plot.score = TRUE,
          counts = TRUE,
-         method = 't.test',
+         method = "t.test",
          gene_id = "SYMBOL") {
 
   p <- sig_boxplot(data = data$counts,
@@ -185,7 +185,7 @@ function(data,
          type,
          plot.score = TRUE,
          counts = TRUE,
-         method = 't.test',
+         method = "t.test",
          gene_id = "SYMBOL") {
 
   p <- sig_boxplot(data = Biobase::exprs(data),
@@ -212,7 +212,7 @@ function(data,
          type,
          plot.score = TRUE,
          counts = TRUE,
-         method = 't.test',
+         method = "t.test",
          slot = "counts",
          gene_id = "SYMBOL") {
 
@@ -240,7 +240,7 @@ function(data,
          type,
          plot.score = TRUE,
          counts = TRUE,
-         method = 't.test',
+         method = "t.test",
          slot = "counts",
          gene_id = "SYMBOL") {
 
@@ -268,7 +268,7 @@ function(data,
          type,
          plot.score = TRUE,
          counts = TRUE,
-         method = 't.test',
+         method = "t.test",
          slot = "counts",
          gene_id = "SYMBOL") {
 
@@ -286,7 +286,7 @@ function(data,
     plot.score <- rep(plot.score, length(data))
 
   p <- list()
-  for (i in 1:length(data)) {
+  for (i in seq_along(data)) {
     p[[i]] <- sig_boxplot(data = data[[i]],
                           sigs = sigs,
                           ID = ID[[i]],
@@ -304,5 +304,3 @@ function(data,
     patchwork::plot_layout(guides = "collect")
   return(p)
 })
-
-

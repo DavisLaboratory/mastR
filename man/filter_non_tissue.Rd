@@ -138,7 +138,8 @@ filter_non_tissue(
 
 \item{ID}{vector or character, to specify the group of tumor/tissue types}
 
-\item{type}{pattern, specify the type of interest, e.g. 'colorectal'}
+\item{type}{pattern, specify the type of interest, e.g. 'colorectal', match
+to primary_disease of CCLE if data is 'CCLE'}
 
 \item{...}{params for \code{\link[=grep]{grep()}} to find matched cell lines in CCLE}
 

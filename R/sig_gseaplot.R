@@ -1,6 +1,4 @@
 #' @include plot.R
-#' @import ggplot2 clusterProfiler grid ggplotify
-#' @importFrom enrichplot gseaplot2
 NULL
 
 #' Visualize GSEA result with input list of gene symbols.
@@ -54,13 +52,11 @@ function(data,
                        markers = Reduce(union, sigs),
                        gene_id = gene_id,
                        ...)
-  gsets <- reshape2::melt(sigs)
-  colnames(gsets) <- "SYMBOL"
-  gsets$set <- "Signature"
+  gsets <- data.frame(SYMBOL = sigs, set = "Signature")
   ids <- AnnotationDbi::select(org.Hs.eg.db, gsets[,1],
                                columns = gene_id,
                                keytype = "SYMBOL")
-  gsets <- merge(gsets, ids, all = T, by.x = "SYMBOL", by.y = "SYMBOL")
+  gsets <- merge(gsets, ids, all = TRUE, by.x = "SYMBOL", by.y = "SYMBOL")
 
   p <- gsea_plot_init(tDEG = tDEG, gsets = gsets,
                       gene_id = gene_id, digits = digits) |>
@@ -90,8 +86,11 @@ function(data,
                        markers = Reduce(union, sigs),
                        gene_id = gene_id,
                        ...)
-  gsets <- reshape2::melt(sigs)
-  colnames(gsets) <- c("SYMBOL","set")
+
+  if(is.null(names(sigs)))
+    names(sigs) <- seq_along(sigs)  ## set gene list names
+  gsets <- utils::stack(sigs)
+  colnames(gsets) <- c("SYMBOL", "set")
   ids <- AnnotationDbi::select(org.Hs.eg.db, gsets[,1],
                                columns = gene_id,
                                keytype = "SYMBOL")
@@ -125,9 +124,7 @@ function(data,
                        markers = Reduce(union, sigs),
                        gene_id = gene_id,
                        ...)
-  gsets <- reshape2::melt(sigs)
-  colnames(gsets) <- "SYMBOL"
-  gsets$set <- "Signature"
+  gsets <- data.frame(SYMBOL = sigs, set = "Signature")
   ids <- AnnotationDbi::select(org.Hs.eg.db, gsets[,1],
                                columns = gene_id,
                                keytype = "SYMBOL")
@@ -161,12 +158,15 @@ function(data,
                        markers = Reduce(union, sigs),
                        gene_id = gene_id,
                        ...)
-  gsets <- reshape2::melt(sigs)
-  colnames(gsets) <- c("SYMBOL","set")
+
+  if(is.null(names(sigs)))
+    names(sigs) <- seq_along(sigs)  ## set gene list names
+  gsets <- utils::stack(sigs)
+  colnames(gsets) <- c("SYMBOL", "set")
   ids <- AnnotationDbi::select(org.Hs.eg.db, gsets[,1],
                                columns = gene_id,
                                keytype = "SYMBOL")
-  gsets <- merge(gsets, ids, all = T, by.x = "SYMBOL", by.y = "SYMBOL")
+  gsets <- merge(gsets, ids, all = TRUE, by.x = "SYMBOL", by.y = "SYMBOL")
 
   p <- gsea_plot_init(tDEG = tDEG, gsets = gsets,
                       gene_id = gene_id, digits = digits) |>
@@ -202,7 +202,7 @@ function(data,
     slot <- rep(slot, length(data))
 
   p <- list()
-  for (i in 1:length(data)) {
+  for (i in seq_along(data)) {
     p[[i]] <- sig_gseaplot(data = data[[i]],
                            sigs = sigs,
                            ID = ID[[i]],
@@ -222,3 +222,4 @@ function(data,
   return(p)
 })
 
+utils::globalVariables(c("org.Hs.eg.db"))

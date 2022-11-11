@@ -48,7 +48,7 @@ function(data,
 
   ## save DE result tables into list
   DE_table <- list()
-  for (i in 1:ncol(tfit)) {
+  for (i in seq_len(ncol(tfit))) {
     ## use limma::topTreat() to get statistics of DEA
     DE_table[[i]] <- limma::topTreat(tfit, coef = i, number = Inf) |> na.omit()
   }

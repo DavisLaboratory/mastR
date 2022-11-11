@@ -34,7 +34,7 @@ setGeneric("sig_heatmap",
                     gene_id = "SYMBOL",
                     ranks_plot = FALSE,
                     slot = "counts",
-                    col = colorRampPalette(colors = c(rgb(1, 1, 0), "red"))(256))
+                    col = colorRampPalette(c("#76B7B2","#E15759"))(256))
              standardGeneric("sig_heatmap"))
 
 #' @rdname sig_heatmap
@@ -53,7 +53,7 @@ function(data,
          min_max = FALSE,
          gene_id = "SYMBOL",
          ranks_plot = FALSE,
-         col = colorRampPalette(colors = c(rgb(1, 1, 0), "red"))(256)) {
+         col = colorRampPalette(c("#76B7B2","#E15759"))(256)) {
 
   stopifnot(is.logical(counts), is.character(scale), is.logical(min_max),
             is.character(gene_id), is.logical(ranks_plot))
@@ -85,7 +85,7 @@ function(data,
          min_max = FALSE,
          gene_id = "SYMBOL",
          ranks_plot = FALSE,
-         col = colorRampPalette(colors = c(rgb(1, 1, 0), "red"))(256)) {
+         col = colorRampPalette(c("#76B7B2","#E15759"))(256)) {
 
   stopifnot(is.logical(counts), is.character(scale), is.logical(min_max),
             is.character(gene_id), is.logical(ranks_plot))
@@ -94,7 +94,6 @@ function(data,
                     counts = counts, scale = scale, min_max = min_max,
                     gene_id = gene_id, ranks_plot = ranks_plot, col = col)
 
-  require(patchwork)
   p <- (p[[1]] + p[[2]]) +
     patchwork::plot_layout(guides = "collect") +
     patchwork::plot_annotation(title = "Heatmaps of logCPM",
@@ -118,7 +117,7 @@ function(data,
          min_max = FALSE,
          gene_id = "SYMBOL",
          ranks_plot = FALSE,
-         col = colorRampPalette(colors = c(rgb(1, 1, 0), "red"))(256)) {
+         col = colorRampPalette(c("#76B7B2","#E15759"))(256)) {
 
   p <- sig_heatmap(data = as.matrix(data), sigs = sigs, ID = ID,
                    markers = markers, counts = counts, scale = scale,
@@ -143,7 +142,7 @@ function(data,
          min_max = FALSE,
          gene_id = "SYMBOL",
          ranks_plot = FALSE,
-         col = colorRampPalette(colors = c(rgb(1, 1, 0), "red"))(256)) {
+         col = colorRampPalette(c("#76B7B2","#E15759"))(256)) {
 
   p <- sig_heatmap(data = data$counts, sigs = sigs, ID = data$samples[[ID]],
                    markers = markers, counts = counts, scale = scale,
@@ -168,7 +167,7 @@ function(data,
          min_max = FALSE,
          gene_id = "SYMBOL",
          ranks_plot = FALSE,
-         col = colorRampPalette(colors = c(rgb(1, 1, 0), "red"))(256)) {
+         col = colorRampPalette(c("#76B7B2","#E15759"))(256)) {
 
   p <- sig_heatmap(data = Biobase::exprs(data), sigs = sigs,
                    ID = data[[ID]], markers = markers, counts = counts,
@@ -194,7 +193,7 @@ function(data,
          gene_id = "SYMBOL",
          ranks_plot = FALSE,
          slot = "counts",
-         col = colorRampPalette(colors = c(rgb(1, 1, 0), "red"))(256)) {
+         col = colorRampPalette(c("#76B7B2","#E15759"))(256)) {
 
   p <- sig_heatmap(data = Seurat::GetAssayData(data, slot = slot),
                    sigs = sigs, ID = data@meta.data[[ID]],
@@ -221,7 +220,7 @@ function(data,
          gene_id = "SYMBOL",
          ranks_plot = FALSE,
          slot = "counts",
-         col = colorRampPalette(colors = c(rgb(1, 1, 0), "red"))(256)) {
+         col = colorRampPalette(c("#76B7B2","#E15759"))(256)) {
 
   p <- sig_heatmap(data = SummarizedExperiment::assay(data, slot),
                    sigs = sigs, ID = data@colData[[ID]],
@@ -248,7 +247,7 @@ function(data,
          gene_id = "SYMBOL",
          ranks_plot = FALSE,
          slot = "counts",
-         col = colorRampPalette(colors = c(rgb(1, 1, 0), "red"))(256)) {
+         col = colorRampPalette(c("#76B7B2","#E15759"))(256)) {
 
   stopifnot(is.logical(counts), is.character(scale), is.logical(min_max),
             is.character(gene_id), is.logical(ranks_plot))

@@ -1,11 +1,13 @@
 test_that("filter_non_tissue works", {
   ## load CCLE
   CCLE <- depmap::depmap_TPM()
-  CCLE <- tidyr::pivot_wider(CCLE[, c("gene_name", "cell_line", "rna_expression")],
+  CCLE <- tidyr::pivot_wider(
+    CCLE[, c("gene_name", "cell_line", "rna_expression")],
     names_from = "cell_line",
     values_from = "rna_expression"
-  )
-  CCLE <- tibble::column_to_rownames(CCLE, "gene_name")
+  ) |> data.frame()
+  rownames(CCLE) <- CCLE$gene_name
+  CCLE$gene_name <- NULL
   CCLE_meta <- depmap::depmap_metadata()
   cell_lines <- CCLE_meta$primary_disease[match(
     colnames(CCLE),

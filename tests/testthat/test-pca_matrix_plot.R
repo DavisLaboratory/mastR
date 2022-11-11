@@ -1,5 +1,3 @@
-library(vdiffr)
-
 test_that("pca_matrix_plot works", {
   ## test without loadings
   p <- pca_matrix_plot(im_data_6, features = NK_markers$HGNC_Symbol,

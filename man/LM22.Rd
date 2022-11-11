@@ -10,7 +10,27 @@ A data frame with 547 rows 23 variables:
 \item{Gene}{gene symbols}
 \item{B cells naive}{0 or 1, represents if the gene is significantly
 up-regulated in the subset}
-...
+\item{B cells memory}{0 or 1}
+\item{Plasma cells}{0 or 1}
+\item{T cells CD8}{0 or 1}
+\item{T cells CD4 naive}{0 or 1}
+\item{T cells CD4 memory resting}{0 or 1}
+\item{T cells CD4 memory activated}{0 or 1}
+\item{T cells follicular helper}{0 or 1}
+\item{T cells regulatory (Tregs)}{0 or 1}
+\item{T cells gamma delta}{0 or 1}
+\item{NK cells resting}{0 or 1}
+\item{NK cells activated}{0 or 1}
+\item{Monocytes}{0 or 1}
+\item{Macrophages M0}{0 or 1}
+\item{Macrophages M1}{0 or 1}
+\item{Macrophages M2}{0 or 1}
+\item{Dendritic cells resting}{0 or 1}
+\item{Dendritic cells activated}{0 or 1}
+\item{Mast cells resting}{0 or 1}
+\item{Mast cells activated}{0 or 1}
+\item{Eosinophils}{0 or 1}
+\item{Neutrophils}{0 or 1}
 }
 }
 \source{

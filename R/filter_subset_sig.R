@@ -8,8 +8,8 @@
 #' @param data A list of expression data objects
 #' @param ID vector or character, specify the group factor or column name of
 #'           coldata for DE comparisons
-#' @param dir character, could be 'UP' or 'DOWN' to use only up- or down-expressed
-#'            genes
+#' @param dir character, could be 'UP' or 'DOWN' to use only up- or
+#'            down-expressed genes
 #' @param comb 'RRA' or Fun, keep all passing genes or only intersected genes,
 #'              could be `union` or `intersect` or `setdiff` or customed Fun,
 #'              or could be 'RRA' to use Robust Rank Aggregation method for
@@ -38,7 +38,7 @@ setGeneric("filter_subset_sig",
                     gene_id = "SYMBOL",
                     method = "RP",
                     comb = union,
-                    filter = c(10,10),
+                    filter = c(10, 10),
                     s_thres = 0.05,
                     ...)
            standardGeneric("filter_subset_sig"))
@@ -59,7 +59,7 @@ function(data,
          gene_id = "SYMBOL",
          method = "RP",
          comb = union,
-         filter = c(10,10),
+         filter = c(10, 10),
          s_thres = 0.05,
          ...) {
 
@@ -70,7 +70,8 @@ function(data,
   markers <- AnnotationDbi::select(org.Hs.eg.db, markers, gene_id, "SYMBOL")
   # tryCatch(
   #   {
-  #     markers$ENSEMBL[match(c("KLRA1P", "TRBC1", "TRDC"), markers$SYMBOL)] <- c(
+  #     markers$ENSEMBL[match(c("KLRA1P", "TRBC1", "TRDC"),
+  #                           markers$SYMBOL)] <- c(
   #       "ENSG00000256667",
   #       "ENSG00000211751",
   #       "ENSG00000211829"
@@ -93,7 +94,7 @@ function(data,
     filter <- lapply(seq_along(data), \(x) filter)
 
   NK_against_subsets <- list()
-  for (i in 1:length(data)) {
+  for (i in seq_along(data)) {
     DEGs <- get_degs(data = data[[i]], ID = ID[[i]], type = type[[i]],
                      counts = counts[[i]], method = method,
                      markers = markers$SYMBOL |> unique(),
@@ -127,7 +128,7 @@ function(data,
          gene_id = "SYMBOL",
          method = "RP",
          comb = union,
-         filter = c(10,10),
+         filter = c(10, 10),
          s_thres = 0.05,
          ...) {
 
@@ -138,7 +139,8 @@ function(data,
   markers <- AnnotationDbi::select(org.Hs.eg.db, markers, gene_id, "SYMBOL")
   # tryCatch(
   #   {
-  #     markers$ENSEMBL[match(c("KLRA1P", "TRBC1", "TRDC"), markers$SYMBOL)] <- c(
+  #     markers$ENSEMBL[match(c("KLRA1P", "TRBC1", "TRDC"),
+  #                           markers$SYMBOL)] <- c(
   #       "ENSG00000256667",
   #       "ENSG00000211751",
   #       "ENSG00000211829"
@@ -176,7 +178,7 @@ function(data,
          gene_id = "SYMBOL",
          method = "RP",
          comb = union,
-         filter = c(10,10),
+         filter = c(10, 10),
          s_thres = 0.05,
          ...) {
 
@@ -187,7 +189,8 @@ function(data,
   markers <- AnnotationDbi::select(org.Hs.eg.db, markers, gene_id, "SYMBOL")
   # tryCatch(
   #   {
-  #     markers$ENSEMBL[match(c("KLRA1P", "TRBC1", "TRDC"), markers$SYMBOL)] <- c(
+  #     markers$ENSEMBL[match(c("KLRA1P", "TRBC1", "TRDC"),
+  #                           markers$SYMBOL)] <- c(
   #       "ENSG00000256667",
   #       "ENSG00000211751",
   #       "ENSG00000211829"
@@ -209,3 +212,4 @@ function(data,
   return(NK_against_subsets)
 })
 
+utils::globalVariables(c("org.Hs.eg.db"))

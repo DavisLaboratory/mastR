@@ -10,7 +10,12 @@ A data frame with 375 rows 9 variables:
 \item{Gene}{gene symbols}
 \item{Subset}{immune subset of the marker gene}
 \item{B cells}{gene median expression in B cells}
-...
+\item{T CD4}{gene median expression in T CD4 cells}
+\item{T CD8}{gene median expression in T CD8 cells}
+\item{T γδ}{gene median expression in T γδ cells}
+\item{NK}{gene median expression in NK cells}
+\item{MoMaDC}{gene median expression in MoMaDC cells}
+\item{granulocytes}{gene median expression in granulocytes}
 }
 }
 \source{

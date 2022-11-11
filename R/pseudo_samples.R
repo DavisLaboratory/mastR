@@ -70,9 +70,9 @@ function(data,
   pb <- do.call(cbind, pb)
   pb <- pb[,which(!is.na(colnames(pb)))]
   colnames(pb) <- p_samples
-  pb <- apply(pb, c(1,2), as.numeric)
-  if(fun == "mean" & !is.null(scale)){
-    pb <- pb*scale
+  pb <- apply(pb, c(1, 2), as.numeric)
+  if(fun == "mean" & !is.null(scale)) {
+    pb <- pb * scale
   }
   return(pb)
 })
@@ -115,7 +115,7 @@ function(data,
   stopifnot(is.character(fun), is.numeric(min.cells),
             is.numeric(max.cells), is.character(slot))
 
-  expr <- SeuratObject::GetAssayData(data, slot = slot) |> as.matrix()
+  expr <- Seurat::GetAssayData(data, slot = slot) |> as.matrix()
   coldata <- data@meta.data[,by]
   rm(data)
 

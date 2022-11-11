@@ -1,4 +1,4 @@
-library(vdiffr)
+# library(vdiffr)
 
 test_that("plot_density works", {
   dge <- edgeR::DGEList(counts = Biobase::exprs(im_data_6),
@@ -6,7 +6,8 @@ test_that("plot_density works", {
 
   p <- function() plot_density(dge = dge, ID = "group", keep = 1:1e4, counts = TRUE)
 
-  expect_doppelganger("basic density plot", p)
+  # expect_doppelganger("basic density plot", p)
+  expect_silent(p())
 })
 
 test_that("plot_rle works", {
@@ -16,7 +17,8 @@ test_that("plot_rle works", {
   p <- function() plot_rle(dge = dge, ID = "group", keep = 1:1e4, counts = TRUE)
 
   expect_true(is(rle(dge$counts), "matrix"))
-  expect_doppelganger("basic RLE boxplot", p)
+  # expect_doppelganger("basic RLE boxplot", p)
+  expect_silent(p())
 })
 
 test_that("plot_MDS works", {
@@ -25,7 +27,8 @@ test_that("plot_MDS works", {
 
   p <- function() plot_MDS(dge = dge, ID = "group", keep = 1:1e4, counts = TRUE)
 
-  expect_doppelganger("basic MDS plot", p)
+  # expect_doppelganger("basic MDS plot", p)
+  expect_silent(p())
 })
 
 test_that("scatter_plot_init works", {

@@ -42,6 +42,9 @@ or group to be kept}
 
 \item{...}{omitted}
 }
+\value{
+A list of "UP" and "DOWN" genes
+}
 \description{
 return DEGs UP and DOWN list based on Rank Product
 }

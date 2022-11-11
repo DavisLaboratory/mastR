@@ -45,14 +45,14 @@ get_msigdb_sig <- function(pattern,
   msigdb <- msigdb::getMsigdb(org = species, id = id, version = version)
 
   ## subset msigdb if given cat or subcat
-  if(!(is.null(cat) & is.null(subcat))) {
+  if(!(is.null(cat) && is.null(subcat))) {
      msigdb <- msigdb::subsetCollection(msigdb,
                                         collection = cat,
                                         subcollection = subcat)
   }
 
   msig_gs <- grep(pattern, names(msigdb), ...)
-  if(length(msig_gs) == 0){
+  if(length(msig_gs) == 0) {
     stop("No matched gene set is found in MSigDB!")
   }
   msigdb <- msigdb[msig_gs]
@@ -60,11 +60,11 @@ get_msigdb_sig <- function(pattern,
   if(plot == TRUE) {
     if(length(msigdb) > 1) {
       UpSetR::upset(UpSetR::fromList(msigdb |> GSEABase::geneIds()),
-                    nsets = length(msigdb)) |> print()
+                    nsets = length(msigdb)) |> show()
     }else warning("Only one gene-set is matched!")
   }
 
-  msigdb <- Reduce('|', msigdb)
+  msigdb <- Reduce("|", msigdb)
   GSEABase::setName(msigdb) <- paste("MSigDB", pattern, sep = "_")[1]
   return(msigdb)
 }

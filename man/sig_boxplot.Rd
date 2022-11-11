@@ -130,7 +130,7 @@ sig_boxplot(
 
 \item{method}{a character string indicating which method to be used for
 \code{stat_compare_means()} to compare the means across types,
-could be 't.test', 'wilcox.test', 'anova'..., default 't.test'}
+could be "t.test", 'wilcox.test', 'anova'..., default "t.test"}
 
 \item{slot}{character, indicate which slot used for seurat/sce object}
 
