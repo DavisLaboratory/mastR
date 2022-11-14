@@ -94,8 +94,8 @@ coldata for DE comparisons}
 group other subsets for multiple comparisons for DE analysis,
 default 'RP'}
 
-\item{slot}{character, specify which slot to use only for sce or seurat object,
-optional, default 'counts'}
+\item{slot}{character, specify which slot to use only for sce or seurat
+object, optional, default 'counts'}
 
 \item{...}{params for \code{\link[=de_analysis]{de_analysis()}} and \code{\link[=DEGs_RP]{DEGs_RP()}} or \code{\link[=DEGs_Group]{DEGs_Group()}}}
 }
@@ -109,8 +109,8 @@ This function uses edgeR and limma to get 'UP' and 'DOWN' DEG
 lists, for multiple comparisons, DEGs can be obtained from intersection of
 all comparsion DEGs or by using product of p value ranks for multiple
 comparisons. Filter out low expressed genes and extract DE genes by using
-limma::voom and limma::treat, and also create an object \code{proc_data} to store
-processed data.
+limma::voom and limma::treat, and also create an object \code{proc_data} to
+store processed data.
 }
 \examples{
 DEGs <- get_degs(im_data_6, ID = "celltype:ch1",

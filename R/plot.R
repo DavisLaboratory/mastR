@@ -1,5 +1,4 @@
 #' @import ggplot2 ggpubr ggplotify
-#' @importFrom enrichplot gseaplot2
 NULL
 
 tableau_20 <-  c("#4E79A7", "#A0CBE8", "#F28E2B", "#FFBE7D", "#59A14F",
@@ -82,7 +81,8 @@ rle <- function(expr_mat, log = FALSE) {
 plot_rle <- function(dge, ID, keep = TRUE, counts = TRUE) {
   ## set colors for each cell type
   col <- dge$samples[[ID]] |> as.factor() |> as.numeric()
-  colors <- colorRampPalette(colors = tableau_20)(unique(dge$samples[[ID]]) |> length())
+  colors <- colorRampPalette(colors = tableau_20)(unique(dge$samples[[ID]]) |>
+                                                    length())
 
   ## calculate logCPM
   if(counts) {
@@ -127,7 +127,8 @@ plot_rle <- function(dge, ID, keep = TRUE, counts = TRUE) {
 plot_MDS <- function(dge, ID, keep = TRUE, counts = TRUE) {
   ## set colors for each cell type
   col <- dge$samples[[ID]] |> as.factor() |> as.numeric()
-  colors <- colorRampPalette(colors = tableau_20)(unique(dge$samples[[ID]]) |> length())
+  colors <- colorRampPalette(colors = tableau_20)(unique(dge$samples[[ID]]) |>
+                                                    length())
 
   ## calculate logCPM
   if(counts) {
@@ -189,7 +190,7 @@ pca_matrix_plot_init <- function(data,
   }
 
   ## scale and do PCA on selected features
-  if (length(features) == 1 & features[1] == "all") {
+  if (length(features) == 1 && features[1] == "all") {
     tmp <- stats::prcomp(Matrix::t(data), scale = scale)
   }else {
     features <- AnnotationDbi::select(org.Hs.eg.db, features, gene_id, "SYMBOL")
@@ -214,15 +215,16 @@ pca_matrix_plot_init <- function(data,
   ## top n PCs matrix plot
   p <- list(NA)
   k <- 1
-  p1 <- lapply(1:n, function(x) {
+  p1 <- lapply(seq_len(n), function(x) {
     ggplot2::ggplot() +
       ggplot2::geom_text(ggplot2::aes(
         x = 1, y = 1,
-        label = paste("PC", x, round(summary(tmp)$importance[2, x] * 100, 2), "%")
+        label = paste("PC", x,
+                      round(summary(tmp)$importance[2, x] * 100, 2), "%")
       ), size = 5) +
       ggplot2::theme_void()
   })
-  for (i in 1:(n - 1)) {
+  for (i in seq_len(n - 1)) {
     for (j in (i + 1):n) {
       if (is.null(group_by)) {
         Group <- data.frame(group = rep("1", ncol(data)))
@@ -256,7 +258,7 @@ pca_matrix_plot_init <- function(data,
   layout_mat <- matrix(NA, n, n)
   layout_mat[lower.tri(layout_mat)] <- seq_along(p)
   layout_mat <- Matrix::t(layout_mat)
-  layout_mat[(ceiling(n / 2) + 1):n, 1:floor(n / 2)] <- length(p) + 1
+  layout_mat[(ceiling(n / 2) + 1):n, seq_len(floor(n / 2))] <- length(p) + 1
   diag(layout_mat) <- (length(p) + 2):(length(p) + 1 + n)
 
   p <- gridExtra::arrangeGrob(grobs = c(p, list(p0), p1),
@@ -338,7 +340,7 @@ exp_boxplot_init <- function(expr, sigs, type, by, counts = TRUE,
   sigs <- sigs[!duplicated(sigs[[gene_id]]), gene_id]
   sigs <- intersect(rownames(expr), sigs)
 
-  ## calculate median expression of sigs by aggregating samples based on by group
+  ## calculate median expression of sigs by aggregating samples on group
   group <- ifelse(grepl(type, by), type, by)
   expr <- dplyr::group_by(expr[sigs, ] |> Matrix::t() |> as.data.frame(),
                           group |> factor()) |>
@@ -444,7 +446,8 @@ gsea_plot_init <- function(tDEG, gsets, gene_id = "SYMBOL", digits = 2) {
 heatmap_init <- function(expr, sigs, by, markers, counts = TRUE,
                          scale = "none", min_max = FALSE,
                          gene_id = "SYMBOL", ranks_plot = FALSE,
-                         col = grDevices::colorRampPalette(c("#76B7B2","#E15759"))(256)) {
+                         col = grDevices::colorRampPalette(c("#76B7B2",
+                                                             "#E15759"))(256)) {
   if (counts) {
     expr <- edgeR::DGEList(expr)
     expr <- edgeR::calcNormFactors(expr, method = "TMM")
@@ -477,16 +480,19 @@ heatmap_init <- function(expr, sigs, by, markers, counts = TRUE,
     expr <- apply(expr, 2, rank) |> log2()
   ## scale genes expression across samples using min_max(z-score) way
   if (min_max)
-    expr <- apply(expr, 1, function(x) (x - min(x)) / (max(x) - min(x))) |> Matrix::t()
+    expr <- apply(expr, 1, function(x) (x - min(x)) / (max(x) - min(x))) |>
+      Matrix::t()
   ## heatmap for markers pool genes
   p1 <- pheatmap::pheatmap(expr[c(setdiff(index.1, index.2), index.2),],
                            silent = TRUE, scale = scale,
                            border_color = NA, annotation_col = anno_col,
                            show_rownames = FALSE,
                            gaps_col = table(by) |> cumsum(),
-                           show_colnames = FALSE, main = "Original Markers Pool",
+                           show_colnames = FALSE,
+                           main = "Original Markers Pool",
                            gaps_row = length(index.1) - length(index.2),
-                           cluster_cols = FALSE, cluster_rows = FALSE, color = col,
+                           cluster_cols = FALSE, cluster_rows = FALSE,
+                           color = col,
                            annotation_colors = ann_colors
   ) |> ggplotify::as.ggplot()
   ## heatmap for final signature genes
@@ -496,7 +502,8 @@ heatmap_init <- function(expr, sigs, by, markers, counts = TRUE,
                            show_rownames = FALSE,
                            gaps_col = table(by) |> cumsum(),
                            show_colnames = FALSE, main = "Screened Signature",
-                           cluster_cols = FALSE, cluster_rows = FALSE, color = col,
+                           cluster_cols = FALSE, cluster_rows = FALSE,
+                           color = col,
                            annotation_colors = ann_colors
   ) |> ggplotify::as.ggplot()
 
@@ -513,12 +520,16 @@ agg_mean <- function(expr, by) {
   return(expr)
 }
 
-#helper: arrange plot matrix, add plot_spacer() at the end for samples less than max
+#helper: arrange plot matrix
+# add plot_spacer() at the end for samples less than max
 add_spacer <- function(x, ns) {
   if(length(x) < ns) {
     x <- append(x, paste(c("list(",
-                           paste(rep("patchwork::plot_spacer()", ns - length(x)),
-                                 collapse = ","), ")"), collapse = "") |>
+                           paste(rep("patchwork::plot_spacer()",
+                                 ns - length(x)),
+                                 collapse = ","),
+                           ")"),
+                         collapse = "") |>
                   (\(x) parse(text = x))() |> eval(),
                 length(x))
   }
@@ -566,10 +577,12 @@ rankdensity_init <- function(expr, sigs, by, counts = TRUE,
                                         size = 5) +
                      ggplot2::theme_void()
                  })
-  # layout_mat <- split(1:ncol(expr), data[[i]]@phenoData@data[[ID[i]]] %>% sort()) %>% do.call(rbind, args = .)
+  # layout_mat <- split(seq_len(ncol(expr)), data[[i]]@phenoData@data[[ID[i]]] |>
+  #   sort()) |> do.call(what = rbind)
   # layout_mat[t(apply(layout_mat, 1, duplicated))] <- "#"
-  # layout_mat <- cbind(1:length(unique(data[[i]]@phenoData@data[[ID[i]]])) + ncol(expr), layout_mat)
-  # layout_mat <- apply(layout_mat, 1, paste, collapse = "") %>%
+  # layout_mat <- cbind(seq_along(unique(data[[i]]@phenoData@data[[ID[i]]]))+ncol(expr),
+  #                     layout_mat)
+  # layout_mat <- apply(layout_mat, 1, paste, collapse = "") |>
   #   paste(collapse = "\n")  ## convert matrix to design for patchwork
 
   ## set num of column for matrix plot
@@ -598,18 +611,21 @@ scatter_hdb_cl <- function(sig_matrix, markers_list) {
   ml <- utils::stack(markers_list) |> (\(x) split(x$ind, x$values))()
 
   p <- lapply(rownames(sig_matrix), function(m) {
-    p <- ggplot2::ggplot(data.frame(Gene = m,
-                                    Expression = sig_matrix[m,] |> as.numeric(),
-                                    Type = ifelse(colnames(sig_matrix) %in% ml[[m]],
-                                                  colnames(sig_matrix),
-                                                  "")),
-                         ggplot2::aes(x = Gene , y = Expression,
-                                      col = (Type != ""))) +
+    p <- ggplot2::ggplot(data.frame(
+      Gene = m,
+      Expression = sig_matrix[m,] |> as.numeric(),
+      Type = ifelse(colnames(sig_matrix) %in% ml[[m]],
+                    colnames(sig_matrix),
+                    "")
+      ),
+      ggplot2::aes(x = Gene, y = Expression,
+                   col = (Type != ""))) +
       ggrepel::geom_label_repel(ggplot2::aes(label = Type)) +
       ggplot2::geom_point() +
       ggplot2::labs(col = "is.marker") +
       ggplot2::facet_wrap(~Gene) +
-      ggplot2::scale_color_manual(values = c("TRUE" = "red", "FALSE" = "black")) +
+      ggplot2::scale_color_manual(values = c("TRUE" = "red",
+                                             "FALSE" = "black")) +
       ggplot2::theme_classic()
   })
 

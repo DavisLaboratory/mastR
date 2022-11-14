@@ -10,9 +10,6 @@
 #' @importFrom grDevices colorRampPalette
 #' @importFrom dplyr group_by summarise_all arrange_
 #' @importFrom jsonlite fromJSON toJSON
-#' @importFrom enrichplot gseaplot2
-#' @importFrom clusterProfiler GSEA
 #' @importFrom Biobase exprs pData
 #' @importFrom depmap depmap_TPM depmap_metadata
-#' @importFrom RobustRankAggreg aggregateRanks
 NULL

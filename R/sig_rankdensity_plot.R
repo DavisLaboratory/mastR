@@ -1,5 +1,7 @@
 #' Plot rank density
 #'
+#' Show the rank density of given signature in the given comparison.
+#'
 #' @inheritParams sig_boxplot
 #' @param aggregate logical, if to aggregate expression according to `ID`,
 #'                  default FALSE
@@ -216,8 +218,10 @@ function(data,
 
     if(!is.null(names(data)))
       p[[i]] <- p[[i]] +
-        patchwork::plot_annotation(subtitle = names(data)[i],
-                                   theme = theme(plot.subtitle = element_text(hjust = 0.5)))
+        patchwork::plot_annotation(
+          subtitle = names(data)[i],
+          theme = theme(plot.subtitle = element_text(hjust = 0.5))
+        )
     p[[i]] <- ggplotify::as.ggplot(p[[i]])
   }
 
@@ -225,4 +229,3 @@ function(data,
     patchwork::plot_layout(guides = "collect")
   return(p)
 })
-

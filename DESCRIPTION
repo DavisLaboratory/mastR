@@ -23,28 +23,30 @@ Depends:
     R (>= 4.2)
 LazyData: true
 Suggests: 
+    clusterProfiler,
+    enrichplot,
+    ggrepel,
     knitr,
     rmarkdown,
+    RobustRankAggreg,
     rvest,
     Seurat,
     SingleCellExperiment,
+    singscore,
     SummarizedExperiment,
-    testthat (>= 3.0.0),
+    testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Imports: 
     AnnotationDbi,
     Biobase,
     BiocGenerics,
-    clusterProfiler,
     depmap,
     dplyr,
     edgeR,
-    enrichplot,
     ggfortify,
     ggplot2,
     ggplotify,
     ggpubr,
-    ggrepel,
     graphics,
     grDevices,
     gridExtra,
@@ -56,8 +58,6 @@ Imports:
     msigdb,
     patchwork,
     pheatmap,
-    RobustRankAggreg,
-    singscore,
     stats,
     tidyr,
     UpSetR,

@@ -1,8 +1,9 @@
 #' Extract specific subset markers from LM7 or/and LM22
 #'
 #' Extract markers for subsets matched to the given pattern from LM7/LM22, and
-#' save the matched genes in 'GeneSet' class object, if both pattern are provided,
-#' the output would be a 'GeneSetCollection' class object with setName: LM7, LM22.
+#' save the matched genes in 'GeneSet' class object, if both pattern are
+#' provided, the output would be a 'GeneSetCollection' class object with
+#' setName: LM7, LM22.
 #'
 #' @param lm7.pattern character string containing a regular expression,
 #'                    to be matched in the given subsets in LM7

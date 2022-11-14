@@ -149,12 +149,12 @@ to primary_disease of CCLE if data is 'CCLE'}
 expressed in relevant samples}
 
 \item{markers}{vector, a vector of gene names, listed the gene symbols to be
-filtered. Default 'NULL' means all genes in data to be filtered}
+filtered. Default 'NULL' means all genes}
 
 \item{ignore.case}{logical, if to ignore the case of tissue pattern}
 
-\item{slot}{character, specify which slot to use only for sce or seurat object,
-optional, default 'counts'}
+\item{slot}{character, specify which slot to use only for sce or seurat
+object, optional, default 'counts'}
 }
 \value{
 a vector of gene symbols

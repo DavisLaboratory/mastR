@@ -1,14 +1,14 @@
 #' @title Aggregate single cells to pseudo-samples according to specific factors
 #'
-#' @description Gather cells for each group according to specified factors, then randomly
-#'   assign and aggregate cells to each pseudo-samples with randomized cell size.
-#'   (min.cells <= size <= max.cells)
+#' @description Gather cells for each group according to specified factors,
+#'   then randomly assign and aggregate cells to each pseudo-samples with randomized
+#'   cell size. (min.cells <= size <= max.cells)
 #'
 #' @param data a matrix or Seurat/SCE object containing expression and metadata
 #' @param by a vector of ID names or dataframe for aggregation
 #' @param fun chr, methods used to aggregate cells, could be 'sum' or 'mean',
 #'            default 'sum'
-#' @param scale a num or NULL, indicates if multiply a scale to the average expression
+#' @param scale a num or NULL, if to multiply a scale to the average expression
 #' @param min.cells num, default 300, the minimum size of cells aggregating
 #'                  to each pseudo-sample
 #' @param max.cells num, default 600, the maximum size of cells aggregating
@@ -16,7 +16,7 @@
 #' @param slot chr, specify which slot of seurat object to aggregate, can be
 #'             'counts', 'data', 'scale.data'..., default is 'counts'
 #'
-#' @return An expression matrix after aggregating cells based on specified factors
+#' @return An expression matrix after aggregating cells on specified factors
 #'
 #' @examples
 #' counts <- matrix(abs(rnorm(10000, 10,10)), 100)
@@ -59,11 +59,13 @@ function(data,
   l <- pseudo_sample_list(data = data, by = by,
                           min.cells = min.cells,
                           max.cells = max.cells)
-  p_samples <- lapply(names(l), function(x) paste(x, names(l[[x]]), sep = "_")) |>
+  p_samples <- lapply(names(l), function(x) {
+    paste(x, names(l[[x]]), sep = "_")
+    }) |>
     unlist()
   p_samples <- p_samples[!grepl("_$", p_samples)]
   pb <- lapply(l, function(i) sapply(i, function(j) {
-    if(fun == "mean"){
+    if(fun == "mean") {
       Matrix::rowMeans(data[,j])
     } else if(fun == "sum") Matrix::rowSums(data[,j])
   }))
@@ -71,7 +73,7 @@ function(data,
   pb <- pb[,which(!is.na(colnames(pb)))]
   colnames(pb) <- p_samples
   pb <- apply(pb, c(1, 2), as.numeric)
-  if(fun == "mean" & !is.null(scale)) {
+  if(fun == "mean" && !is.null(scale)) {
     pb <- pb * scale
   }
   return(pb)
@@ -154,8 +156,8 @@ function(data,
 #' Split cells according to specific factors
 #'
 #' Gathering cells to make the pool according to specific factors, and randomly
-#' assign the cells from the pool to pseudo-sample with the randomized cell size.
-#' (min.cells <= size <= max.cells)
+#' assign the cells from the pool to pseudo-sample with the randomized cell
+#' size. (min.cells <= size <= max.cells)
 #'
 #' @param data matrix or data.frame or other single cell expression object
 #' @param by a vector or data.frame contains factor(s) for aggregation
@@ -190,7 +192,7 @@ pseudo_sample_list <- function(data,
     ## spread cells into multiple pseudo samples with cell counts from min.cells
     ## to max.cells when max.cells != Inf
     while (length(cells) > max.cells) {
-      psample[[i]] <- sample(cells, runif(1, min.cells, max.cells), replace = F)
+      psample[[i]] <- sample(cells, runif(1, min.cells, max.cells), replace = FALSE)
       cells <- setdiff(cells, psample[[i]])
       i <- i + 1
     }
@@ -201,4 +203,3 @@ pseudo_sample_list <- function(data,
   })
   return(psamples)
 }
-

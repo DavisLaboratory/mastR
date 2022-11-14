@@ -2,10 +2,10 @@
 #' @import ggplot2
 NULL
 
-#' @title Biplot of signature for specific subset vs others
+#' @title Scatter plot of signature for specific subset vs others
 #'
-#' @description  Biplot depicts mean expression for each signature gene in
-#'   specific subset against other cell types.
+#' @description  Scatter plot depicts mean expression for each signature gene in
+#'   the specific subset against other cell types.
 #'
 #' @inheritParams sig_boxplot
 #' @param xint intercept of vertical dashed line
@@ -215,5 +215,3 @@ function(data,
     patchwork::plot_layout(guides = "collect")
   return(p)
 })
-
-

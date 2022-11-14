@@ -39,7 +39,8 @@ test_that("filter_non_tissue works", {
   expect_setequal(non_tissue_genes, non_tissue_genes_2)
 
   ## test Matrix object
-  non_tissue_genes_2 <- filter_non_tissue(CCLE |> as.matrix() |> Matrix::Matrix(),
+  non_tissue_genes_2 <- filter_non_tissue(
+    CCLE |> as.matrix() |> Matrix::Matrix(),
     ID = cell_lines,
     type = "colorectal",
     markers = NK_markers$HGNC_Symbol

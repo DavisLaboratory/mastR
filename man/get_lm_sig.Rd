@@ -20,8 +20,9 @@ A GeneSet or GeneSetCollection for matched subsets in LM7 and/or LM22
 }
 \description{
 Extract markers for subsets matched to the given pattern from LM7/LM22, and
-save the matched genes in 'GeneSet' class object, if both pattern are provided,
-the output would be a 'GeneSetCollection' class object with setName: LM7, LM22.
+save the matched genes in 'GeneSet' class object, if both pattern are
+provided, the output would be a 'GeneSetCollection' class object with
+setName: LM7, LM22.
 }
 \examples{
 get_lm_sig(lm7.pattern = "NK", lm22.pattern = "NK cells")

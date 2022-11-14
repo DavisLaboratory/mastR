@@ -12,8 +12,9 @@
 #'            The category(s) must be one from [msigdb::listCollections()],
 #'            see details in [msigdb::subsetCollection()]
 #' @param subcat character, stating the sub-category(s) to be retrieved.
-#'               The sub-category(s) must be one from [msigdb::listSubCollections()],
-#'               see details in [msigdb::subsetCollection()]
+#'               The sub-category(s) must be one from
+#'               [msigdb::listSubCollections()], see details in
+#'               [msigdb::subsetCollection()]
 #' @param id a character, representing the ID type to use ("SYM" for gene
 #'           symbols and "EZID" for Entrez IDs)
 #' @param version a character, stating the version of MSigDB to be retrieved

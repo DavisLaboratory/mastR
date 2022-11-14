@@ -7,15 +7,15 @@ NULL
 #'   lists, for multiple comparisons, DEGs can be obtained from intersection of
 #'   all comparsion DEGs or by using product of p value ranks for multiple
 #'   comparisons. Filter out low expressed genes and extract DE genes by using
-#'   limma::voom and limma::treat, and also create an object `proc_data` to store
-#'   processed data.
+#'   limma::voom and limma::treat, and also create an object `proc_data` to
+#'   store processed data.
 #'
 #' @inheritParams de_analysis
 #' @param data expression object
 #' @param ID vector or character, specify the group factor or column name of
 #'           coldata for DE comparisons
-#' @param slot character, specify which slot to use only for sce or seurat object,
-#'             optional, default 'counts'
+#' @param slot character, specify which slot to use only for sce or seurat
+#'             object, optional, default 'counts'
 #' @param ... params for [de_analysis()] and [DEGs_RP()] or [DEGs_Group()]
 #'
 #' @return A list of 'UP' and 'DOWN' data frame of all differentially expressed
@@ -65,7 +65,7 @@ function(data,
                       ...)
 
   ## assemble DEGs from comparisons by Rank Product or simple groups
-  if(method == "RP"){
+  if(method == "RP") {
     DEGs <- DEGs_RP(tfit = tfit, ...)
   }else if(method == "Group") {
     DEGs <- DEGs_Group(tfit = tfit, ...)

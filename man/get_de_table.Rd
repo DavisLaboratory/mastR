@@ -32,8 +32,8 @@ coldata for DE comparisons}
 
 \item{type}{pattern, specify the group of interest, e.g. NK}
 
-\item{slot}{character, specify which slot to use only for sce or seurat object,
-optional, default 'counts'}
+\item{slot}{character, specify which slot to use only for sce or seurat
+object, optional, default 'counts'}
 
 \item{...}{params for function \code{\link[=de_analysis]{de_analysis()}}}
 }

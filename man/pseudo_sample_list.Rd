@@ -22,8 +22,8 @@ A list of cell names for each pseudo-sample
 }
 \description{
 Gathering cells to make the pool according to specific factors, and randomly
-assign the cells from the pool to pseudo-sample with the randomized cell size.
-(min.cells <= size <= max.cells)
+assign the cells from the pool to pseudo-sample with the randomized cell
+size. (min.cells <= size <= max.cells)
 }
 \examples{
 counts <- matrix(abs(rnorm(10000, 10,10)), 100)

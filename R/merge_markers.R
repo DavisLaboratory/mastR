@@ -5,7 +5,8 @@ NULL
 #'
 #' Merge markers collected from different DB into one 'GeneSet' object, saved a
 #' data.frame in json format under `longDescription` with 'TRUE' and '-' to
-#' indicate which DB each gene is from, this can be shown via [jsonlite::fromJSON()]
+#' indicate which DB each gene is from, this can be shown via
+#' [jsonlite::fromJSON()].
 #'
 #' @param markers_list list of markers to be merged, can be a list of
 #'                     'GeneSet'/vector or a 'GeneSetCollection' object

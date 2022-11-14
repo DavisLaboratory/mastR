@@ -27,15 +27,16 @@ DEGs_RP(
 \item{assemble}{'intersect' or 'union', whether to select intersected or
 union genes of different comparisons, default 'intersect'}
 
-\item{Rank}{character, the variable for ranking DEGs, can be 'logFC', 'adj.P.Val'...
-default 'adj.P.Val'}
+\item{Rank}{character, the variable for ranking DEGs, can be 'logFC',
+'adj.P.Val'..., default 'adj.P.Val'}
 
 \item{nperm}{num, permutation runs of simulating the distribution}
 
 \item{thres}{num, cutoff for rank product permutation test if method = "RP",
 default 0.05}
 
-\item{keep.top}{NULL or num, whether to keep top n DEGs of specific comparison}
+\item{keep.top}{NULL or num, whether to keep top n DEGs of specific
+comparison}
 
 \item{keep.group}{NULL or pattern, specify the top DEGs of which comparison
 or group to be kept}

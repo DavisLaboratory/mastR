@@ -118,7 +118,7 @@ could be one of 'ENSEMBL', 'SYMBOL', ... default 'SYMBOL'}
 ggplot or patchwork
 }
 \description{
-Plot rank density
+Show the rank density of given signature in the given comparison.
 }
 \examples{
 sig_rankdensity_plot(

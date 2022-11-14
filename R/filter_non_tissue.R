@@ -12,10 +12,10 @@
 #' @param q num, quantile cutoff to screen markers which are not or lowly
 #'          expressed in relevant samples
 #' @param markers vector, a vector of gene names, listed the gene symbols to be
-#'                filtered. Default 'NULL' means all genes in data to be filtered
+#'                filtered. Default 'NULL' means all genes
 #' @param ignore.case logical, if to ignore the case of tissue pattern
-#' @param slot character, specify which slot to use only for sce or seurat object,
-#'             optional, default 'counts'
+#' @param slot character, specify which slot to use only for sce or seurat
+#'             object, optional, default 'counts'
 #'
 #' @return a vector of gene symbols
 #'
@@ -170,9 +170,11 @@ function(data = 'CCLE',
   CCLE_meta <- depmap::depmap_metadata()
 
   ## convert CCLE from long to wide data format
-  CCLE <- tidyr::pivot_wider(CCLE[,c("gene_name", "cell_line", "rna_expression")],
-                             names_from = "cell_line",
-                             values_from = "rna_expression") |> data.frame()
+  CCLE <- tidyr::pivot_wider(
+    CCLE[,c("gene_name", "cell_line", "rna_expression")],
+    names_from = "cell_line",
+    values_from = "rna_expression"
+  ) |> data.frame()
   rownames(CCLE) <- CCLE$gene_name
   CCLE$gene_name <- NULL
 
@@ -315,14 +317,15 @@ function(data = 'CCLE',
 
   stopifnot(is.character(slot))
 
-  non_tissue_genes <- filter_non_tissue(data = Seurat::GetAssayData(data, slot = slot),
-                                        ID = data@meta.data[[ID]],
-                                        type = type,
-                                        log = log, q = q,
-                                        markers = markers,
-                                        ignore.case = ignore.case,
-                                        ...)
+  non_tissue_genes <- filter_non_tissue(
+    data = Seurat::GetAssayData(data, slot = slot),
+    ID = data@meta.data[[ID]],
+    type = type,
+    log = log, q = q,
+    markers = markers,
+    ignore.case = ignore.case,
+    ...
+  )
 
   return(non_tissue_genes)
 })
-

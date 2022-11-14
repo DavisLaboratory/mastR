@@ -25,10 +25,11 @@ DEGs_Group(
 \item{assemble}{'intersect' or 'union', whether to select intersected or
 union genes of different comparisons, default 'intersect'}
 
-\item{Rank}{character, the variable for ranking DEGs, can be 'logFC', 'adj.P.Val'...
-default 'adj.P.Val'}
+\item{Rank}{character, the variable for ranking DEGs, can be 'logFC',
+'adj.P.Val'..., default 'adj.P.Val'}
 
-\item{keep.top}{NULL or num, whether to keep top n DEGs of specific comparison}
+\item{keep.top}{NULL or num, whether to keep top n DEGs of specific
+comparison}
 
 \item{keep.group}{NULL or pattern, specify the top DEGs of which comparison
 or group to be kept}

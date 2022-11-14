@@ -4,7 +4,8 @@ test_that("plot_density works", {
   dge <- edgeR::DGEList(counts = Biobase::exprs(im_data_6),
                         group = im_data_6$`celltype:ch1`)
 
-  p <- function() plot_density(dge = dge, ID = "group", keep = 1:1e4, counts = TRUE)
+  p <- function() plot_density(dge = dge, ID = "group",
+                               keep = 1:1e4, counts = TRUE)
 
   # expect_doppelganger("basic density plot", p)
   expect_silent(p())
@@ -41,5 +42,3 @@ test_that("scatter_plot_init works", {
 
   expect_true(is.ggplot(p))
 })
-
-

@@ -7,11 +7,13 @@ test_that("merge_markers works", {
   Panglao <- get_panglao_sig(species = "Hs", type = "NK cells")
 
   ## test GeneSetCollection
-  gsc <- GSEABase::GeneSetCollection(list(NK_markers$HGNC_Symbol |>
-                                            GSEABase::GeneSet(setName = "NK_curson",
-                                                              geneIdType = GSEABase::SymbolIdentifier()),
-                                          Msig,
-                                          Panglao))
+  gsc <- GSEABase::GeneSetCollection(
+    list(NK_markers$HGNC_Symbol |>
+      GSEABase::GeneSet(setName = "NK_curson",
+                        geneIdType = GSEABase::SymbolIdentifier()),
+         Msig,
+         Panglao)
+  )
   markers <- merge_markers(markers = gsc)
 
   expect_s4_class(markers, "GeneSet")
@@ -31,5 +33,7 @@ test_that("merge_markers works", {
                                         Panglao@geneIds) |>
                     Reduce(f = union))
   ## test un-named list
-  expect_error(merge_markers(markers = list(NK_markers, Msig@geneIds, Panglao@geneIds)))
+  expect_error(merge_markers(markers = list(NK_markers,
+                                       Msig@geneIds,
+                                       Panglao@geneIds)))
 })

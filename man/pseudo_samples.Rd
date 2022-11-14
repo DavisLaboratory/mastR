@@ -66,7 +66,7 @@ pseudo_samples(
 \item{fun}{chr, methods used to aggregate cells, could be 'sum' or 'mean',
 default 'sum'}
 
-\item{scale}{a num or NULL, indicates if multiply a scale to the average expression}
+\item{scale}{a num or NULL, if to multiply a scale to the average expression}
 
 \item{min.cells}{num, default 300, the minimum size of cells aggregating
 to each pseudo-sample}
@@ -78,12 +78,12 @@ to each pseudo-sample}
 'counts', 'data', 'scale.data'..., default is 'counts'}
 }
 \value{
-An expression matrix after aggregating cells based on specified factors
+An expression matrix after aggregating cells on specified factors
 }
 \description{
-Gather cells for each group according to specified factors, then randomly
-assign and aggregate cells to each pseudo-samples with randomized cell size.
-(min.cells <= size <= max.cells)
+Gather cells for each group according to specified factors,
+then randomly assign and aggregate cells to each pseudo-samples with randomized
+cell size. (min.cells <= size <= max.cells)
 }
 \examples{
 counts <- matrix(abs(rnorm(10000, 10,10)), 100)

@@ -9,7 +9,7 @@
 \alias{sig_scatter_plot,Seurat,vector,character,character-method}
 \alias{sig_scatter_plot,SummarizedExperiment,vector,character,character-method}
 \alias{sig_scatter_plot,list,vector,character,character-method}
-\title{Biplot of signature for specific subset vs others}
+\title{Scatter plot of signature for specific subset vs others}
 \usage{
 sig_scatter_plot(
   data,
@@ -127,8 +127,8 @@ could be one of 'ENSEMBL', 'SYMBOL', ... default 'SYMBOL'}
 patchwork or ggplot of scatter plot of median expression
 }
 \description{
-Biplot depicts mean expression for each signature gene in
-specific subset against other cell types.
+Scatter plot depicts mean expression for each signature gene in
+the specific subset against other cell types.
 }
 \examples{
 sig_scatter_plot(

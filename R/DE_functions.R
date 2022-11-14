@@ -27,17 +27,19 @@ voom_lm_fit <- function(dge, ID, type, method = c("RP", "Group"),
 
   ## group samples into binary groups if group = TRUE,
   ## otherwise use as multiple groups asis
-  if (group & method != "RP") {
+  if (group == TRUE && method != "RP") {
     dge$samples$group <- ifelse(grepl(type, dge$samples[[ID]]),
                                 make.names(type),
                                 "Others") |>
-      factor(levels = c(make.names(type), "Others"))  ## set type to be the first level
+      factor(levels = c(make.names(type), "Others"))
+      ## set type to be the first level
   } else {
     dge$samples$group <- ifelse(grepl(type, dge$samples[[ID]]),
                                 make.names(type),
                                 dge$samples[[ID]] |> make.names()) |>
       (\(x) factor(x, levels = c(make.names(type),
-                                 unique(x[x != make.names(type)]))))()  ## set type to be the first level
+                                 unique(x[x != make.names(type)]))))()
+                                 ## set type to be the first level
   }
 
   ## make contrast design
@@ -48,7 +50,8 @@ voom_lm_fit <- function(dge, ID, type, method = c("RP", "Group"),
     contrasts = c(paste(levels(factor(dge$samples$group))[1],
                         levels(factor(dge$samples$group))[-1],
                         sep = "-"
-    )),  ## type vs all the rest respectively, if group = TRUE, it's type vs Others
+    )),
+    ## type vs all the rest respectively, if group = TRUE, it's type vs Others
     levels = design
   )
 
@@ -56,7 +59,7 @@ voom_lm_fit <- function(dge, ID, type, method = c("RP", "Group"),
   proc_data <- dge
 
   ## set par for plot
-  if (plot & counts) {
+  if (plot && counts) {
     op <- par(no.readonly = TRUE)
     par(mfrow = c(1, 2))
   }
@@ -76,9 +79,10 @@ voom_lm_fit <- function(dge, ID, type, method = c("RP", "Group"),
   fit <- limma::lmFit(v, design = design)
   tfit <- limma::contrasts.fit(fit, contrasts = contrast.mat) |>
     limma::treat(lfc = lfc)
-  show(limma::decideTests(tfit, lfc = lfc, p.value = p) |> summary()) ## summarize the total number of DEGs
+  ## summarize the total number of DEGs
+  show(limma::decideTests(tfit, lfc = lfc, p.value = p) |> summary())
   if (plot) limma::plotSA(tfit, main = "Final model: Mean-variance trend")
-  if (plot & counts) par(op)
+  if (plot && counts) par(op)
   return(tfit)
 }
 
@@ -91,12 +95,13 @@ voom_lm_fit <- function(dge, ID, type, method = c("RP", "Group"),
 #' @param p num, cutoff of p value for DE analysis
 #' @param assemble 'intersect' or 'union', whether to select intersected or
 #'                  union genes of different comparisons, default 'intersect'
-#' @param Rank character, the variable for ranking DEGs, can be 'logFC', 'adj.P.Val'...
-#'             default 'adj.P.Val'
+#' @param Rank character, the variable for ranking DEGs, can be 'logFC',
+#'             'adj.P.Val'..., default 'adj.P.Val'
 #' @param nperm num, permutation runs of simulating the distribution
 #' @param thres num, cutoff for rank product permutation test if method = "RP",
 #'              default 0.05
-#' @param keep.top NULL or num, whether to keep top n DEGs of specific comparison
+#' @param keep.top NULL or num, whether to keep top n DEGs of specific
+#'                 comparison
 #' @param keep.group NULL or pattern, specify the top DEGs of which comparison
 #'                   or group to be kept
 #' @param ... omitted
@@ -168,7 +173,7 @@ DEGs_RP <- function(tfit, lfc = 0, p = 0.05, assemble = "intersect",
 }
 
 
-#helper: return DEGs UP and DOWN list based on intersection or union of comparisons
+#helper: return DEGs UP and DOWN list based on intersection or union
 #' return DEGs UP and DOWN list based on intersection or union of comparisons
 #'
 #' @inheritParams DEGs_RP
@@ -195,17 +200,21 @@ DEGs_Group <- function(tfit, lfc = 0, p = 0.05,
   }
   DEGs[["UP"]] <- lapply(UPs, rownames) |> Reduce(f = assemble)
   DEGs[["DOWN"]] <- lapply(DWs, rownames) |> Reduce(f = assemble)
-  DEGs[["UP"]] <- do.call(function(...) apply(cbind(...), 1, mean, na.rm = TRUE),
-                          lapply(UPs, function(x,g) rank(x[g, Rank]),
+  DEGs[["UP"]] <- do.call(function(...) {
+                            apply(cbind(...), 1, mean, na.rm = TRUE)
+                          },
+                          lapply(UPs, function(x, g) rank(x[g, Rank]),
                                  g = DEGs[["UP"]])) |>
     order() |> (\(x) DEGs[["UP"]][x])()
-  DEGs[["DOWN"]] <- do.call(function(...) apply(cbind(...), 1, mean, na.rm = TRUE),
-                            lapply(DWs, function(x,g) rank(x[g, Rank]),
+  DEGs[["DOWN"]] <- do.call(function(...) {
+                              apply(cbind(...), 1, mean, na.rm = TRUE)
+                            },
+                            lapply(DWs, function(x, g) rank(x[g, Rank]),
                                    g = DEGs[["DOWN"]])) |>
     order() |> (\(x) DEGs[["DOWN"]][x])()
 
   ## keep the top DEGs in specified comparison even if they didn't pass RP test
-  if(!is.null(keep.top) & assemble == "intersect"){
+  if(!is.null(keep.top) && assemble == "intersect") {
     if(length(which(grepl(keep.group, colnames(tfit)))) != 1)
       stop("Please specify only one comparison for keep.group!")
     tmp <- DEG[[which(grepl(keep.group, colnames(tfit)))]] |>

@@ -26,8 +26,9 @@ The category(s) must be one from \code{\link[msigdb:listCollections]{msigdb::lis
 see details in \code{\link[msigdb:subsetCollection]{msigdb::subsetCollection()}}}
 
 \item{subcat}{character, stating the sub-category(s) to be retrieved.
-The sub-category(s) must be one from \code{\link[msigdb:listSubCollections]{msigdb::listSubCollections()}},
-see details in \code{\link[msigdb:subsetCollection]{msigdb::subsetCollection()}}}
+The sub-category(s) must be one from
+\code{\link[msigdb:listSubCollections]{msigdb::listSubCollections()}}, see details in
+\code{\link[msigdb:subsetCollection]{msigdb::subsetCollection()}}}
 
 \item{id}{a character, representing the ID type to use ("SYM" for gene
 symbols and "EZID" for Entrez IDs)}
