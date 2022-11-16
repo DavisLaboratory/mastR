@@ -23,16 +23,19 @@ test_that("voom_lm_fit works", {
                            type = "NK", method = "Group",
                            group = TRUE, counts = FALSE)
 
-  expect_true(is(tfit_RP, "MArrayLM"))
-  expect_true(is(tfit_GP, "MArrayLM"))
-  expect_true(is(tfit_GP_c, "MArrayLM"))
+  expect_true(is(tfit_RP$tfit, "MArrayLM"))
+  expect_true(is(tfit_GP$tfit, "MArrayLM"))
+  expect_true(is(tfit_GP_c$tfit, "MArrayLM"))
+  expect_true(is(tfit_RP$proc_data, "DGEList"))
+  expect_true(is(tfit_GP$proc_data, "DGEList"))
+  expect_true(is(tfit_GP_c$proc_data, "DGEList"))
 })
 
 test_that("DEGs_RP works", {
   dge <- edgeR::DGEList(counts = Biobase::exprs(im_data_6),
                         group = im_data_6$`celltype:ch1`)
   tfit <- voom_lm_fit(dge = dge, ID = "group",
-                      type = "NK", method = "RP")
+                      type = "NK", method = "RP")$tfit
 
   DEGs_i <- DEGs_RP(tfit = tfit, assemble = "intersect")
   DEGs_u <- DEGs_RP(tfit = tfit, assemble = "union")
@@ -47,7 +50,7 @@ test_that("DEGs_Group works", {
   dge <- edgeR::DGEList(counts = Biobase::exprs(im_data_6),
                         group = im_data_6$`celltype:ch1`)
   tfit <- voom_lm_fit(dge = dge, ID = "group",
-                      type = "NK", method = "Group")
+                      type = "NK", method = "Group")$tfit
 
   DEGs_i <- DEGs_Group(tfit = tfit, assemble = "intersect")
   DEGs_u <- DEGs_Group(tfit = tfit, assemble = "union")

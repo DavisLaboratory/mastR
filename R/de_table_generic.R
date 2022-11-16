@@ -1,7 +1,7 @@
 #' @include DE_functions.R plot.R
 NULL
 
-#' @title Get DE analysis result table with statistics
+#' @title Get DE analysis result table(s) with statistics
 #'
 #' @description This function uses edgeR and limma to get DE analysis results
 #'   lists for multiple comparisons. Filter out low expressed genes and obtain
@@ -41,18 +41,23 @@ function(data,
   rm(data)
 
   ## standard DE analysis with edgeR and limma::voom pipeline
-  tfit <- de_analysis(dge = DGE,
-                      ID = ID,
-                      type = type,
-                      ...)
+  voom_res <- de_analysis(
+    dge = DGE,
+    ID = ID,
+    type = type,
+    ...
+  )
 
   ## save DE result tables into list
   DE_table <- list()
-  for (i in seq_len(ncol(tfit))) {
+  for (i in seq_len(ncol(voom_res$tfit))) {
     ## use limma::topTreat() to get statistics of DEA
-    DE_table[[i]] <- limma::topTreat(tfit, coef = i, number = Inf) |> na.omit()
+    DE_table[[i]] <- limma::topTreat(voom_res$tfit, coef = i, number = Inf) |> na.omit()
   }
-  names(DE_table) <- colnames(tfit)
+  names(DE_table) <- colnames(voom_res$tfit)
+
+  ## save the processed DGEList
+  DE_table$proc_data <- voom_res$proc_data
 
   return(DE_table)
 })

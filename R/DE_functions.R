@@ -73,7 +73,7 @@ voom_lm_fit <- function(dge, ID, type, method = c("RP", "Group"),
   }else v <- dge$counts
 
   ## assign proc_data as global variable
-  assign("proc_data", proc_data, envir = .GlobalEnv)
+  # assign("proc_data", proc_data, envir = .GlobalEnv)
 
   ## linear regression fit
   fit <- limma::lmFit(v, design = design)
@@ -83,7 +83,7 @@ voom_lm_fit <- function(dge, ID, type, method = c("RP", "Group"),
   show(limma::decideTests(tfit, lfc = lfc, p.value = p) |> summary())
   if (plot) limma::plotSA(tfit, main = "Final model: Mean-variance trend")
   if (plot && counts) par(op)
-  return(tfit)
+  return(list(tfit = tfit, proc_data = proc_data))
 }
 
 
@@ -164,9 +164,9 @@ DEGs_RP <- function(tfit, lfc = 0, p = 0.05, assemble = "intersect",
     tmp <- DEG[[which(grepl(keep.group, colnames(tfit)))]] |>
       dplyr::arrange_(.dots = Rank)
     DEGs[["UP"]] <- union(DEGs[["UP"]],
-                          rownames(tmp)[tmp$lfc > 0][1:keep.top])
+                          rownames(tmp)[tmp$lfc > 0][seq_len(keep.top)])
     DEGs[["DOWN"]] <- union(DEGs[["DOWN"]],
-                            rownames(tmp)[tmp$lfc < 0][1:keep.top])
+                            rownames(tmp)[tmp$lfc < 0][seq_len(keep.top)])
   }
 
   return(DEGs)
@@ -220,9 +220,9 @@ DEGs_Group <- function(tfit, lfc = 0, p = 0.05,
     tmp <- DEG[[which(grepl(keep.group, colnames(tfit)))]] |>
       dplyr::arrange_(.dots = Rank)
     DEGs[["UP"]] <- union(DEGs[["UP"]],
-                          rownames(tmp)[tmp$lfc > 0][1:keep.top])
+                          rownames(tmp)[tmp$lfc > 0][seq_len(keep.top)])
     DEGs[["DOWN"]] <- union(DEGs[["DOWN"]],
-                            rownames(tmp)[tmp$lfc < 0][1:keep.top])
+                            rownames(tmp)[tmp$lfc < 0][seq_len(keep.top)])
   }
 
   return(DEGs)

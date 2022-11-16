@@ -1,11 +1,11 @@
 #' Filter specific cell type signature genes against other subsets.
 #'
 #' Specify the signature of the subset matched 'type' against other subsets,
-#' and generate proc_data after removing low expression genes and limma::voom
-#' transformation.
+#' either "union", "intersect" or "RRA" can be specified when input is a list
+#' of datasets to integrate the signatures into one.
 #'
 #' @inheritParams de_analysis
-#' @param data A list of expression data objects
+#' @param data An expression data or a list of expression data objects
 #' @param ID vector or character, specify the group factor or column name of
 #'           coldata for DE comparisons
 #' @param dir character, could be 'UP' or 'DOWN' to use only up- or

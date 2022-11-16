@@ -422,8 +422,9 @@ gsea_plot_init <- function(tDEG, gsets, gene_id = "SYMBOL", digits = 2) {
 
     gse <- clusterProfiler::GSEA(glist, TERM2GENE = gsets[, c("set", gene_id)])
     if(nrow(gse) == 0) {
-      message(paste("No term was found enriched in", n, "."))
-      p <- grid::textGrob(paste("No term was found enriched in", n, "."))
+      ms <- paste("No term was found enriched in", n, ".")
+      message(ms)
+      p <- grid::textGrob(ms)
     } else {
       p <- enrichplot::gseaplot2(gse, geneSetID = seq_len(nrow(gse)),
                                  pvalue_table = FALSE,

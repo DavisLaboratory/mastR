@@ -52,6 +52,8 @@ function(data,
                        markers = Reduce(union, sigs),
                        gene_id = gene_id,
                        ...)
+
+  tDEG <- tDEG[which(names(tDEG) != "proc_data")]  ## only keep DEG tables
   gsets <- data.frame(SYMBOL = sigs, set = "Signature")
   ids <- AnnotationDbi::select(org.Hs.eg.db, gsets[,1],
                                columns = gene_id,
@@ -87,6 +89,8 @@ function(data,
                        gene_id = gene_id,
                        ...)
 
+  tDEG <- tDEG[which(names(tDEG) != "proc_data")]  ## only keep DEG tables
+
   if(is.null(names(sigs)))
     names(sigs) <- seq_along(sigs)  ## set gene list names
   gsets <- utils::stack(sigs)
@@ -94,7 +98,7 @@ function(data,
   ids <- AnnotationDbi::select(org.Hs.eg.db, gsets[,1],
                                columns = gene_id,
                                keytype = "SYMBOL")
-  gsets <- merge(gsets, ids, all = T, by.x = "SYMBOL", by.y = "SYMBOL")
+  gsets <- merge(gsets, ids, all = TRUE, by.x = "SYMBOL", by.y = "SYMBOL")
 
   p <- gsea_plot_init(tDEG = tDEG, gsets = gsets,
                       gene_id = gene_id, digits = digits) |>
@@ -124,11 +128,13 @@ function(data,
                        markers = Reduce(union, sigs),
                        gene_id = gene_id,
                        ...)
+
+  tDEG <- tDEG[which(names(tDEG) != "proc_data")]  ## only keep DEG tables
   gsets <- data.frame(SYMBOL = sigs, set = "Signature")
   ids <- AnnotationDbi::select(org.Hs.eg.db, gsets[,1],
                                columns = gene_id,
                                keytype = "SYMBOL")
-  gsets <- merge(gsets, ids, all = T, by.x = "SYMBOL", by.y = "SYMBOL")
+  gsets <- merge(gsets, ids, all = TRUE, by.x = "SYMBOL", by.y = "SYMBOL")
 
   p <- gsea_plot_init(tDEG = tDEG, gsets = gsets,
                       gene_id = gene_id, digits = digits) |>
@@ -158,6 +164,8 @@ function(data,
                        markers = Reduce(union, sigs),
                        gene_id = gene_id,
                        ...)
+
+  tDEG <- tDEG[which(names(tDEG) != "proc_data")]  ## only keep DEG tables
 
   if(is.null(names(sigs)))
     names(sigs) <- seq_along(sigs)  ## set gene list names

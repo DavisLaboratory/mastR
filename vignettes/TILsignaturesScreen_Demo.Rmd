@@ -210,7 +210,8 @@ DEG_6 <- get_degs(
   markers = geneIds(Markers), 
   gene_id = "ENSEMBL"  ## convert ensembl IDs of rownames into symbols if gene_id != "SYMBOL"
 )  
-## `proc_data` object would be generated, saved expr after limma::voom pipeline.
+## `proc_data` object would be saved, saved expr after limma::voom pipeline.
+proc_data <- DEG_6$proc_data
 
 DEG_6[["UP"]] |> head()
 DEG_6[["DOWN"]] |> head()
@@ -330,10 +331,8 @@ Loading can be drawn to show which genes are relevant to NK cells, and result sh
 
 ```{r pca, fig.width=10, fig.height=7}
 ## as proc_data shows better discrimination, use it for visualization
-vis_data <- proc_data
-
 pca_matrix_plot(
-  data = vis_data, 
+  data = proc_data, 
   features = sig_NK_CRC, 
   counts = FALSE,
   group_by = "celltype.ch1",
@@ -345,7 +344,7 @@ pca_matrix_plot(
 library(ggfortify)
 
 pca_matrix_plot(
-  data = vis_data, 
+  data = proc_data, 
   features = sig_NK_CRC, 
   loading = TRUE,
   counts = FALSE,
@@ -370,7 +369,7 @@ We can see the expression pattern of cutrated signature is more distinguishable 
 
 ```{r heatmap, fig.width=12, warning=FALSE}
 sig_heatmap(
-  data = vis_data, 
+  data = proc_data, 
   sigs = sig_NK_CRC,
   counts = FALSE,
   ID = "celltype.ch1", 
@@ -381,7 +380,7 @@ sig_heatmap(
 ## for multiple datasets
 sig_heatmap(
   data = list(data_6 = im_data_6,
-              proc_data = vis_data), 
+              proc_data = proc_data), 
   sigs = sig_NK_CRC,
   ID = c("celltype:ch1", "celltype.ch1"), 
   markers = geneIds(Markers),
@@ -406,7 +405,7 @@ We can find, processed data shows more digstinguishable rankdensity distribution
 ## visualization on both original and processed data
 sig_rankdensity_plot(
   data = list(im_data_6 = im_data_6,
-              process_Data = vis_data), 
+              process_Data = proc_data), 
   sigs = sig_NK_CRC,
   counts = c(TRUE, FALSE),
   ID = c("celltype:ch1", "celltype.ch1"), 
@@ -415,7 +414,7 @@ sig_rankdensity_plot(
 
 ## visualization on aggregated data
 sig_rankdensity_plot(
-  data = vis_data, 
+  data = proc_data, 
   sigs = sig_NK_CRC,
   ID = "celltype.ch1", 
   counts = FALSE,
@@ -435,7 +434,7 @@ Obviously, our signature always shows significantly higher score in NK cells.
 
 ```{r score boxplot, warning=FALSE}
 sig_boxplot(
-  data = vis_data, 
+  data = proc_data, 
   sigs = sig_NK_CRC,
   ID = "celltype.ch1", 
   type = "NK", 
@@ -445,7 +444,7 @@ sig_boxplot(
 
 ## To make boxplots for more than 1 immune datasets at once:
 # result_score_boxplot(data = list(data_6 = im_data_6,
-#                                  proc_data = vis_data), 
+#                                  proc_data = proc_data), 
 #                      sigs = sig_NK_CRC,
 #                      ID = c("celltype:ch1", "label.main"),
 #                      type = "NK",
@@ -463,7 +462,7 @@ It's clear the score can increase the difference between NK cells and others.
 
 ```{r abundance boxplot, warning=FALSE}
 sig_boxplot(
-  data = vis_data, 
+  data = proc_data, 
   sigs = sig_NK_CRC,
   ID = "celltype.ch1", 
   type = "NK",
@@ -482,7 +481,7 @@ Based on sactter plot result, we can actually do further filtration to improve s
 
 ```{r abundance scatter plot, warning=FALSE}
 sig_scatter_plot(
-  data = vis_data, 
+  data = proc_data, 
   sigs = sig_NK_CRC,
   ID = "celltype.ch1", 
   type = "NK",
@@ -494,7 +493,7 @@ sig_scatter_plot(
 ## To make scatter plot for more than 1 immune datasets at once:
 # sig_scatter_plot(
 #   data = list(data_6 = im_data_6,
-#               proc_data = vis_data), 
+#               proc_data = proc_data), 
 #   sigs = sig_NK_CRC,
 #   ID = c("celltype:ch1", "celltype.ch1"),
 #   type = "NK", 
@@ -512,7 +511,7 @@ It's clear that our screened signature is enriched in all comparisons.
 
 ```{r gseaplot, fig.width=8, fig.height=5, warning=FALSE}
 sig_gseaplot(
-  data = vis_data, 
+  data = proc_data, 
   sigs = sig_NK_CRC,
   ID = "celltype.ch1", 
   type = "NK",
@@ -560,7 +559,7 @@ We can see the difference of NK vs CD4 and CD8 T cells increased, but the differ
 
 ```{r score boxplot refine, warning=FALSE}
 p1 <- sig_boxplot(
-  data = vis_data, 
+  data = proc_data, 
   sigs = sig_NK_CRC_refine,
   ID = "celltype.ch1", 
   type = "NK", 
@@ -568,7 +567,7 @@ p1 <- sig_boxplot(
   gene_id = "ENSEMBL"
 ) + ggtitle("Signature after Refinement")
 p2 <- sig_boxplot(
-  data = vis_data, 
+  data = proc_data, 
   sigs = sig_NK_CRC,
   ID = "celltype.ch1", 
   type = "NK", 
@@ -583,7 +582,7 @@ Abundance scatter plot also shows more specific genes to NK compared with CD4/8 
 
 ```{r abundance scatter plot refine, warning=FALSE}
 p1 <- sig_scatter_plot(
-  data = vis_data, 
+  data = proc_data, 
   sigs = sig_NK_CRC_refine,
   ID = "celltype.ch1", 
   type = "NK",
@@ -592,7 +591,7 @@ p1 <- sig_scatter_plot(
   gene_id = "ENSEMBL"
 ) + ggtitle("Signature after Refinement")
 p2 <- sig_scatter_plot(
-  data = vis_data, 
+  data = proc_data, 
   sigs = sig_NK_CRC,
   ID = "celltype.ch1", 
   type = "NK",

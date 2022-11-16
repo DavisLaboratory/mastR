@@ -68,7 +68,7 @@ filter_subset_sig(
 )
 }
 \arguments{
-\item{data}{A list of expression data objects}
+\item{data}{An expression data or a list of expression data objects}
 
 \item{markers}{vector, a vector of gene names, listed the gene symbols to be
 kept anyway after filtration. Default 'NULL' means no special
@@ -110,8 +110,8 @@ a vector of gene symbols
 }
 \description{
 Specify the signature of the subset matched 'type' against other subsets,
-and generate proc_data after removing low expression genes and limma::voom
-transformation.
+either "union", "intersect" or "RRA" can be specified when input is a list
+of datasets to integrate the signatures into one.
 }
 \examples{
 sigs <- filter_subset_sig(im_data_6, "celltype:ch1", "NK",

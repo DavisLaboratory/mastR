@@ -8,7 +8,7 @@
 \alias{get_de_table,ExpressionSet,character,character-method}
 \alias{get_de_table,SummarizedExperiment,character,character-method}
 \alias{get_de_table,Seurat,character,character-method}
-\title{Get DE analysis result table with statistics}
+\title{Get DE analysis result table(s) with statistics}
 \usage{
 get_de_table(data, ID, type, slot = "counts", ...)
 

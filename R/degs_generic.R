@@ -57,19 +57,24 @@ function(data,
   rm(data)
 
   ## standard DE analysis with edgeR and limma::voom pipeline
-  tfit <- de_analysis(dge = DGE,
-                      ID = ID,
-                      type = type,
-                      counts = counts,
-                      method = method,
-                      ...)
+  voom_res <- de_analysis(
+    dge = DGE,
+    ID = ID,
+    type = type,
+    counts = counts,
+    method = method,
+    ...
+  )
 
   ## assemble DEGs from comparisons by Rank Product or simple groups
   if(method == "RP") {
-    DEGs <- DEGs_RP(tfit = tfit, ...)
+    DEGs <- DEGs_RP(tfit = voom_res$tfit, ...)
   }else if(method == "Group") {
-    DEGs <- DEGs_Group(tfit = tfit, ...)
+    DEGs <- DEGs_Group(tfit = voom_res$tfit, ...)
   }else stop("Please provide a valid method, either 'RP' or 'Group'!")
+
+  ## save the processed DGEList
+  DEGs$proc_data <- voom_res$proc_data
 
   return(DEGs)
 })
@@ -277,9 +282,10 @@ de_analysis <- function(dge,
     dge <- edgeR::calcNormFactors(dge, method = "TMM")
 
   ## voom linear fit by limma
-  tfit <- voom_lm_fit(dge = dge, ID = ID, type = type, method = method,
-                      group = group, plot = plot, counts = counts,
-                      lfc = lfc, p = p)
+  ## return a list of tfit and a processed DGEList
+  res <- voom_lm_fit(dge = dge, ID = ID, type = type, method = method,
+                     group = group, plot = plot, counts = counts,
+                     lfc = lfc, p = p)
 
-  return(tfit)
+  return(res)
 }
