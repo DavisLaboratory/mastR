@@ -550,6 +550,16 @@ m_ct_refine <- filter_subset_sig(
 ## get 2 more new signature genes
 sig_NK_CRC_refine <- intersect(m_ct_refine, m_ccl)
 setdiff(sig_NK_CRC_refine, sig_NK_CRC)
+
+## most NK-CD8 top DEGs are not in the markers pool
+deg_tables <- TILsignaturesScreen::get_de_table(
+  data = im_data_6, 
+  ID = "celltype:ch1",
+  type = "NK"
+)
+intersect(mapIds(org.Hs.eg.db, rownames(deg_tables$`NK-CD8`)[1:200],
+                 "SYMBOL", "ENSEMBL"),
+          geneIds(Markers))  ## only 15 out of top 200 DEGs are in the pool
 ```
 
 

@@ -66,8 +66,7 @@ voom_lm_fit <- function(dge, ID, type, method = c("RP", "Group"),
 
   ## voom fit if data is raw counts data
   if(counts) {
-    v <- limma::voom(dge, design = design,
-                     normalize.method = "quantile", plot = plot)
+    v <- limma::voom(dge, design = design, plot = plot)
     ## save voom fitted counts into global variable
     proc_data$counts <- v$E
   }else v <- dge$counts
