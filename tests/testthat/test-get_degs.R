@@ -6,7 +6,8 @@ test_that("get_degs works", {
   ## test DGEList object
   data <- DEGs$proc_data
   DEGs <- get_degs(data, ID = "celltype.ch1",
-                   type = "NK", counts = FALSE)
+                   type = "NK", counts = FALSE,
+                   filter = c(1, 4))
   expect_identical(names(DEGs), c("UP", "DOWN", "proc_data"))
 
   ## test matrix object

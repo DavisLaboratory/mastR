@@ -420,7 +420,10 @@ gsea_plot_init <- function(tDEG, gsets, gene_id = "SYMBOL", digits = 2) {
     names(glist) <- rownames(tDEG[[n]])
     glist <- sort(glist, decreasing = TRUE)
 
-    gse <- clusterProfiler::GSEA(glist, TERM2GENE = gsets[, c("set", gene_id)])
+    suppressWarnings(
+      gse <- clusterProfiler::GSEA(glist,
+                                   TERM2GENE = gsets[, c("set", gene_id)])
+    )
     if(nrow(gse) == 0) {
       ms <- paste("No term was found enriched in", n, ".")
       message(ms)
@@ -548,54 +551,46 @@ rankdensity_init <- function(expr, sigs, by, counts = TRUE,
     expr <- edgeR::cpm(expr, log = TRUE)
   }
 
-  ## aggregate samples based on by group
-  if(aggregate) {
-    expr <- agg_mean(expr = expr, by = by)
-    by <- colnames(expr)
-    # expr <- expr[, order(by)]
-  }else expr <- expr[, order(by)]
-
   ## calculate ranks of genes using singscore
   rank_data <- singscore::rankGenes(expr)
   UP <- AnnotationDbi::select(org.Hs.eg.db, sigs,
                               columns = gene_id,
                               keytype = "SYMBOL")
-  UP <- UP[!duplicated(UP[[gene_id]]), gene_id]
-  # NK_scores <- singscore::simpleScore(rank_data, upSet = UP)
+  UP <- UP[!duplicated(UP[[gene_id]]), gene_id] |>
+    intersect(rownames(expr))
 
-  ## plot rankdensity
-  p <- list()
-  for (j in seq_len(ncol(rank_data))) {
-    p[[j]] <- singscore::plotRankDensity(rank_data[, j, drop = FALSE],
-                                         upSet = UP,
-                                         textSize = 1
-    )
+  data <- t(rank_data[UP,]/nrow(rank_data)) |>
+    data.frame(Group = by)
+  data$Sample <- rownames(data)
+
+  if(aggregate == TRUE) {
+    #update y-positions for barcode of up-set
+    data <- data |> tidyr::pivot_longer(-c("Sample","Group"),
+                                        names_to = "Gene",
+                                        values_to = "Rank") |>
+      dplyr::group_by(Group) |>
+      dplyr::mutate(max_den = max(density(Rank)$y))
+
+    p <- ggplot(data, aes(x = Rank, col = Group, group = Group)) +
+      geom_density() +
+      geom_segment(aes(y = max_den, xend = Rank, yend = max_den*1.1)) +
+      facet_wrap(~Group, scales = "free") +
+      theme_bw()
+  }else {
+    #update y-positions for barcode of up-set
+    data <- data |> tidyr::pivot_longer(-c("Sample","Group"),
+                                        names_to = "Gene",
+                                        values_to = "Rank") |>
+      dplyr::group_by(Group) |>
+      dplyr::mutate(y_s = as.numeric(factor(Sample))) |>
+      dplyr::mutate(y_s = -y_s/max(y_s), y_e = y_s - 0.1)
+
+    p <- ggplot(data, aes(x = Rank, col = Group, group = Sample)) +
+      geom_density() +
+      geom_segment(aes(y = y_s, xend = Rank, yend = y_e)) +
+      facet_wrap(~Group, scales = "free") +
+      theme_bw()
   }
-  tags <- lapply(sort(by) |> unique(),
-                 function(x) {
-                   ggplot2::ggplot() +
-                     ggplot2::geom_text(ggplot2::aes(x = 1, y = 1, label = x),
-                                        size = 5) +
-                     ggplot2::theme_void()
-                 })
-  # layout_mat <- split(seq_len(ncol(expr)), data[[i]]@phenoData@data[[ID[i]]] |>
-  #   sort()) |> do.call(what = rbind)
-  # layout_mat[t(apply(layout_mat, 1, duplicated))] <- "#"
-  # layout_mat <- cbind(seq_along(unique(data[[i]]@phenoData@data[[ID[i]]]))+ncol(expr),
-  #                     layout_mat)
-  # layout_mat <- apply(layout_mat, 1, paste, collapse = "") |>
-  #   paste(collapse = "\n")  ## convert matrix to design for patchwork
-
-  ## set num of column for matrix plot
-  ns <- table(by) |> max()
-
-  ## plot
-  p <- split(p, sort(by)) |>
-    lapply(add_spacer, ns = ns) |>
-    do.call(what = c)
-  p <- patchwork::wrap_plots(p, ncol = ns)
-  tags <- patchwork::wrap_plots(tags, ncol = 1)
-  p <- (tags | p) + patchwork::plot_layout(widths = c(1, ns))
 
   return(p)
 }
@@ -636,4 +631,5 @@ scatter_hdb_cl <- function(sig_matrix, markers_list) {
 }
 
 utils::globalVariables(c("org.Hs.eg.db", "median", "Gene", "Expression", "Type",
-                         "Group", "TotalScore", "Proportion of Variance"))
+                         "Group", "TotalScore", "Proportion of Variance", "Rank",
+                         "Sample", "max_den", "y_s", "y_e"))
