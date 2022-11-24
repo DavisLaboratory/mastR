@@ -11,7 +11,7 @@
 pseudo_samples(
   data,
   by,
-  fun = "sum",
+  fun = c("sum", "mean"),
   scale = NULL,
   min.cells = 0,
   max.cells = Inf,
@@ -21,7 +21,7 @@ pseudo_samples(
 \S4method{pseudo_samples}{matrix,data.frame}(
   data,
   by,
-  fun = "sum",
+  fun = c("sum", "mean"),
   scale = NULL,
   min.cells = 0,
   max.cells = Inf,
@@ -31,7 +31,7 @@ pseudo_samples(
 \S4method{pseudo_samples}{matrix,vector}(
   data,
   by,
-  fun = "sum",
+  fun = c("sum", "mean"),
   scale = NULL,
   min.cells = 0,
   max.cells = Inf,
@@ -41,7 +41,7 @@ pseudo_samples(
 \S4method{pseudo_samples}{Seurat,character}(
   data,
   by,
-  fun = "sum",
+  fun = c("sum", "mean"),
   scale = NULL,
   min.cells = 0,
   max.cells = Inf,
@@ -51,7 +51,7 @@ pseudo_samples(
 \S4method{pseudo_samples}{SummarizedExperiment,character}(
   data,
   by,
-  fun = "sum",
+  fun = c("sum", "mean"),
   scale = NULL,
   min.cells = 0,
   max.cells = Inf,

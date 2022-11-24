@@ -68,6 +68,7 @@ To screen the immune subset signatures, we have to load the example datasets. Th
 
 ```{r setup}
 library(TILsignaturesScreen)
+library(ggplot2)
 ```
 
 ### NK markers from [Curson's Publication](https://aacrjournals.org/cancerimmunolres/article/7/7/1162/469488/A-Gene-Signature-Predicting-Natural-Killer-Cell)
@@ -248,8 +249,6 @@ We can see PCA shows clearer separation between NK cells and other cells by usin
 And compared with edgeR normalization only, data after voom can explain more variance in PC1 between NK cells and others, indicating stronger power for cell type discrimination.
 
 ```{r PCA for im_data_6, fig.width=10, fig.height=7}
-library(ggfortify)
-
 ## PCA on raw counts data with standard edgeR normalization
 pca_matrix_plot(im_data_6, group_by = "celltype:ch1", 
                 counts = TRUE)
@@ -340,9 +339,6 @@ pca_matrix_plot(
 )
 
 ## loadings can be shown by setting loading = TRUE
-## need to library ggfortify for plotting loadings
-library(ggfortify)
-
 pca_matrix_plot(
   data = proc_data, 
   features = sig_NK_CRC, 
@@ -655,6 +651,33 @@ m_ct_m <- filter_subset_sig(
 ## we can get only 8 signature genes this time
 m_ct_m
 ```
+
+
+# Screen on Multiple Datasets
+
+----------------------------------
+
+We also provide pseudo-sample functions in this package to help users convert scRNA data into pseudo-bulk data, which can then be used in our above workflow.
+
+`pseudo_samples()` can help aggregate cells into pseudo-sample according to the given factor.
+
+```{r pseudo-bulk}
+## create a test scRNA object of 100 genes x 100 cells
+counts <- matrix(abs(rnorm(10000, 10, 10)), 100)
+rownames(counts) <- 1:100
+colnames(counts) <- 1:100
+meta <- data.frame(
+  subset = rep(c("A", "B"), 50),
+  level = rep(1:4, each = 25)
+)
+rownames(meta) <- 1:100
+pb <- pseudo_samples(counts, by = meta)
+
+## Seurat or SCE object are also accepted
+# scRNA <- Seurat::CreateSeuratObject(counts = counts, meta.data = meta)
+# pseudo_samples(scRNA, by = c("subset","level"))
+```
+
 
 
 # Session Info

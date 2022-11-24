@@ -4,7 +4,6 @@
 #' @import utils
 #' @import graphics
 #' @import patchwork
-#' @import ggfortify
 #' @import ggpubr
 #' @import org.Hs.eg.db
 #' @importFrom grDevices colorRampPalette

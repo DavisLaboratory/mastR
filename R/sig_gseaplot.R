@@ -219,7 +219,7 @@ function(data,
                            digits = digits,
                            slot = slot[i],
                            ...)
-    p[[i]] <- ggplotify::as.ggplot(p[[i]])
+    p[[i]] <- patchwork::patchworkGrob(p[[i]]) |> ggpubr::as_ggplot()
     if(!is.null(names(data)))
       p[[i]] <- p[[i]] + ggplot2::labs(subtitle = names(data)[i]) +
         ggplot2::theme(plot.subtitle = element_text(hjust = 0.5))

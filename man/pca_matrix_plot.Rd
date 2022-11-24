@@ -20,6 +20,7 @@ pca_matrix_plot(
   scale = TRUE,
   n = 4,
   loading = FALSE,
+  n_loadings = 10,
   gene_id = "SYMBOL"
 )
 
@@ -31,6 +32,7 @@ pca_matrix_plot(
   scale = TRUE,
   n = 4,
   loading = FALSE,
+  n_loadings = 10,
   gene_id = "SYMBOL"
 )
 
@@ -42,6 +44,7 @@ pca_matrix_plot(
   scale = TRUE,
   n = 4,
   loading = FALSE,
+  n_loadings = 10,
   gene_id = "SYMBOL"
 )
 
@@ -53,6 +56,7 @@ pca_matrix_plot(
   scale = TRUE,
   n = 4,
   loading = FALSE,
+  n_loadings = 10,
   gene_id = "SYMBOL"
 )
 
@@ -64,6 +68,7 @@ pca_matrix_plot(
   scale = TRUE,
   n = 4,
   loading = FALSE,
+  n_loadings = 10,
   gene_id = "SYMBOL"
 )
 
@@ -75,6 +80,7 @@ pca_matrix_plot(
   scale = TRUE,
   n = 4,
   loading = FALSE,
+  n_loadings = 10,
   gene_id = "SYMBOL"
 )
 
@@ -87,6 +93,7 @@ pca_matrix_plot(
   scale = TRUE,
   n = 4,
   loading = FALSE,
+  n_loadings = 10,
   gene_id = "SYMBOL"
 )
 
@@ -99,6 +106,7 @@ pca_matrix_plot(
   scale = TRUE,
   n = 4,
   loading = FALSE,
+  n_loadings = 10,
   gene_id = "SYMBOL"
 )
 }
@@ -121,6 +129,9 @@ default NULL}
 \item{n}{num, specify top n PCs to plot}
 
 \item{loading}{logical, if to plot and label loadings of PCA, default 'FALSE'}
+
+\item{n_loadings}{num, top n loadings to plot; or a vector of gene IDs;
+only work when \code{loading = TRUE}}
 
 \item{gene_id}{character, specify which column of IDs used to calculate TPM,
 also indicate the ID type of expression data's rowname,

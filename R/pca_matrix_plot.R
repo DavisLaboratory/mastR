@@ -3,22 +3,10 @@ NULL
 
 #' @title Make a matrix plot of PCA with top PCs
 #'
-#' @import ggfortify
+#' @inheritParams pca_matrix_plot_init
 #' @param data expression data, can be matrix, eSet, seurat...
-#' @param features vector of gene symbols or 'all', specify the genes used for
-#'                 PCA, default 'all'
 #' @param slot character, specify the slot name of seurat or sce object,
 #'             optional
-#' @param counts logical, TRUE indicates to calculate cpm before PCA
-#' @param group_by character, specify the column to be grouped and colored,
-#'                 default NULL
-#' @param scale logical, if to scale data for PCA, default TRUE
-#' @param n num, specify top n PCs to plot
-#' @param loading logical, if to plot and label loadings of PCA, default 'FALSE'
-#' @param gene_id character, specify which column of IDs used to calculate TPM,
-#'                also indicate the ID type of expression data's rowname,
-#'                could be one of 'ENSEMBL', 'SYMBOL', 'ENTREZ'...,
-#'                default 'SYMBOL'
 #'
 #' @return matrix plot of PCA
 #'
@@ -35,6 +23,7 @@ setGeneric("pca_matrix_plot",
                     scale = TRUE,
                     n = 4,
                     loading = FALSE,
+                    n_loadings = 10,
                     gene_id = "SYMBOL")
              standardGeneric("pca_matrix_plot"))
 
@@ -49,12 +38,13 @@ function(data,
          scale = TRUE,
          n = 4,
          loading = FALSE,
+         n_loadings = 10,
          gene_id = "SYMBOL") {
 
   p <- pca_matrix_plot_init(data = data, features = features,
                             counts = counts, group_by = group_by,
                             scale = scale, n = n, loading = loading,
-                            gene_id = gene_id)
+                            n_loadings = n_loadings, gene_id = gene_id)
   return(p)
 })
 
@@ -69,12 +59,13 @@ function(data,
          scale = TRUE,
          n = 4,
          loading = FALSE,
+         n_loadings = 10,
          gene_id = "SYMBOL") {
 
   p <- pca_matrix_plot_init(data = data, features = features,
                             counts = counts, group_by = group_by,
                             scale = scale, n = n, loading = loading,
-                            gene_id = gene_id)
+                            n_loadings = n_loadings, gene_id = gene_id)
   return(p)
 })
 
@@ -89,12 +80,13 @@ function(data,
          scale = TRUE,
          n = 4,
          loading = FALSE,
+         n_loadings = 10,
          gene_id = "SYMBOL") {
 
   p <- pca_matrix_plot_init(data = data |> as.matrix(), features = features,
                             counts = counts, group_by = group_by,
                             scale = scale, n = n, loading = loading,
-                            gene_id = gene_id)
+                            n_loadings = n_loadings, gene_id = gene_id)
   return(p)
 })
 
@@ -109,6 +101,7 @@ function(data,
          scale = TRUE,
          n = 4,
          loading = FALSE,
+         n_loadings = 10,
          gene_id = "SYMBOL") {
 
   if(is.character(group_by))
@@ -118,7 +111,7 @@ function(data,
   p <- pca_matrix_plot(data = data, features = features,
                        counts = counts, group_by = group_by,
                        scale = scale, n = n, loading = loading,
-                       gene_id = gene_id)
+                       n_loadings = n_loadings, gene_id = gene_id)
   return(p)
 })
 
@@ -133,6 +126,7 @@ function(data,
          scale = TRUE,
          n = 4,
          loading = FALSE,
+         n_loadings = 10,
          gene_id = "SYMBOL") {
 
   if(is.character(group_by))
@@ -142,7 +136,7 @@ function(data,
   p <- pca_matrix_plot(data = data, features = features,
                        counts = counts, group_by = group_by,
                        scale = scale, n = n, loading = loading,
-                       gene_id = gene_id)
+                       n_loadings = n_loadings, gene_id = gene_id)
   return(p)
 })
 
@@ -158,6 +152,7 @@ function(data,
          scale = TRUE,
          n = 4,
          loading = FALSE,
+         n_loadings = 10,
          gene_id = "SYMBOL") {
 
   if(is.character(group_by))
@@ -167,7 +162,7 @@ function(data,
   p <- pca_matrix_plot(data = data, features = features,
                        counts = counts, group_by = group_by,
                        scale = scale, n = n, loading = loading,
-                       gene_id = gene_id)
+                       n_loadings = n_loadings, gene_id = gene_id)
   return(p)
 })
 
@@ -183,6 +178,7 @@ function(data,
          scale = TRUE,
          n = 4,
          loading = FALSE,
+         n_loadings = 10,
          gene_id = "SYMBOL") {
 
   if(is.character(group_by))
@@ -192,6 +188,6 @@ function(data,
   p <- pca_matrix_plot(data = data, features = features,
                        counts = counts, group_by = group_by,
                        scale = scale, n = n, loading = loading,
-                       gene_id = gene_id)
+                       n_loadings = n_loadings, gene_id = gene_id)
   return(p)
 })

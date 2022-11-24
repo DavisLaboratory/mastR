@@ -33,7 +33,7 @@
 setGeneric("pseudo_samples",
            function(data,
                     by,
-                    fun = "sum",
+                    fun = c("sum", "mean"),
                     scale = NULL,
                     min.cells = 0,
                     max.cells = Inf,
@@ -47,12 +47,13 @@ setMethod("pseudo_samples", signature(
 ),
 function(data,
          by,
-         fun = "sum",
+         fun = c("sum", "mean"),
          scale = NULL,
          min.cells = 0,
          max.cells = Inf,
          slot = "counts") {
 
+  fun <- match.arg(fun)
   stopifnot(is.character(fun), is.numeric(min.cells),
             is.numeric(max.cells), is.character(slot))
 
@@ -66,8 +67,8 @@ function(data,
   p_samples <- p_samples[!grepl("_$", p_samples)]
   pb <- lapply(l, function(i) sapply(i, function(j) {
     if(fun == "mean") {
-      Matrix::rowMeans(data[,j])
-    } else if(fun == "sum") Matrix::rowSums(data[,j])
+      Matrix::rowMeans(data[,j], na.rm = TRUE)
+    } else if(fun == "sum") Matrix::rowSums(data[,j], na.rm = TRUE)
   }))
   pb <- do.call(cbind, pb)
   pb <- pb[,which(!is.na(colnames(pb)))]
@@ -86,7 +87,7 @@ setMethod("pseudo_samples", signature(
 ),
 function(data,
          by,
-         fun = "sum",
+         fun = c("sum", "mean"),
          scale = NULL,
          min.cells = 0,
          max.cells = Inf,
@@ -108,7 +109,7 @@ setMethod("pseudo_samples", signature(
 ),
 function(data,
          by,
-         fun = "sum",
+         fun = c("sum", "mean"),
          scale = NULL,
          min.cells = 0,
          max.cells = Inf,
@@ -134,7 +135,7 @@ setMethod("pseudo_samples", signature(
 ),
 function(data,
          by,
-         fun = "sum",
+         fun = c("sum", "mean"),
          scale = NULL,
          min.cells = 0,
          max.cells = Inf,

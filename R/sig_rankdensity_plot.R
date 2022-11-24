@@ -222,7 +222,7 @@ function(data,
           subtitle = names(data)[i],
           theme = theme(plot.subtitle = element_text(hjust = 0.5))
         )
-    p[[i]] <- ggplotify::as.ggplot(p[[i]])
+    p[[i]] <- patchwork::patchworkGrob(p[[i]]) |> ggpubr::as_ggplot()
   }
 
   p <- patchwork::wrap_plots(p) +
