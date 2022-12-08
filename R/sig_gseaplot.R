@@ -43,6 +43,7 @@ function(data,
          type,
          gene_id = "SYMBOL",
          digits = 2,
+         slot = "counts",
          ...) {
 
   stopifnot(is.character(gene_id), is.numeric(digits))
@@ -51,6 +52,7 @@ function(data,
   tDEG <- get_de_table(data = data, ID = ID, type = type,
                        markers = Reduce(union, sigs),
                        gene_id = gene_id,
+                       slot = slot,
                        ...)
 
   tDEG <- tDEG[which(names(tDEG) != "proc_data")]  ## only keep DEG tables
@@ -79,6 +81,7 @@ function(data,
          type,
          gene_id = "SYMBOL",
          digits = 2,
+         slot = "counts",
          ...) {
 
   stopifnot(is.character(gene_id), is.numeric(digits))
@@ -87,6 +90,7 @@ function(data,
   tDEG <- get_de_table(data = data, ID = ID, type = type,
                        markers = Reduce(union, sigs),
                        gene_id = gene_id,
+                       slot = slot,
                        ...)
 
   tDEG <- tDEG[which(names(tDEG) != "proc_data")]  ## only keep DEG tables
