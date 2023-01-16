@@ -130,31 +130,41 @@ DEGs_RP <- function(tfit, lfc = 0, p = 0.05, assemble = "intersect",
   genes <- lapply(UPs, rownames) |> Reduce(f = assemble)
   genes <- intersect(genes, lapply(DEG, rownames) |>
                        Reduce(f = intersect))
-  # if(!is.null(rand)) set.seed(rand)
-  up_dist <- lapply(UPs, function(x) {
-    sample.int(length(genes), nperm, replace = TRUE)
+  if(length(genes) == 0) {
+    DEGs[["UP"]] <- genes
+  }else {
+    # if(!is.null(rand)) set.seed(rand)
+    up_dist <- lapply(UPs, function(x) {
+      sample.int(length(genes), nperm, replace = TRUE)
     })
-  pr_up_dist <- do.call(cbind, up_dist) |> apply(1, prod)
-  up_pr <- lapply(DEG, function(x) rank(x[genes, Rank])) |>
-    do.call(what = cbind) |> apply(1, prod)
-  names(up_pr) <- genes
-  up_pr <- up_pr[up_pr < quantile(pr_up_dist, thres)]  ## keep top rank genes
-  DEGs[["UP"]] <- names(sort(up_pr))
+    pr_up_dist <- do.call(cbind, up_dist) |> apply(1, prod)
+    up_pr <- lapply(DEG, function(x) rank(x[genes, Rank])) |>
+      do.call(what = cbind) |> apply(1, prod)
+    names(up_pr) <- genes
+    up_pr <- up_pr[up_pr < quantile(pr_up_dist, thres)]  ## keep top rank genes
+    DEGs[["UP"]] <- names(sort(up_pr))
+  }
+
 
   ## PR distribution for DWs
   genes <- lapply(DWs, rownames) |> Reduce(f = assemble)
   genes <- intersect(genes, lapply(DEG, rownames) |>
                        Reduce(f = intersect))
-  # if(!is.null(rand)) set.seed(rand)
-  dw_dist <- lapply(DWs, function(x) {
-    sample.int(length(genes), nperm, replace = TRUE)
+  if(length(genes) == 0) {
+    DEGs[["DOWN"]] <- genes
+  }else {
+    # if(!is.null(rand)) set.seed(rand)
+    dw_dist <- lapply(DWs, function(x) {
+      sample.int(length(genes), nperm, replace = TRUE)
     })
-  pr_dw_dist <- do.call(cbind, dw_dist) |> apply(1, prod)
-  dw_pr <- lapply(DEG, function(x) rank(x[genes, Rank])) |>
-    do.call(what = cbind) |> apply(1, prod)
-  names(dw_pr) <- genes
-  dw_pr <- dw_pr[dw_pr < quantile(pr_dw_dist, thres)] ## keep top rank genes
-  DEGs[["DOWN"]] <- names(sort(dw_pr))
+    pr_dw_dist <- do.call(cbind, dw_dist) |> apply(1, prod)
+    dw_pr <- lapply(DEG, function(x) rank(x[genes, Rank])) |>
+      do.call(what = cbind) |> apply(1, prod)
+    names(dw_pr) <- genes
+    dw_pr <- dw_pr[dw_pr < quantile(pr_dw_dist, thres)] ## keep top rank genes
+    DEGs[["DOWN"]] <- names(sort(dw_pr))
+  }
+
 
   ## keep the top DEGs in specified comparison even if they didn't pass RP test
   if(!is.null(keep.top)) {
