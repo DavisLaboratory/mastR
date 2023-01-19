@@ -30,9 +30,9 @@
 #' @export
 setGeneric("filter_subset_sig",
            function(data,
-                    markers,
                     ID,
                     type,
+                    markers = NULL,
                     counts = TRUE,
                     dir = "UP",
                     gene_id = "SYMBOL",
@@ -46,14 +46,13 @@ setGeneric("filter_subset_sig",
 #' @rdname filter_subset_sig
 setMethod("filter_subset_sig", signature(
   data = 'list',
-  markers = 'vector',
   ID = 'ANY',
   type = 'ANY'
 ),
 function(data,
-         markers,
          ID,
          type,
+         markers = NULL,
          counts = TRUE,
          dir = "UP",
          gene_id = "SYMBOL",
@@ -63,11 +62,15 @@ function(data,
          s_thres = 0.05,
          ...) {
 
-  stopifnot(is.vector(markers), is.character(dir),
-            is.character(method), is.numeric(s_thres),
-            is.character(gene_id))
+  stopifnot(is.character(dir), is.character(method),
+            is.numeric(s_thres), is.character(gene_id))
 
-  markers <- AnnotationDbi::select(org.Hs.eg.db, markers, gene_id, "SYMBOL")
+  if (!is.null(markers)) {
+    stopifnot("Please provide a vector of gene symbols!" = is.vector(markers))
+    markers <- AnnotationDbi::select(org.Hs.eg.db,
+                                     markers,
+                                     gene_id, "SYMBOL")
+  }
   # tryCatch(
   #   {
   #     markers$ENSEMBL[match(c("KLRA1P", "TRBC1", "TRDC"),
@@ -101,7 +104,11 @@ function(data,
                      filter = filter[[i]],
                      gene_id = gene_id[[i]], ...)[[dir]]
 
-    NK_against_subsets[[i]] <- markers$SYMBOL[markers[[gene_id[[i]]]] %in% DEGs]
+    if(is.null(markers)) {
+      NK_against_subsets[[i]] <- DEGs
+    }else {
+      NK_against_subsets[[i]] <- markers$SYMBOL[markers[[gene_id[[i]]]] %in% DEGs]
+    }
   }
   if((is.character(comb)) && (comb == "RRA")) {
     if(length(NK_against_subsets) == 1) return(unlist(NK_against_subsets))
@@ -115,14 +122,13 @@ function(data,
 #' @rdname filter_subset_sig
 setMethod("filter_subset_sig", signature(
   data = 'DGEList',
-  markers = 'vector',
   ID = 'ANY',
   type = 'ANY'
 ),
 function(data,
-         markers,
          ID,
          type,
+         markers = NULL,
          counts = TRUE,
          dir = "UP",
          gene_id = "SYMBOL",
@@ -132,11 +138,15 @@ function(data,
          s_thres = 0.05,
          ...) {
 
-  stopifnot(is.vector(markers), is.character(dir),
-            is.character(method), is.numeric(s_thres),
-            is.character(gene_id))
+  stopifnot(is.character(dir), is.character(method),
+            is.numeric(s_thres), is.character(gene_id))
 
-  markers <- AnnotationDbi::select(org.Hs.eg.db, markers, gene_id, "SYMBOL")
+  if (!is.null(markers)) {
+    stopifnot("Please provide a vector of gene symbols!" = is.vector(markers))
+    markers <- AnnotationDbi::select(org.Hs.eg.db,
+                                     markers,
+                                     gene_id, "SYMBOL")
+  }
   # tryCatch(
   #   {
   #     markers$ENSEMBL[match(c("KLRA1P", "TRBC1", "TRDC"),
@@ -157,7 +167,11 @@ function(data,
                    filter = filter,
                    gene_id = gene_id, ...)[[dir]]
 
-  NK_against_subsets <- markers$SYMBOL[markers[[gene_id]] %in% DEGs]
+  if(is.null(markers)) {
+    NK_against_subsets <- DEGs
+  }else {
+    NK_against_subsets <- markers$SYMBOL[markers[[gene_id]] %in% DEGs]
+  }
 
   return(NK_against_subsets)
 })
@@ -165,14 +179,13 @@ function(data,
 #' @rdname filter_subset_sig
 setMethod("filter_subset_sig", signature(
   data = 'ANY',
-  markers = 'vector',
   ID = 'ANY',
   type = 'ANY'
 ),
 function(data,
-         markers,
          ID,
          type,
+         markers = NULL,
          counts = TRUE,
          dir = "UP",
          gene_id = "SYMBOL",
@@ -182,11 +195,15 @@ function(data,
          s_thres = 0.05,
          ...) {
 
-  stopifnot(is.vector(markers), is.character(dir),
-            is.character(method), is.numeric(s_thres),
-            is.character(gene_id))
+  stopifnot(is.character(dir), is.character(method),
+            is.numeric(s_thres), is.character(gene_id))
 
-  markers <- AnnotationDbi::select(org.Hs.eg.db, markers, gene_id, "SYMBOL")
+  if (!is.null(markers)) {
+    stopifnot("Please provide a vector of gene symbols!" = is.vector(markers))
+    markers <- AnnotationDbi::select(org.Hs.eg.db,
+                                     markers,
+                                     gene_id, "SYMBOL")
+  }
   # tryCatch(
   #   {
   #     markers$ENSEMBL[match(c("KLRA1P", "TRBC1", "TRDC"),
@@ -207,7 +224,11 @@ function(data,
                    filter = filter,
                    gene_id = gene_id, ...)[[dir]]
 
-  NK_against_subsets <- markers$SYMBOL[markers[[gene_id]] %in% DEGs]
+  if(is.null(markers)) {
+    NK_against_subsets <- DEGs
+  }else {
+    NK_against_subsets <- markers$SYMBOL[markers[[gene_id]] %in% DEGs]
+  }
 
   return(NK_against_subsets)
 })

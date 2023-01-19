@@ -2,10 +2,13 @@
 # use before DE
 filterGenes <- function(dge, ID, filter = c(10, 10), counts = TRUE,
                         markers = NULL, gene_id = "SYMBOL") {
-  if (!is.null(markers))
+  if (!is.null(markers)) {
+    stopifnot("Please provide a vector of gene symbols!" = is.vector(markers))
     markers <- AnnotationDbi::select(org.Hs.eg.db,
                                      markers,
                                      gene_id, "SYMBOL")
+  }
+
   if(counts) {
     keep <- edgeR::filterByExpr(dge, group = dge$samples[[ID]],
                                 min.count = filter[1],

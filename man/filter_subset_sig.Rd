@@ -2,16 +2,16 @@
 % Please edit documentation in R/filter_subset_sig.R
 \name{filter_subset_sig}
 \alias{filter_subset_sig}
-\alias{filter_subset_sig,list,vector-method}
-\alias{filter_subset_sig,DGEList,vector-method}
-\alias{filter_subset_sig,ANY,vector-method}
+\alias{filter_subset_sig,list-method}
+\alias{filter_subset_sig,DGEList-method}
+\alias{filter_subset_sig,ANY-method}
 \title{Filter specific cell type signature genes against other subsets.}
 \usage{
 filter_subset_sig(
   data,
-  markers,
   ID,
   type,
+  markers = NULL,
   counts = TRUE,
   dir = "UP",
   gene_id = "SYMBOL",
@@ -22,11 +22,11 @@ filter_subset_sig(
   ...
 )
 
-\S4method{filter_subset_sig}{list,vector}(
+\S4method{filter_subset_sig}{list}(
   data,
-  markers,
   ID,
   type,
+  markers = NULL,
   counts = TRUE,
   dir = "UP",
   gene_id = "SYMBOL",
@@ -37,11 +37,11 @@ filter_subset_sig(
   ...
 )
 
-\S4method{filter_subset_sig}{DGEList,vector}(
+\S4method{filter_subset_sig}{DGEList}(
   data,
-  markers,
   ID,
   type,
+  markers = NULL,
   counts = TRUE,
   dir = "UP",
   gene_id = "SYMBOL",
@@ -52,11 +52,11 @@ filter_subset_sig(
   ...
 )
 
-\S4method{filter_subset_sig}{ANY,vector}(
+\S4method{filter_subset_sig}{ANY}(
   data,
-  markers,
   ID,
   type,
+  markers = NULL,
   counts = TRUE,
   dir = "UP",
   gene_id = "SYMBOL",
@@ -70,14 +70,14 @@ filter_subset_sig(
 \arguments{
 \item{data}{An expression data or a list of expression data objects}
 
-\item{markers}{vector, a vector of gene names, listed the gene symbols to be
-kept anyway after filtration. Default 'NULL' means no special
-genes need to be kept.}
-
 \item{ID}{vector or character, specify the group factor or column name of
 coldata for DE comparisons}
 
 \item{type}{pattern, specify the group of interest, e.g. NK}
+
+\item{markers}{vector, a vector of gene names, listed the gene symbols to be
+kept anyway after filtration. Default 'NULL' means no special
+genes need to be kept.}
 
 \item{counts}{logical, if the expr in data is raw counts data}
 
