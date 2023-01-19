@@ -22,8 +22,14 @@ plot_density <- function(dge, ID, keep = TRUE, counts = TRUE, filter = 10) {
   if(counts) {
     M <- median(dge$samples$lib.size) * 1e-6
     L <- mean(dge$samples$lib.size) * 1e-6
-    lcpm.1 <- edgeR::cpm(dge, log = TRUE)
-    lcpm.2 <- edgeR::cpm(dge[keep,, keep.lib.sizes = FALSE], log = TRUE)
+    lcpm.1 <- edgeR::cpm(
+      edgeR::calcNormFactors(dge, method = "TMM"),
+      log = TRUE
+    )
+    lcpm.2 <- edgeR::cpm(
+      edgeR::calcNormFactors(dge[keep,, keep.lib.sizes = FALSE]),
+      log = TRUE
+    )
     abl <- log2(filter/M + 2/L)
   }else {
     # lcpm.1 <- log1p(dge$counts)
@@ -86,8 +92,14 @@ plot_rle <- function(dge, ID, keep = TRUE, counts = TRUE) {
 
   ## calculate logCPM
   if(counts) {
-    lcpm.1 <- edgeR::cpm(dge, log = TRUE)
-    lcpm.2 <- edgeR::cpm(dge[keep,, keep.lib.sizes = FALSE], log = TRUE)
+    lcpm.1 <- edgeR::cpm(
+      edgeR::calcNormFactors(dge, method = "TMM"),
+      log = TRUE
+    )
+    lcpm.2 <- edgeR::cpm(
+      edgeR::calcNormFactors(dge[keep,, keep.lib.sizes = FALSE]),
+      log = TRUE
+    )
   }else {
     # lcpm.1 <- log1p(dge$counts)
     # lcpm.2 <- log1p(dge$counts[keep,])
@@ -132,8 +144,14 @@ plot_MDS <- function(dge, ID, keep = TRUE, counts = TRUE) {
 
   ## calculate logCPM
   if(counts) {
-    lcpm.1 <- edgeR::cpm(dge, log = TRUE)
-    lcpm.2 <- edgeR::cpm(dge[keep,, keep.lib.sizes = FALSE], log = TRUE)
+    lcpm.1 <- edgeR::cpm(
+      edgeR::calcNormFactors(dge, method = "TMM"),
+      log = TRUE
+    )
+    lcpm.2 <- edgeR::cpm(
+      edgeR::calcNormFactors(dge[keep,, keep.lib.sizes = FALSE]),
+      log = TRUE
+    )
   }else {
     # lcpm.1 <- log1p(dge$counts)
     # lcpm.2 <- log1p(dge$counts[keep,])
