@@ -99,7 +99,7 @@ function(data,
   if(plot.score == TRUE) {
     ## plot scores of signature
     ## calculate scores
-    scores <- singscore_init(expr = data, sigs = sigs, by = ID,
+    scores <- singscore_init(expr = as.matrix(data), sigs = sigs, by = ID,
                              counts = counts, gene_id = gene_id)
     ## boxplot of scores
     p <- score_boxplot_init(scores = scores, by = ID,
