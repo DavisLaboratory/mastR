@@ -171,14 +171,20 @@ DEGs_RP <- function(tfit, lfc = 0, p = 0.05, assemble = "intersect",
 
   ## keep the top DEGs in specified comparison even if they didn't pass RP test
   if(!is.null(keep.top)) {
-    if(length(which(grepl(keep.group, colnames(tfit)))) != 1)
-      stop("Please specify only one comparison for keep.group!")
-    tmp <- DEG[[which(grepl(keep.group, colnames(tfit)))]] |>
-      dplyr::arrange_(.dots = Rank)
-    DEGs[["UP"]] <- union(DEGs[["UP"]],
-                          rownames(tmp)[tmp$lfc > 0][seq_len(keep.top)])
-    DEGs[["DOWN"]] <- union(DEGs[["DOWN"]],
-                            rownames(tmp)[tmp$lfc < 0][seq_len(keep.top)])
+    if(length(which(grepl(keep.group, colnames(tfit)))) < 1)
+      stop("Please specify at least one valid comparison for keep.group!")
+    ## get top n UP DEGs for specified comparison
+    tmp <- lapply(which(grepl(keep.group, colnames(tfit))), \(i) {
+      tmp <- DEG[[i]] |> dplyr::arrange_(.dots = Rank)
+      tmp <- rownames(tmp)[tmp$lfc > 0][seq_len(keep.top)]
+    })
+    DEGs[["UP"]] <- Reduce(union, c(list(DEGs[["UP"]]), tmp))
+    ## get top n DOWN DEGs for specified comparison
+    tmp <- lapply(which(grepl(keep.group, colnames(tfit))), \(i) {
+      tmp <- DEG[[i]] |> dplyr::arrange_(.dots = Rank)
+      tmp <- rownames(tmp)[tmp$lfc < 0][seq_len(keep.top)]
+    })
+    DEGs[["DOWN"]] <- Reduce(union, c(list(DEGs[["DOWN"]]), tmp))
   }
 
   return(DEGs)
@@ -227,14 +233,20 @@ DEGs_Group <- function(tfit, lfc = 0, p = 0.05,
 
   ## keep the top DEGs in specified comparison even if they didn't pass RP test
   if(!is.null(keep.top) && assemble == "intersect") {
-    if(length(which(grepl(keep.group, colnames(tfit)))) != 1)
-      stop("Please specify only one comparison for keep.group!")
-    tmp <- DEG[[which(grepl(keep.group, colnames(tfit)))]] |>
-      dplyr::arrange_(.dots = Rank)
-    DEGs[["UP"]] <- union(DEGs[["UP"]],
-                          rownames(tmp)[tmp$lfc > 0][seq_len(keep.top)])
-    DEGs[["DOWN"]] <- union(DEGs[["DOWN"]],
-                            rownames(tmp)[tmp$lfc < 0][seq_len(keep.top)])
+    if(length(which(grepl(keep.group, colnames(tfit)))) < 1)
+      stop("Please specify at least one valid comparison for keep.group!")
+    ## get top n UP DEGs for specified comparison
+    tmp <- lapply(which(grepl(keep.group, colnames(tfit))), \(i) {
+      tmp <- DEG[[i]] |> dplyr::arrange_(.dots = Rank)
+      tmp <- rownames(tmp)[tmp$lfc > 0][seq_len(keep.top)]
+    })
+    DEGs[["UP"]] <- Reduce(union, c(list(DEGs[["UP"]]), tmp))
+    ## get top n DOWN DEGs for specified comparison
+    tmp <- lapply(which(grepl(keep.group, colnames(tfit))), \(i) {
+      tmp <- DEG[[i]] |> dplyr::arrange_(.dots = Rank)
+      tmp <- rownames(tmp)[tmp$lfc < 0][seq_len(keep.top)]
+    })
+    DEGs[["DOWN"]] <- Reduce(union, c(list(DEGs[["DOWN"]]), tmp))
   }
 
   return(DEGs)
