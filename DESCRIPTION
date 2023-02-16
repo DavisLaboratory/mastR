@@ -1,5 +1,5 @@
-Package: TILsignaturesScreen
-Title: Screen Immune Cells Signature for Specific Cancer or Tissue Type
+Package: mastR
+Title: MArker Screening Tool in R
 Version: 0.9.0
 Authors@R: 
     person("Jinjin", "Chen", , "chen.j@wehi.edu.au", role = c("aut", "cre"),
@@ -62,7 +62,6 @@ Imports:
     utils
 Collate: 
     'DE_functions.R'
-    'TILsignaturesScreen_Package.R'
     'data.R'
     'plot.R'
     'de_table_generic.R'
@@ -74,6 +73,7 @@ Collate:
     'get_panglao_sig.R'
     'list_panglao_organs.R'
     'list_panglao_types.R'
+    'mastR_Package.R'
     'merge_markers.R'
     'pca_matrix_plot.R'
     'pseudo_samples.R'
@@ -82,6 +82,6 @@ Collate:
     'sig_heatmap.R'
     'sig_rankdensity_plot.R'
     'sig_scatter_plot.R'
-URL: https://davislaboratory.github.io/TILsignaturesScreen
-BugReports: https://github.com/DavisLaboratory/TILsignaturesScreen/issues
+URL: https://davislaboratory.github.io/mastR
+BugReports: https://github.com/DavisLaboratory/mastR/issues
 VignetteBuilder: knitr

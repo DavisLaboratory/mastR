@@ -1,2 +1,2 @@
-# TILsignaturesScreen
-An R package for screening (immune) cell type signature in specific tissue.
+# mastR
+An R package for automatically screening cell type signature in specific cancer or tissue based on limma.

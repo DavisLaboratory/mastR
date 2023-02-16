@@ -15,7 +15,7 @@ NULL
 
 #' Screen Immune Cells Signature for Specific Cancer or Tissue Type
 #'
-#' `TILsignaturesScreen` This package enables screening immune cells signatures
+#' `mastR` This package enables screening immune cells signatures
 #'   for specific cancer or tissue type. Imported NK cell markers are based on
 #'   LM22 and LM7 and human orthologs in mice. MSigDB genesets of relevant terms
 #'   and Panglao DB markers can also be retrieved by this package. Users can
@@ -25,9 +25,9 @@ NULL
 #'   visualization functions are implemented in this package.
 #'
 #' @author Jinjin Chen \email{chen.j@@wehi.edu.au}
-#' @name TILsignaturesScreen_Package
+#' @name mastR_Package
 #' @docType package
-#' @aliases TILsignaturesScreen TILsignaturesScreen_Package
+#' @aliases mastR mastR_Package
 #' @keywords internal
 #'
 NULL

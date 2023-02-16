@@ -1,5 +1,5 @@
 ---
-title: "TILsignaturesScreen_Demo"
+title: "mastR_Demo"
 author:
   - name: Jinjin Chen
     affiliation:
@@ -9,7 +9,7 @@ author:
 date: "`r format(Sys.time(), '%d %b %Y')`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{TILsignaturesScreen_Demo}
+  %\VignetteIndexEntry{mastR_Demo}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -25,30 +25,30 @@ knitr::opts_chunk$set(
 
 -----------------------------
 
-This report demonstrates how to use the functions in R package `TILsignaturesScreen 0.1.0` to screen immune subset signatures in specific tissue and visualize the effects of the curation.
+This report demonstrates how to use the functions in R package `mastR 0.1.0` to screen immune subset signatures in specific tissue and visualize the effects of the curation.
 
-`TILsignaturesScreen` is developed to screen immune cells signature in cancer tissues. So there are several datasets imported into this package for running by default. But users could specify other immune subsets and other tissues by setting the parameters in the R functions. Next, this report will show how the workflow runs to refine NK cells signatures which are specific for CRC, and how to visualize the results effect.
+`mastR` is developed to screen immune cells signature in cancer tissues. So there are several datasets imported into this package for running by default. But users could specify other immune subsets and other tissues by setting the parameters in the R functions. Next, this report will show how the workflow runs to refine NK cells signatures which are specific for CRC, and how to visualize the results effect.
 
 # Installation
 
 -----------------------------
 
-Install `TILsignaturesScreen` R package from [GitHub](https://github.com/Gene233/TILsignaturesScreen).
-The most updated version of `TILsignaturesScreen` is hosted on GitHub and can be easily installed using `devtools::install_github()` function provided by [devtools](https://cran.r-project.org/package=devtools).
+Install `mastR` R package from [GitHub](https://github.com/Gene233/mastR).
+The most updated version of `mastR` is hosted on GitHub and can be easily installed using `devtools::install_github()` function provided by [devtools](https://cran.r-project.org/package=devtools).
 
 ```{r installation, eval=FALSE}
 # if (!requireNamespace("devtools", quietly = TRUE)) {
 #   install.packages("devtools")
 # }
-# if (!requireNamespace("TILsignaturesScreen", quietly = TRUE)) {
-#   devtools::install_github("Gene233/TILsignaturesScreen")
+# if (!requireNamespace("mastR", quietly = TRUE)) {
+#   devtools::install_github("Gene233/mastR")
 # }
 
 if (!requireNamespace("BiocManager", quietly=TRUE)) {
   install.packages("BiocManager")
 }
-if (!requireNamespace("TILsignaturesScreen", quietly = TRUE)) {
-  BiocManager::install("TILsignaturesScreen")
+if (!requireNamespace("mastR", quietly = TRUE)) {
+  BiocManager::install("mastR")
 }
 ```
 
@@ -62,12 +62,12 @@ To screen the immune subset signatures, we have to load the example datasets. Th
 
 `NK_markers` dataset is a combination of CIBERSORT LM7, LM22 and human orthologs in mice from [Huntington](https://cancerimmunolres.aacrjournals.org/content/7/7/1162.long). It contains 114 genes in total.
 
-`LM7` and `LM22` are signature matrices, you can get more details by `?TILsignaturesScreen::LM7` or `?TILsignaturesScreen::LM22`.
+`LM7` and `LM22` are signature matrices, you can get more details by `?mastR::LM7` or `?mastR::LM22`.
 
-`im_data_6` is a eSet object, containing RNA-seq TMM normalized counts data of 6 sorted immune subsets. More details in `?TILsignaturesScreen::im_data_6`.
+`im_data_6` is a eSet object, containing RNA-seq TMM normalized counts data of 6 sorted immune subsets. More details in `?mastR::im_data_6`.
 
 ```{r setup}
-library(TILsignaturesScreen)
+library(mastR)
 library(ggplot2)
 ```
 
@@ -548,7 +548,7 @@ sig_NK_CRC_refine <- intersect(m_ct_refine, m_ccl)
 setdiff(sig_NK_CRC_refine, sig_NK_CRC)
 
 ## most NK-CD8 top DEGs are not in the markers pool
-deg_tables <- TILsignaturesScreen::get_de_table(
+deg_tables <- mastR::get_de_table(
   data = im_data_6, 
   ID = "celltype:ch1",
   type = "NK"
