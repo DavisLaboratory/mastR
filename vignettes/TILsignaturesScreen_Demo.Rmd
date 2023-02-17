@@ -80,7 +80,7 @@ NK_markers
 
 ### Markers from LM
 
-Uses can extract markers for subsets matched to the given pattern from imported data `LM7`/`LM22`. 
+Users can extract markers for subsets matched to the given pattern from imported data `LM7`/`LM22`. 
 
 The matched genes will be saved in 'GeneSet' class object, if both pattern are provided, the output would be a 'GeneSetCollection' class object with setName: LM7, LM22.
 
@@ -112,7 +112,7 @@ MSig <- get_msigdb_sig(pattern = "NATURAL_KILLER_CELL_MEDIATED",
                        plot = TRUE)
 
 MSig
-```
+```   
 
 ### Markers from PanglaoDB
 
@@ -287,9 +287,8 @@ To specify NK markers for CRC, use `filter_non_tissue()` function to remove fail
 
 ```{r markers for cancer cell line}
 ## convert CCLE from long to wide data format
-CCLE <- tidyr::pivot_wider(CCLE[,c("gene_name", "cell_line", "rna_expression")],
-                           names_from = "cell_line",
-                           values_from = "rna_expression") |> data.frame()
+CCLE <- CCLE[,c("gene_name", "cell_line", "rna_expression")] %>% 
+  tidyr::pivot_wider(names_from = "cell_line", values_from = "rna_expression", values_fn = dplyr::first) |> data.frame()
 rownames(CCLE) <- CCLE$gene_name
 CCLE$gene_name <- NULL
 
@@ -506,14 +505,14 @@ To see if the curated NK cells signature is enriched in NK cells than other immu
 It's clear that our screened signature is enriched in all comparisons.
 
 ```{r gseaplot, fig.width=8, fig.height=5, warning=FALSE}
-sig_gseaplot(
-  data = proc_data, 
-  sigs = sig_NK_CRC,
-  ID = "celltype.ch1", 
-  type = "NK",
-  gene_id = "ENSEMBL",
-  counts = FALSE
-)
+# sig_gseaplot(
+#   data = proc_data, 
+#   sigs = sig_NK_CRC,
+#   ID = "celltype.ch1", 
+#   type = "NK",
+#   gene_id = "ENSEMBL",
+#   counts = FALSE
+# )
 ```
 
 
