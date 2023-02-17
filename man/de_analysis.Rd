@@ -17,6 +17,7 @@ de_analysis(
   p = 0.05,
   markers = NULL,
   gene_id = "SYMBOL",
+  batch = NULL,
   ...
 )
 }
@@ -54,6 +55,9 @@ genes need to be kept.}
 \item{gene_id}{character, specify the gene ID type of rownames of expression data
 when markers is not NULL, could be one of 'ENSEMBL', 'SYMBOL',
 'ENTREZ'..., default 'SYMBOL'}
+
+\item{batch}{vector of character, column name(s) of coldata to be treated as
+batch effect factor, default NULL}
 
 \item{...}{omitted}
 }
