@@ -6,9 +6,9 @@
 #' @import patchwork
 #' @import ggpubr
 #' @import org.Hs.eg.db
+#' @import Seurat
 #' @importFrom grDevices colorRampPalette
-#' @importFrom dplyr group_by summarise_all arrange_
-#' @importFrom jsonlite fromJSON toJSON
+#' @importFrom dplyr group_by summarise_all arrange first
 #' @importFrom Biobase exprs pData
 #' @importFrom depmap depmap_TPM depmap_metadata
 NULL

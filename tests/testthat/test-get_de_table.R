@@ -1,4 +1,5 @@
 test_that("get_de_table works", {
+  data("im_data_6")
   ## test Expression object
   DEG_table <- get_de_table(im_data_6, ID = "celltype:ch1", type = "NK")
   expect_true(all(sapply(DEG_table[-length(DEG_table)], is.data.frame)))

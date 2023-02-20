@@ -47,6 +47,7 @@ DE statistics by using limma::voom and limma::treat, and also create an
 object \code{proc_data} to store processed data.
 }
 \examples{
+data("im_data_6")
 DE_tables <- get_de_table(im_data_6, ID = "celltype:ch1", type = "NK")
 
 }

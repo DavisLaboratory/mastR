@@ -22,6 +22,7 @@ NULL
 #' @return patchwork or ggplot of boxplot
 #'
 #' @examples
+#' data("im_data_6", "NK_markers")
 #' p <- sig_boxplot(
 #'   im_data_6, sigs = NK_markers$HGNC_Symbol[1:30],
 #'   ID = "celltype:ch1", type = "NK",

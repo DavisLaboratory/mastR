@@ -1,4 +1,5 @@
 test_that("sig_boxplot works", {
+  data("im_data_6", "NK_markers")
   ## test eSet object
   ### test expression boxplot
   p <- sig_boxplot(

@@ -1,6 +1,7 @@
 # library(vdiffr)
 
 test_that("plot_density works", {
+  data("im_data_6")
   dge <- edgeR::DGEList(counts = Biobase::exprs(im_data_6),
                         group = im_data_6$`celltype:ch1`)
 
@@ -12,6 +13,7 @@ test_that("plot_density works", {
 })
 
 test_that("plot_rle works", {
+  data("im_data_6")
   dge <- edgeR::DGEList(counts = Biobase::exprs(im_data_6),
                         group = im_data_6$`celltype:ch1`)
 
@@ -23,6 +25,7 @@ test_that("plot_rle works", {
 })
 
 test_that("plot_MDS works", {
+  data("im_data_6")
   dge <- edgeR::DGEList(counts = Biobase::exprs(im_data_6),
                         group = im_data_6$`celltype:ch1`)
 
@@ -34,6 +37,7 @@ test_that("plot_MDS works", {
 
 test_that("scatter_plot_init works", {
 
+  data("im_data_6", "NK_markers")
   p <- scatter_plot_init(expr = Biobase::exprs(im_data_6),
                          sigs = NK_markers$HGNC_Symbol,
                          type = "NK",

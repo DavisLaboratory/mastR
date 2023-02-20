@@ -1,4 +1,5 @@
 test_that("filter_subset_sig works", {
+  data("im_data_6", "NK_markers")
   ## test matrix object
   sig <- filter_subset_sig(
     im_data_6@assayData$exprs,

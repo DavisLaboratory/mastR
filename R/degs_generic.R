@@ -25,6 +25,7 @@ NULL
 #'         keep.top is NULL
 #'
 #' @examples
+#' data("im_data_6")
 #' DEGs <- get_degs(im_data_6, ID = "celltype:ch1",
 #'                  type = "NK", gene_id = "ENSEMBL")
 #'

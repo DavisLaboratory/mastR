@@ -1,4 +1,5 @@
 test_that("filterGenes works", {
+  data("im_data_6")
   dge <- edgeR::DGEList(counts = Biobase::exprs(im_data_6),
                         group = im_data_6$`celltype:ch1`)
 
@@ -7,6 +8,7 @@ test_that("filterGenes works", {
 })
 
 test_that("voom_lm_fit works", {
+  data("im_data_6")
   dge <- edgeR::DGEList(counts = Biobase::exprs(im_data_6),
                         group = im_data_6$`celltype:ch1`)
 
@@ -32,6 +34,7 @@ test_that("voom_lm_fit works", {
 })
 
 test_that("DEGs_RP works", {
+  data("im_data_6")
   dge <- edgeR::DGEList(counts = Biobase::exprs(im_data_6),
                         group = im_data_6$`celltype:ch1`)
   tfit <- voom_lm_fit(dge = dge, ID = "group",
@@ -47,6 +50,7 @@ test_that("DEGs_RP works", {
 })
 
 test_that("DEGs_Group works", {
+  data("im_data_6")
   dge <- edgeR::DGEList(counts = Biobase::exprs(im_data_6),
                         group = im_data_6$`celltype:ch1`)
   tfit <- voom_lm_fit(dge = dge, ID = "group",

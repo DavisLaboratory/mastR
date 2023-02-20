@@ -164,6 +164,8 @@ Specify signatures against specific tissues or cell lines,
 and generate CCLE_tpm_new after retrieving specific tissues.
 }
 \examples{
-filter_non_tissue(type = "colorectal", markers = NK_markers$HGNC_Symbol)
+data("NK_markers", "ccle_crc_5")
+filter_non_tissue(ccle_crc_5, ID = "cancer", type = "CRC",
+                  markers = NK_markers$HGNC_Symbol)
 
 }

@@ -11,6 +11,7 @@ NULL
 #' @return matrix plot of PCA
 #'
 #' @examples
+#' data("im_data_6")
 #' pca_matrix_plot(data = im_data_6)
 #'
 #' @export

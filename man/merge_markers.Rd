@@ -22,6 +22,7 @@ indicate which DB each gene is from, this can be shown via
 \code{\link[jsonlite:fromJSON]{jsonlite::fromJSON()}}.
 }
 \examples{
+data("NK_markers")
 Panglao <- get_panglao_sig(type = "NK cells")
 Markers <- merge_markers(markers = list(
                            NK_markers = NK_markers$HGNC_Symbol,

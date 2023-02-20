@@ -77,3 +77,12 @@
 #' @source \url{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE60424}
 "im_data_6"
 
+#' RNA-seq TPM data of 5 CRC cell line samples from CCLE.
+#'
+#' A test DGEList object with RNA-seq RSEM quantified TPM data of 5 CRC cell
+#' line samples from CCLE [depmap::depmap_TPM()].
+#'
+#' @format A DGEList of `r nrow(ccle_crc_5)` genes * 5 samples:
+#' @source [depmap::depmap_TPM()]
+"ccle_crc_5"
+

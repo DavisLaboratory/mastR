@@ -9,6 +9,7 @@
 #' @return ggplot or patchwork
 #'
 #' @examples
+#' data("im_data_6", "NK_markers")
 #' sig_rankdensity_plot(
 #'   data = im_data_6, sigs = NK_markers$HGNC_Symbol[1:10],
 #'   ID = "celltype:ch1", gene_id = "ENSEMBL"

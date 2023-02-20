@@ -15,6 +15,7 @@
 #' @export
 #'
 #' @examples
+#' data("LM7", "LM22")
 #' get_lm_sig(lm7.pattern = "NK", lm22.pattern = "NK cells")
 get_lm_sig <- function(lm7.pattern, lm22.pattern, ...) {
 

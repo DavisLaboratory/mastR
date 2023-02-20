@@ -123,6 +123,7 @@ limma::voom and limma::treat, and also create an object \code{proc_data} to
 store processed data.
 }
 \examples{
+data("im_data_6")
 DEGs <- get_degs(im_data_6, ID = "celltype:ch1",
                  type = "NK", gene_id = "ENSEMBL")
 

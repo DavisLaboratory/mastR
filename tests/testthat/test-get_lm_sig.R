@@ -1,4 +1,5 @@
 test_that("get_lm_sig works", {
+  data("LM7", "LM22")
   lm7 <- get_lm_sig(lm7.pattern = "\\w+")
   lm22 <- get_lm_sig(lm22.pattern = "\\w+")
   lm <- get_lm_sig(lm7.pattern = "\\w+", lm22.pattern = "\\w+")

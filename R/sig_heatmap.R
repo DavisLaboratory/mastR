@@ -18,6 +18,7 @@ NULL
 #' @return patchwork object of pheatmaps
 #'
 #' @examples
+#' data("im_data_6", "NK_markers")
 #' sig_heatmap(data = im_data_6, sigs = NK_markers$HGNC_Symbol[1:10],
 #'             ID = "celltype:ch1", markers = NK_markers$HGNC_Symbol,
 #'             gene_id = "ENSEMBL")
