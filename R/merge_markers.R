@@ -20,7 +20,7 @@
 #'                            PanglaoDB = GSEABase::geneIds(Panglao)
 #'                          ))
 #' jsonlite::fromJSON(GSEABase::longDescription(Markers))
-merge_markers <- function(markers_list, plot = FALSE) {
+merge_markers <- function(..., plot = FALSE) {
 
   stopifnot("markers_list must be a list!" = is.list(markers_list),
             "plot is not a logical value!" = is.logical(plot),

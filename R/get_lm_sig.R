@@ -17,7 +17,7 @@
 #' @examples
 #' data("LM7", "LM22")
 #' get_lm_sig(lm7.pattern = "NK", lm22.pattern = "NK cells")
-get_lm_sig <- function(lm7.pattern, lm22.pattern, ...) {
+get_lm_sig <- function(lm7.pattern, lm22.pattern) {
 
 
   if(missing(lm7.pattern) && missing(lm22.pattern))
@@ -26,8 +26,9 @@ get_lm_sig <- function(lm7.pattern, lm22.pattern, ...) {
   ## retrieve markers from LM7 signature matrix if lm7.pattern is given
   if(!missing(lm7.pattern)) {
     stopifnot(is.character(lm7.pattern))
-
-    gs_7 <- subset(LM7, grepl(lm7.pattern, Subset, ...))$Gene
+    LM7 <- mastR::LM7
+    keep <- grepl(lm7.pattern, LM7$Subset, ...)
+    gs_7 <- LM7$Gene[keep]
     gs_7 <- GSEABase::GeneSet(gs_7, setName = "LM7",
                               geneIdType = GSEABase::SymbolIdentifier())
     gs <- gs_7

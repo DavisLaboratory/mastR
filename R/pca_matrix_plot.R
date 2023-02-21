@@ -19,7 +19,7 @@ setGeneric("pca_matrix_plot",
            function(data,
                     features = "all",
                     slot = "counts",
-                    counts = TRUE,
+                    counts = TRUE, # remove
                     group_by = NULL,
                     scale = TRUE,
                     n = 4,

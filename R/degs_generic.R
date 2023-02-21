@@ -96,8 +96,8 @@ setMethod("get_degs", signature(
 function(data,
          ID,
          type,
-         counts = TRUE,
-         method = c("RP", "Group"),
+         normalize = TRUE,
+         feature_selection = c('auto', "rankproduct", "none"),
          batch = NULL,
          ...) {
 
