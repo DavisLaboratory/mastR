@@ -15,9 +15,9 @@
 sig_heatmap(
   data,
   sigs,
-  ID,
+  group_col,
   markers,
-  counts = TRUE,
+  normalize = TRUE,
   scale = "none",
   min_max = FALSE,
   gene_id = "SYMBOL",
@@ -29,9 +29,9 @@ sig_heatmap(
 \S4method{sig_heatmap}{matrix,vector,vector,vector}(
   data,
   sigs,
-  ID,
+  group_col,
   markers,
-  counts = TRUE,
+  normalize = TRUE,
   scale = "none",
   min_max = FALSE,
   gene_id = "SYMBOL",
@@ -42,9 +42,9 @@ sig_heatmap(
 \S4method{sig_heatmap}{Matrix,vector,vector,vector}(
   data,
   sigs,
-  ID,
+  group_col,
   markers,
-  counts = TRUE,
+  normalize = TRUE,
   scale = "none",
   min_max = FALSE,
   gene_id = "SYMBOL",
@@ -55,9 +55,9 @@ sig_heatmap(
 \S4method{sig_heatmap}{data.frame,vector,vector,vector}(
   data,
   sigs,
-  ID,
+  group_col,
   markers,
-  counts = TRUE,
+  normalize = TRUE,
   scale = "none",
   min_max = FALSE,
   gene_id = "SYMBOL",
@@ -68,9 +68,9 @@ sig_heatmap(
 \S4method{sig_heatmap}{DGEList,vector,character,vector}(
   data,
   sigs,
-  ID,
+  group_col,
   markers,
-  counts = TRUE,
+  normalize = TRUE,
   scale = "none",
   min_max = FALSE,
   gene_id = "SYMBOL",
@@ -81,9 +81,9 @@ sig_heatmap(
 \S4method{sig_heatmap}{ExpressionSet,vector,character,vector}(
   data,
   sigs,
-  ID,
+  group_col,
   markers,
-  counts = TRUE,
+  normalize = TRUE,
   scale = "none",
   min_max = FALSE,
   gene_id = "SYMBOL",
@@ -94,9 +94,9 @@ sig_heatmap(
 \S4method{sig_heatmap}{Seurat,vector,character,vector}(
   data,
   sigs,
-  ID,
+  group_col,
   markers,
-  counts = TRUE,
+  normalize = TRUE,
   scale = "none",
   min_max = FALSE,
   gene_id = "SYMBOL",
@@ -108,9 +108,9 @@ sig_heatmap(
 \S4method{sig_heatmap}{SummarizedExperiment,vector,character,vector}(
   data,
   sigs,
-  ID,
+  group_col,
   markers,
-  counts = TRUE,
+  normalize = TRUE,
   scale = "none",
   min_max = FALSE,
   gene_id = "SYMBOL",
@@ -122,9 +122,9 @@ sig_heatmap(
 \S4method{sig_heatmap}{list,vector,character,vector}(
   data,
   sigs,
-  ID,
+  group_col,
   markers,
-  counts = TRUE,
+  normalize = TRUE,
   scale = "none",
   min_max = FALSE,
   gene_id = "SYMBOL",
@@ -138,12 +138,13 @@ sig_heatmap(
 
 \item{sigs}{a vector of signature (Symbols)}
 
-\item{ID}{character or vector, specify the column name to compare in coldata}
+\item{group_col}{character or vector, specify the column name to compare in coldata}
 
 \item{markers}{a vector of gene names, listed the gene symbols of original
 markers pool}
 
-\item{counts}{logical, indicate if data is raw counts data}
+\item{normalize}{logical, TRUE indicates raw counts data to normalize and
+calculate cpm}
 
 \item{scale}{could be 'none', 'row' or 'column'}
 
@@ -168,7 +169,7 @@ Compare the heatmap before and after screening.
 \examples{
 data("im_data_6", "NK_markers")
 sig_heatmap(data = im_data_6, sigs = NK_markers$HGNC_Symbol[1:10],
-            ID = "celltype:ch1", markers = NK_markers$HGNC_Symbol,
+            group_col = "celltype:ch1", markers = NK_markers$HGNC_Symbol,
             gene_id = "ENSEMBL")
 
 }

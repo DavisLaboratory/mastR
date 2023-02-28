@@ -4,7 +4,7 @@ test_that("multiplication works", {
   ## test eSet object
   p <- sig_scatter_plot(
     im_data_6, sigs = NK_markers$HGNC_Symbol,
-    ID = "celltype:ch1", type = "NK",
+    group_col = "celltype:ch1", target_group = "NK",
     gene_id = "ENSEMBL"
     )
   expect_true(is.ggplot(p))
@@ -14,7 +14,7 @@ test_that("multiplication works", {
                         group = im_data_6$`celltype:ch1`)
   p <- sig_scatter_plot(
     dge, sigs = NK_markers$HGNC_Symbol,
-    ID = "group", type = "NK",
+    group_col = "group", target_group = "NK",
     gene_id = "ENSEMBL"
   )
   expect_true(is.ggplot(p))
@@ -24,7 +24,7 @@ test_that("multiplication works", {
                                             meta.data = dge$samples)
   p <- sig_scatter_plot(
     data_seurat, sigs = NK_markers$HGNC_Symbol,
-    ID = "group", type = "NK",
+    group_col = "group", target_group = "NK",
     gene_id = "ENSEMBL"
   )
   expect_true(is.ggplot(p))

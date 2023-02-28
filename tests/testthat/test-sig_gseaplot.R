@@ -5,8 +5,8 @@ test_that("sig_gseaplot works", {
     p <- sig_gseaplot(
       im_data_6@assayData$exprs,
       sigs = NK_markers$HGNC_Symbol[1:20],
-      ID = im_data_6$`celltype:ch1`,
-      type = "NK",
+      group_col = im_data_6$`celltype:ch1`,
+      target_group = "NK",
       gene_id = "ENSEMBL"
     )
   )
@@ -18,7 +18,7 @@ test_that("sig_gseaplot works", {
     p <- sig_gseaplot(
       im_data_6,
       sigs = NK_markers$HGNC_Symbol[1:20],
-      ID = "celltype:ch1", type = "NK",
+      group_col = "celltype:ch1", target_group = "NK",
       gene_id = "ENSEMBL"
     )
   )
@@ -29,7 +29,7 @@ test_that("sig_gseaplot works", {
     p <- sig_gseaplot(
       im_data_6,
       sigs = NK_markers$HGNC_Symbol[1:20],
-      ID = "celltype:ch1", type = "NK",
+      group_col = "celltype:ch1", target_group = "NK",
       gene_id = "ENSEMBL"
     )
   )
@@ -41,7 +41,7 @@ test_that("sig_gseaplot works", {
   suppressWarnings(
     p <- sig_gseaplot(
       dge, sigs = NK_markers$HGNC_Symbol[1:20],
-      ID = "group", type = "NK",
+      group_col = "group", target_group = "NK",
       gene_id = "ENSEMBL"
     )
   )
@@ -54,7 +54,7 @@ test_that("sig_gseaplot works", {
     p <- sig_gseaplot(
       data_seurat,
       sigs = NK_markers$HGNC_Symbol[1:20],
-      ID = "group", type = "NK",
+      group_col = "group", target_group = "NK",
       gene_id = "ENSEMBL"
       )
   )
@@ -66,7 +66,7 @@ test_that("sig_gseaplot works", {
       list(A = im_data_6, B = im_data_6),
       sigs = list(a = NK_markers$HGNC_Symbol[1:20],
                   b = NK_markers$HGNC_Symbol[21:35]),
-      ID = "celltype:ch1", type = "NK",
+      group_col = "celltype:ch1", target_group = "NK",
       gene_id = "ENSEMBL"
     )
   )

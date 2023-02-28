@@ -9,17 +9,17 @@ tableau_20 <-  c("#4E79A7", "#A0CBE8", "#F28E2B", "#FFBE7D", "#59A14F",
 ## plot functions for comparing unfiltered and filtered data
 ##---------------------------------------------------------------
 #helper: logCPM density plot between filtered and unfiltered
-plot_density <- function(dge, ID, keep = TRUE, counts = TRUE, filter = 10) {
+plot_density <- function(dge, group_col, keep = TRUE, normalize = TRUE, filter = 10) {
   ## set colors for each cell type
-  col <- dge$samples[[ID]] |> as.factor() |> as.numeric()
-  colors <- colorRampPalette(colors = tableau_20)(unique(dge$samples[[ID]]) |> length())
+  col <- dge$samples[[group_col]] |> as.factor() |> as.numeric()
+  colors <- colorRampPalette(colors = tableau_20)(unique(dge$samples[[group_col]]) |> length())
 
   ## set par for plot to make 2 plots in one page
   op <- par(no.readonly = TRUE)
   par(mfrow = c(1, 2), oma = c(0, 0, 3, 0))
 
   ## calculate logCPM
-  if(counts) {
+  if(normalize) {
     M <- median(dge$samples$lib.size) * 1e-6
     L <- mean(dge$samples$lib.size) * 1e-6
     lcpm.1 <- edgeR::cpm(
@@ -42,22 +42,22 @@ plot_density <- function(dge, ID, keep = TRUE, counts = TRUE, filter = 10) {
 
   ## plot unfiltered data
   plot(stats::density(lcpm.1[,1]), col = colors[col[1]],
-       main = "Unfiltered", xlab = ifelse(counts, "logCPM", "logcounts"),
+       main = "Unfiltered", xlab = ifelse(normalize, "logCPM", "logcounts"),
        ylim = c(0, max(stats::density(lcpm.1)$y) * 1.2))
   abline(v = abl, lty = 3)
   lapply(2:ncol(dge), function(i) lines(stats::density(lcpm.1[,i]),
                                         col = colors[col[i]]))
-  legend("topright", legend = unique(dge$samples[[ID]]),
+  legend("topright", legend = unique(dge$samples[[group_col]]),
          text.col = colors[unique(col)], bty = "n", inset = c(-0.3, 0))
 
   ## plot filtered data
   plot(stats::density(lcpm.2[,1]), col = colors[col[1]],
-       main = "Filtered", xlab = ifelse(counts, "logCPM", "logcounts"),
+       main = "Filtered", xlab = ifelse(normalize, "logCPM", "logcounts"),
        ylim = c(0, max(stats::density(lcpm.2)$y) * 1.2))
   abline(v = abl, lty = 3)
   lapply(2:ncol(dge), function(i) lines(stats::density(lcpm.2[,i]),
                                         col = colors[col[i]]))
-  legend("topright", legend = unique(dge$samples[[ID]]),
+  legend("topright", legend = unique(dge$samples[[group_col]]),
          text.col = colors[unique(col)], bty = "n", inset = c(-0.3, 0))
 
   mtext("Input Dataset", side = 3, line = 0, outer = TRUE)
@@ -84,14 +84,14 @@ rle <- function(expr_mat, log = FALSE) {
 }
 
 #helper: RLE plot between before and after filtration
-plot_rle <- function(dge, ID, keep = TRUE, counts = TRUE) {
+plot_rle <- function(dge, group_col, keep = TRUE, normalize = TRUE) {
   ## set colors for each cell type
-  col <- dge$samples[[ID]] |> as.factor() |> as.numeric()
-  colors <- colorRampPalette(colors = tableau_20)(unique(dge$samples[[ID]]) |>
+  col <- dge$samples[[group_col]] |> as.factor() |> as.numeric()
+  colors <- colorRampPalette(colors = tableau_20)(unique(dge$samples[[group_col]]) |>
                                                     length())
 
   ## calculate logCPM
-  if(counts) {
+  if(normalize) {
     lcpm.1 <- edgeR::cpm(
       edgeR::calcNormFactors(dge, method = "TMM"),
       log = TRUE
@@ -128,7 +128,7 @@ plot_rle <- function(dge, ID, keep = TRUE, counts = TRUE) {
   ## add legend
   plot(0, type = "n", axes = FALSE, xlab = "", ylab = "")
   legend("center",
-         legend = unique(dge$samples[[ID]]) |> sort(),
+         legend = unique(dge$samples[[group_col]]) |> sort(),
          fill = colors, xpd = TRUE, ncol = 4
   )
   ## set par back to original
@@ -136,14 +136,14 @@ plot_rle <- function(dge, ID, keep = TRUE, counts = TRUE) {
 }
 
 #helper: MDS plot before and after filtration
-plot_MDS <- function(dge, ID, keep = TRUE, counts = TRUE) {
+plot_MDS <- function(dge, group_col, keep = TRUE, normalize = TRUE) {
   ## set colors for each cell type
-  col <- dge$samples[[ID]] |> as.factor() |> as.numeric()
-  colors <- colorRampPalette(colors = tableau_20)(unique(dge$samples[[ID]]) |>
+  col <- dge$samples[[group_col]] |> as.factor() |> as.numeric()
+  colors <- colorRampPalette(colors = tableau_20)(unique(dge$samples[[group_col]]) |>
                                                     length())
 
   ## calculate logCPM
-  if(counts) {
+  if(normalize) {
     lcpm.1 <- edgeR::cpm(
       edgeR::calcNormFactors(dge, method = "TMM"),
       log = TRUE
@@ -175,7 +175,7 @@ plot_MDS <- function(dge, ID, keep = TRUE, counts = TRUE) {
   ## add legend
   plot(0, type = "n", axes = FALSE, xlab = "", ylab = "")
   legend("center",
-         legend = unique(dge$samples[[ID]]) |> sort(),
+         legend = unique(dge$samples[[group_col]]) |> sort(),
          fill = colors, xpd = TRUE
   )
   mtext("Input Data", side = 3, line = 0, outer = TRUE)
@@ -292,7 +292,8 @@ plotPCAbiplot <- function(prcomp,
 #' @param data expression matrix
 #' @param features vector of gene symbols or 'all', specify the genes used for
 #'                 PCA, default 'all'
-#' @param counts logical, TRUE indicates to calculate cpm before PCA
+#' @param normalize logical, TRUE indicates raw counts data to normalize and
+#'                  calculate cpm before PCA
 #' @param scale logical, if to scale data for PCA, default TRUE
 #' @param n num, specify top n PCs to plot
 #' @param gene_id character, specify which column of IDs used to calculate TPM,
@@ -303,7 +304,7 @@ plotPCAbiplot <- function(prcomp,
 #' @return matrix plot of PCA
 pca_matrix_plot_init <- function(data,
                                  features = "all",
-                                 counts = TRUE,
+                                 normalize = TRUE,
                                  group_by = NULL,
                                  scale = TRUE,
                                  n = 4,
@@ -311,13 +312,13 @@ pca_matrix_plot_init <- function(data,
                                  n_loadings = 10,
                                  gene_id = "SYMBOL") {
 
-  stopifnot(is.logical(counts), is.vector(features),
+  stopifnot(is.logical(normalize), is.vector(features),
             is.null(group_by) | is.vector(group_by),
             is.logical(scale), is.numeric(n),
             is.logical(loading), is.character(gene_id))
 
   ## calculate logCPM for raw counts data
-  if(counts) {
+  if(normalize) {
     data <- edgeR::DGEList(counts = data)
     data <- edgeR::calcNormFactors(data)
     data <- edgeR::cpm(data, log = TRUE)
@@ -327,7 +328,8 @@ pca_matrix_plot_init <- function(data,
   if (length(features) == 1 && features[1] == "all") {
     tmp <- stats::prcomp(Matrix::t(data), scale = scale)
   }else {
-    id <- AnnotationDbi::mapIds(org.Hs.eg.db, features, gene_id, "SYMBOL") |>
+    id <- AnnotationDbi::mapIds(org.Hs.eg.db::org.Hs.eg.db,
+                                features, gene_id, "SYMBOL") |>
       na.omit()
     id <- id[id %in% rownames(data)]
     tmp <- stats::prcomp(Matrix::t(data[id,]), scale = scale)
@@ -406,15 +408,15 @@ pca_matrix_plot_init <- function(data,
 
 ## scatter_plot function
 ##---------------------------------------------------------------
-scatter_plot_init <- function(expr, sigs, type, by,
-                              counts = TRUE,
+scatter_plot_init <- function(expr, sigs, target_group, by,
+                              normalize = TRUE,
                               xint = 1, yint = 1,
                               gene_id = "SYMBOL") {
-  stopifnot(is.logical(counts), is.numeric(xint),
+  stopifnot(is.logical(normalize), is.numeric(xint),
             is.numeric(yint), is.character(gene_id))
 
-  ## log-normalize data if counts = T
-  if (counts) {
+  ## log-normalize data if normalize = T
+  if (normalize) {
     expr <- edgeR::DGEList(expr,
                            group = by)
     expr <- edgeR::calcNormFactors(expr, method = "TMM")
@@ -424,14 +426,15 @@ scatter_plot_init <- function(expr, sigs, type, by,
   }
 
   ## convert result gene symbols into gene IDs mapped to data rownames
-  sigs <- AnnotationDbi::select(org.Hs.eg.db, sigs,
+  sigs <- AnnotationDbi::select(org.Hs.eg.db::org.Hs.eg.db,
+                                sigs,
                                 columns = gene_id,
                                 keytype = "SYMBOL")
   sigs <- sigs[!duplicated(sigs[[gene_id]]), gene_id]
   sigs <- intersect(rownames(expr), sigs)
 
   ## calculate median expression of sigs by aggregating cells based on by group
-  group <- ifelse(grepl(type, by), type, by)
+  group <- ifelse(grepl(target_group, by), target_group, by)
   expr <- dplyr::group_by(expr[sigs,] |> Matrix::t() |> as.data.frame(),
                           group |> factor()) |>
     dplyr::summarise_all(.funs = mean, na.rm = TRUE) |> Matrix::t()
@@ -439,10 +442,12 @@ scatter_plot_init <- function(expr, sigs, type, by,
   expr <- expr[-1, ] |> apply(MARGIN = c(1, 2), FUN = as.numeric) |>
     as.data.frame()
 
-  ## biplot of specified type vs all other types
-  p <- tidyr::gather(expr, "celltype", "Median Expression", -type) |>
+  ## biplot of specified target_group vs all other types
+  p <- tidyr::pivot_longer(expr, -target_group,
+                           names_to = "celltype",
+                           values_to = "Median Expression") |>
     ggplot2::ggplot(ggplot2::aes_q(x = as.name("Median Expression"),
-                                   y = as.name(type))) +
+                                   y = as.name(target_group))) +
     ggplot2::geom_point(alpha = 0.4, shape = 1) +
     ggplot2::geom_vline(xintercept = xint, lty = 2) +
     ggplot2::geom_hline(yintercept = yint, lty = 2) +
@@ -454,13 +459,13 @@ scatter_plot_init <- function(expr, sigs, type, by,
 
 ## boxplot of expression for signatures
 ##---------------------------------------------------------------
-exp_boxplot_init <- function(expr, sigs, type, by, counts = TRUE,
+exp_boxplot_init <- function(expr, sigs, target_group, by, normalize = TRUE,
                              method = "t.test", gene_id = "SYMBOL") {
 
-  stopifnot(is.logical(counts), is.character(gene_id))
+  stopifnot(is.logical(normalize), is.character(gene_id))
 
-  ## log-normalize data if counts = T
-  if (counts) {
+  ## log-normalize data if normalize = T
+  if (normalize) {
     expr <- edgeR::DGEList(expr,
                            group = by)
     expr <- edgeR::calcNormFactors(expr, method = "TMM")
@@ -470,14 +475,15 @@ exp_boxplot_init <- function(expr, sigs, type, by, counts = TRUE,
   }
 
   ## convert result gene symbols into gene IDs mapped to data rownames
-  sigs <- AnnotationDbi::select(org.Hs.eg.db, sigs,
+  sigs <- AnnotationDbi::select(org.Hs.eg.db::org.Hs.eg.db,
+                                sigs,
                                 columns = gene_id,
                                 keytype = "SYMBOL")
   sigs <- sigs[!duplicated(sigs[[gene_id]]), gene_id]
   sigs <- intersect(rownames(expr), sigs)
 
   ## calculate median expression of sigs by aggregating samples on group
-  group <- ifelse(grepl(type, by), type, by)
+  group <- ifelse(grepl(target_group, by), target_group, by)
   expr <- dplyr::group_by(expr[sigs, ] |> Matrix::t() |> as.data.frame(),
                           group |> factor()) |>
     dplyr::summarise_all(.funs = median, na.rm = TRUE) |> Matrix::t()
@@ -486,8 +492,10 @@ exp_boxplot_init <- function(expr, sigs, type, by, counts = TRUE,
     as.data.frame()
   expr$Gene <- rownames(expr)
 
-  ## boxplot of signature in specified type vs all other types
-  p <- tidyr::gather(expr, "Group", "Median Expression", -Gene) |>
+  ## boxplot of signature in specified target_group vs all other types
+  p <- tidyr::pivot_longer(expr, -Gene,
+                           names_to = "Group",
+                           values_to = "Median Expression") |>
     ggplot2::ggplot(ggplot2::aes_q(x = as.name("Group"),
                                    y = as.name("Median Expression"))) +
     ggplot2::geom_boxplot(ggplot2::aes(col = Group)) +
@@ -495,9 +503,9 @@ exp_boxplot_init <- function(expr, sigs, type, by, counts = TRUE,
     ggplot2::geom_line(ggplot2::aes(group = Gene), col = "grey", alpha = .5) +
     ggpubr::stat_compare_means(label = "p.signif",
                                method = method,
-                               ref.group = type) +
+                               ref.group = target_group) +
     ggplot2::labs(title = "Signatures Median Expression across Groups",
-                  x = "Types", y = "Expression") +
+                  x = "Groups", y = "Expression") +
     ggplot2::theme_classic() +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90))
   return(p)
@@ -507,10 +515,10 @@ exp_boxplot_init <- function(expr, sigs, type, by, counts = TRUE,
 ## score boexplot
 ##---------------------------------------------------------------
 #helper: calculate singscores
-singscore_init <- function(expr, sigs, by, counts = TRUE,
+singscore_init <- function(expr, sigs, by, normalize = TRUE,
                            gene_id = "SYMBOL") {
   ## calculate log-normalized data if raw counts data
-  if (counts) {
+  if (normalize) {
     expr <- edgeR::DGEList(expr,
                            group = by)
     expr <- edgeR::calcNormFactors(expr, method = "TMM")
@@ -519,7 +527,8 @@ singscore_init <- function(expr, sigs, by, counts = TRUE,
 
   ## singscore samples using given signature genes
   rank_data <- singscore::rankGenes(expr)
-  UP <- AnnotationDbi::mapIds(org.Hs.eg.db, sigs,
+  UP <- AnnotationDbi::mapIds(org.Hs.eg.db::org.Hs.eg.db,
+                              sigs,
                               column = gene_id,
                               keytype = "SYMBOL") |>
     na.omit()
@@ -529,9 +538,9 @@ singscore_init <- function(expr, sigs, by, counts = TRUE,
 }
 
 #helper: boxplot of comparing scores
-score_boxplot_init <- function(scores, by, type, method) {
+score_boxplot_init <- function(scores, by, target_group, method) {
   ## set Group for samples by given factor
-  scores$Group <- ifelse(grepl(type, by), type, by)
+  scores$Group <- ifelse(grepl(target_group, by), target_group, by)
 
   ## plot
   p <- ggplot2::ggplot(data = scores,
@@ -539,7 +548,7 @@ score_boxplot_init <- function(scores, by, type, method) {
     ggplot2::geom_boxplot(ggplot2::aes(col = Group)) +
     ggplot2::geom_jitter(ggplot2::aes(col = Group), alpha = 0.2) +
     ggpubr::stat_compare_means(label = "p.signif", method = method,
-                               ref.group = type, label.y.npc = 1) +
+                               ref.group = target_group, label.y.npc = 1) +
     ggplot2::labs(title = "Scores across Groups") +
     ggplot2::theme_classic() +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90),
@@ -583,12 +592,12 @@ gsea_plot_init <- function(tDEG, gsets, gene_id = "SYMBOL", digits = 2) {
 
 ## heatmap for comparing signature with original markers pool
 ##---------------------------------------------------------------
-heatmap_init <- function(expr, sigs, by, markers, counts = TRUE,
+heatmap_init <- function(expr, sigs, by, markers, normalize = TRUE,
                          scale = "none", min_max = FALSE,
                          gene_id = "SYMBOL", ranks_plot = FALSE,
                          col = grDevices::colorRampPalette(c("#76B7B2",
                                                              "#E15759"))(256)) {
-  if (counts) {
+  if (normalize) {
     expr <- edgeR::DGEList(expr)
     expr <- edgeR::calcNormFactors(expr, method = "TMM")
     expr <- edgeR::cpm(expr, log = TRUE)
@@ -598,7 +607,7 @@ heatmap_init <- function(expr, sigs, by, markers, counts = TRUE,
   }
 
   ## convert markers and sigs into gene IDs matched to expr rownames
-  tmp <- AnnotationDbi::select(org.Hs.eg.db, rownames(expr),
+  tmp <- AnnotationDbi::select(org.Hs.eg.db::org.Hs.eg.db, rownames(expr),
                                columns = "SYMBOL", keytype = gene_id)
 
   ## get index of matched genes between markers/sigs and expr data
@@ -677,10 +686,10 @@ add_spacer <- function(x, ns) {
 }
 
 #helper: make matrix plot of rankdensity
-rankdensity_init <- function(expr, sigs, by, counts = TRUE,
+rankdensity_init <- function(expr, sigs, by, normalize = TRUE,
                              aggregate = FALSE, gene_id = "SYMBOL") {
   ## calculate log-norm expression
-  if (counts) {
+  if (normalize) {
     expr <- edgeR::DGEList(expr,
                            group = by)
     expr <- edgeR::calcNormFactors(expr, method = "TMM")
@@ -689,7 +698,8 @@ rankdensity_init <- function(expr, sigs, by, counts = TRUE,
 
   ## calculate ranks of genes using singscore
   rank_data <- singscore::rankGenes(expr)
-  UP <- AnnotationDbi::select(org.Hs.eg.db, sigs,
+  UP <- AnnotationDbi::select(org.Hs.eg.db::org.Hs.eg.db,
+                              sigs,
                               columns = gene_id,
                               keytype = "SYMBOL")
   UP <- UP[!duplicated(UP[[gene_id]]), gene_id] |>
@@ -701,7 +711,7 @@ rankdensity_init <- function(expr, sigs, by, counts = TRUE,
 
   if(aggregate == TRUE) {
     #update y-positions for barcode of up-set
-    data <- data |> tidyr::pivot_longer(-c("Sample","Group"),
+    data <- data |> tidyr::pivot_longer(-c("Sample", "Group"),
                                         names_to = "Gene",
                                         values_to = "Rank") |>
       dplyr::group_by(Group) |>
@@ -714,7 +724,7 @@ rankdensity_init <- function(expr, sigs, by, counts = TRUE,
       theme_bw()
   }else {
     #update y-positions for barcode of up-set
-    data <- data |> tidyr::pivot_longer(-c("Sample","Group"),
+    data <- data |> tidyr::pivot_longer(-c("Sample", "Group"),
                                         names_to = "Gene",
                                         values_to = "Rank") |>
       dplyr::group_by(Group) |>
@@ -766,6 +776,6 @@ scatter_hdb_cl <- function(sig_matrix, markers_list) {
   return(p)
 }
 
-utils::globalVariables(c("org.Hs.eg.db", "median", "Gene", "Expression", "Type",
+utils::globalVariables(c("median", "Gene", "Expression", "Type",
                          "Group", "TotalScore", "Proportion of Variance", "Rank",
                          "Sample", "max_den", "y_s", "y_e", "x_end", "y_end"))

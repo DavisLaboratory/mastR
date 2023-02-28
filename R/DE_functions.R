@@ -1,16 +1,16 @@
 #helper: use edgeR to filter low counts genes and keep genes in markers
 # use before DE
-filterGenes <- function(dge, ID, filter = c(10, 10), counts = TRUE,
+filterGenes <- function(dge, group_col, filter = c(10, 10), normalize = TRUE,
                         markers = NULL, gene_id = "SYMBOL") {
   if (!is.null(markers)) {
     stopifnot("Please provide a vector of gene symbols!" = is.vector(markers))
-    markers <- AnnotationDbi::select(org.Hs.eg.db,
+    markers <- AnnotationDbi::select(org.Hs.eg.db::org.Hs.eg.db,
                                      markers,
                                      gene_id, "SYMBOL")
   }
 
-  if(counts) {
-    keep <- edgeR::filterByExpr(dge, group = dge$samples[[ID]],
+  if(normalize) {
+    keep <- edgeR::filterByExpr(dge, group = dge$samples[[group_col]],
                                 min.count = filter[1],
                                 large.n = filter[2]) |
       (rownames(dge) %in% markers[[gene_id]])
@@ -22,27 +22,28 @@ filterGenes <- function(dge, ID, filter = c(10, 10), counts = TRUE,
 
 
 #helper: voom and linear regression fit for DE based on limma
-voom_lm_fit <- function(dge, ID, type, method = c("RP", "Group"),
-                        group = FALSE, plot = FALSE, counts = TRUE,
+voom_lm_fit <- function(dge, group_col, target_group,
+                        feature_selection = c('auto', "rankproduct", "none"),
+                        group = FALSE, plot = FALSE, normalize = TRUE,
                         lfc = 0, p = 0.05, batch = NULL) {
 
-  method <- match.arg(method)
+  feature_selection <- match.arg(feature_selection)
 
   ## group samples into binary groups if group = TRUE,
   ## otherwise use as multiple groups asis
-  if (group == TRUE && method != "RP") {
-    dge$samples$group <- ifelse(grepl(type, dge$samples[[ID]]),
-                                make.names(type),
+  if (group == TRUE && feature_selection == "none") {
+    dge$samples$group <- ifelse(grepl(target_group, dge$samples[[group_col]]),
+                                make.names(target_group),
                                 "Others") |>
-      factor(levels = c(make.names(type), "Others"))
-      ## set type to be the first level
+      factor(levels = c(make.names(target_group), "Others"))
+      ## set target_group to be the first level
   } else {
-    dge$samples$group <- ifelse(grepl(type, dge$samples[[ID]]),
-                                make.names(type),
-                                dge$samples[[ID]] |> make.names()) |>
-      (\(x) factor(x, levels = c(make.names(type),
-                                 unique(x[x != make.names(type)]))))()
-                                 ## set type to be the first level
+    dge$samples$group <- ifelse(grepl(target_group, dge$samples[[group_col]]),
+                                make.names(target_group),
+                                dge$samples[[group_col]] |> make.names()) |>
+      (\(x) factor(x, levels = c(make.names(target_group),
+                                 unique(x[x != make.names(target_group)]))))()
+                                 ## set target_group to be the first level
   }
 
   ## make contrast design
@@ -55,7 +56,7 @@ voom_lm_fit <- function(dge, ID, type, method = c("RP", "Group"),
                         levels(dge$samples$group)[-1],
                         sep = "-"
     )),
-    ## type vs all the rest respectively, if group = TRUE, it's type vs Others
+    ## target_group vs all the rest respectively, if group = TRUE, it's target_group vs Others
     levels = design
   )
 
@@ -63,13 +64,13 @@ voom_lm_fit <- function(dge, ID, type, method = c("RP", "Group"),
   proc_data <- dge
 
   ## set par for plot
-  if (plot && counts) {
+  if (plot && normalize) {
     op <- par(no.readonly = TRUE)
     par(mfrow = c(1, 2))
   }
 
   ## voom fit if data is raw counts data
-  if(counts) {
+  if(normalize) {
     v <- limma::voom(dge, design = design, plot = plot)
     ## save voom fitted counts into global variable
     proc_data$counts <- v$E
@@ -85,7 +86,7 @@ voom_lm_fit <- function(dge, ID, type, method = c("RP", "Group"),
   ## summarize the total number of DEGs
   show(limma::decideTests(tfit, lfc = lfc, p.value = p) |> summary())
   if (plot) limma::plotSA(tfit, main = "Final model: Mean-variance trend")
-  if (plot && counts) par(op)
+  if (plot && normalize) par(op)
   return(list(tfit = tfit, proc_data = proc_data))
 }
 
@@ -101,8 +102,8 @@ voom_lm_fit <- function(dge, ID, type, method = c("RP", "Group"),
 #' @param Rank character, the variable for ranking DEGs, can be 'logFC',
 #'             'adj.P.Val'..., default 'adj.P.Val'
 #' @param nperm num, permutation runs of simulating the distribution
-#' @param thres num, cutoff for rank product permutation test if method = "RP",
-#'              default 0.05
+#' @param thres num, cutoff for rank product permutation test if
+#'              feature_selection = "rankproduct", default 0.05
 #' @param keep.top NULL or num, whether to keep top n DEGs of specific
 #'                 comparison
 #' @param keep.group NULL or pattern, specify the top DEGs of which comparison
@@ -253,5 +254,5 @@ DEGs_Group <- function(tfit, lfc = 0, p = 0.05,
   return(DEGs)
 }
 
-utils::globalVariables(c("org.Hs.eg.db", "logFC", "adj.P.Val"))
+utils::globalVariables(c("logFC", "adj.P.Val"))
 

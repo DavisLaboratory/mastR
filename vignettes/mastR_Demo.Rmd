@@ -69,8 +69,10 @@ To screen the immune subset signatures, we have to load the example datasets. Th
 ```{r setup}
 library(mastR)
 library(ggplot2)
+library(GSEABase)
 
-data("im_data_6", "NK_markers", "LM22", "LM7", "ccle_crc_5")
+data("im_data_6", "NK_markers", "LM22",
+     "LM7", "ccle_crc_5", "msigdb_gobp_nk")
 ```
 
 ### NK markers from [Curson's Publication](https://aacrjournals.org/cancerimmunolres/article/7/7/1162/469488/A-Gene-Signature-Predicting-Natural-Killer-Cell)
@@ -82,21 +84,23 @@ NK_markers
 
 ### Markers from LM
 
-Users can extract markers for subsets matched to the given pattern from imported data `LM7`/`LM22`. 
+Users can extract markers for subsets matched to the given regex pattern from imported data `LM7`/`LM22`. 
 
 The matched genes will be saved in 'GeneSet' class object, if both pattern are provided, the output would be a 'GeneSetCollection' class object with setName: LM7, LM22.
 
 ```{r LM markers}
 ## only retrieve LM7
-get_lm_sig(lm7.pattern = "NK")
+get_lm_sig(lm7.pattern = "^NK")
 
 ## only retrieve LM22
 get_lm_sig(lm22.pattern = "NK cells")
 
 ## collect both LM7 and LM22
-LM <- get_lm_sig(lm7.pattern = "NK", lm22.pattern = "NK cells")
+LM <- get_lm_sig(lm7.pattern = "^NK", lm22.pattern = "NK cells")
 
 LM
+## show upset diagram
+gsc_plot(LM)
 ```
 
 ### Markers from MSigDB
@@ -107,13 +111,22 @@ All genesets with geneset name matched to the `pattern` in the whole MSigDB woul
 
 By setting `plot = TRUE`, an UpSetR plot across matched genesets would be printed.
 
-```{r MSigDB genesets, fig.width=12, warning=FALSE}
+```{r MSigDB genesets, fig.width=12}
 ## collect all "natural killer mediated" relavent genesets from MSigDB
-MSig <- get_msigdb_sig(pattern = "NATURAL_KILLER_CELL_MEDIATED",
-                       subcat = "GO:BP", version = '7.4',
-                       plot = TRUE)
-
+# MSig <- get_gsc_sig(gsc = "msigdb",
+#                     pattern = "NATURAL_KILLER_CELL_MEDIATED",
+#                     cat = "c5", subcat = "GO:BP",
+#                     version = '7.4',
+#                     species = "hs")
+MSig <- get_gsc_sig(gsc = msigdb_gobp_nk,
+                    pattern = "NATURAL_KILLER_CELL_MEDIATED")
 MSig
+## show upset diagram of collected gene-sets
+gsc_plot(MSig)
+
+## merge all genesets into one
+MSig <- merge_markers(MSig)
+setName(MSig) <- "MSigDB"
 ```
 
 ### Markers from PanglaoDB
@@ -145,18 +158,11 @@ The input can be a list of vectors of genes, or a list of GeneSet objects, or a 
 nk_m <- NK_markers$HGNC_Symbol |> 
     GeneSet(geneIdType = SymbolIdentifier(), setName = "NK_markers")
 
-Markers <- merge_markers(
-  markers_list = list(
-    NK_markers = nk_m,
-    LM7 = LM[["LM7"]],
-    LM22 = LM[["LM22"]],
-    MSigDB = MSig,
-    PanglaoDB = Panglao
-    ),
-  plot = TRUE)
+gsc <- GeneSetCollection(c(nk_m, LM, MSig, Panglao))
+Markers <- merge_markers(gsc)
 
-## can also use on GeneSetCollection
-# merge_markers(markers_list = LM, plot = TRUE)
+## upset plot
+gsc_plot(gsc)
 
 Markers
 
@@ -195,10 +201,10 @@ edgeR::DGEList(
 To find the passing genes, low expression genes filtration needs to be done first. `get_degs()` function can filter low expression genes out from immune dataset, generate a filtered `proc_data` object and return a differentially expressed genes list ('UP' and 'DOWN').
 
 * `data` param can be a bulk RNA-seq expression object with subset labels, can be matrix, eSet, DGEList, ...  
-* `ID` param can specify the column name of groups (labels), can be a vector when `data` is a matrix.  
-* `type` param can specify the cell type name of interest. Users can choose one name in `ID` vector.  
-* `count` param indicates if the input data is raw counts data. If `counts = FALSE`, the function would directly use the expression data *per se* to filter out genes instead of calculating CPM.  
-* `method` param to choose whether to use rank product ('RP') or 'Group' for multiple comparisons for DE analysis, default 'RP'.  
+* `group_col` param can specify the column name of groups (labels), can be a vector when `data` is a matrix.  
+* `target_group` param can specify the cell target_group name of interest. Users can choose one name in `group_col` vector.  
+* `normalize` param indicates if the input data is raw counts data. If `normalize = FALSE`, the function would directly use the expression data *per se* to filter out genes instead of calculating CPM.  
+* `feature_selection` param to choose whether to use rank product ('rankproduct') or 'none' to select DEGs from multiple comparisons of DE analysis, default 'auto' uses 'rankproduct' but change to 'none' if final genes < 5 for both UP and DOWN.  
 * `plot = TRUE` would visualize the QC results before and after filtration. It would make log hist plot, RLE plot, MDS plot and SA plot.  
 * `markers` param could specify a geneset to be kept no matter if they pass the filtration. Setting it to `NULL` can skip this.  
 * `gene_id` specify the gene ID type of rownames of data when markers is not NULL, could be one of 'ENSEMBL', 'SYMBOL', 'ENTREZ'..., default 'SYMBOL'.
@@ -212,9 +218,10 @@ Get DEGs from immune datasets based on rank-product method.
 ```{r DEG_6}
 DEG_6 <- get_degs(
   data = im_data_6,  
-  ID = "celltype:ch1", type = "NK", 
+  group_col = "celltype:ch1", target_group = "NK", 
   plot = TRUE, ## show QC plots after filtration
-  markers = geneIds(Markers), 
+  markers = geneIds(Markers),
+  feature_selection = "rankproduct",
   gene_id = "ENSEMBL"  ## convert ensembl IDs of rownames into symbols if gene_id != "SYMBOL"
 )  
 ## `proc_data` object would be saved, saved expr after limma::voom pipeline.
@@ -243,8 +250,8 @@ names(m_ct) <- names(deg_up)[match(m_ct, deg_up)]  ## set ensembl ID as names fo
 ## run by wrapped function in one-step
 m_ct_new <- filter_subset_sig(data = im_data_6, 
                               markers = geneIds(Markers),
-                              ID = "celltype:ch1",
-                              type = "NK",
+                              group_col = "celltype:ch1",
+                              target_group = "NK",
                               gene_id = "ENSEMBL")
 
 setequal(m_ct, m_ct_new)
@@ -257,18 +264,18 @@ And compared with edgeR normalization only, data after voom can explain more var
 ```{r PCA for im_data_6, fig.width=10, fig.height=7}
 ## PCA on raw counts data with standard edgeR normalization
 pca_matrix_plot(im_data_6, group_by = "celltype:ch1", 
-                counts = TRUE)
+                normalize = TRUE)
 pca_matrix_plot(im_data_6[names(m_ct),], group_by = "celltype:ch1", 
-                counts = TRUE)
+                normalize = TRUE)
 
 ## PCA on limma::voomed data after standard edgeR normalization
 pca_matrix_plot(proc_data, group_by = "celltype.ch1", 
-                counts = FALSE)
+                normalize = FALSE)
 pca_matrix_plot(proc_data[names(m_ct),], group_by = "celltype.ch1", 
-                counts = FALSE)
+                normalize = FALSE)
 ## PCA show smaller PC1 variance without intersect with markers pool
 pca_matrix_plot(proc_data[DEG_6$UP,], group_by = "celltype.ch1", 
-                counts = FALSE)
+                normalize = FALSE)
 ```
 
 
@@ -285,8 +292,8 @@ ccle_crc_5[1:10,]
 
 To specify NK markers for CRC, use `filter_non_tissue()` function to remove failing genes which are also highly expressed by CRC adherent cell lines *per se*.
 
-* `ID` param is the group vector of input samples, or the name of group column.
-* `type` param is an expression pattern to specify the tissue of interest, here we choose 'colorectal' to select all colorectal adherent cell lines.  
+* `group_col` param is the group vector of input samples, or the name of group column.
+* `target_group` param is an expression pattern to specify the tissue of interest, here we choose 'colorectal' to select all colorectal adherent cell lines.  
 * `ignore.case` means whether to ignore the capital or not.  
 * `log = TURE` would do log transformation to the data.  
 * `q` param is the threshold to remove failing genes. 0.25 means removing markers with median expression >= 25% percentile of non-zero expression of all genes.  
@@ -301,17 +308,17 @@ To specify NK markers for CRC, use `filter_non_tissue()` function to remove fail
 # rownames(CCLE) <- CCLE$gene_name
 # CCLE$gene_name <- NULL
 # 
-# ## match depmap ID of CCLE TPM to CCLE meta to get disease names
+# ## match depmap group_col of CCLE TPM to CCLE meta to get disease names
 # idx <- match(colnames(CCLE), CCLE_meta$cell_line)
 # cell_lines <- CCLE_meta$primary_disease[idx]
 
 ## markers against for CRC cell lines
 m_ccl <- filter_non_tissue(data = ccle_crc_5,
-                           ID = "cancer",
-                           type = "CRC",
+                           group_col = "cancer",
+                           target_group = "CRC",
                            markers = geneIds(Markers))
 ## as CCLE is default setting, this can also be easily run without loading CCLE
-# m_ccl <- filter_non_tissue(type = "colorectal",
+# m_ccl <- filter_non_tissue(target_group = "colorectal",
 #                            markers = geneIds(Markers))
 
 head(m_ccl)
@@ -341,7 +348,7 @@ Loading can be drawn to show which genes are relevant to NK cells, and result sh
 pca_matrix_plot(
   data = proc_data, 
   features = sig_NK_CRC, 
-  counts = FALSE,
+  normalize = FALSE,
   group_by = "celltype.ch1",
   gene_id = "ENSEMBL"
 )
@@ -351,7 +358,7 @@ pca_matrix_plot(
   data = proc_data, 
   features = sig_NK_CRC, 
   loading = TRUE,
-  counts = FALSE,
+  normalize = FALSE,
   group_by = "celltype.ch1",
   gene_id = "ENSEMBL"
 )
@@ -365,7 +372,7 @@ pca_matrix_plot(
 * `sigs` param is the final curated signature symbols, while `markers` param is the original markers pool.  
 * `scale` could specify the `column` or `row` to be scaled or no scaling by `none`.  
 * `min_max` is used to decide if to apply min-max normalization to each row of expression data.
-* `counts` means whether to calculate logCPM or not.    
+* `normalize` means whether to normalize and calculate logCPM or not.    
 * Users are able to specify the color of heatmap by setting `color` param.
 
 
@@ -375,8 +382,8 @@ We can see the expression pattern of cutrated signature is more distinguishable 
 sig_heatmap(
   data = proc_data, 
   sigs = sig_NK_CRC,
-  counts = FALSE,
-  ID = "celltype.ch1", 
+  normalize = FALSE,
+  group_col = "celltype.ch1", 
   markers = geneIds(Markers),
   gene_id = "ENSEMBL"
 )
@@ -386,9 +393,9 @@ sig_heatmap(
   data = list(data_6 = im_data_6,
               proc_data = proc_data), 
   sigs = sig_NK_CRC,
-  ID = c("celltype:ch1", "celltype.ch1"), 
+  group_col = c("celltype:ch1", "celltype.ch1"), 
   markers = geneIds(Markers),
-  counts = c(TRUE, FALSE),
+  normalize = c(TRUE, FALSE),
   gene_id = "ENSEMBL",
   col = colorRampPalette(c(rgb(1, 1, 0), "red"))(256)  ## can customize heatmap color
 )
@@ -411,8 +418,8 @@ sig_rankdensity_plot(
   data = list(im_data_6 = im_data_6,
               process_Data = proc_data), 
   sigs = sig_NK_CRC,
-  counts = c(TRUE, FALSE),
-  ID = c("celltype:ch1", "celltype.ch1"), 
+  normalize = c(TRUE, FALSE),
+  group_col = c("celltype:ch1", "celltype.ch1"), 
   gene_id = "ENSEMBL"
 )
 
@@ -420,8 +427,8 @@ sig_rankdensity_plot(
 sig_rankdensity_plot(
   data = proc_data, 
   sigs = sig_NK_CRC,
-  ID = "celltype.ch1", 
-  counts = FALSE,
+  group_col = "celltype.ch1", 
+  normalize = FALSE,
   aggregate =  TRUE,
   gene_id = "ENSEMBL"
 )
@@ -440,9 +447,9 @@ Obviously, our signature always shows significantly higher score in NK cells.
 sig_boxplot(
   data = proc_data, 
   sigs = sig_NK_CRC,
-  ID = "celltype.ch1", 
-  type = "NK", 
-  counts = FALSE,
+  group_col = "celltype.ch1", 
+  target_group = "NK", 
+  normalize = FALSE,
   gene_id = "ENSEMBL"
 )
 
@@ -450,9 +457,9 @@ sig_boxplot(
 # result_score_boxplot(data = list(data_6 = im_data_6,
 #                                  proc_data = proc_data), 
 #                      sigs = sig_NK_CRC,
-#                      ID = c("celltype:ch1", "label.main"),
-#                      type = "NK",
-#                      counts = c(TRUE, FALSE),
+#                      group_col = c("celltype:ch1", "label.main"),
+#                      target_group = "NK",
+#                      normalize = c(TRUE, FALSE),
 #                      gene_id = "ENSEMBL") *
 #   guides(col = "none")
 ```
@@ -468,10 +475,10 @@ It's clear the score can increase the difference between NK cells and others.
 sig_boxplot(
   data = proc_data, 
   sigs = sig_NK_CRC,
-  ID = "celltype.ch1", 
-  type = "NK",
+  group_col = "celltype.ch1", 
+  target_group = "NK",
   plot.score = FALSE,
-  counts = FALSE,
+  normalize = FALSE,
   gene_id = "ENSEMBL"
 )
 ```
@@ -487,9 +494,9 @@ Based on sactter plot result, we can actually do further filtration to improve s
 sig_scatter_plot(
   data = proc_data, 
   sigs = sig_NK_CRC,
-  ID = "celltype.ch1", 
-  type = "NK",
-  counts = FALSE,
+  group_col = "celltype.ch1", 
+  target_group = "NK",
+  normalize = FALSE,
   xint = 2.5, yint = 2.5,
   gene_id = "ENSEMBL"
 )
@@ -499,10 +506,10 @@ sig_scatter_plot(
 #   data = list(data_6 = im_data_6,
 #               proc_data = proc_data), 
 #   sigs = sig_NK_CRC,
-#   ID = c("celltype:ch1", "celltype.ch1"),
-#   type = "NK", 
+#   group_col = c("celltype:ch1", "celltype.ch1"),
+#   target_group = "NK", 
 #   xint = 2.5, yint = 2.5,
-#   counts = c(TRUE, FALSE), 
+#   normalize = c(TRUE, FALSE), 
 #   gene_id = "ENSEMBL")
 ```
 
@@ -517,10 +524,10 @@ It's clear that our screened signature is enriched in all comparisons.
 sig_gseaplot(
   data = proc_data, 
   sigs = sig_NK_CRC,
-  ID = "celltype.ch1", 
-  type = "NK",
+  group_col = "celltype.ch1", 
+  target_group = "NK",
   gene_id = "ENSEMBL",
-  counts = FALSE
+  normalize = FALSE
 )
 ```
 
@@ -544,8 +551,8 @@ We only get 2 more new genes when keeping top 200 DEGs in 'NK-CD8', that's becau
 m_ct_refine <- filter_subset_sig(
   data = im_data_6, 
   markers = geneIds(Markers),
-  ID = "celltype:ch1",
-  type = "NK",
+  group_col = "celltype:ch1",
+  target_group = "NK",
   gene_id = "ENSEMBL",
   keep.top = 200,
   keep.group = "CD8"
@@ -558,8 +565,8 @@ setdiff(sig_NK_CRC_refine, sig_NK_CRC)
 ## most NK-CD8 top DEGs are not in the markers pool
 deg_tables <- mastR::get_de_table(
   data = im_data_6, 
-  ID = "celltype:ch1",
-  type = "NK"
+  group_col = "celltype:ch1",
+  target_group = "NK"
 )
 intersect(mapIds(org.Hs.eg.db, rownames(deg_tables$`NK-CD8`)[1:200],
                  "SYMBOL", "ENSEMBL"),
@@ -575,17 +582,17 @@ We can see the difference of NK vs CD4 and CD8 T cells increased, but the differ
 p1 <- sig_boxplot(
   data = proc_data, 
   sigs = sig_NK_CRC_refine,
-  ID = "celltype.ch1", 
-  type = "NK", 
-  counts = FALSE,
+  group_col = "celltype.ch1", 
+  target_group = "NK", 
+  normalize = FALSE,
   gene_id = "ENSEMBL"
 ) + ggtitle("Signature after Refinement")
 p2 <- sig_boxplot(
   data = proc_data, 
   sigs = sig_NK_CRC,
-  ID = "celltype.ch1", 
-  type = "NK", 
-  counts = FALSE,
+  group_col = "celltype.ch1", 
+  target_group = "NK", 
+  normalize = FALSE,
   gene_id = "ENSEMBL"
 ) + ggtitle("Signature before Refinement")
 
@@ -598,18 +605,18 @@ Abundance scatter plot also shows more specific genes to NK compared with CD4/8 
 p1 <- sig_scatter_plot(
   data = proc_data, 
   sigs = sig_NK_CRC_refine,
-  ID = "celltype.ch1", 
-  type = "NK",
-  counts = FALSE,
+  group_col = "celltype.ch1", 
+  target_group = "NK",
+  normalize = FALSE,
   xint = 2.5, yint = 2.5,
   gene_id = "ENSEMBL"
 ) + ggtitle("Signature after Refinement")
 p2 <- sig_scatter_plot(
   data = proc_data, 
   sigs = sig_NK_CRC,
-  ID = "celltype.ch1", 
-  type = "NK",
-  counts = FALSE,
+  group_col = "celltype.ch1", 
+  target_group = "NK",
+  normalize = FALSE,
   xint = 2.5, yint = 2.5,
   gene_id = "ENSEMBL"
 ) + ggtitle("Signature before Refinement")
@@ -635,13 +642,13 @@ It's better to use union when you get only a few genes screened for each dataset
 m_ct_m <- filter_subset_sig(
   data = list(A = im_data_6, B = im_data_6), 
   markers = geneIds(Markers),
-  ID = "celltype:ch1",
-  type = "NK",
+  group_col = "celltype:ch1",
+  target_group = "NK",
   gene_id = "ENSEMBL"
 )
 
 ## we will get exactly the same list
-## if we choose 'union' or 'intersect' as combination method
+## if we choose 'union' or 'intersect' as combination
 setequal(m_ct_m, m_ct)
 
 ## but we will only get the genes appear at top rank across gene lists
@@ -649,8 +656,8 @@ setequal(m_ct_m, m_ct)
 m_ct_m <- filter_subset_sig(
   data = list(A = im_data_6, B = im_data_6), 
   markers = geneIds(Markers),
-  ID = "celltype:ch1",
-  type = "NK",
+  group_col = "celltype:ch1",
+  target_group = "NK",
   gene_id = "ENSEMBL",
   comb = "RRA",  ## change this to use different strategy, default is "union"
   s_thres = 0.5  ## only work when comb = "RRA", set a threshold for ranking score

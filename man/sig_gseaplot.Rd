@@ -12,8 +12,8 @@
 sig_gseaplot(
   data,
   sigs,
-  ID,
-  type,
+  group_col,
+  target_group,
   gene_id = "SYMBOL",
   digits = 2,
   slot = "counts",
@@ -23,8 +23,8 @@ sig_gseaplot(
 \S4method{sig_gseaplot}{ANY,vector}(
   data,
   sigs,
-  ID,
-  type,
+  group_col,
+  target_group,
   gene_id = "SYMBOL",
   digits = 2,
   slot = "counts",
@@ -34,8 +34,8 @@ sig_gseaplot(
 \S4method{sig_gseaplot}{ANY,list}(
   data,
   sigs,
-  ID,
-  type,
+  group_col,
+  target_group,
   gene_id = "SYMBOL",
   digits = 2,
   slot = "counts",
@@ -45,8 +45,8 @@ sig_gseaplot(
 \S4method{sig_gseaplot}{DGEList,vector}(
   data,
   sigs,
-  ID,
-  type,
+  group_col,
+  target_group,
   gene_id = "SYMBOL",
   digits = 2,
   slot = "counts",
@@ -56,8 +56,8 @@ sig_gseaplot(
 \S4method{sig_gseaplot}{DGEList,list}(
   data,
   sigs,
-  ID,
-  type,
+  group_col,
+  target_group,
   gene_id = "SYMBOL",
   digits = 2,
   slot = "counts",
@@ -67,8 +67,8 @@ sig_gseaplot(
 \S4method{sig_gseaplot}{list,ANY}(
   data,
   sigs,
-  ID,
-  type,
+  group_col,
+  target_group,
   gene_id = "SYMBOL",
   digits = 2,
   slot = "counts",
@@ -80,9 +80,9 @@ sig_gseaplot(
 
 \item{sigs}{a vector of signature (Symbols)}
 
-\item{ID}{character or vector, specify the column name to compare in coldata}
+\item{group_col}{character or vector, specify the column name to compare in coldata}
 
-\item{type}{pattern, specify the group of interest as reference}
+\item{target_group}{pattern, specify the group of interest as reference}
 
 \item{gene_id}{character, indicate the ID type of rowname of expression data's ,
 could be one of 'ENSEMBL', 'SYMBOL', ... default 'SYMBOL'}
@@ -104,7 +104,7 @@ data("im_data_6", "NK_markers")
 sig_gseaplot(sigs = list(A = NK_markers$HGNC_Symbol[1:15],
                          B = NK_markers$HGNC_Symbol[20:40],
                          C = NK_markers$HGNC_Symbol[60:75]),
-             data = im_data_6, ID = "celltype:ch1",
-             type = "NK", gene_id = "ENSEMBL")
+             data = im_data_6, group_col = "celltype:ch1",
+             target_group = "NK", gene_id = "ENSEMBL")
 
 }

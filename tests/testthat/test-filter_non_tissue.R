@@ -4,7 +4,7 @@ test_that("filter_non_tissue works", {
   ## test default 'CCLE'
   non_tissue_genes <- filter_non_tissue(
     # data = "CCLE",
-    type = "colorectal",
+    target_group = "colorectal",
     markers = NK_markers$HGNC_Symbol
   )
   expect_true(all(non_tissue_genes %in% NK_markers$HGNC_Symbol))
@@ -12,8 +12,8 @@ test_that("filter_non_tissue works", {
   ## test data.frame object
   non_tissue_genes_1 <- filter_non_tissue(
     as.data.frame(ccle_crc_5$counts),
-    ID = ccle_crc_5$samples$cancer,
-    type = "CRC",
+    group_col = ccle_crc_5$samples$cancer,
+    target_group = "CRC",
     markers = NK_markers$HGNC_Symbol
   )
   expect_true(all(non_tissue_genes_1 %in% NK_markers$HGNC_Symbol))
@@ -21,8 +21,8 @@ test_that("filter_non_tissue works", {
   ## test matrix object
   non_tissue_genes_2 <- filter_non_tissue(
     ccle_crc_5$counts,
-    ID = ccle_crc_5$samples$cancer,
-    type = "CRC",
+    group_col = ccle_crc_5$samples$cancer,
+    target_group = "CRC",
     markers = NK_markers$HGNC_Symbol
   )
   expect_setequal(non_tissue_genes_1, non_tissue_genes_2)
@@ -30,8 +30,8 @@ test_that("filter_non_tissue works", {
   ## test Matrix object
   non_tissue_genes_2 <- filter_non_tissue(
     ccle_crc_5$counts |> Matrix::Matrix(),
-    ID = ccle_crc_5$samples$cancer,
-    type = "CRC",
+    group_col = ccle_crc_5$samples$cancer,
+    target_group = "CRC",
     markers = NK_markers$HGNC_Symbol
   )
   expect_setequal(non_tissue_genes_1, non_tissue_genes_2)
@@ -39,8 +39,8 @@ test_that("filter_non_tissue works", {
   ## test DGEList object
   non_tissue_genes_2 <- filter_non_tissue(
     ccle_crc_5,
-    ID = "cancer",
-    type = "CRC",
+    group_col = "cancer",
+    target_group = "CRC",
     markers = NK_markers$HGNC_Symbol
   )
   expect_setequal(non_tissue_genes_1, non_tissue_genes_2)
@@ -53,8 +53,8 @@ test_that("filter_non_tissue works", {
   )
   non_tissue_genes_2 <- filter_non_tissue(
     data_seurat,
-    ID = "cancer",
-    type = "CRC",
+    group_col = "cancer",
+    target_group = "CRC",
     markers = NK_markers$HGNC_Symbol
   )
   expect_setequal(non_tissue_genes_1, non_tissue_genes_2)
@@ -63,8 +63,8 @@ test_that("filter_non_tissue works", {
   data_sce <- Seurat::as.SingleCellExperiment(data_seurat)
   non_tissue_genes_2 <- filter_non_tissue(
     data_sce,
-    ID = "cancer",
-    type = "CRC",
+    group_col = "cancer",
+    target_group = "CRC",
     markers = NK_markers$HGNC_Symbol
   )
   expect_setequal(non_tissue_genes_1, non_tissue_genes_2)
@@ -72,8 +72,8 @@ test_that("filter_non_tissue works", {
   ## test without providing markers
   non_tissue_genes_2 <- filter_non_tissue(
     ccle_crc_5,
-    ID = "cancer",
-    type = "CRC"
+    group_col = "cancer",
+    target_group = "CRC"
   )
   expect_true(all(non_tissue_genes_1 %in% union(non_tissue_genes_2,
                                                 NK_markers$HGNC_Symbol)))

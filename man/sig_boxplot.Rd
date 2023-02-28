@@ -15,10 +15,10 @@
 sig_boxplot(
   data,
   sigs,
-  ID,
-  type,
+  group_col,
+  target_group,
   plot.score = TRUE,
-  counts = TRUE,
+  normalize = TRUE,
   method = "t.test",
   slot = "counts",
   gene_id = "SYMBOL"
@@ -27,10 +27,10 @@ sig_boxplot(
 \S4method{sig_boxplot}{matrix,vector,vector,character}(
   data,
   sigs,
-  ID,
-  type,
+  group_col,
+  target_group,
   plot.score = TRUE,
-  counts = TRUE,
+  normalize = TRUE,
   method = "t.test",
   gene_id = "SYMBOL"
 )
@@ -38,10 +38,10 @@ sig_boxplot(
 \S4method{sig_boxplot}{Matrix,vector,vector,character}(
   data,
   sigs,
-  ID,
-  type,
+  group_col,
+  target_group,
   plot.score = TRUE,
-  counts = TRUE,
+  normalize = TRUE,
   method = "t.test",
   gene_id = "SYMBOL"
 )
@@ -49,10 +49,10 @@ sig_boxplot(
 \S4method{sig_boxplot}{data.frame,vector,vector,character}(
   data,
   sigs,
-  ID,
-  type,
+  group_col,
+  target_group,
   plot.score = TRUE,
-  counts = TRUE,
+  normalize = TRUE,
   method = "t.test",
   gene_id = "SYMBOL"
 )
@@ -60,10 +60,10 @@ sig_boxplot(
 \S4method{sig_boxplot}{DGEList,vector,character,character}(
   data,
   sigs,
-  ID,
-  type,
+  group_col,
+  target_group,
   plot.score = TRUE,
-  counts = TRUE,
+  normalize = TRUE,
   method = "t.test",
   gene_id = "SYMBOL"
 )
@@ -71,10 +71,10 @@ sig_boxplot(
 \S4method{sig_boxplot}{ExpressionSet,vector,character,character}(
   data,
   sigs,
-  ID,
-  type,
+  group_col,
+  target_group,
   plot.score = TRUE,
-  counts = TRUE,
+  normalize = TRUE,
   method = "t.test",
   gene_id = "SYMBOL"
 )
@@ -82,10 +82,10 @@ sig_boxplot(
 \S4method{sig_boxplot}{Seurat,vector,character,character}(
   data,
   sigs,
-  ID,
-  type,
+  group_col,
+  target_group,
   plot.score = TRUE,
-  counts = TRUE,
+  normalize = TRUE,
   method = "t.test",
   slot = "counts",
   gene_id = "SYMBOL"
@@ -94,10 +94,10 @@ sig_boxplot(
 \S4method{sig_boxplot}{SummarizedExperiment,vector,character,character}(
   data,
   sigs,
-  ID,
-  type,
+  group_col,
+  target_group,
   plot.score = TRUE,
-  counts = TRUE,
+  normalize = TRUE,
   method = "t.test",
   slot = "counts",
   gene_id = "SYMBOL"
@@ -106,10 +106,10 @@ sig_boxplot(
 \S4method{sig_boxplot}{list,vector,character,character}(
   data,
   sigs,
-  ID,
-  type,
+  group_col,
+  target_group,
   plot.score = TRUE,
-  counts = TRUE,
+  normalize = TRUE,
   method = "t.test",
   slot = "counts",
   gene_id = "SYMBOL"
@@ -120,16 +120,17 @@ sig_boxplot(
 
 \item{sigs}{a vector of signature (Symbols)}
 
-\item{ID}{character or vector, specify the column name to compare in coldata}
+\item{group_col}{character or vector, specify the column name to compare in coldata}
 
-\item{type}{pattern, specify the group of interest as reference}
+\item{target_group}{pattern, specify the group of interest as reference}
 
 \item{plot.score}{logical, if to plot score instead of expression of signature}
 
-\item{counts}{logical, indicate if data is raw counts data}
+\item{normalize}{logical, TRUE indicates raw counts data to normalize and
+calculate cpm}
 
 \item{method}{a character string indicating which method to be used for
-\code{stat_compare_means()} to compare the means across types,
+\code{stat_compare_means()} to compare the means across groups,
 could be "t.test", 'wilcox.test', 'anova'..., default "t.test"}
 
 \item{slot}{character, indicate which slot used for seurat/sce object}
@@ -147,7 +148,7 @@ Make boxplot and show expression or score level of signature across subsets.
 data("im_data_6", "NK_markers")
 p <- sig_boxplot(
   im_data_6, sigs = NK_markers$HGNC_Symbol[1:30],
-  ID = "celltype:ch1", type = "NK",
+  group_col = "celltype:ch1", target_group = "NK",
   gene_id = "ENSEMBL"
 )
 

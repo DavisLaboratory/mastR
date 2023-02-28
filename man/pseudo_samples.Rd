@@ -61,7 +61,7 @@ pseudo_samples(
 \arguments{
 \item{data}{a matrix or Seurat/SCE object containing expression and metadata}
 
-\item{by}{a vector of ID names or dataframe for aggregation}
+\item{by}{a vector of group names or dataframe for aggregation}
 
 \item{fun}{chr, methods used to aggregate cells, could be 'sum' or 'mean',
 default 'sum'}

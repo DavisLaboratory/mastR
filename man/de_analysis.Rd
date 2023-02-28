@@ -6,10 +6,10 @@
 \usage{
 de_analysis(
   dge,
-  ID,
-  type,
-  counts = TRUE,
-  method = c("RP", "Group"),
+  group_col,
+  target_group,
+  normalize = TRUE,
+  feature_selection = c("auto", "rankproduct", "none"),
   group = FALSE,
   filter = c(10, 10),
   plot = FALSE,
@@ -24,35 +24,37 @@ de_analysis(
 \arguments{
 \item{dge}{DGEList object for DE analysis, including expr and samples info}
 
-\item{ID}{character, column name of coldata to specify the DE comparisons}
+\item{group_col}{character, column name of coldata to specify the DE comparisons}
 
-\item{type}{pattern, specify the group of interest, e.g. NK}
+\item{target_group}{pattern, specify the group of interest, e.g. NK}
 
-\item{counts}{logical, if the expr in data is raw counts data}
+\item{normalize}{logical, if the expr in data is raw counts needs to be normalized}
 
-\item{method}{either 'RP' or 'Group', choose whether to use rank product or
-group other subsets for multiple comparisons for DE analysis,
-default 'RP'}
+\item{feature_selection}{one of 'auto', "rankproduct" or "none", choose if to
+use rank product or not to select DEGs from multiple
+comparisons of DE analysis, default 'auto' uses
+'rankproduct' but change to 'none' if final genes < 5
+for both UP and DOWN.}
 
 \item{group}{logical, TRUE to separate samples into only 2 groups:
-`type`` and 'Others'; FALSE to set each level as a group}
+`target_group`` and 'Others'; FALSE to set each level as a group}
 
 \item{filter}{a vector of 2 numbers, filter condition to remove low expression
-genes, the 1st for min.counts (if counts = TRUE) or CPM/TPM
-(if counts = F), the 2nd for samples size 'large.n'}
+genes, the 1st for min.counts (if normalize = TRUE) or CPM/TPM
+(if normalize = FALSE), the 2nd for samples size 'large.n'}
 
 \item{plot}{logical, if to make plots to show QC before and after filtration}
 
 \item{lfc}{num, cutoff of logFC for DE analysis}
 
 \item{p}{num, cutoff of p value for DE analysis and permutation test if
-method = "RP"}
+feature_selection = "rankproduct"}
 
 \item{markers}{vector, a vector of gene names, listed the gene symbols to be
 kept anyway after filtration. Default 'NULL' means no special
 genes need to be kept.}
 
-\item{gene_id}{character, specify the gene ID type of rownames of expression data
+\item{gene_id}{character, specify the gene ID target_group of rownames of expression data
 when markers is not NULL, could be one of 'ENSEMBL', 'SYMBOL',
 'ENTREZ'..., default 'SYMBOL'}
 

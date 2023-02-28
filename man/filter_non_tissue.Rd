@@ -11,12 +11,12 @@
 \alias{filter_non_tissue,ExpressionSet,character,character-method}
 \alias{filter_non_tissue,SummarizedExperiment,character,character-method}
 \alias{filter_non_tissue,Seurat,character,character-method}
-\title{Specify cell type signature against adherent cancer cell lines.}
+\title{Specify cell target_group signature against adherent cancer cell lines.}
 \usage{
 filter_non_tissue(
   data = "CCLE",
-  ID,
-  type,
+  group_col,
+  target_group,
   ...,
   log = FALSE,
   q = 0.25,
@@ -27,8 +27,8 @@ filter_non_tissue(
 
 \S4method{filter_non_tissue}{matrix,vector,character}(
   data = "CCLE",
-  ID,
-  type,
+  group_col,
+  target_group,
   ...,
   log = FALSE,
   q = 0.25,
@@ -39,8 +39,8 @@ filter_non_tissue(
 
 \S4method{filter_non_tissue}{Matrix,vector,character}(
   data = "CCLE",
-  ID,
-  type,
+  group_col,
+  target_group,
   ...,
   log = FALSE,
   q = 0.25,
@@ -51,8 +51,8 @@ filter_non_tissue(
 
 \S4method{filter_non_tissue}{data.frame,vector,character}(
   data = "CCLE",
-  ID,
-  type,
+  group_col,
+  target_group,
   ...,
   log = FALSE,
   q = 0.25,
@@ -63,8 +63,8 @@ filter_non_tissue(
 
 \S4method{filter_non_tissue}{character,missing,character}(
   data = "CCLE",
-  ID,
-  type,
+  group_col,
+  target_group,
   ...,
   log = FALSE,
   q = 0.25,
@@ -75,8 +75,8 @@ filter_non_tissue(
 
 \S4method{filter_non_tissue}{missing,missing,character}(
   data = "CCLE",
-  ID,
-  type,
+  group_col,
+  target_group,
   ...,
   log = FALSE,
   q = 0.25,
@@ -87,8 +87,8 @@ filter_non_tissue(
 
 \S4method{filter_non_tissue}{DGEList,character,character}(
   data = "CCLE",
-  ID,
-  type,
+  group_col,
+  target_group,
   ...,
   log = FALSE,
   q = 0.25,
@@ -99,8 +99,8 @@ filter_non_tissue(
 
 \S4method{filter_non_tissue}{ExpressionSet,character,character}(
   data = "CCLE",
-  ID,
-  type,
+  group_col,
+  target_group,
   ...,
   log = FALSE,
   q = 0.25,
@@ -111,8 +111,8 @@ filter_non_tissue(
 
 \S4method{filter_non_tissue}{SummarizedExperiment,character,character}(
   data = "CCLE",
-  ID,
-  type,
+  group_col,
+  target_group,
   ...,
   log = FALSE,
   q = 0.25,
@@ -123,8 +123,8 @@ filter_non_tissue(
 
 \S4method{filter_non_tissue}{Seurat,character,character}(
   data = "CCLE",
-  ID,
-  type,
+  group_col,
+  target_group,
   ...,
   log = FALSE,
   q = 0.25,
@@ -136,9 +136,9 @@ filter_non_tissue(
 \arguments{
 \item{data}{'CCLE' or expression object}
 
-\item{ID}{vector or character, to specify the group of tumor/tissue types}
+\item{group_col}{vector or character, to specify the group of tumor/tissue target_groups}
 
-\item{type}{pattern, specify the type of interest, e.g. 'colorectal', match
+\item{target_group}{pattern, specify the target_group of interest, e.g. 'colorectal', match
 to primary_disease of CCLE if data is 'CCLE'}
 
 \item{...}{params for \code{\link[=grep]{grep()}} to find matched cell lines in CCLE}
@@ -165,7 +165,7 @@ and generate CCLE_tpm_new after retrieving specific tissues.
 }
 \examples{
 data("NK_markers", "ccle_crc_5")
-filter_non_tissue(ccle_crc_5, ID = "cancer", type = "CRC",
+filter_non_tissue(ccle_crc_5, group_col = "cancer", target_group = "CRC",
                   markers = NK_markers$HGNC_Symbol)
 
 }

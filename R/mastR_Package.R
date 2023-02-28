@@ -4,11 +4,18 @@
 #' @import utils
 #' @import graphics
 #' @import patchwork
+#' @import limma
+#' @import edgeR
 #' @import ggpubr
 #' @import org.Hs.eg.db
-#' @import Seurat
+#' @import msigdb
+#' @import GSEABase
+#' @importFrom Seurat GetAssayData
+#' @importFrom SingleCellExperiment SingleCellExperiment
+#' @importFrom SummarizedExperiment assay colData
 #' @importFrom grDevices colorRampPalette
-#' @importFrom dplyr group_by summarise_all arrange first
+#' @importFrom dplyr group_by summarise_all arrange
+#' @importFrom tidyr pivot_wider pivot_longer
 #' @importFrom Biobase exprs pData
 #' @importFrom depmap depmap_TPM depmap_metadata
 NULL

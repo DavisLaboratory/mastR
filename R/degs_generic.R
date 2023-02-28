@@ -12,7 +12,7 @@ NULL
 #'
 #' @inheritParams de_analysis
 #' @param data expression object
-#' @param ID vector or character, specify the group factor or column name of
+#' @param group_col vector or character, specify the group factor or column name of
 #'           coldata for DE comparisons
 #' @param slot character, specify which slot to use only for sce or seurat
 #'             object, optional, default 'counts'
@@ -26,16 +26,16 @@ NULL
 #'
 #' @examples
 #' data("im_data_6")
-#' DEGs <- get_degs(im_data_6, ID = "celltype:ch1",
-#'                  type = "NK", gene_id = "ENSEMBL")
+#' DEGs <- get_degs(im_data_6, group_col = "celltype:ch1",
+#'                  target_group = "NK", gene_id = "ENSEMBL")
 #'
 #'@export
 setGeneric("get_degs",
            function(data,
-                    ID,
-                    type,
-                    counts = TRUE,
-                    method = c("RP", "Group"),
+                    group_col,
+                    target_group,
+                    normalize = TRUE,
+                    feature_selection = c('auto', "rankproduct", "none"),
                     slot = "counts",
                     batch = NULL,
                     ...)
@@ -44,42 +44,46 @@ setGeneric("get_degs",
 #' @rdname get_degs
 setMethod("get_degs", signature(
   data = 'DGEList',
-  ID = 'character',
-  type = 'character'
+  group_col = 'character',
+  target_group = 'character'
 ),
 function(data,
-         ID,
-         type,
-         counts = TRUE,
-         method = c("RP", "Group"),
+         group_col,
+         target_group,
+         normalize = TRUE,
+         feature_selection = c('auto', "rankproduct", "none"),
          batch = NULL,
          ...) {
 
-  method <- match.arg(method)
+  feature_selection <- match.arg(feature_selection)
   stopifnot("Please provide column names as batch!" =
               is.null(batch) | is.vector(batch))
 
   DGE <- data
-  DGE$samples$group <- DGE$samples[[ID]]
+  DGE$samples$group <- DGE$samples[[group_col]]
   rm(data)
 
   ## standard DE analysis with edgeR and limma::voom pipeline
   voom_res <- de_analysis(
     dge = DGE,
-    ID = ID,
-    type = type,
-    counts = counts,
-    method = method,
+    group_col = group_col,
+    target_group = target_group,
+    normalize = normalize,
+    feature_selection = feature_selection,
     batch = batch,
     ...
   )
 
-  ## assemble DEGs from comparisons by Rank Product or simple groups
-  if(method == "RP") {
+  ## assemble DEGs from comparisons by Rank Product or simply intersect/union
+  if(feature_selection == "auto") {
     DEGs <- DEGs_RP(tfit = voom_res$tfit, ...)
-  }else if(method == "Group") {
+    if(all(lengths(DEGs) < 5))
+      DEGs <- DEGs_Group(tfit = voom_res$tfit, ...)
+  }else if(feature_selection == "rankproduct") {
+    DEGs <- DEGs_RP(tfit = voom_res$tfit, ...)
+  }else {
     DEGs <- DEGs_Group(tfit = voom_res$tfit, ...)
-  }else stop("Please provide a valid method, either 'RP' or 'Group'!")
+  }
 
   ## save the processed DGEList
   DEGs$proc_data <- voom_res$proc_data
@@ -90,27 +94,29 @@ function(data,
 #' @rdname get_degs
 setMethod("get_degs", signature(
   data = 'matrix',
-  ID = 'vector',
-  type = 'character'
+  group_col = 'vector',
+  target_group = 'character'
 ),
 function(data,
-         ID,
-         type,
-         counts = TRUE,
-         method = c("RP", "Group"),
+         group_col,
+         target_group,
+         normalize = TRUE,
+         feature_selection = c('auto', "rankproduct", "none"),
          batch = NULL,
          ...) {
 
-  DGE <- edgeR::DGEList(counts = data, group = ID)
+  DGE <- edgeR::DGEList(counts = data, group = group_col)
   if(!is.null(batch)) {
-    DGE$samples <- data.frame(group = ID, batch)
+    DGE$samples <- data.frame(group = group_col, batch)
     batch <- colnames(DGE$samples)[-1]
   }
-  ID <- "group"
+  group_col <- "group"
   rm(data)
 
-  DEGs <- get_degs(data = DGE, ID = ID, type = type,
-                   counts = counts, method = method,
+  DEGs <- get_degs(data = DGE, group_col = group_col,
+                   target_group = target_group,
+                   normalize = normalize,
+                   feature_selection = feature_selection,
                    batch = batch,
                    ...)
   return(DEGs)
@@ -119,27 +125,29 @@ function(data,
 #' @rdname get_degs
 setMethod("get_degs", signature(
   data = 'Matrix',
-  ID = 'vector',
-  type = 'character'
+  group_col = 'vector',
+  target_group = 'character'
 ),
 function(data,
-         ID,
-         type,
-         counts = TRUE,
-         method = c("RP", "Group"),
+         group_col,
+         target_group,
+         normalize = TRUE,
+         feature_selection = c('auto', "rankproduct", "none"),
          batch = NULL,
          ...) {
 
-  DGE <- edgeR::DGEList(counts = data, group = ID)
+  DGE <- edgeR::DGEList(counts = data, group = group_col)
   if(!is.null(batch)) {
-    DGE$samples <- data.frame(group = ID, batch)
+    DGE$samples <- data.frame(group = group_col, batch)
     batch <- colnames(DGE$samples)[-1]
   }
-  ID <- "group"
+  group_col <- "group"
   rm(data)
 
-  DEGs <- get_degs(data = DGE, ID = ID, type = type,
-                   counts = counts, method = method,
+  DEGs <- get_degs(data = DGE, group_col = group_col,
+                   target_group = target_group,
+                   normalize = normalize,
+                   feature_selection = feature_selection,
                    batch = batch,
                    ...)
   return(DEGs)
@@ -148,14 +156,14 @@ function(data,
 #' @rdname get_degs
 setMethod("get_degs", signature(
   data = 'ExpressionSet',
-  ID = 'character',
-  type = 'character'
+  group_col = 'character',
+  target_group = 'character'
 ),
 function(data,
-         ID,
-         type,
-         counts = TRUE,
-         method = c("RP", "Group"),
+         group_col,
+         target_group,
+         normalize = TRUE,
+         feature_selection = c('auto', "rankproduct", "none"),
          batch = NULL,
          ...) {
 
@@ -164,13 +172,15 @@ function(data,
 
   DGE <- edgeR::DGEList(counts = expr,
                         samples = coldata,
-                        group = coldata[[ID]])
+                        group = coldata[[group_col]])
   if(!is.null(batch)) batch <- make.names(batch)
-  ID <- make.names(ID)
+  group_col <- make.names(group_col)
   rm(data, expr, coldata)
 
-  DEGs <- get_degs(data = DGE, ID = ID, type = type,
-                   counts = counts, method = method,
+  DEGs <- get_degs(data = DGE, group_col = group_col,
+                   target_group = target_group,
+                   normalize = normalize,
+                   feature_selection = feature_selection,
                    batch = batch,
                    ...)
   return(DEGs)
@@ -179,14 +189,14 @@ function(data,
 #' @rdname get_degs
 setMethod("get_degs", signature(
   data = 'SummarizedExperiment',
-  ID = 'character',
-  type = 'character'
+  group_col = 'character',
+  target_group = 'character'
 ),
 function(data,
-         ID,
-         type,
-         counts = TRUE,
-         method = c("RP", "Group"),
+         group_col,
+         target_group,
+         normalize = TRUE,
+         feature_selection = c('auto', "rankproduct", "none"),
          slot = "counts",
          batch = NULL,
          ...) {
@@ -196,13 +206,15 @@ function(data,
 
   DGE <- edgeR::DGEList(counts = expr,
                         samples = coldata,
-                        group = coldata[[ID]])
+                        group = coldata[[group_col]])
   if(!is.null(batch)) batch <- make.names(batch)
-  ID <- make.names(ID)
+  group_col <- make.names(group_col)
   rm(data, expr, coldata)
 
-  DEGs <- get_degs(data = DGE, ID = ID, type = type,
-                   counts = counts, method = method,
+  DEGs <- get_degs(data = DGE, group_col = group_col,
+                   target_group = target_group,
+                   normalize = normalize,
+                   feature_selection = feature_selection,
                    batch = batch,
                    ...)
   return(DEGs)
@@ -211,14 +223,14 @@ function(data,
 #' @rdname get_degs
 setMethod("get_degs", signature(
   data = 'Seurat',
-  ID = 'character',
-  type = 'character'
+  group_col = 'character',
+  target_group = 'character'
 ),
 function(data,
-         ID,
-         type,
-         counts = TRUE,
-         method = c("RP", "Group"),
+         group_col,
+         target_group,
+         normalize = TRUE,
+         feature_selection = c('auto', "rankproduct", "none"),
          slot = "counts",
          batch = NULL,
          ...) {
@@ -228,13 +240,15 @@ function(data,
 
   DGE <- edgeR::DGEList(counts = expr,
                         samples = coldata,
-                        group = coldata[[ID]])
+                        group = coldata[[group_col]])
   if(!is.null(batch)) batch <- make.names(batch)
-  ID <- make.names(ID)
+  group_col <- make.names(group_col)
   rm(data, expr, coldata)
 
-  DEGs <- get_degs(data = DGE, ID = ID, type = type,
-                   counts = counts, method = method,
+  DEGs <- get_degs(data = DGE, group_col = group_col,
+                   target_group = target_group,
+                   normalize = normalize,
+                   feature_selection = feature_selection,
                    batch = batch,
                    ...)
   return(DEGs)
@@ -246,25 +260,27 @@ function(data,
 #' @description Standard DE analysis by using edgeR and limma::voom pipeline
 #'
 #' @param dge DGEList object for DE analysis, including expr and samples info
-#' @param ID character, column name of coldata to specify the DE comparisons
-#' @param type pattern, specify the group of interest, e.g. NK
-#' @param counts logical, if the expr in data is raw counts data
-#' @param method either 'RP' or 'Group', choose whether to use rank product or
-#'               group other subsets for multiple comparisons for DE analysis,
-#'               default 'RP'
+#' @param group_col character, column name of coldata to specify the DE comparisons
+#' @param target_group pattern, specify the group of interest, e.g. NK
+#' @param normalize logical, if the expr in data is raw counts needs to be normalized
+#' @param feature_selection one of 'auto', "rankproduct" or "none", choose if to
+#'                          use rank product or not to select DEGs from multiple
+#'                          comparisons of DE analysis, default 'auto' uses
+#'                          'rankproduct' but change to 'none' if final genes < 5
+#'                          for both UP and DOWN.
 #' @param group logical, TRUE to separate samples into only 2 groups:
-#'              `type`` and 'Others'; FALSE to set each level as a group
+#'              `target_group`` and 'Others'; FALSE to set each level as a group
 #' @param filter a vector of 2 numbers, filter condition to remove low expression
-#'               genes, the 1st for min.counts (if counts = TRUE) or CPM/TPM
-#'               (if counts = F), the 2nd for samples size 'large.n'
+#'               genes, the 1st for min.counts (if normalize = TRUE) or CPM/TPM
+#'               (if normalize = FALSE), the 2nd for samples size 'large.n'
 #' @param plot logical, if to make plots to show QC before and after filtration
 #' @param lfc num, cutoff of logFC for DE analysis
 #' @param p num, cutoff of p value for DE analysis and permutation test if
-#'          method = "RP"
+#'          feature_selection = "rankproduct"
 #' @param markers vector, a vector of gene names, listed the gene symbols to be
 #'                kept anyway after filtration. Default 'NULL' means no special
 #'                genes need to be kept.
-#' @param gene_id character, specify the gene ID type of rownames of expression data
+#' @param gene_id character, specify the gene ID target_group of rownames of expression data
 #'                when markers is not NULL, could be one of 'ENSEMBL', 'SYMBOL',
 #'                'ENTREZ'..., default 'SYMBOL'
 #' @param batch vector of character, column name(s) of coldata to be treated as
@@ -275,10 +291,10 @@ function(data,
 #'
 #' @export
 de_analysis <- function(dge,
-                        ID,
-                        type,
-                        counts = TRUE,
-                        method = c("RP", "Group"),
+                        group_col,
+                        target_group,
+                        normalize = TRUE,
+                        feature_selection = c('auto', "rankproduct", "none"),
                         group = FALSE,
                         filter = c(10, 10),
                         plot = FALSE,
@@ -289,34 +305,43 @@ de_analysis <- function(dge,
                         batch = NULL,
                         ...) {
 
-  stopifnot(is.logical(counts), is.character(method), is.logical(group),
-            is.numeric(filter), is.logical(plot), is.numeric(lfc),
+  stopifnot(is.logical(normalize), is.character(feature_selection),
+            is.logical(group), is.numeric(filter),
+            is.logical(plot), is.numeric(lfc),
             is.numeric(p), is.character(gene_id))
 
-  method <- match.arg(method)
+  feature_selection <- match.arg(feature_selection)
 
   ## filter low counts genes
-  keep <- filterGenes(dge = dge, ID = ID, filter = filter, counts = counts,
-                      markers = markers, gene_id = gene_id)
+  keep <- filterGenes(dge = dge,
+                      group_col = group_col,
+                      filter = filter,
+                      normalize = normalize,
+                      markers = markers,
+                      gene_id = gene_id)
 
   ## plot distribution of unfiltered and filtered data
   if(plot) {
-    plot_density(dge = dge, ID = ID, keep = keep,
-                 counts = counts, filter = filter[1])
-    plot_rle(dge = dge, ID = ID, keep = keep, counts = counts)
-    plot_MDS(dge = dge, ID = ID, keep = keep, counts = counts)
+    plot_density(dge = dge, group_col = group_col, keep = keep,
+                 normalize = normalize, filter = filter[1])
+    plot_rle(dge = dge, group_col = group_col,
+             keep = keep, normalize = normalize)
+    plot_MDS(dge = dge, group_col = group_col,
+             keep = keep, normalize = normalize)
   }
 
   ## DE
   dge <- dge[keep, , keep.lib.sizes = FALSE]
   ## normalization for raw counts data
-  if(counts)
+  if(normalize)
     dge <- edgeR::calcNormFactors(dge, method = "TMM")
 
   ## voom linear fit by limma
   ## return a list of tfit and a processed DGEList
-  res <- voom_lm_fit(dge = dge, ID = ID, type = type, method = method,
-                     group = group, plot = plot, counts = counts,
+  res <- voom_lm_fit(dge = dge, group_col = group_col,
+                     target_group = target_group,
+                     feature_selection = feature_selection,
+                     group = group, plot = plot, normalize = normalize,
                      lfc = lfc, p = p, batch = batch)
 
   return(res)

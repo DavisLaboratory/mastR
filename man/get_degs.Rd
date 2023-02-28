@@ -12,10 +12,10 @@
 \usage{
 get_degs(
   data,
-  ID,
-  type,
-  counts = TRUE,
-  method = c("RP", "Group"),
+  group_col,
+  target_group,
+  normalize = TRUE,
+  feature_selection = c("auto", "rankproduct", "none"),
   slot = "counts",
   batch = NULL,
   ...
@@ -23,10 +23,10 @@ get_degs(
 
 \S4method{get_degs}{DGEList,character,character}(
   data,
-  ID,
-  type,
-  counts = TRUE,
-  method = c("RP", "Group"),
+  group_col,
+  target_group,
+  normalize = TRUE,
+  feature_selection = c("auto", "rankproduct", "none"),
   slot = "counts",
   batch = NULL,
   ...
@@ -34,10 +34,10 @@ get_degs(
 
 \S4method{get_degs}{matrix,vector,character}(
   data,
-  ID,
-  type,
-  counts = TRUE,
-  method = c("RP", "Group"),
+  group_col,
+  target_group,
+  normalize = TRUE,
+  feature_selection = c("auto", "rankproduct", "none"),
   slot = "counts",
   batch = NULL,
   ...
@@ -45,10 +45,10 @@ get_degs(
 
 \S4method{get_degs}{Matrix,vector,character}(
   data,
-  ID,
-  type,
-  counts = TRUE,
-  method = c("RP", "Group"),
+  group_col,
+  target_group,
+  normalize = TRUE,
+  feature_selection = c("auto", "rankproduct", "none"),
   slot = "counts",
   batch = NULL,
   ...
@@ -56,10 +56,10 @@ get_degs(
 
 \S4method{get_degs}{ExpressionSet,character,character}(
   data,
-  ID,
-  type,
-  counts = TRUE,
-  method = c("RP", "Group"),
+  group_col,
+  target_group,
+  normalize = TRUE,
+  feature_selection = c("auto", "rankproduct", "none"),
   slot = "counts",
   batch = NULL,
   ...
@@ -67,10 +67,10 @@ get_degs(
 
 \S4method{get_degs}{SummarizedExperiment,character,character}(
   data,
-  ID,
-  type,
-  counts = TRUE,
-  method = c("RP", "Group"),
+  group_col,
+  target_group,
+  normalize = TRUE,
+  feature_selection = c("auto", "rankproduct", "none"),
   slot = "counts",
   batch = NULL,
   ...
@@ -78,10 +78,10 @@ get_degs(
 
 \S4method{get_degs}{Seurat,character,character}(
   data,
-  ID,
-  type,
-  counts = TRUE,
-  method = c("RP", "Group"),
+  group_col,
+  target_group,
+  normalize = TRUE,
+  feature_selection = c("auto", "rankproduct", "none"),
   slot = "counts",
   batch = NULL,
   ...
@@ -90,16 +90,18 @@ get_degs(
 \arguments{
 \item{data}{expression object}
 
-\item{ID}{vector or character, specify the group factor or column name of
+\item{group_col}{vector or character, specify the group factor or column name of
 coldata for DE comparisons}
 
-\item{type}{pattern, specify the group of interest, e.g. NK}
+\item{target_group}{pattern, specify the group of interest, e.g. NK}
 
-\item{counts}{logical, if the expr in data is raw counts data}
+\item{normalize}{logical, if the expr in data is raw counts needs to be normalized}
 
-\item{method}{either 'RP' or 'Group', choose whether to use rank product or
-group other subsets for multiple comparisons for DE analysis,
-default 'RP'}
+\item{feature_selection}{one of 'auto', "rankproduct" or "none", choose if to
+use rank product or not to select DEGs from multiple
+comparisons of DE analysis, default 'auto' uses
+'rankproduct' but change to 'none' if final genes < 5
+for both UP and DOWN.}
 
 \item{slot}{character, specify which slot to use only for sce or seurat
 object, optional, default 'counts'}
@@ -124,7 +126,7 @@ store processed data.
 }
 \examples{
 data("im_data_6")
-DEGs <- get_degs(im_data_6, ID = "celltype:ch1",
-                 type = "NK", gene_id = "ENSEMBL")
+DEGs <- get_degs(im_data_6, group_col = "celltype:ch1",
+                 target_group = "NK", gene_id = "ENSEMBL")
 
 }

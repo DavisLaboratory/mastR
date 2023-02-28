@@ -8,12 +8,13 @@ NULL
 #'
 #' @param data expression data, can be matrix, DGEList, eSet, seurat, sce...
 #' @param sigs a vector of signature (Symbols)
-#' @param ID character or vector, specify the column name to compare in coldata
-#' @param type pattern, specify the group of interest as reference
+#' @param group_col character or vector, specify the column name to compare in coldata
+#' @param target_group pattern, specify the group of interest as reference
 #' @param plot.score logical, if to plot score instead of expression of signature
-#' @param counts logical, indicate if data is raw counts data
+#' @param normalize logical, TRUE indicates raw counts data to normalize and
+#'                  calculate cpm
 #' @param method a character string indicating which method to be used for
-#'               `stat_compare_means()` to compare the means across types,
+#'               `stat_compare_means()` to compare the means across groups,
 #'               could be "t.test", 'wilcox.test', 'anova'..., default "t.test"
 #' @param slot character, indicate which slot used for seurat/sce object
 #' @param gene_id character, indicate the ID type of rowname of expression data's ,
@@ -25,7 +26,7 @@ NULL
 #' data("im_data_6", "NK_markers")
 #' p <- sig_boxplot(
 #'   im_data_6, sigs = NK_markers$HGNC_Symbol[1:30],
-#'   ID = "celltype:ch1", type = "NK",
+#'   group_col = "celltype:ch1", target_group = "NK",
 #'   gene_id = "ENSEMBL"
 #' )
 #'
@@ -33,10 +34,10 @@ NULL
 setGeneric("sig_boxplot",
            function(data,
                     sigs,
-                    ID,
-                    type,
+                    group_col,
+                    target_group,
                     plot.score = TRUE,
-                    counts = TRUE,
+                    normalize = TRUE,
                     method = "t.test",
                     slot = "counts",
                     gene_id = "SYMBOL")
@@ -46,32 +47,33 @@ setGeneric("sig_boxplot",
 setMethod("sig_boxplot", signature(
   data = "matrix",
   sigs = "vector",
-  ID = "vector",
-  type = "character"
+  group_col = "vector",
+  target_group = "character"
 ),
 function(data,
          sigs,
-         ID,
-         type,
+         group_col,
+         target_group,
          plot.score = TRUE,
-         counts = TRUE,
+         normalize = TRUE,
          method = "t.test",
          gene_id = "SYMBOL") {
 
-  stopifnot(is.logical(counts), is.character(method), is.character(gene_id))
+  stopifnot(is.logical(normalize), is.character(method), is.character(gene_id))
 
   if(plot.score == TRUE) {
     ## plot scores of signature
     ## calculate scores
-    scores <- singscore_init(expr = data, sigs = sigs, by = ID,
-                             counts = counts, gene_id = gene_id)
+    scores <- singscore_init(expr = data, sigs = sigs, by = group_col,
+                             normalize = normalize, gene_id = gene_id)
     ## boxplot of scores
-    p <- score_boxplot_init(scores = scores, by = ID,
-                            type = type, method = method)
+    p <- score_boxplot_init(scores = scores, by = group_col,
+                            target_group = target_group, method = method)
   } else {
     ## plot median expression of signature
-    p <- exp_boxplot_init(expr = data, sigs = sigs, type = type,
-                          by = ID, counts = counts,
+    p <- exp_boxplot_init(expr = data, sigs = sigs,
+                          target_group = target_group,
+                          by = group_col, normalize = normalize,
                           method = method,
                           gene_id = gene_id)
   }
@@ -83,32 +85,36 @@ function(data,
 setMethod("sig_boxplot", signature(
   data = "Matrix",
   sigs = "vector",
-  ID = "vector",
-  type = "character"
+  group_col = "vector",
+  target_group = "character"
 ),
 function(data,
          sigs,
-         ID,
-         type,
+         group_col,
+         target_group,
          plot.score = TRUE,
-         counts = TRUE,
+         normalize = TRUE,
          method = "t.test",
          gene_id = "SYMBOL") {
 
-  stopifnot(is.logical(counts), is.character(method), is.character(gene_id))
+  stopifnot(is.logical(normalize), is.character(method), is.character(gene_id))
 
   if(plot.score == TRUE) {
     ## plot scores of signature
     ## calculate scores
-    scores <- singscore_init(expr = as.matrix(data), sigs = sigs, by = ID,
-                             counts = counts, gene_id = gene_id)
+    scores <- singscore_init(expr = as.matrix(data),
+                             sigs = sigs,
+                             by = group_col,
+                             normalize = normalize,
+                             gene_id = gene_id)
     ## boxplot of scores
-    p <- score_boxplot_init(scores = scores, by = ID,
-                            type = type, method = method)
+    p <- score_boxplot_init(scores = scores, by = group_col,
+                            target_group = target_group, method = method)
   } else {
     ## plot median expression of signature
-    p <- exp_boxplot_init(expr = data, sigs = sigs, type = type,
-                          by = ID, counts = counts,
+    p <- exp_boxplot_init(expr = data, sigs = sigs,
+                          target_group = target_group,
+                          by = group_col, normalize = normalize,
                           method = method,
                           gene_id = gene_id)
   }
@@ -120,26 +126,26 @@ function(data,
 setMethod("sig_boxplot", signature(
   data = "data.frame",
   sigs = "vector",
-  ID = "vector",
-  type = "character"
+  group_col = "vector",
+  target_group = "character"
 ),
 function(data,
          sigs,
-         ID,
-         type,
+         group_col,
+         target_group,
          plot.score = TRUE,
-         counts = TRUE,
+         normalize = TRUE,
          method = "t.test",
          gene_id = "SYMBOL") {
 
-  stopifnot(is.logical(counts), is.character(method), is.character(gene_id))
+  stopifnot(is.logical(normalize), is.character(method), is.character(gene_id))
 
   p <- sig_boxplot(data = as.matrix(data),
                    sigs = sigs,
-                   ID = ID,
-                   type = type,
+                   group_col = group_col,
+                   target_group = target_group,
                    plot.score = plot.score,
-                   counts = counts,
+                   normalize = normalize,
                    method = method,
                    gene_id = gene_id)
 
@@ -150,24 +156,24 @@ function(data,
 setMethod("sig_boxplot", signature(
   data = "DGEList",
   sigs = "vector",
-  ID = "character",
-  type = "character"
+  group_col = "character",
+  target_group = "character"
 ),
 function(data,
          sigs,
-         ID,
-         type,
+         group_col,
+         target_group,
          plot.score = TRUE,
-         counts = TRUE,
+         normalize = TRUE,
          method = "t.test",
          gene_id = "SYMBOL") {
 
   p <- sig_boxplot(data = data$counts,
                    sigs = sigs,
-                   ID = data$samples[[ID]],
-                   type = type,
+                   group_col = data$samples[[group_col]],
+                   target_group = target_group,
                    plot.score = plot.score,
-                   counts = counts,
+                   normalize = normalize,
                    method = method,
                    gene_id = gene_id)
   return(p)
@@ -177,24 +183,24 @@ function(data,
 setMethod("sig_boxplot", signature(
   data = "ExpressionSet",
   sigs = "vector",
-  ID = "character",
-  type = "character"
+  group_col = "character",
+  target_group = "character"
 ),
 function(data,
          sigs,
-         ID,
-         type,
+         group_col,
+         target_group,
          plot.score = TRUE,
-         counts = TRUE,
+         normalize = TRUE,
          method = "t.test",
          gene_id = "SYMBOL") {
 
   p <- sig_boxplot(data = Biobase::exprs(data),
                    sigs = sigs,
-                   ID = Biobase::pData(data)[[ID]],
-                   type = type,
+                   group_col = Biobase::pData(data)[[group_col]],
+                   target_group = target_group,
                    plot.score = plot.score,
-                   counts = counts,
+                   normalize = normalize,
                    method = method,
                    gene_id = gene_id)
   return(p)
@@ -204,25 +210,25 @@ function(data,
 setMethod("sig_boxplot", signature(
   data = "Seurat",
   sigs = "vector",
-  ID = "character",
-  type = "character"
+  group_col = "character",
+  target_group = "character"
 ),
 function(data,
          sigs,
-         ID,
-         type,
+         group_col,
+         target_group,
          plot.score = TRUE,
-         counts = TRUE,
+         normalize = TRUE,
          method = "t.test",
          slot = "counts",
          gene_id = "SYMBOL") {
 
   p <- sig_boxplot(data = Seurat::GetAssayData(data, slot = slot),
                    sigs = sigs,
-                   ID = data@meta.data[[ID]],
-                   type = type,
+                   group_col = data@meta.data[[group_col]],
+                   target_group = target_group,
                    plot.score = plot.score,
-                   counts = counts,
+                   normalize = normalize,
                    method = method,
                    gene_id = gene_id)
   return(p)
@@ -232,25 +238,25 @@ function(data,
 setMethod("sig_boxplot", signature(
   data = "SummarizedExperiment",
   sigs = "vector",
-  ID = "character",
-  type = "character"
+  group_col = "character",
+  target_group = "character"
 ),
 function(data,
          sigs,
-         ID,
-         type,
+         group_col,
+         target_group,
          plot.score = TRUE,
-         counts = TRUE,
+         normalize = TRUE,
          method = "t.test",
          slot = "counts",
          gene_id = "SYMBOL") {
 
   p <- sig_boxplot(data = SummarizedExperiment::assay(data, slot),
                    sigs = sigs,
-                   ID = data@colData[[ID]],
-                   type = type,
+                   group_col = data@colData[[group_col]],
+                   target_group = target_group,
                    plot.score = plot.score,
-                   counts = counts,
+                   normalize = normalize,
                    method = method,
                    gene_id = gene_id)
   return(p)
@@ -260,25 +266,25 @@ function(data,
 setMethod("sig_boxplot", signature(
   data = "list",
   sigs = "vector",
-  ID = "character",
-  type = "character"
+  group_col = "character",
+  target_group = "character"
 ),
 function(data,
          sigs,
-         ID,
-         type,
+         group_col,
+         target_group,
          plot.score = TRUE,
-         counts = TRUE,
+         normalize = TRUE,
          method = "t.test",
          slot = "counts",
          gene_id = "SYMBOL") {
 
-  if(length(counts) == 1)
-    counts <- rep(counts, length(data))
-  if(length(type) == 1)
-    type <- rep(type, length(data))
-  if(length(ID) == 1)
-    ID <- rep(ID, length(data))
+  if(length(normalize) == 1)
+    normalize <- rep(normalize, length(data))
+  if(length(target_group) == 1)
+    target_group <- rep(target_group, length(data))
+  if(length(group_col) == 1)
+    group_col <- rep(group_col, length(data))
   if(length(slot) == 1)
     slot <- rep(slot, length(data))
   if(length(gene_id) == 1)
@@ -290,10 +296,10 @@ function(data,
   for (i in seq_along(data)) {
     p[[i]] <- sig_boxplot(data = data[[i]],
                           sigs = sigs,
-                          ID = ID[[i]],
-                          type = type[i],
+                          group_col = group_col[[i]],
+                          target_group = target_group[i],
                           plot.score = plot.score[i],
-                          counts = counts[i],
+                          normalize = normalize[i],
                           method = method,
                           slot = slot[i],
                           gene_id = gene_id[i])

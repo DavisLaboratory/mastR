@@ -32,8 +32,8 @@ union genes of different comparisons, default 'intersect'}
 
 \item{nperm}{num, permutation runs of simulating the distribution}
 
-\item{thres}{num, cutoff for rank product permutation test if method = "RP",
-default 0.05}
+\item{thres}{num, cutoff for rank product permutation test if
+feature_selection = "rankproduct", default 0.05}
 
 \item{keep.top}{NULL or num, whether to keep top n DEGs of specific
 comparison}

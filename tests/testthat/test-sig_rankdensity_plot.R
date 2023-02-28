@@ -5,7 +5,7 @@ test_that("sig_rankdensity_plot works", {
   p <- sig_rankdensity_plot(
     im_data_6@assayData$exprs,
     sigs = NK_markers$HGNC_Symbol[1:20],
-    ID = im_data_6$`celltype:ch1`,
+    group_col = im_data_6$`celltype:ch1`,
     gene_id = "ENSEMBL"
   )
   expect_true(is.ggplot(p))
@@ -14,7 +14,7 @@ test_that("sig_rankdensity_plot works", {
   p <- sig_rankdensity_plot(
     im_data_6@assayData$exprs,
     sigs = NK_markers$HGNC_Symbol[1:20],
-    ID = im_data_6$`celltype:ch1`,
+    group_col = im_data_6$`celltype:ch1`,
     gene_id = "ENSEMBL",
     aggregate = TRUE
   )
@@ -25,7 +25,7 @@ test_that("sig_rankdensity_plot works", {
   p <- sig_rankdensity_plot(
     im_data_6,
     sigs = NK_markers$HGNC_Symbol[1:20],
-    ID = "celltype:ch1",
+    group_col = "celltype:ch1",
     gene_id = "ENSEMBL"
   )
   expect_true(is.ggplot(p))
@@ -34,7 +34,7 @@ test_that("sig_rankdensity_plot works", {
   p <- sig_rankdensity_plot(
     im_data_6,
     sigs = NK_markers$HGNC_Symbol[1:20],
-    ID = "celltype:ch1",
+    group_col = "celltype:ch1",
     gene_id = "ENSEMBL"
   )
   expect_true(is.ggplot(p))
@@ -44,7 +44,7 @@ test_that("sig_rankdensity_plot works", {
                         group = im_data_6$`celltype:ch1`)
   p <- sig_rankdensity_plot(
     dge, sigs = NK_markers$HGNC_Symbol[1:20],
-    ID = "group",
+    group_col = "group",
     gene_id = "ENSEMBL"
   )
   expect_true(is.ggplot(p))
@@ -55,7 +55,7 @@ test_that("sig_rankdensity_plot works", {
   p <- sig_rankdensity_plot(
     data_seurat,
     sigs = NK_markers$HGNC_Symbol[1:20],
-    ID = "group",
+    group_col = "group",
     gene_id = "ENSEMBL"
   )
   expect_true(is.ggplot(p))
@@ -64,7 +64,7 @@ test_that("sig_rankdensity_plot works", {
   p <- sig_rankdensity_plot(
     list(A = im_data_6, B = im_data_6),
     sigs = NK_markers$HGNC_Symbol[1:20],
-    ID = "celltype:ch1",
+    group_col = "celltype:ch1",
     gene_id = "ENSEMBL"
   )
   expect_true(is.ggplot(p))

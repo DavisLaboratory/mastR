@@ -4,7 +4,7 @@ test_that("sig_heatmap works", {
   p <- sig_heatmap(
     im_data_6@assayData$exprs,
     sigs = NK_markers$HGNC_Symbol[1:20],
-    ID = im_data_6$`celltype:ch1`,
+    group_col = im_data_6$`celltype:ch1`,
     markers = NK_markers$HGNC_Symbol,
     gene_id = "ENSEMBL"
   )
@@ -15,7 +15,7 @@ test_that("sig_heatmap works", {
   p <- sig_heatmap(
     im_data_6,
     sigs = NK_markers$HGNC_Symbol[1:20],
-    ID = "celltype:ch1",
+    group_col = "celltype:ch1",
     markers = NK_markers$HGNC_Symbol,
     gene_id = "ENSEMBL"
   )
@@ -25,7 +25,7 @@ test_that("sig_heatmap works", {
   p <- sig_heatmap(
     im_data_6,
     sigs = NK_markers$HGNC_Symbol[1:20],
-    ID = "celltype:ch1",
+    group_col = "celltype:ch1",
     markers = NK_markers$HGNC_Symbol,
     gene_id = "ENSEMBL"
   )
@@ -36,7 +36,7 @@ test_that("sig_heatmap works", {
                         group = im_data_6$`celltype:ch1`)
   p <- sig_heatmap(
     dge, sigs = NK_markers$HGNC_Symbol[1:20],
-    ID = "group",
+    group_col = "group",
     markers = NK_markers$HGNC_Symbol,
     gene_id = "ENSEMBL"
   )
@@ -48,7 +48,7 @@ test_that("sig_heatmap works", {
   p <- sig_heatmap(
     data_seurat,
     sigs = NK_markers$HGNC_Symbol[1:20],
-    ID = "group",
+    group_col = "group",
     markers = NK_markers$HGNC_Symbol,
     gene_id = "ENSEMBL"
   )
@@ -58,7 +58,7 @@ test_that("sig_heatmap works", {
   p <- sig_heatmap(
     list(A = im_data_6, B = im_data_6),
     sigs = NK_markers$HGNC_Symbol[1:20],
-    ID = "celltype:ch1",
+    group_col = "celltype:ch1",
     markers = NK_markers$HGNC_Symbol,
     gene_id = "ENSEMBL"
   )

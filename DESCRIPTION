@@ -19,7 +19,6 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Depends: 
-    org.Hs.eg.db,
     R (>= 4.2)
 LazyData: true
 Suggests: 
@@ -31,15 +30,13 @@ Suggests:
     rmarkdown,
     RobustRankAggreg,
     rvest,
-    SingleCellExperiment,
     singscore,
-    SummarizedExperiment,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    UpSetR
 Config/testthat/edition: 3
 Imports: 
     AnnotationDbi,
     Biobase,
-    BiocGenerics,
     depmap,
     dplyr,
     edgeR,
@@ -53,12 +50,14 @@ Imports:
     Matrix,
     methods,
     msigdb,
+    org.Hs.eg.db,
     patchwork,
     pheatmap,
     Seurat,
+    SingleCellExperiment,
     stats,
+    SummarizedExperiment,
     tidyr,
-    UpSetR,
     utils
 Collate: 
     'DE_functions.R'
@@ -68,9 +67,11 @@ Collate:
     'degs_generic.R'
     'filter_non_tissue.R'
     'filter_subset_sig.R'
+    'get_gsc_sig.R'
     'get_lm_sig.R'
-    'get_msigdb_sig.R'
     'get_panglao_sig.R'
+    'gls2gsc.R'
+    'gsc_plot.R'
     'list_panglao_organs.R'
     'list_panglao_types.R'
     'mastR_Package.R'

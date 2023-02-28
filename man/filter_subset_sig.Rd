@@ -9,13 +9,13 @@
 \usage{
 filter_subset_sig(
   data,
-  ID,
-  type,
+  group_col,
+  target_group,
   markers = NULL,
-  counts = TRUE,
+  normalize = TRUE,
   dir = "UP",
   gene_id = "SYMBOL",
-  method = "RP",
+  feature_selection = c("auto", "rankproduct", "none"),
   comb = union,
   filter = c(10, 10),
   s_thres = 0.05,
@@ -24,13 +24,13 @@ filter_subset_sig(
 
 \S4method{filter_subset_sig}{list}(
   data,
-  ID,
-  type,
+  group_col,
+  target_group,
   markers = NULL,
-  counts = TRUE,
+  normalize = TRUE,
   dir = "UP",
   gene_id = "SYMBOL",
-  method = "RP",
+  feature_selection = c("auto", "rankproduct", "none"),
   comb = union,
   filter = c(10, 10),
   s_thres = 0.05,
@@ -39,13 +39,13 @@ filter_subset_sig(
 
 \S4method{filter_subset_sig}{DGEList}(
   data,
-  ID,
-  type,
+  group_col,
+  target_group,
   markers = NULL,
-  counts = TRUE,
+  normalize = TRUE,
   dir = "UP",
   gene_id = "SYMBOL",
-  method = "RP",
+  feature_selection = c("auto", "rankproduct", "none"),
   comb = union,
   filter = c(10, 10),
   s_thres = 0.05,
@@ -54,13 +54,13 @@ filter_subset_sig(
 
 \S4method{filter_subset_sig}{ANY}(
   data,
-  ID,
-  type,
+  group_col,
+  target_group,
   markers = NULL,
-  counts = TRUE,
+  normalize = TRUE,
   dir = "UP",
   gene_id = "SYMBOL",
-  method = "RP",
+  feature_selection = c("auto", "rankproduct", "none"),
   comb = union,
   filter = c(10, 10),
   s_thres = 0.05,
@@ -70,36 +70,39 @@ filter_subset_sig(
 \arguments{
 \item{data}{An expression data or a list of expression data objects}
 
-\item{ID}{vector or character, specify the group factor or column name of
+\item{group_col}{vector or character, specify the group factor or column name of
 coldata for DE comparisons}
 
-\item{type}{pattern, specify the group of interest, e.g. NK}
+\item{target_group}{pattern, specify the group of interest, e.g. NK}
 
 \item{markers}{vector, a vector of gene names, listed the gene symbols to be
 kept anyway after filtration. Default 'NULL' means no special
 genes need to be kept.}
 
-\item{counts}{logical, if the expr in data is raw counts data}
+\item{normalize}{logical, if the expr in data is raw counts needs to be normalized}
 
 \item{dir}{character, could be 'UP' or 'DOWN' to use only up- or
 down-expressed genes}
 
-\item{gene_id}{character, specify the gene ID type of rownames of expression data
+\item{gene_id}{character, specify the gene ID target_group of rownames of expression data
 when markers is not NULL, could be one of 'ENSEMBL', 'SYMBOL',
 'ENTREZ'..., default 'SYMBOL'}
 
-\item{method}{either 'RP' or 'Group', choose whether to use rank product or
-group other subsets for multiple comparisons for DE analysis,
-default 'RP'}
+\item{feature_selection}{one of 'auto', "rankproduct" or "none", choose if to
+use rank product or not to select DEGs from multiple
+comparisons of DE analysis, default 'auto' uses
+'rankproduct' but change to 'none' if final genes < 5
+for both UP and DOWN.}
 
-\item{comb}{'RRA' or Fun, keep all passing genes or only intersected genes,
-could be \code{union} or \code{intersect} or \code{setdiff} or customed Fun,
-or could be 'RRA' to use Robust Rank Aggregation method for
-integrating multi-lists if DEGs, default 'union'}
+\item{comb}{'RRA' or Fun for combining sigs from multiple datasets, keep all
+passing genes or only intersected genes, could be \code{union} or
+\code{intersect} or \code{setdiff} or customed Fun, or could be 'RRA' to
+use Robust Rank Aggregation method for integrating multi-lists
+of sigs, default 'union'}
 
 \item{filter}{(list of) vector of 2 numbers, filter condition to remove low
-expression genes, the 1st for min.counts (if counts = TRUE) or
-CPM/TPM (if counts = F), the 2nd for samples size 'large.n'}
+expression genes, the 1st for min.counts (if normalize = TRUE)
+or CPM/TPM (if normalize = FALSE), the 2nd for samples size 'large.n'}
 
 \item{s_thres}{num, threshold of score if comb = 'RRA'}
 
@@ -109,7 +112,7 @@ CPM/TPM (if counts = F), the 2nd for samples size 'large.n'}
 a vector of gene symbols
 }
 \description{
-Specify the signature of the subset matched 'type' against other subsets,
+Specify the signature of the subset matched 'target_group' against other subsets,
 either "union", "intersect" or "RRA" can be specified when input is a list
 of datasets to integrate the signatures into one.
 }

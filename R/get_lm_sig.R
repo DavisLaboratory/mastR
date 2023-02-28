@@ -27,7 +27,9 @@ get_lm_sig <- function(lm7.pattern, lm22.pattern, ...) {
   if(!missing(lm7.pattern)) {
     stopifnot(is.character(lm7.pattern))
 
-    gs_7 <- subset(LM7, grepl(lm7.pattern, Subset, ...))$Gene
+    LM7 <- mastR::LM7
+    idx <- grep(lm7.pattern, LM7$Subset, ...)
+    gs_7 <- LM7$Gene[idx]
     gs_7 <- GSEABase::GeneSet(gs_7, setName = "LM7",
                               geneIdType = GSEABase::SymbolIdentifier())
     gs <- gs_7
@@ -37,6 +39,7 @@ get_lm_sig <- function(lm7.pattern, lm22.pattern, ...) {
   if(!missing(lm22.pattern)) {
     stopifnot(is.character(lm22.pattern))
 
+    LM22 <- mastR::LM22
     idx <- grep(lm22.pattern, colnames(LM22)[-1], ...)
     idx <- Reduce(function(x, y) {x == 1 | y == 1}, LM22[,-1][,idx]) |>
       as.logical()
@@ -50,5 +53,3 @@ get_lm_sig <- function(lm7.pattern, lm22.pattern, ...) {
   }
   return(gs)
 }
-
-utils::globalVariables(c("LM7", "LM22", "Subset"))

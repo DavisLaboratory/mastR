@@ -4,13 +4,10 @@
 \alias{merge_markers}
 \title{Merge markers list into one.}
 \usage{
-merge_markers(markers_list, plot = FALSE)
+merge_markers(...)
 }
 \arguments{
-\item{markers_list}{list of markers to be merged, can be a list of
-'GeneSet'/vector or a 'GeneSetCollection' object}
-
-\item{plot}{logical, if to make UpSetR plot for given list}
+\item{...}{GeneSet or GeneSetCollection object to be merged}
 }
 \value{
 A GeneSet class of union genes in the given list
@@ -22,11 +19,6 @@ indicate which DB each gene is from, this can be shown via
 \code{\link[jsonlite:fromJSON]{jsonlite::fromJSON()}}.
 }
 \examples{
-data("NK_markers")
-Panglao <- get_panglao_sig(type = "NK cells")
-Markers <- merge_markers(markers = list(
-                           NK_markers = NK_markers$HGNC_Symbol,
-                           PanglaoDB = GSEABase::geneIds(Panglao)
-                         ))
+Markers <- merge_markers(mastR::msigdb_gobp_nk[1:3])
 jsonlite::fromJSON(GSEABase::longDescription(Markers))
 }

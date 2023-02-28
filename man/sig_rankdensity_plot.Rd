@@ -15,8 +15,8 @@
 sig_rankdensity_plot(
   data,
   sigs,
-  ID,
-  counts = TRUE,
+  group_col,
+  normalize = TRUE,
   aggregate = FALSE,
   slot = "counts",
   gene_id = "SYMBOL"
@@ -25,8 +25,8 @@ sig_rankdensity_plot(
 \S4method{sig_rankdensity_plot}{matrix,vector,vector}(
   data,
   sigs,
-  ID,
-  counts = TRUE,
+  group_col,
+  normalize = TRUE,
   aggregate = FALSE,
   gene_id = "SYMBOL"
 )
@@ -34,8 +34,8 @@ sig_rankdensity_plot(
 \S4method{sig_rankdensity_plot}{Matrix,vector,vector}(
   data,
   sigs,
-  ID,
-  counts = TRUE,
+  group_col,
+  normalize = TRUE,
   aggregate = FALSE,
   gene_id = "SYMBOL"
 )
@@ -43,8 +43,8 @@ sig_rankdensity_plot(
 \S4method{sig_rankdensity_plot}{data.frame,vector,vector}(
   data,
   sigs,
-  ID,
-  counts = TRUE,
+  group_col,
+  normalize = TRUE,
   aggregate = FALSE,
   gene_id = "SYMBOL"
 )
@@ -52,8 +52,8 @@ sig_rankdensity_plot(
 \S4method{sig_rankdensity_plot}{DGEList,vector,character}(
   data,
   sigs,
-  ID,
-  counts = TRUE,
+  group_col,
+  normalize = TRUE,
   aggregate = FALSE,
   gene_id = "SYMBOL"
 )
@@ -61,8 +61,8 @@ sig_rankdensity_plot(
 \S4method{sig_rankdensity_plot}{ExpressionSet,vector,character}(
   data,
   sigs,
-  ID,
-  counts = TRUE,
+  group_col,
+  normalize = TRUE,
   aggregate = FALSE,
   gene_id = "SYMBOL"
 )
@@ -70,8 +70,8 @@ sig_rankdensity_plot(
 \S4method{sig_rankdensity_plot}{Seurat,vector,character}(
   data,
   sigs,
-  ID,
-  counts = TRUE,
+  group_col,
+  normalize = TRUE,
   aggregate = FALSE,
   slot = "counts",
   gene_id = "SYMBOL"
@@ -80,8 +80,8 @@ sig_rankdensity_plot(
 \S4method{sig_rankdensity_plot}{SummarizedExperiment,vector,character}(
   data,
   sigs,
-  ID,
-  counts = TRUE,
+  group_col,
+  normalize = TRUE,
   aggregate = FALSE,
   slot = "counts",
   gene_id = "SYMBOL"
@@ -90,8 +90,8 @@ sig_rankdensity_plot(
 \S4method{sig_rankdensity_plot}{list,vector,character}(
   data,
   sigs,
-  ID,
-  counts = TRUE,
+  group_col,
+  normalize = TRUE,
   aggregate = FALSE,
   slot = "counts",
   gene_id = "SYMBOL"
@@ -102,11 +102,12 @@ sig_rankdensity_plot(
 
 \item{sigs}{a vector of signature (Symbols)}
 
-\item{ID}{character or vector, specify the column name to compare in coldata}
+\item{group_col}{character or vector, specify the column name to compare in coldata}
 
-\item{counts}{logical, indicate if data is raw counts data}
+\item{normalize}{logical, TRUE indicates raw counts data to normalize and
+calculate cpm}
 
-\item{aggregate}{logical, if to aggregate expression according to \code{ID},
+\item{aggregate}{logical, if to aggregate expression according to \code{group_col},
 default FALSE}
 
 \item{slot}{character, indicate which slot used for seurat/sce object}
@@ -124,7 +125,7 @@ Show the rank density of given signature in the given comparison.
 data("im_data_6", "NK_markers")
 sig_rankdensity_plot(
   data = im_data_6, sigs = NK_markers$HGNC_Symbol[1:10],
-  ID = "celltype:ch1", gene_id = "ENSEMBL"
+  group_col = "celltype:ch1", gene_id = "ENSEMBL"
 )
 
 }

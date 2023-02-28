@@ -14,9 +14,9 @@
 sig_scatter_plot(
   data,
   sigs,
-  ID,
-  type,
-  counts = TRUE,
+  group_col,
+  target_group,
+  normalize = TRUE,
   slot = "counts",
   xint = 1,
   yint = 1,
@@ -26,9 +26,9 @@ sig_scatter_plot(
 \S4method{sig_scatter_plot}{matrix,vector,vector,character}(
   data,
   sigs,
-  ID,
-  type,
-  counts = TRUE,
+  group_col,
+  target_group,
+  normalize = TRUE,
   xint = 1,
   yint = 1,
   gene_id = "SYMBOL"
@@ -37,9 +37,9 @@ sig_scatter_plot(
 \S4method{sig_scatter_plot}{Matrix,vector,vector,character}(
   data,
   sigs,
-  ID,
-  type,
-  counts = TRUE,
+  group_col,
+  target_group,
+  normalize = TRUE,
   xint = 1,
   yint = 1,
   gene_id = "SYMBOL"
@@ -48,9 +48,9 @@ sig_scatter_plot(
 \S4method{sig_scatter_plot}{DGEList,vector,character,character}(
   data,
   sigs,
-  ID,
-  type,
-  counts = TRUE,
+  group_col,
+  target_group,
+  normalize = TRUE,
   xint = 1,
   yint = 1,
   gene_id = "SYMBOL"
@@ -59,9 +59,9 @@ sig_scatter_plot(
 \S4method{sig_scatter_plot}{ExpressionSet,vector,character,character}(
   data,
   sigs,
-  ID,
-  type,
-  counts = TRUE,
+  group_col,
+  target_group,
+  normalize = TRUE,
   xint = 1,
   yint = 1,
   gene_id = "SYMBOL"
@@ -70,9 +70,9 @@ sig_scatter_plot(
 \S4method{sig_scatter_plot}{Seurat,vector,character,character}(
   data,
   sigs,
-  ID,
-  type,
-  counts = TRUE,
+  group_col,
+  target_group,
+  normalize = TRUE,
   slot = "counts",
   xint = 1,
   yint = 1,
@@ -82,9 +82,9 @@ sig_scatter_plot(
 \S4method{sig_scatter_plot}{SummarizedExperiment,vector,character,character}(
   data,
   sigs,
-  ID,
-  type,
-  counts = TRUE,
+  group_col,
+  target_group,
+  normalize = TRUE,
   slot = "counts",
   xint = 1,
   yint = 1,
@@ -94,9 +94,9 @@ sig_scatter_plot(
 \S4method{sig_scatter_plot}{list,vector,character,character}(
   data,
   sigs,
-  ID,
-  type,
-  counts = TRUE,
+  group_col,
+  target_group,
+  normalize = TRUE,
   slot = "counts",
   xint = 1,
   yint = 1,
@@ -108,11 +108,12 @@ sig_scatter_plot(
 
 \item{sigs}{a vector of signature (Symbols)}
 
-\item{ID}{character or vector, specify the column name to compare in coldata}
+\item{group_col}{character or vector, specify the column name to compare in coldata}
 
-\item{type}{pattern, specify the group of interest as reference}
+\item{target_group}{pattern, specify the group of interest as reference}
 
-\item{counts}{logical, indicate if data is raw counts data}
+\item{normalize}{logical, TRUE indicates raw counts data to normalize and
+calculate cpm}
 
 \item{slot}{character, indicate which slot used for seurat/sce object}
 
@@ -134,7 +135,7 @@ the specific subset against other cell types.
 data("im_data_6", "NK_markers")
 sig_scatter_plot(
   sigs = NK_markers$HGNC_Symbol, data = im_data_6,
-  ID = "celltype:ch1", type = "NK",
+  group_col = "celltype:ch1", target_group = "NK",
   gene_id = "ENSEMBL"
 )
 

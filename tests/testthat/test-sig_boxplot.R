@@ -4,7 +4,7 @@ test_that("sig_boxplot works", {
   ### test expression boxplot
   p <- sig_boxplot(
     im_data_6, sigs = NK_markers$HGNC_Symbol[10:30],
-    ID = "celltype:ch1", type = "NK",
+    group_col = "celltype:ch1", target_group = "NK",
     plot.score = FALSE,
     gene_id = "ENSEMBL"
   )
@@ -13,7 +13,7 @@ test_that("sig_boxplot works", {
   ### test score boxplot
   p <- sig_boxplot(
     im_data_6, sigs = NK_markers$HGNC_Symbol[10:30],
-    ID = "celltype:ch1", type = "NK",
+    group_col = "celltype:ch1", target_group = "NK",
     plot.score = TRUE,
     gene_id = "ENSEMBL"
   )
@@ -24,7 +24,7 @@ test_that("sig_boxplot works", {
                         group = im_data_6$`celltype:ch1`)
   p <- sig_boxplot(
     dge, sigs = NK_markers$HGNC_Symbol[10:30],
-    ID = "group", type = "NK",
+    group_col = "group", target_group = "NK",
     gene_id = "ENSEMBL"
   )
   expect_true(is.ggplot(p))
@@ -34,7 +34,7 @@ test_that("sig_boxplot works", {
                                             meta.data = dge$samples)
   p <- sig_boxplot(
     data_seurat, sigs = NK_markers$HGNC_Symbol[10:30],
-    ID = "group", type = "NK",
+    group_col = "group", target_group = "NK",
     gene_id = "ENSEMBL"
   )
   expect_true(is.ggplot(p))
@@ -43,7 +43,7 @@ test_that("sig_boxplot works", {
   p <- sig_boxplot(
     list(A = im_data_6, B = im_data_6),
     sigs = NK_markers$HGNC_Symbol[10:30],
-    ID = "celltype:ch1", type = "NK",
+    group_col = "celltype:ch1", target_group = "NK",
     plot.score = c(TRUE, FALSE),
     gene_id = "ENSEMBL"
   )

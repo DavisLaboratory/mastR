@@ -3,8 +3,8 @@ test_that("filter_subset_sig works", {
   ## test matrix object
   sig <- filter_subset_sig(
     im_data_6@assayData$exprs,
-    ID = im_data_6$`celltype:ch1`,
-    type = "NK",
+    group_col = im_data_6$`celltype:ch1`,
+    target_group = "NK",
     markers = NK_markers$HGNC_Symbol,
     gene_id = "ENSEMBL"
   )
@@ -13,7 +13,7 @@ test_that("filter_subset_sig works", {
   ## test eSet object
   sig <- filter_subset_sig(
     im_data_6,
-    ID = "celltype:ch1", type = "NK",
+    group_col = "celltype:ch1", target_group = "NK",
     markers = NK_markers$HGNC_Symbol,
     gene_id = "ENSEMBL"
   )
@@ -24,7 +24,7 @@ test_that("filter_subset_sig works", {
                         group = im_data_6$`celltype:ch1`)
   sig <- filter_subset_sig(
     dge,
-    ID = "group", type = "NK",
+    group_col = "group", target_group = "NK",
     markers = NK_markers$HGNC_Symbol,
     gene_id = "ENSEMBL"
   )
@@ -35,7 +35,7 @@ test_that("filter_subset_sig works", {
                                             meta.data = dge$samples)
   sig <- filter_subset_sig(
     data_seurat,
-    ID = "group", type = "NK",
+    group_col = "group", target_group = "NK",
     markers = NK_markers$HGNC_Symbol,
     gene_id = "ENSEMBL"
   )
@@ -44,7 +44,7 @@ test_that("filter_subset_sig works", {
   ## test list objects
   p <- filter_subset_sig(
     list(A = im_data_6, B = im_data_6),
-    ID = "celltype:ch1", type = "NK",
+    group_col = "celltype:ch1", target_group = "NK",
     markers = NK_markers$HGNC_Symbol,
     gene_id = "ENSEMBL"
   )

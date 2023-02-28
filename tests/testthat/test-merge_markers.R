@@ -1,40 +1,28 @@
 test_that("merge_markers works", {
 
-  data("NK_markers")
-  Msig <- get_msigdb_sig(
-    pattern = "natural_killer_cell_mediated",
-    ignore.case = TRUE
-  )
-  Panglao <- get_panglao_sig(species = "Hs", type = "NK cells")
+  data("msigdb_gobp_nk")
 
   ## test GeneSetCollection
-  gsc <- GSEABase::GeneSetCollection(
-    list(NK_markers$HGNC_Symbol |>
-      GSEABase::GeneSet(setName = "NK_curson",
-                        geneIdType = GSEABase::SymbolIdentifier()),
-         Msig,
-         Panglao)
-  )
-  markers <- merge_markers(markers = gsc)
+  markers <- merge_markers(msigdb_gobp_nk)
 
   expect_s4_class(markers, "GeneSet")
-  expect_setequal(markers@geneIds, list(NK_markers$HGNC_Symbol,
-                                        Msig@geneIds,
-                                        Panglao@geneIds) |>
+  expect_setequal(markers@geneIds, GSEABase::geneIds(msigdb_gobp_nk) |>
                     Reduce(f = union))
 
-  ## test markers vector list
-  markers <- merge_markers(markers = list(NK = NK_markers$HGNC_Symbol,
-                                          MSigDB = Msig@geneIds,
-                                          PanglaoDB = Panglao@geneIds))
+  ## test GeneSet
+  markers <- merge_markers(msigdb_gobp_nk[[1]],
+                           msigdb_gobp_nk[[2]])
 
   expect_s4_class(markers, "GeneSet")
-  expect_setequal(markers@geneIds, list(NK_markers$HGNC_Symbol,
-                                        Msig@geneIds,
-                                        Panglao@geneIds) |>
-                    Reduce(f = union))
-  ## test un-named list
-  expect_error(merge_markers(markers = list(NK_markers,
-                                       Msig@geneIds,
-                                       Panglao@geneIds)))
+  expect_setequal(markers@geneIds,
+                  GSEABase::geneIds(msigdb_gobp_nk[1:2]) |> Reduce(f = union))
+
+  ## test on mixed GeneSet and GeneSetCollection
+  markers <- merge_markers(msigdb_gobp_nk[[1]], msigdb_gobp_nk[2:3])
+  expect_s4_class(markers, "GeneSet")
+  expect_setequal(markers@geneIds,
+                  GSEABase::geneIds(msigdb_gobp_nk[1:3]) |> Reduce(f = union))
+
+  ## test non- GeneSet or GeneSetCollection
+  expect_error(merge_markers(msigdb_gobp_nk[[1]]@geneIds))
 })

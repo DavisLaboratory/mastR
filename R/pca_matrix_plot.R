@@ -19,7 +19,7 @@ setGeneric("pca_matrix_plot",
            function(data,
                     features = "all",
                     slot = "counts",
-                    counts = TRUE,
+                    normalize = TRUE,
                     group_by = NULL,
                     scale = TRUE,
                     n = 4,
@@ -34,7 +34,7 @@ setMethod("pca_matrix_plot", signature(
 ),
 function(data,
          features = "all",
-         counts = TRUE,
+         normalize = TRUE,
          group_by = NULL,
          scale = TRUE,
          n = 4,
@@ -43,7 +43,7 @@ function(data,
          gene_id = "SYMBOL") {
 
   p <- pca_matrix_plot_init(data = data, features = features,
-                            counts = counts, group_by = group_by,
+                            normalize = normalize, group_by = group_by,
                             scale = scale, n = n, loading = loading,
                             n_loadings = n_loadings, gene_id = gene_id)
   return(p)
@@ -55,7 +55,7 @@ setMethod("pca_matrix_plot", signature(
 ),
 function(data,
          features = "all",
-         counts = TRUE,
+         normalize = TRUE,
          group_by = NULL,
          scale = TRUE,
          n = 4,
@@ -64,7 +64,7 @@ function(data,
          gene_id = "SYMBOL") {
 
   p <- pca_matrix_plot_init(data = data, features = features,
-                            counts = counts, group_by = group_by,
+                            normalize = normalize, group_by = group_by,
                             scale = scale, n = n, loading = loading,
                             n_loadings = n_loadings, gene_id = gene_id)
   return(p)
@@ -76,7 +76,7 @@ setMethod("pca_matrix_plot", signature(
 ),
 function(data,
          features = "all",
-         counts = TRUE,
+         normalize = TRUE,
          group_by = NULL,
          scale = TRUE,
          n = 4,
@@ -85,7 +85,7 @@ function(data,
          gene_id = "SYMBOL") {
 
   p <- pca_matrix_plot_init(data = data |> as.matrix(), features = features,
-                            counts = counts, group_by = group_by,
+                            normalize = normalize, group_by = group_by,
                             scale = scale, n = n, loading = loading,
                             n_loadings = n_loadings, gene_id = gene_id)
   return(p)
@@ -97,7 +97,7 @@ setMethod("pca_matrix_plot", signature(
 ),
 function(data,
          features = "all",
-         counts = TRUE,
+         normalize = TRUE,
          group_by = NULL,
          scale = TRUE,
          n = 4,
@@ -110,7 +110,7 @@ function(data,
   data <- Biobase::exprs(data)
 
   p <- pca_matrix_plot(data = data, features = features,
-                       counts = counts, group_by = group_by,
+                       normalize = normalize, group_by = group_by,
                        scale = scale, n = n, loading = loading,
                        n_loadings = n_loadings, gene_id = gene_id)
   return(p)
@@ -122,7 +122,7 @@ setMethod("pca_matrix_plot", signature(
 ),
 function(data,
          features = "all",
-         counts = TRUE,
+         normalize = TRUE,
          group_by = NULL,
          scale = TRUE,
          n = 4,
@@ -135,7 +135,7 @@ function(data,
   data <- data$counts
 
   p <- pca_matrix_plot(data = data, features = features,
-                       counts = counts, group_by = group_by,
+                       normalize = normalize, group_by = group_by,
                        scale = scale, n = n, loading = loading,
                        n_loadings = n_loadings, gene_id = gene_id)
   return(p)
@@ -148,7 +148,7 @@ setMethod("pca_matrix_plot", signature(
 function(data,
          features = "all",
          slot = "counts",
-         counts = TRUE,
+         normalize = TRUE,
          group_by = NULL,
          scale = TRUE,
          n = 4,
@@ -161,7 +161,7 @@ function(data,
   data <- SummarizedExperiment::assay(data, slot)
 
   p <- pca_matrix_plot(data = data, features = features,
-                       counts = counts, group_by = group_by,
+                       normalize = normalize, group_by = group_by,
                        scale = scale, n = n, loading = loading,
                        n_loadings = n_loadings, gene_id = gene_id)
   return(p)
@@ -174,7 +174,7 @@ setMethod("pca_matrix_plot", signature(
 function(data,
          features = "all",
          slot = "counts",
-         counts = TRUE,
+         normalize = TRUE,
          group_by = NULL,
          scale = TRUE,
          n = 4,
@@ -187,7 +187,7 @@ function(data,
   data <- Seurat::GetAssayData(data, slot = slot)
 
   p <- pca_matrix_plot(data = data, features = features,
-                       counts = counts, group_by = group_by,
+                       normalize = normalize, group_by = group_by,
                        scale = scale, n = n, loading = loading,
                        n_loadings = n_loadings, gene_id = gene_id)
   return(p)

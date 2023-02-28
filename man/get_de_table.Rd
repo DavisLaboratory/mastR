@@ -10,27 +10,27 @@
 \alias{get_de_table,Seurat,character,character-method}
 \title{Get DE analysis result table(s) with statistics}
 \usage{
-get_de_table(data, ID, type, slot = "counts", ...)
+get_de_table(data, group_col, target_group, slot = "counts", ...)
 
-\S4method{get_de_table}{DGEList,character,character}(data, ID, type, slot = "counts", ...)
+\S4method{get_de_table}{DGEList,character,character}(data, group_col, target_group, slot = "counts", ...)
 
-\S4method{get_de_table}{matrix,vector,character}(data, ID, type, slot = "counts", ...)
+\S4method{get_de_table}{matrix,vector,character}(data, group_col, target_group, slot = "counts", ...)
 
-\S4method{get_de_table}{Matrix,vector,character}(data, ID, type, slot = "counts", ...)
+\S4method{get_de_table}{Matrix,vector,character}(data, group_col, target_group, slot = "counts", ...)
 
-\S4method{get_de_table}{ExpressionSet,character,character}(data, ID, type, slot = "counts", ...)
+\S4method{get_de_table}{ExpressionSet,character,character}(data, group_col, target_group, slot = "counts", ...)
 
-\S4method{get_de_table}{SummarizedExperiment,character,character}(data, ID, type, slot = "counts", ...)
+\S4method{get_de_table}{SummarizedExperiment,character,character}(data, group_col, target_group, slot = "counts", ...)
 
-\S4method{get_de_table}{Seurat,character,character}(data, ID, type, slot = "counts", ...)
+\S4method{get_de_table}{Seurat,character,character}(data, group_col, target_group, slot = "counts", ...)
 }
 \arguments{
 \item{data}{expression object}
 
-\item{ID}{vector or character, specify the group factor or column name of
+\item{group_col}{vector or character, specify the group factor or column name of
 coldata for DE comparisons}
 
-\item{type}{pattern, specify the group of interest, e.g. NK}
+\item{target_group}{pattern, specify the group of interest, e.g. NK}
 
 \item{slot}{character, specify which slot to use only for sce or seurat
 object, optional, default 'counts'}
@@ -48,6 +48,6 @@ object \code{proc_data} to store processed data.
 }
 \examples{
 data("im_data_6")
-DE_tables <- get_de_table(im_data_6, ID = "celltype:ch1", type = "NK")
+DE_tables <- get_de_table(im_data_6, group_col = "celltype:ch1", target_group = "NK")
 
 }

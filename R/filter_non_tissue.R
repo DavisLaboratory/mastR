@@ -1,11 +1,11 @@
-#' @title Specify cell type signature against adherent cancer cell lines.
+#' @title Specify cell target_group signature against adherent cancer cell lines.
 #'
 #' @description Specify signatures against specific tissues or cell lines,
 #'   and generate CCLE_tpm_new after retrieving specific tissues.
 #'
 #' @param data 'CCLE' or expression object
-#' @param ID vector or character, to specify the group of tumor/tissue types
-#' @param type pattern, specify the type of interest, e.g. 'colorectal', match
+#' @param group_col vector or character, to specify the group of tumor/tissue target_groups
+#' @param target_group pattern, specify the target_group of interest, e.g. 'colorectal', match
 #'             to primary_disease of CCLE if data is 'CCLE'
 #' @param ... params for [grep()] to find matched cell lines in CCLE
 #' @param log logical, if to do log transformation on expression
@@ -21,14 +21,14 @@
 #'
 #' @examples
 #' data("NK_markers", "ccle_crc_5")
-#' filter_non_tissue(ccle_crc_5, ID = "cancer", type = "CRC",
+#' filter_non_tissue(ccle_crc_5, group_col = "cancer", target_group = "CRC",
 #'                   markers = NK_markers$HGNC_Symbol)
 #'
 #' @export
 setGeneric("filter_non_tissue",
            function(data = 'CCLE',
-                    ID,
-                    type,
+                    group_col,
+                    target_group,
                     ...,
                     log = FALSE,
                     q = 0.25,
@@ -40,12 +40,12 @@ setGeneric("filter_non_tissue",
 #' @rdname filter_non_tissue
 setMethod("filter_non_tissue", signature(
   data = 'matrix',
-  ID = 'vector',
-  type = 'character'
+  group_col = 'vector',
+  target_group = 'character'
 ),
 function(data = 'CCLE',
-         ID,
-         type,
+         group_col,
+         target_group,
          ...,
          log = FALSE,
          q = 0.25,
@@ -55,7 +55,7 @@ function(data = 'CCLE',
   stopifnot(is.logical(log), is.numeric(q), is.logical(ignore.case))
 
   ## select interested samples
-  idx <- grep(type, ID, ignore.case = ignore.case, ...)
+  idx <- grep(target_group, group_col, ignore.case = ignore.case, ...)
   data <- data[,idx]
 
   ## log-transformation on expr
@@ -84,12 +84,12 @@ function(data = 'CCLE',
 #' @rdname filter_non_tissue
 setMethod("filter_non_tissue", signature(
   data = 'Matrix',
-  ID = 'vector',
-  type = 'character'
+  group_col = 'vector',
+  target_group = 'character'
 ),
 function(data = 'CCLE',
-         ID,
-         type,
+         group_col,
+         target_group,
          ...,
          log = FALSE,
          q = 0.25,
@@ -99,7 +99,7 @@ function(data = 'CCLE',
   stopifnot(is.logical(log), is.numeric(q), is.logical(ignore.case))
 
   ## select interested samples
-  idx <- grep(type, ID, ignore.case = ignore.case, ...)
+  idx <- grep(target_group, group_col, ignore.case = ignore.case, ...)
   data <- data[,idx]
 
   ## log-transformation on expr
@@ -128,12 +128,12 @@ function(data = 'CCLE',
 #' @rdname filter_non_tissue
 setMethod("filter_non_tissue", signature(
   data = 'data.frame',
-  ID = 'vector',
-  type = 'character'
+  group_col = 'vector',
+  target_group = 'character'
 ),
 function(data = 'CCLE',
-         ID,
-         type,
+         group_col,
+         target_group,
          ...,
          log = FALSE,
          q = 0.25,
@@ -141,7 +141,7 @@ function(data = 'CCLE',
          ignore.case = TRUE) {
 
   non_tissue_genes <- filter_non_tissue(data = as.matrix(data),
-                                        ID = ID, type = type,
+                                        group_col = group_col, target_group = target_group,
                                         log = log, q = q,
                                         markers = markers,
                                         ignore.case = ignore.case,
@@ -153,12 +153,12 @@ function(data = 'CCLE',
 #' @rdname filter_non_tissue
 setMethod("filter_non_tissue", signature(
   data = 'character',
-  ID = 'missing',
-  type = 'character'
+  group_col = 'missing',
+  target_group = 'character'
 ),
 function(data = 'CCLE',
-         ID,
-         type,
+         group_col,
+         target_group,
          ...,
          log = FALSE,
          q = 0.25,
@@ -186,8 +186,8 @@ function(data = 'CCLE',
   cell_lines <- CCLE_meta$primary_disease[idx]
 
   non_tissue_genes <- filter_non_tissue(data = CCLE,
-                                        ID = cell_lines,
-                                        type = type,
+                                        group_col = cell_lines,
+                                        target_group = target_group,
                                         log = log, q = q,
                                         markers = markers,
                                         ignore.case = ignore.case,
@@ -199,12 +199,12 @@ function(data = 'CCLE',
 #' @rdname filter_non_tissue
 setMethod("filter_non_tissue", signature(
   data = 'missing',
-  ID = 'missing',
-  type = 'character'
+  group_col = 'missing',
+  target_group = 'character'
 ),
 function(data = 'CCLE',
-         ID,
-         type,
+         group_col,
+         target_group,
          ...,
          log = FALSE,
          q = 0.25,
@@ -212,7 +212,7 @@ function(data = 'CCLE',
          ignore.case = TRUE) {
 
   non_tissue_genes <- filter_non_tissue(data = 'CCLE',
-                                        type = type,
+                                        target_group = target_group,
                                         log = log, q = q,
                                         markers = markers,
                                         ignore.case = ignore.case,
@@ -224,12 +224,12 @@ function(data = 'CCLE',
 #' @rdname filter_non_tissue
 setMethod("filter_non_tissue", signature(
   data = 'DGEList',
-  ID = 'character',
-  type = 'character'
+  group_col = 'character',
+  target_group = 'character'
 ),
 function(data = 'CCLE',
-         ID,
-         type,
+         group_col,
+         target_group,
          ...,
          log = FALSE,
          q = 0.25,
@@ -237,8 +237,8 @@ function(data = 'CCLE',
          ignore.case = TRUE) {
 
   non_tissue_genes <- filter_non_tissue(data = data$counts,
-                                        ID = data$samples[[ID]],
-                                        type = type,
+                                        group_col = data$samples[[group_col]],
+                                        target_group = target_group,
                                         log = log, q = q,
                                         markers = markers,
                                         ignore.case = ignore.case,
@@ -250,12 +250,12 @@ function(data = 'CCLE',
 #' @rdname filter_non_tissue
 setMethod("filter_non_tissue", signature(
   data = 'ExpressionSet',
-  ID = 'character',
-  type = 'character'
+  group_col = 'character',
+  target_group = 'character'
 ),
 function(data = 'CCLE',
-         ID,
-         type,
+         group_col,
+         target_group,
          ...,
          log = FALSE,
          q = 0.25,
@@ -263,8 +263,8 @@ function(data = 'CCLE',
          ignore.case = TRUE) {
 
   non_tissue_genes <- filter_non_tissue(data = data@assayData$exprs,
-                                        ID = data[[ID]],
-                                        type = type,
+                                        group_col = data[[group_col]],
+                                        target_group = target_group,
                                         log = log, q = q,
                                         markers = markers,
                                         ignore.case = ignore.case,
@@ -276,12 +276,12 @@ function(data = 'CCLE',
 #' @rdname filter_non_tissue
 setMethod("filter_non_tissue", signature(
   data = 'SummarizedExperiment',
-  ID = 'character',
-  type = 'character'
+  group_col = 'character',
+  target_group = 'character'
 ),
 function(data = 'CCLE',
-         ID,
-         type,
+         group_col,
+         target_group,
          ...,
          log = FALSE,
          q = 0.25,
@@ -292,8 +292,8 @@ function(data = 'CCLE',
   stopifnot(is.character(slot))
 
   non_tissue_genes <- filter_non_tissue(data = SummarizedExperiment::assay(data, slot),
-                                        ID = SummarizedExperiment::colData(data)[[ID]],
-                                        type = type,
+                                        group_col = SummarizedExperiment::colData(data)[[group_col]],
+                                        target_group = target_group,
                                         log = log, q = q,
                                         markers = markers,
                                         ignore.case = ignore.case,
@@ -305,12 +305,12 @@ function(data = 'CCLE',
 #' @rdname filter_non_tissue
 setMethod("filter_non_tissue", signature(
   data = 'Seurat',
-  ID = 'character',
-  type = 'character'
+  group_col = 'character',
+  target_group = 'character'
 ),
 function(data = 'CCLE',
-         ID,
-         type,
+         group_col,
+         target_group,
          ...,
          log = FALSE,
          q = 0.25,
@@ -322,8 +322,8 @@ function(data = 'CCLE',
 
   non_tissue_genes <- filter_non_tissue(
     data = Seurat::GetAssayData(data, slot = slot),
-    ID = data@meta.data[[ID]],
-    type = type,
+    group_col = data@meta.data[[group_col]],
+    target_group = target_group,
     log = log, q = q,
     markers = markers,
     ignore.case = ignore.case,

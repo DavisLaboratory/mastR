@@ -15,7 +15,7 @@ pca_matrix_plot(
   data,
   features = "all",
   slot = "counts",
-  counts = TRUE,
+  normalize = TRUE,
   group_by = NULL,
   scale = TRUE,
   n = 4,
@@ -27,7 +27,7 @@ pca_matrix_plot(
 \S4method{pca_matrix_plot}{matrix}(
   data,
   features = "all",
-  counts = TRUE,
+  normalize = TRUE,
   group_by = NULL,
   scale = TRUE,
   n = 4,
@@ -39,7 +39,7 @@ pca_matrix_plot(
 \S4method{pca_matrix_plot}{Matrix}(
   data,
   features = "all",
-  counts = TRUE,
+  normalize = TRUE,
   group_by = NULL,
   scale = TRUE,
   n = 4,
@@ -51,7 +51,7 @@ pca_matrix_plot(
 \S4method{pca_matrix_plot}{data.frame}(
   data,
   features = "all",
-  counts = TRUE,
+  normalize = TRUE,
   group_by = NULL,
   scale = TRUE,
   n = 4,
@@ -63,7 +63,7 @@ pca_matrix_plot(
 \S4method{pca_matrix_plot}{ExpressionSet}(
   data,
   features = "all",
-  counts = TRUE,
+  normalize = TRUE,
   group_by = NULL,
   scale = TRUE,
   n = 4,
@@ -75,7 +75,7 @@ pca_matrix_plot(
 \S4method{pca_matrix_plot}{DGEList}(
   data,
   features = "all",
-  counts = TRUE,
+  normalize = TRUE,
   group_by = NULL,
   scale = TRUE,
   n = 4,
@@ -88,7 +88,7 @@ pca_matrix_plot(
   data,
   features = "all",
   slot = "counts",
-  counts = TRUE,
+  normalize = TRUE,
   group_by = NULL,
   scale = TRUE,
   n = 4,
@@ -101,7 +101,7 @@ pca_matrix_plot(
   data,
   features = "all",
   slot = "counts",
-  counts = TRUE,
+  normalize = TRUE,
   group_by = NULL,
   scale = TRUE,
   n = 4,
@@ -119,7 +119,8 @@ PCA, default 'all'}
 \item{slot}{character, specify the slot name of seurat or sce object,
 optional}
 
-\item{counts}{logical, TRUE indicates to calculate cpm before PCA}
+\item{normalize}{logical, TRUE indicates raw counts data to normalize and
+calculate cpm before PCA}
 
 \item{group_by}{character, specify the column to be grouped and colored,
 default NULL}

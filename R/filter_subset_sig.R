@@ -1,22 +1,23 @@
 #' Filter specific cell type signature genes against other subsets.
 #'
-#' Specify the signature of the subset matched 'type' against other subsets,
+#' Specify the signature of the subset matched 'target_group' against other subsets,
 #' either "union", "intersect" or "RRA" can be specified when input is a list
 #' of datasets to integrate the signatures into one.
 #'
 #' @inheritParams de_analysis
 #' @param data An expression data or a list of expression data objects
-#' @param ID vector or character, specify the group factor or column name of
+#' @param group_col vector or character, specify the group factor or column name of
 #'           coldata for DE comparisons
 #' @param dir character, could be 'UP' or 'DOWN' to use only up- or
 #'            down-expressed genes
-#' @param comb 'RRA' or Fun, keep all passing genes or only intersected genes,
-#'              could be `union` or `intersect` or `setdiff` or customed Fun,
-#'              or could be 'RRA' to use Robust Rank Aggregation method for
-#'              integrating multi-lists if DEGs, default 'union'
+#' @param comb 'RRA' or Fun for combining sigs from multiple datasets, keep all
+#'             passing genes or only intersected genes, could be `union` or
+#'             `intersect` or `setdiff` or customed Fun, or could be 'RRA' to
+#'             use Robust Rank Aggregation method for integrating multi-lists
+#'             of sigs, default 'union'
 #' @param filter (list of) vector of 2 numbers, filter condition to remove low
-#'               expression genes, the 1st for min.counts (if counts = TRUE) or
-#'               CPM/TPM (if counts = F), the 2nd for samples size 'large.n'
+#'               expression genes, the 1st for min.counts (if normalize = TRUE)
+#'               or CPM/TPM (if normalize = FALSE), the 2nd for samples size 'large.n'
 #' @param s_thres num, threshold of score if comb = 'RRA'
 #' @param ... other params for [get_degs()]
 #'
@@ -31,13 +32,13 @@
 #' @export
 setGeneric("filter_subset_sig",
            function(data,
-                    ID,
-                    type,
+                    group_col,
+                    target_group,
                     markers = NULL,
-                    counts = TRUE,
+                    normalize = TRUE,
                     dir = "UP",
                     gene_id = "SYMBOL",
-                    method = "RP",
+                    feature_selection = c('auto', "rankproduct", "none"),
                     comb = union,
                     filter = c(10, 10),
                     s_thres = 0.05,
@@ -47,28 +48,28 @@ setGeneric("filter_subset_sig",
 #' @rdname filter_subset_sig
 setMethod("filter_subset_sig", signature(
   data = 'list',
-  ID = 'ANY',
-  type = 'ANY'
+  group_col = 'ANY',
+  target_group = 'ANY'
 ),
 function(data,
-         ID,
-         type,
+         group_col,
+         target_group,
          markers = NULL,
-         counts = TRUE,
+         normalize = TRUE,
          dir = "UP",
          gene_id = "SYMBOL",
-         method = "RP",
+         feature_selection = c('auto', "rankproduct", "none"),
          comb = union,
          filter = c(10, 10),
          s_thres = 0.05,
          ...) {
 
-  stopifnot(is.character(dir), is.character(method),
+  stopifnot(is.character(dir), is.character(feature_selection),
             is.numeric(s_thres), is.character(gene_id))
 
   if (!is.null(markers)) {
     stopifnot("Please provide a vector of gene symbols!" = is.vector(markers))
-    markers <- AnnotationDbi::select(org.Hs.eg.db,
+    markers <- AnnotationDbi::select(org.Hs.eg.db::org.Hs.eg.db,
                                      markers,
                                      gene_id, "SYMBOL")
   }
@@ -86,12 +87,12 @@ function(data,
   #   }
   # )
 
-  if(length(ID) == 1)
-    ID <- rep(ID, length(data))
-  if(length(type) == 1)
-    type <- rep(type, length(data))
-  if(length(counts) == 1)
-    counts <- rep(counts, length(data))
+  if(length(group_col) == 1)
+    group_col <- rep(group_col, length(data))
+  if(length(target_group) == 1)
+    target_group <- rep(target_group, length(data))
+  if(length(normalize) == 1)
+    normalize <- rep(normalize, length(data))
   if(length(gene_id) == 1)
     gene_id <- rep(gene_id, length(data))
   if(!is.list(filter) & length(filter) == 2)
@@ -99,8 +100,10 @@ function(data,
 
   NK_against_subsets <- list()
   for (i in seq_along(data)) {
-    DEGs <- get_degs(data = data[[i]], ID = ID[[i]], type = type[[i]],
-                     counts = counts[[i]], method = method,
+    DEGs <- get_degs(data = data[[i]], group_col = group_col[[i]],
+                     target_group = target_group[[i]],
+                     normalize = normalize[[i]],
+                     feature_selection = feature_selection,
                      markers = markers$SYMBOL |> unique(),
                      filter = filter[[i]],
                      gene_id = gene_id[[i]], ...)[[dir]]
@@ -123,28 +126,28 @@ function(data,
 #' @rdname filter_subset_sig
 setMethod("filter_subset_sig", signature(
   data = 'DGEList',
-  ID = 'ANY',
-  type = 'ANY'
+  group_col = 'ANY',
+  target_group = 'ANY'
 ),
 function(data,
-         ID,
-         type,
+         group_col,
+         target_group,
          markers = NULL,
-         counts = TRUE,
+         normalize = TRUE,
          dir = "UP",
          gene_id = "SYMBOL",
-         method = "RP",
+         feature_selection = c('auto', "rankproduct", "none"),
          comb = union,
          filter = c(10, 10),
          s_thres = 0.05,
          ...) {
 
-  stopifnot(is.character(dir), is.character(method),
+  stopifnot(is.character(dir), is.character(feature_selection),
             is.numeric(s_thres), is.character(gene_id))
 
   if (!is.null(markers)) {
     stopifnot("Please provide a vector of gene symbols!" = is.vector(markers))
-    markers <- AnnotationDbi::select(org.Hs.eg.db,
+    markers <- AnnotationDbi::select(org.Hs.eg.db::org.Hs.eg.db,
                                      markers,
                                      gene_id, "SYMBOL")
   }
@@ -162,8 +165,10 @@ function(data,
   #   }
   # )
 
-  DEGs <- get_degs(data = data, ID = ID, type = type,
-                   counts = counts, method = method,
+  DEGs <- get_degs(data = data, group_col = group_col,
+                   target_group = target_group,
+                   normalize = normalize,
+                   feature_selection = feature_selection,
                    markers = markers$SYMBOL |> unique(),
                    filter = filter,
                    gene_id = gene_id, ...)[[dir]]
@@ -180,28 +185,28 @@ function(data,
 #' @rdname filter_subset_sig
 setMethod("filter_subset_sig", signature(
   data = 'ANY',
-  ID = 'ANY',
-  type = 'ANY'
+  group_col = 'ANY',
+  target_group = 'ANY'
 ),
 function(data,
-         ID,
-         type,
+         group_col,
+         target_group,
          markers = NULL,
-         counts = TRUE,
+         normalize = TRUE,
          dir = "UP",
          gene_id = "SYMBOL",
-         method = "RP",
+         feature_selection = c('auto', "rankproduct", "none"),
          comb = union,
          filter = c(10, 10),
          s_thres = 0.05,
          ...) {
 
-  stopifnot(is.character(dir), is.character(method),
+  stopifnot(is.character(dir), is.character(feature_selection),
             is.numeric(s_thres), is.character(gene_id))
 
   if (!is.null(markers)) {
     stopifnot("Please provide a vector of gene symbols!" = is.vector(markers))
-    markers <- AnnotationDbi::select(org.Hs.eg.db,
+    markers <- AnnotationDbi::select(org.Hs.eg.db::org.Hs.eg.db,
                                      markers,
                                      gene_id, "SYMBOL")
   }
@@ -219,8 +224,10 @@ function(data,
   #   }
   # )
 
-  DEGs <- get_degs(data = data, ID = ID, type = type,
-                   counts = counts, method = method,
+  DEGs <- get_degs(data = data, group_col = group_col,
+                   target_group = target_group,
+                   normalize = normalize,
+                   feature_selection = feature_selection,
                    markers = markers$SYMBOL |> unique(),
                    filter = filter,
                    gene_id = gene_id, ...)[[dir]]
@@ -233,5 +240,3 @@ function(data,
 
   return(NK_against_subsets)
 })
-
-utils::globalVariables(c("org.Hs.eg.db"))

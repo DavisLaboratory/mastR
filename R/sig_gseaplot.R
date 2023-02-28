@@ -16,15 +16,15 @@ NULL
 #' sig_gseaplot(sigs = list(A = NK_markers$HGNC_Symbol[1:15],
 #'                          B = NK_markers$HGNC_Symbol[20:40],
 #'                          C = NK_markers$HGNC_Symbol[60:75]),
-#'              data = im_data_6, ID = "celltype:ch1",
-#'              type = "NK", gene_id = "ENSEMBL")
+#'              data = im_data_6, group_col = "celltype:ch1",
+#'              target_group = "NK", gene_id = "ENSEMBL")
 #'
 #' @export
 setGeneric("sig_gseaplot",
            function(data,
                     sigs,
-                    ID,
-                    type,
+                    group_col,
+                    target_group,
                     gene_id = "SYMBOL",
                     digits = 2,
                     slot = "counts",
@@ -35,13 +35,13 @@ setGeneric("sig_gseaplot",
 setMethod("sig_gseaplot", signature(
   data = 'ANY',
   sigs = 'vector',
-  ID = 'ANY',
-  type = 'ANY'
+  group_col = 'ANY',
+  target_group = 'ANY'
 ),
 function(data,
          sigs,
-         ID,
-         type,
+         group_col,
+         target_group,
          gene_id = "SYMBOL",
          digits = 2,
          slot = "counts",
@@ -50,7 +50,7 @@ function(data,
   stopifnot(is.character(gene_id), is.numeric(digits))
 
   ## get DEGs tables list with statistics
-  tDEG <- get_de_table(data = data, ID = ID, type = type,
+  tDEG <- get_de_table(data = data, group_col = group_col, target_group = target_group,
                        markers = Reduce(union, sigs),
                        gene_id = gene_id,
                        slot = slot,
@@ -58,7 +58,8 @@ function(data,
 
   tDEG <- tDEG[which(names(tDEG) != "proc_data")]  ## only keep DEG tables
   gsets <- data.frame(SYMBOL = sigs, set = "Signature")
-  ids <- AnnotationDbi::select(org.Hs.eg.db, gsets[,1],
+  ids <- AnnotationDbi::select(org.Hs.eg.db::org.Hs.eg.db,
+                               gsets[,1],
                                columns = gene_id,
                                keytype = "SYMBOL")
   gsets <- merge(gsets, ids, all = TRUE, by.x = "SYMBOL", by.y = "SYMBOL")
@@ -73,13 +74,13 @@ function(data,
 setMethod("sig_gseaplot", signature(
   data = 'ANY',
   sigs = 'list',
-  ID = 'ANY',
-  type = 'ANY'
+  group_col = 'ANY',
+  target_group = 'ANY'
 ),
 function(data,
          sigs,
-         ID,
-         type,
+         group_col,
+         target_group,
          gene_id = "SYMBOL",
          digits = 2,
          slot = "counts",
@@ -88,7 +89,7 @@ function(data,
   stopifnot(is.character(gene_id), is.numeric(digits))
 
   ## get DEGs tables list with statistics
-  tDEG <- get_de_table(data = data, ID = ID, type = type,
+  tDEG <- get_de_table(data = data, group_col = group_col, target_group = target_group,
                        markers = Reduce(union, sigs),
                        gene_id = gene_id,
                        slot = slot,
@@ -100,7 +101,8 @@ function(data,
     names(sigs) <- seq_along(sigs)  ## set gene list names
   gsets <- utils::stack(sigs)
   colnames(gsets) <- c("SYMBOL", "set")
-  ids <- AnnotationDbi::select(org.Hs.eg.db, gsets[,1],
+  ids <- AnnotationDbi::select(org.Hs.eg.db::org.Hs.eg.db,
+                               gsets[,1],
                                columns = gene_id,
                                keytype = "SYMBOL")
   gsets <- merge(gsets, ids, all = TRUE, by.x = "SYMBOL", by.y = "SYMBOL")
@@ -115,13 +117,13 @@ function(data,
 setMethod("sig_gseaplot", signature(
   data = 'DGEList',
   sigs = 'vector',
-  ID = 'ANY',
-  type = 'ANY'
+  group_col = 'ANY',
+  target_group = 'ANY'
 ),
 function(data,
          sigs,
-         ID,
-         type,
+         group_col,
+         target_group,
          gene_id = "SYMBOL",
          digits = 2,
          ...) {
@@ -129,14 +131,15 @@ function(data,
   stopifnot(is.character(gene_id), is.numeric(digits))
 
   ## get DEGs tables list with statistics
-  tDEG <- get_de_table(data = data, ID = ID, type = type,
+  tDEG <- get_de_table(data = data, group_col = group_col, target_group = target_group,
                        markers = Reduce(union, sigs),
                        gene_id = gene_id,
                        ...)
 
   tDEG <- tDEG[which(names(tDEG) != "proc_data")]  ## only keep DEG tables
   gsets <- data.frame(SYMBOL = sigs, set = "Signature")
-  ids <- AnnotationDbi::select(org.Hs.eg.db, gsets[,1],
+  ids <- AnnotationDbi::select(org.Hs.eg.db::org.Hs.eg.db,
+                               gsets[,1],
                                columns = gene_id,
                                keytype = "SYMBOL")
   gsets <- merge(gsets, ids, all = TRUE, by.x = "SYMBOL", by.y = "SYMBOL")
@@ -151,13 +154,13 @@ function(data,
 setMethod("sig_gseaplot", signature(
   data = 'DGEList',
   sigs = 'list',
-  ID = 'ANY',
-  type = 'ANY'
+  group_col = 'ANY',
+  target_group = 'ANY'
 ),
 function(data,
          sigs,
-         ID,
-         type,
+         group_col,
+         target_group,
          gene_id = "SYMBOL",
          digits = 2,
          ...) {
@@ -165,7 +168,7 @@ function(data,
   stopifnot(is.character(gene_id), is.numeric(digits))
 
   ## get DEGs tables list with statistics
-  tDEG <- get_de_table(data = data, ID = ID, type = type,
+  tDEG <- get_de_table(data = data, group_col = group_col, target_group = target_group,
                        markers = Reduce(union, sigs),
                        gene_id = gene_id,
                        ...)
@@ -176,7 +179,8 @@ function(data,
     names(sigs) <- seq_along(sigs)  ## set gene list names
   gsets <- utils::stack(sigs)
   colnames(gsets) <- c("SYMBOL", "set")
-  ids <- AnnotationDbi::select(org.Hs.eg.db, gsets[,1],
+  ids <- AnnotationDbi::select(org.Hs.eg.db::org.Hs.eg.db,
+                               gsets[,1],
                                columns = gene_id,
                                keytype = "SYMBOL")
   gsets <- merge(gsets, ids, all = TRUE, by.x = "SYMBOL", by.y = "SYMBOL")
@@ -191,13 +195,13 @@ function(data,
 setMethod("sig_gseaplot", signature(
   data = 'list',
   sigs = 'ANY',
-  ID = 'ANY',
-  type = 'ANY'
+  group_col = 'ANY',
+  target_group = 'ANY'
 ),
 function(data,
          sigs,
-         ID,
-         type,
+         group_col,
+         target_group,
          gene_id = "SYMBOL",
          digits = 2,
          slot = "counts",
@@ -205,10 +209,10 @@ function(data,
 
   stopifnot(is.character(gene_id), is.numeric(digits))
 
-  if(length(type) == 1)
-    type <- rep(type, length(data))
-  if(length(ID) == 1)
-    ID <- rep(ID, length(data))
+  if(length(target_group) == 1)
+    target_group <- rep(target_group, length(data))
+  if(length(group_col) == 1)
+    group_col <- rep(group_col, length(data))
   if(length(gene_id) == 1)
     gene_id <- rep(gene_id, length(data))
   if(length(slot) == 1)
@@ -218,8 +222,8 @@ function(data,
   for (i in seq_along(data)) {
     p[[i]] <- sig_gseaplot(data = data[[i]],
                            sigs = sigs,
-                           ID = ID[[i]],
-                           type = type[i],
+                           group_col = group_col[[i]],
+                           target_group = target_group[i],
                            gene_id = gene_id[i],
                            digits = digits,
                            slot = slot[i],
@@ -234,5 +238,3 @@ function(data,
 
   return(p)
 })
-
-utils::globalVariables(c("org.Hs.eg.db"))

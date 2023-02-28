@@ -15,13 +15,13 @@ NULL
 #'
 #' @examples
 #' data("im_data_6")
-#' DE_tables <- get_de_table(im_data_6, ID = "celltype:ch1", type = "NK")
+#' DE_tables <- get_de_table(im_data_6, group_col = "celltype:ch1", target_group = "NK")
 #'
 #'@export
 setGeneric("get_de_table",
            function(data,
-                    ID,
-                    type,
+                    group_col,
+                    target_group,
                     slot = "counts",
                     ...)
            standardGeneric("get_de_table"))
@@ -29,23 +29,23 @@ setGeneric("get_de_table",
 #' @rdname get_de_table
 setMethod("get_de_table", signature(
   data = 'DGEList',
-  ID = 'character',
-  type = 'character'
+  group_col = 'character',
+  target_group = 'character'
 ),
 function(data,
-         ID,
-         type,
+         group_col,
+         target_group,
          ...) {
 
   DGE <- data
-  DGE$samples$group <- DGE$samples[[ID]]
+  DGE$samples$group <- DGE$samples[[group_col]]
   rm(data)
 
   ## standard DE analysis with edgeR and limma::voom pipeline
   voom_res <- de_analysis(
     dge = DGE,
-    ID = ID,
-    type = type,
+    group_col = group_col,
+    target_group = target_group,
     ...
   )
 
@@ -66,19 +66,19 @@ function(data,
 #' @rdname get_de_table
 setMethod("get_de_table", signature(
   data = 'matrix',
-  ID = 'vector',
-  type = 'character'
+  group_col = 'vector',
+  target_group = 'character'
 ),
 function(data,
-         ID,
-         type,
+         group_col,
+         target_group,
          ...) {
 
-  DGE <- edgeR::DGEList(counts = data, group = ID)
-  ID <- "group"
+  DGE <- edgeR::DGEList(counts = data, group = group_col)
+  group_col <- "group"
   rm(data)
 
-  DE_table <- get_de_table(data = DGE, ID = ID, type = type, ...)
+  DE_table <- get_de_table(data = DGE, group_col = group_col, target_group = target_group, ...)
 
   return(DE_table)
 })
@@ -86,19 +86,19 @@ function(data,
 #' @rdname get_de_table
 setMethod("get_de_table", signature(
   data = 'Matrix',
-  ID = 'vector',
-  type = 'character'
+  group_col = 'vector',
+  target_group = 'character'
 ),
 function(data,
-         ID,
-         type,
+         group_col,
+         target_group,
          ...) {
 
-  DGE <- edgeR::DGEList(counts = data, group = ID)
-  ID <- "group"
+  DGE <- edgeR::DGEList(counts = data, group = group_col)
+  group_col <- "group"
   rm(data)
 
-  DE_table <- get_de_table(data = DGE, ID = ID, type = type, ...)
+  DE_table <- get_de_table(data = DGE, group_col = group_col, target_group = target_group, ...)
 
   return(DE_table)
 })
@@ -106,12 +106,12 @@ function(data,
 #' @rdname get_de_table
 setMethod("get_de_table", signature(
   data = 'ExpressionSet',
-  ID = 'character',
-  type = 'character'
+  group_col = 'character',
+  target_group = 'character'
 ),
 function(data,
-         ID,
-         type,
+         group_col,
+         target_group,
          ...) {
 
   expr <- Biobase::exprs(data)
@@ -119,11 +119,11 @@ function(data,
 
   DGE <- edgeR::DGEList(counts = expr,
                         samples = coldata,
-                        group = coldata[[ID]])
-  ID <- make.names(ID)
+                        group = coldata[[group_col]])
+  group_col <- make.names(group_col)
   rm(data, expr, coldata)
 
-  DE_table <- get_de_table(data = DGE, ID = ID, type = type, ...)
+  DE_table <- get_de_table(data = DGE, group_col = group_col, target_group = target_group, ...)
 
   return(DE_table)
 })
@@ -131,12 +131,12 @@ function(data,
 #' @rdname get_de_table
 setMethod("get_de_table", signature(
   data = 'SummarizedExperiment',
-  ID = 'character',
-  type = 'character'
+  group_col = 'character',
+  target_group = 'character'
 ),
 function(data,
-         ID,
-         type,
+         group_col,
+         target_group,
          slot = "counts",
          ...) {
 
@@ -145,11 +145,11 @@ function(data,
 
   DGE <- edgeR::DGEList(counts = expr,
                         samples = coldata,
-                        group = coldata[[ID]])
-  ID <- make.names(ID)
+                        group = coldata[[group_col]])
+  group_col <- make.names(group_col)
   rm(data, expr, coldata)
 
-  DE_table <- get_de_table(data = DGE, ID = ID, type = type, ...)
+  DE_table <- get_de_table(data = DGE, group_col = group_col, target_group = target_group, ...)
 
   return(DE_table)
 })
@@ -157,12 +157,12 @@ function(data,
 #' @rdname get_de_table
 setMethod("get_de_table", signature(
   data = 'Seurat',
-  ID = 'character',
-  type = 'character'
+  group_col = 'character',
+  target_group = 'character'
 ),
 function(data,
-         ID,
-         type,
+         group_col,
+         target_group,
          slot = "counts",
          ...) {
 
@@ -171,11 +171,11 @@ function(data,
 
   DGE <- edgeR::DGEList(counts = expr,
                         samples = coldata,
-                        group = coldata[[ID]])
-  ID <- make.names(ID)
+                        group = coldata[[group_col]])
+  group_col <- make.names(group_col)
   rm(data, expr, coldata)
 
-  DE_table <- get_de_table(data = DGE, ID = ID, type = type, ...)
+  DE_table <- get_de_table(data = DGE, group_col = group_col, target_group = target_group, ...)
 
   return(DE_table)
 })

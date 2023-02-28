@@ -5,7 +5,7 @@
 #'   cell size. (min.cells <= size <= max.cells)
 #'
 #' @param data a matrix or Seurat/SCE object containing expression and metadata
-#' @param by a vector of ID names or dataframe for aggregation
+#' @param by a vector of group names or dataframe for aggregation
 #' @param fun chr, methods used to aggregate cells, could be 'sum' or 'mean',
 #'            default 'sum'
 #' @param scale a num or NULL, if to multiply a scale to the average expression
@@ -184,7 +184,7 @@ pseudo_sample_list <- function(data,
                                by,
                                min.cells = 0,
                                max.cells = Inf) {
-  ## split cell IDs based on give factor(s)
+  ## split cell groups based on given factor(s)
   l <- split(colnames(data), by)
 
   psamples <- lapply(l, function(cells) {
