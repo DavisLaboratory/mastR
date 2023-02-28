@@ -1,4 +1,5 @@
 test_that("get_degs works", {
+  data("im_data_6")
   ## test Expression object
   DEGs <- get_degs(im_data_6, ID = "celltype:ch1", type = "NK")
   expect_identical(names(DEGs), c("UP", "DOWN", "proc_data"))
@@ -35,5 +36,10 @@ test_that("get_degs works", {
   DEGs <- get_degs(data_sce,
                    ID = "celltype.ch1",
                    type = "NK")
+  expect_identical(names(DEGs), c("UP", "DOWN", "proc_data"))
+
+  ## test batch effect correction
+  DEGs <- get_degs(im_data_6, ID = "celltype:ch1",
+                   type = "NK", batch = "race:ch1")
   expect_identical(names(DEGs), c("UP", "DOWN", "proc_data"))
 })

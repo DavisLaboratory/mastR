@@ -17,6 +17,7 @@ get_degs(
   counts = TRUE,
   method = c("RP", "Group"),
   slot = "counts",
+  batch = NULL,
   ...
 )
 
@@ -27,6 +28,7 @@ get_degs(
   counts = TRUE,
   method = c("RP", "Group"),
   slot = "counts",
+  batch = NULL,
   ...
 )
 
@@ -37,6 +39,7 @@ get_degs(
   counts = TRUE,
   method = c("RP", "Group"),
   slot = "counts",
+  batch = NULL,
   ...
 )
 
@@ -47,6 +50,7 @@ get_degs(
   counts = TRUE,
   method = c("RP", "Group"),
   slot = "counts",
+  batch = NULL,
   ...
 )
 
@@ -57,6 +61,7 @@ get_degs(
   counts = TRUE,
   method = c("RP", "Group"),
   slot = "counts",
+  batch = NULL,
   ...
 )
 
@@ -67,6 +72,7 @@ get_degs(
   counts = TRUE,
   method = c("RP", "Group"),
   slot = "counts",
+  batch = NULL,
   ...
 )
 
@@ -77,6 +83,7 @@ get_degs(
   counts = TRUE,
   method = c("RP", "Group"),
   slot = "counts",
+  batch = NULL,
   ...
 )
 }
@@ -97,6 +104,9 @@ default 'RP'}
 \item{slot}{character, specify which slot to use only for sce or seurat
 object, optional, default 'counts'}
 
+\item{batch}{vector of column name(s) or dataframe, specify the batch effect
+factor(s), default NULL}
+
 \item{...}{params for \code{\link[=de_analysis]{de_analysis()}} and \code{\link[=DEGs_RP]{DEGs_RP()}} or \code{\link[=DEGs_Group]{DEGs_Group()}}}
 }
 \value{
@@ -113,6 +123,7 @@ limma::voom and limma::treat, and also create an object \code{proc_data} to
 store processed data.
 }
 \examples{
+data("im_data_6")
 DEGs <- get_degs(im_data_6, ID = "celltype:ch1",
                  type = "NK", gene_id = "ENSEMBL")
 

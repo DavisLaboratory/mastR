@@ -24,7 +24,7 @@ filterGenes <- function(dge, ID, filter = c(10, 10), counts = TRUE,
 #helper: voom and linear regression fit for DE based on limma
 voom_lm_fit <- function(dge, ID, type, method = c("RP", "Group"),
                         group = FALSE, plot = FALSE, counts = TRUE,
-                        lfc = 0, p = 0.05) {
+                        lfc = 0, p = 0.05, batch = NULL) {
 
   method <- match.arg(method)
 
@@ -46,12 +46,13 @@ voom_lm_fit <- function(dge, ID, type, method = c("RP", "Group"),
   }
 
   ## make contrast design
-  design <- model.matrix(~ 0 + factor(dge$samples$group))
-  colnames(design) <- levels(factor(dge$samples$group))
+  form <- formula(paste(c("~0", "group", batch), collapse = "+"))
+  design <- model.matrix(form, dge$samples)
+  colnames(design) <- gsub("group", "", colnames(design))
   rownames(design) <- colnames(dge)
   contrast.mat <- limma::makeContrasts(
-    contrasts = c(paste(levels(factor(dge$samples$group))[1],
-                        levels(factor(dge$samples$group))[-1],
+    contrasts = c(paste(levels(dge$samples$group)[1],
+                        levels(dge$samples$group)[-1],
                         sep = "-"
     )),
     ## type vs all the rest respectively, if group = TRUE, it's type vs Others
@@ -175,13 +176,13 @@ DEGs_RP <- function(tfit, lfc = 0, p = 0.05, assemble = "intersect",
       stop("Please specify at least one valid comparison for keep.group!")
     ## get top n UP DEGs for specified comparison
     tmp <- lapply(which(grepl(keep.group, colnames(tfit))), \(i) {
-      tmp <- DEG[[i]] |> dplyr::arrange_(.dots = Rank)
+      tmp <- DEG[[i]] |> dplyr::arrange(!!sym(Rank))
       tmp <- rownames(tmp)[tmp$lfc > 0][seq_len(keep.top)]
     })
     DEGs[["UP"]] <- Reduce(union, c(list(DEGs[["UP"]]), tmp))
     ## get top n DOWN DEGs for specified comparison
     tmp <- lapply(which(grepl(keep.group, colnames(tfit))), \(i) {
-      tmp <- DEG[[i]] |> dplyr::arrange_(.dots = Rank)
+      tmp <- DEG[[i]] |> dplyr::arrange(!!sym(Rank))
       tmp <- rownames(tmp)[tmp$lfc < 0][seq_len(keep.top)]
     })
     DEGs[["DOWN"]] <- Reduce(union, c(list(DEGs[["DOWN"]]), tmp))
@@ -237,13 +238,13 @@ DEGs_Group <- function(tfit, lfc = 0, p = 0.05,
       stop("Please specify at least one valid comparison for keep.group!")
     ## get top n UP DEGs for specified comparison
     tmp <- lapply(which(grepl(keep.group, colnames(tfit))), \(i) {
-      tmp <- DEG[[i]] |> dplyr::arrange_(.dots = Rank)
+      tmp <- DEG[[i]] |> dplyr::arrange(!!sym(Rank))
       tmp <- rownames(tmp)[tmp$lfc > 0][seq_len(keep.top)]
     })
     DEGs[["UP"]] <- Reduce(union, c(list(DEGs[["UP"]]), tmp))
     ## get top n DOWN DEGs for specified comparison
     tmp <- lapply(which(grepl(keep.group, colnames(tfit))), \(i) {
-      tmp <- DEG[[i]] |> dplyr::arrange_(.dots = Rank)
+      tmp <- DEG[[i]] |> dplyr::arrange(!!sym(Rank))
       tmp <- rownames(tmp)[tmp$lfc < 0][seq_len(keep.top)]
     })
     DEGs[["DOWN"]] <- Reduce(union, c(list(DEGs[["DOWN"]]), tmp))

@@ -1,4 +1,5 @@
 test_that("sig_heatmap works", {
+  data("im_data_6", "NK_markers")
   ## test matrix object
   p <- sig_heatmap(
     im_data_6@assayData$exprs,

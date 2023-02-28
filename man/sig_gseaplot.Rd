@@ -100,6 +100,7 @@ patchwork object for all comparisons
 Visualize GSEA result with multiple lists of genes by using \code{clusterProfiler}.
 }
 \examples{
+data("im_data_6", "NK_markers")
 sig_gseaplot(sigs = list(A = NK_markers$HGNC_Symbol[1:15],
                          B = NK_markers$HGNC_Symbol[20:40],
                          C = NK_markers$HGNC_Symbol[60:75]),

@@ -69,6 +69,8 @@ To screen the immune subset signatures, we have to load the example datasets. Th
 ```{r setup}
 library(mastR)
 library(ggplot2)
+
+data("im_data_6", "NK_markers", "LM22", "LM7", "ccle_crc_5")
 ```
 
 ### NK markers from [Curson's Publication](https://aacrjournals.org/cancerimmunolres/article/7/7/1162/469488/A-Gene-Signature-Predicting-Natural-Killer-Cell)
@@ -140,14 +142,17 @@ Finally, all markers can be merged into one 'GeneSet' object by using function `
 The input can be a list of vectors of genes, or a list of GeneSet objects, or a GeneSetCollection object. `plot = TRUE` requires the list to have > 1 elements.
 
 ```{r integrate markers}
-Markers <- merge_markers(markers_list = list(
-  NK_markers = NK_markers$HGNC_Symbol |> 
-    GeneSet(geneIdType = SymbolIdentifier(), setName = "NK_markers"),
-  LM7 = LM[["LM7"]],
-  LM22 = LM[["LM22"]],
-  MSigDB = MSig,
-  PanglaoDB = Panglao
-  ), 
+nk_m <- NK_markers$HGNC_Symbol |> 
+    GeneSet(geneIdType = SymbolIdentifier(), setName = "NK_markers")
+
+Markers <- merge_markers(
+  markers_list = list(
+    NK_markers = nk_m,
+    LM7 = LM[["LM7"]],
+    LM22 = LM[["LM22"]],
+    MSigDB = MSig,
+    PanglaoDB = Panglao
+    ),
   plot = TRUE)
 
 ## can also use on GeneSetCollection
@@ -176,14 +181,15 @@ Only samples from healthy individuals are kept, and 'Whole Blood' or 'PBMC' cell
 ```{r im_data_6}
 im_data_6
 
-edgeR::DGEList(
-  counts = exprs(im_data_6),
-  samples = pData(im_data_6)
-)[["samples"]][, c(
+idx <- c(
   "lib.size", "donorid.ch1", "smoker.ch1",
   "cellcount.ch1", "collectiondate.ch1",
   "celltype.ch1", "gender.ch1"
-)]
+)
+edgeR::DGEList(
+  counts = exprs(im_data_6),
+  samples = pData(im_data_6)
+)[["samples"]][, idx]
 ```
 
 To find the passing genes, low expression genes filtration needs to be done first. `get_degs()` function can filter low expression genes out from immune dataset, generate a filtered `proc_data` object and return a differentially expressed genes list ('UP' and 'DOWN').
@@ -268,17 +274,18 @@ pca_matrix_plot(proc_data[DEG_6$UP,], group_by = "celltype.ch1",
 
 ## Specify Markers Against Tissue
 
-The example uses `CCLE_tpm` from [DepMap CCLE](https://depmap.org/portal/download/), containing RSEM quantified TPM data of 1392 cancer cell lines (until 2022.04).
+The example uses `CCLE_tpm` from [DepMap CCLE](https://depmap.org/portal/download/), containing RSEM quantified TPM data of 1392 cancer cell lines (until 2022.04). For fast test, here we only selected 5 CRC cell line samples as a small test dataset `ccle_crc_5`.
 
 ```{r CCLE_tpm}
-CCLE <- depmap::depmap_TPM()
-CCLE_meta <- depmap::depmap_metadata()
+# CCLE <- depmap::depmap_TPM()
+# CCLE_meta <- depmap::depmap_metadata()
 
-CCLE[1:10,]
+ccle_crc_5[1:10,]
 ```
 
-To specify NK markers for CRC, use `filter_non_tissue()` function to remove failing genes which are also highly expressed by CRC adherent cell lines *per se*. This function would also generate `CCLE_tpm_new` object, extracting all `type` relevant cell lines.
+To specify NK markers for CRC, use `filter_non_tissue()` function to remove failing genes which are also highly expressed by CRC adherent cell lines *per se*.
 
+* `ID` param is the group vector of input samples, or the name of group column.
 * `type` param is an expression pattern to specify the tissue of interest, here we choose 'colorectal' to select all colorectal adherent cell lines.  
 * `ignore.case` means whether to ignore the capital or not.  
 * `log = TURE` would do log transformation to the data.  
@@ -286,24 +293,26 @@ To specify NK markers for CRC, use `filter_non_tissue()` function to remove fail
 * `markers` param is the updated markers pool.
 
 ```{r markers for cancer cell line}
-## convert CCLE from long to wide data format
-CCLE <- CCLE[,c("gene_name", "cell_line", "rna_expression")] %>% 
-  tidyr::pivot_wider(names_from = "cell_line", values_from = "rna_expression", values_fn = dplyr::first) |> data.frame()
-rownames(CCLE) <- CCLE$gene_name
-CCLE$gene_name <- NULL
-
-## match depmap ID of CCLE TPM to CCLE meta to get disease names
-idx <- match(colnames(CCLE), CCLE_meta$cell_line)
-cell_lines <- CCLE_meta$primary_disease[idx]
+# ## convert CCLE from long to wide data format
+# CCLE <- CCLE[,c("gene_name", "cell_line", "rna_expression")] |>
+#   tidyr::pivot_wider(names_from = "cell_line",
+#                      values_from = "rna_expression") |>
+#   data.frame()
+# rownames(CCLE) <- CCLE$gene_name
+# CCLE$gene_name <- NULL
+# 
+# ## match depmap ID of CCLE TPM to CCLE meta to get disease names
+# idx <- match(colnames(CCLE), CCLE_meta$cell_line)
+# cell_lines <- CCLE_meta$primary_disease[idx]
 
 ## markers against for CRC cell lines
-m_ccl <- filter_non_tissue(data = CCLE,
-                           ID = cell_lines,
-                           type = "colorectal",
+m_ccl <- filter_non_tissue(data = ccle_crc_5,
+                           ID = "cancer",
+                           type = "CRC",
                            markers = geneIds(Markers))
 ## as CCLE is default setting, this can also be easily run without loading CCLE
-# m_ccl <- filter(type = "colorectal",
-#                 markers = geneIds(Markers))
+# m_ccl <- filter_non_tissue(type = "colorectal",
+#                            markers = geneIds(Markers))
 
 head(m_ccl)
 ```

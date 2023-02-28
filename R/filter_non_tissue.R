@@ -20,7 +20,9 @@
 #' @return a vector of gene symbols
 #'
 #' @examples
-#' filter_non_tissue(type = "colorectal", markers = NK_markers$HGNC_Symbol)
+#' data("NK_markers", "ccle_crc_5")
+#' filter_non_tissue(ccle_crc_5, ID = "cancer", type = "CRC",
+#'                   markers = NK_markers$HGNC_Symbol)
 #'
 #' @export
 setGeneric("filter_non_tissue",
@@ -170,11 +172,12 @@ function(data = 'CCLE',
   CCLE_meta <- depmap::depmap_metadata()
 
   ## convert CCLE from long to wide data format
-  CCLE <- tidyr::pivot_wider(
-    CCLE[,c("gene_name", "cell_line", "rna_expression")],
-    names_from = "cell_line",
-    values_from = "rna_expression"
-  ) |> data.frame()
+  CCLE <- CCLE[,c("gene_name", "cell_line", "rna_expression")] |>
+    tidyr::pivot_wider(
+      names_from = "cell_line",
+      values_from = "rna_expression"
+      ) |>
+    data.frame()
   rownames(CCLE) <- CCLE$gene_name
   CCLE$gene_name <- NULL
 

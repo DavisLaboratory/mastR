@@ -1,6 +1,3 @@
-#' @importFrom jsonlite toJSON fromJSON
-NULL
-
 #' Merge markers list into one.
 #'
 #' Merge markers collected from different DB into one 'GeneSet' object, saved a
@@ -16,6 +13,7 @@ NULL
 #' @export
 #'
 #' @examples
+#' data("NK_markers")
 #' Panglao <- get_panglao_sig(type = "NK cells")
 #' Markers <- merge_markers(markers = list(
 #'                            NK_markers = NK_markers$HGNC_Symbol,

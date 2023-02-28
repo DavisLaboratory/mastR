@@ -131,6 +131,7 @@ Scatter plot depicts mean expression for each signature gene in
 the specific subset against other cell types.
 }
 \examples{
+data("im_data_6", "NK_markers")
 sig_scatter_plot(
   sigs = NK_markers$HGNC_Symbol, data = im_data_6,
   ID = "celltype:ch1", type = "NK",

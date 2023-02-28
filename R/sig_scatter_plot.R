@@ -14,6 +14,7 @@ NULL
 #' @return patchwork or ggplot of scatter plot of median expression
 #'
 #' @examples
+#' data("im_data_6", "NK_markers")
 #' sig_scatter_plot(
 #'   sigs = NK_markers$HGNC_Symbol, data = im_data_6,
 #'   ID = "celltype:ch1", type = "NK",

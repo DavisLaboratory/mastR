@@ -1,4 +1,6 @@
 test_that("multiplication works", {
+  data("NK_markers")
+  data("im_data_6", "NK_markers")
   ## test eSet object
   p <- sig_scatter_plot(
     im_data_6, sigs = NK_markers$HGNC_Symbol,

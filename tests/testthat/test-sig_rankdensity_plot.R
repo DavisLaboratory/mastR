@@ -1,4 +1,5 @@
 test_that("sig_rankdensity_plot works", {
+  data("im_data_6", "NK_markers")
   ## test matrix object
   ### test aggregate = FALSE
   p <- sig_rankdensity_plot(

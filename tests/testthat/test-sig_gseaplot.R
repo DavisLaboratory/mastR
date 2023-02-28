@@ -1,4 +1,5 @@
 test_that("sig_gseaplot works", {
+  data("im_data_6", "NK_markers")
   ## test matrix object
   suppressWarnings(
     p <- sig_gseaplot(

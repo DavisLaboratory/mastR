@@ -14,6 +14,7 @@ NULL
 #' @return A list of DE result table of all comparisons.
 #'
 #' @examples
+#' data("im_data_6")
 #' DE_tables <- get_de_table(im_data_6, ID = "celltype:ch1", type = "NK")
 #'
 #'@export

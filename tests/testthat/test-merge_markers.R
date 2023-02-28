@@ -1,5 +1,6 @@
 test_that("merge_markers works", {
 
+  data("NK_markers")
   Msig <- get_msigdb_sig(
     pattern = "natural_killer_cell_mediated",
     ignore.case = TRUE
