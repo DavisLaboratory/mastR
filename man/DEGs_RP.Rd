@@ -6,7 +6,7 @@
 \usage{
 DEGs_RP(
   tfit,
-  lfc = 0,
+  lfc = NULL,
   p = 0.05,
   assemble = "intersect",
   Rank = "adj.P.Val",

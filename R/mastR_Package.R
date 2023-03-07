@@ -14,10 +14,9 @@
 #' @importFrom SingleCellExperiment SingleCellExperiment
 #' @importFrom SummarizedExperiment assay colData
 #' @importFrom grDevices colorRampPalette
-#' @importFrom dplyr group_by summarise_all arrange
+#' @importFrom dplyr group_by summarise_all summarise arrange inner_join
 #' @importFrom tidyr pivot_wider pivot_longer
-#' @importFrom Biobase exprs pData
-#' @importFrom depmap depmap_TPM depmap_metadata
+#' @importFrom Biobase exprs pData rowMedians
 NULL
 
 #' Screen Immune Cells Signature for Specific Cancer or Tissue Type

@@ -17,7 +17,7 @@ sig_heatmap(
   sigs,
   group_col,
   markers,
-  normalize = TRUE,
+  normalize = FALSE,
   scale = "none",
   min_max = FALSE,
   gene_id = "SYMBOL",
@@ -31,7 +31,7 @@ sig_heatmap(
   sigs,
   group_col,
   markers,
-  normalize = TRUE,
+  normalize = FALSE,
   scale = "none",
   min_max = FALSE,
   gene_id = "SYMBOL",
@@ -44,7 +44,7 @@ sig_heatmap(
   sigs,
   group_col,
   markers,
-  normalize = TRUE,
+  normalize = FALSE,
   scale = "none",
   min_max = FALSE,
   gene_id = "SYMBOL",
@@ -57,7 +57,7 @@ sig_heatmap(
   sigs,
   group_col,
   markers,
-  normalize = TRUE,
+  normalize = FALSE,
   scale = "none",
   min_max = FALSE,
   gene_id = "SYMBOL",
@@ -70,11 +70,12 @@ sig_heatmap(
   sigs,
   group_col,
   markers,
-  normalize = TRUE,
+  normalize = FALSE,
   scale = "none",
   min_max = FALSE,
   gene_id = "SYMBOL",
   ranks_plot = FALSE,
+  slot = "counts",
   col = colorRampPalette(c("#76B7B2", "#E15759"))(256)
 )
 
@@ -83,7 +84,7 @@ sig_heatmap(
   sigs,
   group_col,
   markers,
-  normalize = TRUE,
+  normalize = FALSE,
   scale = "none",
   min_max = FALSE,
   gene_id = "SYMBOL",
@@ -96,7 +97,7 @@ sig_heatmap(
   sigs,
   group_col,
   markers,
-  normalize = TRUE,
+  normalize = FALSE,
   scale = "none",
   min_max = FALSE,
   gene_id = "SYMBOL",
@@ -110,7 +111,7 @@ sig_heatmap(
   sigs,
   group_col,
   markers,
-  normalize = TRUE,
+  normalize = FALSE,
   scale = "none",
   min_max = FALSE,
   gene_id = "SYMBOL",
@@ -124,7 +125,7 @@ sig_heatmap(
   sigs,
   group_col,
   markers,
-  normalize = TRUE,
+  normalize = FALSE,
   scale = "none",
   min_max = FALSE,
   gene_id = "SYMBOL",
@@ -156,7 +157,7 @@ could be one of 'ENSEMBL', 'SYMBOL', ... default 'SYMBOL'}
 \item{ranks_plot}{logical, if to use ranks instead of expression of genes to
 draw heatmap}
 
-\item{slot}{character, indicate which slot used for seurat/sce object}
+\item{slot}{character, indicate which slot used as expression, optional}
 
 \item{col}{vactor of color to draw heatmap}
 }

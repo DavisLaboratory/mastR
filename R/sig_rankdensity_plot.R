@@ -20,7 +20,7 @@ setGeneric("sig_rankdensity_plot",
            function(data,
                     sigs,
                     group_col,
-                    normalize = TRUE,
+                    normalize = FALSE,
                     aggregate = FALSE,
                     slot = "counts",
                     gene_id = "SYMBOL")
@@ -35,7 +35,7 @@ setMethod("sig_rankdensity_plot", signature(
 function(data,
          sigs,
          group_col,
-         normalize = TRUE,
+         normalize = FALSE,
          aggregate = FALSE,
          gene_id = "SYMBOL") {
 
@@ -57,7 +57,7 @@ setMethod("sig_rankdensity_plot", signature(
 function(data,
          sigs,
          group_col,
-         normalize = TRUE,
+         normalize = FALSE,
          aggregate = FALSE,
          gene_id = "SYMBOL") {
 
@@ -79,7 +79,7 @@ setMethod("sig_rankdensity_plot", signature(
 function(data,
          sigs,
          group_col,
-         normalize = TRUE,
+         normalize = FALSE,
          aggregate = FALSE,
          gene_id = "SYMBOL") {
 
@@ -101,13 +101,14 @@ setMethod("sig_rankdensity_plot", signature(
 function(data,
          sigs,
          group_col,
-         normalize = TRUE,
+         normalize = FALSE,
          aggregate = FALSE,
+         slot = "counts",
          gene_id = "SYMBOL") {
 
   stopifnot(is.character(gene_id), is.logical(normalize), is.logical(aggregate))
 
-  p <- sig_rankdensity_plot(data = data$counts, sigs = sigs,
+  p <- sig_rankdensity_plot(data = data[[slot]], sigs = sigs,
                             group_col = data$samples[[group_col]],
                             normalize = normalize,
                             aggregate = aggregate, gene_id = gene_id)
@@ -124,7 +125,7 @@ setMethod("sig_rankdensity_plot", signature(
 function(data,
          sigs,
          group_col,
-         normalize = TRUE,
+         normalize = FALSE,
          aggregate = FALSE,
          gene_id = "SYMBOL") {
 
@@ -147,7 +148,7 @@ setMethod("sig_rankdensity_plot", signature(
 function(data,
          sigs,
          group_col,
-         normalize = TRUE,
+         normalize = FALSE,
          aggregate = FALSE,
          slot = "counts",
          gene_id = "SYMBOL") {
@@ -171,7 +172,7 @@ setMethod("sig_rankdensity_plot", signature(
 function(data,
          sigs,
          group_col,
-         normalize = TRUE,
+         normalize = FALSE,
          aggregate = FALSE,
          slot = "counts",
          gene_id = "SYMBOL") {
@@ -195,7 +196,7 @@ setMethod("sig_rankdensity_plot", signature(
 function(data,
          sigs,
          group_col,
-         normalize = TRUE,
+         normalize = FALSE,
          aggregate = FALSE,
          slot = "counts",
          gene_id = "SYMBOL") {

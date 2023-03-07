@@ -4,6 +4,7 @@ test_that("filter_non_tissue works", {
   ## test default 'CCLE'
   non_tissue_genes <- filter_non_tissue(
     # data = "CCLE",
+    group_col = "primary_disease",
     target_group = "colorectal",
     markers = NK_markers$HGNC_Symbol
   )

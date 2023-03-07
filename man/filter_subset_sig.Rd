@@ -34,6 +34,8 @@ filter_subset_sig(
   comb = union,
   filter = c(10, 10),
   s_thres = 0.05,
+  slot = "counts",
+  batch = NULL,
   ...
 )
 
@@ -88,11 +90,11 @@ down-expressed genes}
 when markers is not NULL, could be one of 'ENSEMBL', 'SYMBOL',
 'ENTREZ'..., default 'SYMBOL'}
 
-\item{feature_selection}{one of 'auto', "rankproduct" or "none", choose if to
+\item{feature_selection}{one of "auto", "rankproduct" or "none", choose if to
 use rank product or not to select DEGs from multiple
 comparisons of DE analysis, default 'auto' uses
-'rankproduct' but change to 'none' if final genes < 5
-for both UP and DOWN.}
+'rankproduct' but change to 'none' if final
+genes < 5 for both UP and DOWN.}
 
 \item{comb}{'RRA' or Fun for combining sigs from multiple datasets, keep all
 passing genes or only intersected genes, could be \code{union} or
@@ -107,6 +109,12 @@ or CPM/TPM (if normalize = FALSE), the 2nd for samples size 'large.n'}
 \item{s_thres}{num, threshold of score if comb = 'RRA'}
 
 \item{...}{other params for \code{\link[=get_degs]{get_degs()}}}
+
+\item{slot}{character, specify which slot to use only for DGEList, sce or
+seurat object, optional, default 'counts'}
+
+\item{batch}{vector of character, column name(s) of coldata to be treated as
+batch effect factor, default NULL}
 }
 \value{
 a vector of gene symbols

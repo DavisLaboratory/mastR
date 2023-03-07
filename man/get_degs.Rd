@@ -97,24 +97,25 @@ coldata for DE comparisons}
 
 \item{normalize}{logical, if the expr in data is raw counts needs to be normalized}
 
-\item{feature_selection}{one of 'auto', "rankproduct" or "none", choose if to
+\item{feature_selection}{one of "auto", "rankproduct" or "none", choose if to
 use rank product or not to select DEGs from multiple
 comparisons of DE analysis, default 'auto' uses
-'rankproduct' but change to 'none' if final genes < 5
-for both UP and DOWN.}
+'rankproduct' but change to 'none' if final
+genes < 5 for both UP and DOWN.}
 
-\item{slot}{character, specify which slot to use only for sce or seurat
-object, optional, default 'counts'}
+\item{slot}{character, specify which slot to use only for DGEList, sce or
+seurat object, optional, default 'counts'}
 
 \item{batch}{vector of column name(s) or dataframe, specify the batch effect
 factor(s), default NULL}
 
-\item{...}{params for \code{\link[=de_analysis]{de_analysis()}} and \code{\link[=DEGs_RP]{DEGs_RP()}} or \code{\link[=DEGs_Group]{DEGs_Group()}}}
+\item{...}{params for \code{\link[=process_data]{process_data()}} and \code{\link[=select_sig]{select_sig()}}}
 }
 \value{
-A list of 'UP' and 'DOWN' data frame of all differentially expressed
-genes. Both are ordered by rank product or 'Rank' variable if
-keep.top is NULL
+A list of 'UP', 'DOWN' geneset of all differentially expressed
+genes, and a DGEList 'proc_data' containing data after process
+(filtration, normalization and voom fit). Both 'UP' and 'DOWN' are
+ordered by rank product or 'Rank' variable if keep.top is NULL
 }
 \description{
 This function uses edgeR and limma to get 'UP' and 'DOWN' DEG

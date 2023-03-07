@@ -18,6 +18,7 @@ de_analysis(
   markers = NULL,
   gene_id = "SYMBOL",
   batch = NULL,
+  summary = TRUE,
   ...
 )
 }
@@ -30,11 +31,11 @@ de_analysis(
 
 \item{normalize}{logical, if the expr in data is raw counts needs to be normalized}
 
-\item{feature_selection}{one of 'auto', "rankproduct" or "none", choose if to
+\item{feature_selection}{one of "auto", "rankproduct" or "none", choose if to
 use rank product or not to select DEGs from multiple
 comparisons of DE analysis, default 'auto' uses
-'rankproduct' but change to 'none' if final genes < 5
-for both UP and DOWN.}
+'rankproduct' but change to 'none' if final
+genes < 5 for both UP and DOWN.}
 
 \item{group}{logical, TRUE to separate samples into only 2 groups:
 `target_group`` and 'Others'; FALSE to set each level as a group}
@@ -60,6 +61,8 @@ when markers is not NULL, could be one of 'ENSEMBL', 'SYMBOL',
 
 \item{batch}{vector of character, column name(s) of coldata to be treated as
 batch effect factor, default NULL}
+
+\item{summary}{logical, if to show the summary of DE analysis}
 
 \item{...}{omitted}
 }

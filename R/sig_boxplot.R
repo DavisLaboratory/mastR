@@ -16,7 +16,7 @@ NULL
 #' @param method a character string indicating which method to be used for
 #'               `stat_compare_means()` to compare the means across groups,
 #'               could be "t.test", 'wilcox.test', 'anova'..., default "t.test"
-#' @param slot character, indicate which slot used for seurat/sce object
+#' @param slot character, indicate which slot used as expression, optional
 #' @param gene_id character, indicate the ID type of rowname of expression data's ,
 #'                could be one of 'ENSEMBL', 'SYMBOL', ... default 'SYMBOL'
 #'
@@ -37,7 +37,7 @@ setGeneric("sig_boxplot",
                     group_col,
                     target_group,
                     plot.score = TRUE,
-                    normalize = TRUE,
+                    normalize = FALSE,
                     method = "t.test",
                     slot = "counts",
                     gene_id = "SYMBOL")
@@ -55,7 +55,7 @@ function(data,
          group_col,
          target_group,
          plot.score = TRUE,
-         normalize = TRUE,
+         normalize = FALSE,
          method = "t.test",
          gene_id = "SYMBOL") {
 
@@ -93,7 +93,7 @@ function(data,
          group_col,
          target_group,
          plot.score = TRUE,
-         normalize = TRUE,
+         normalize = FALSE,
          method = "t.test",
          gene_id = "SYMBOL") {
 
@@ -134,7 +134,7 @@ function(data,
          group_col,
          target_group,
          plot.score = TRUE,
-         normalize = TRUE,
+         normalize = FALSE,
          method = "t.test",
          gene_id = "SYMBOL") {
 
@@ -164,11 +164,12 @@ function(data,
          group_col,
          target_group,
          plot.score = TRUE,
-         normalize = TRUE,
+         normalize = FALSE,
          method = "t.test",
+         slot = "counts",
          gene_id = "SYMBOL") {
 
-  p <- sig_boxplot(data = data$counts,
+  p <- sig_boxplot(data = data[[slot]],
                    sigs = sigs,
                    group_col = data$samples[[group_col]],
                    target_group = target_group,
@@ -191,7 +192,7 @@ function(data,
          group_col,
          target_group,
          plot.score = TRUE,
-         normalize = TRUE,
+         normalize = FALSE,
          method = "t.test",
          gene_id = "SYMBOL") {
 
@@ -218,7 +219,7 @@ function(data,
          group_col,
          target_group,
          plot.score = TRUE,
-         normalize = TRUE,
+         normalize = FALSE,
          method = "t.test",
          slot = "counts",
          gene_id = "SYMBOL") {
@@ -246,7 +247,7 @@ function(data,
          group_col,
          target_group,
          plot.score = TRUE,
-         normalize = TRUE,
+         normalize = FALSE,
          method = "t.test",
          slot = "counts",
          gene_id = "SYMBOL") {
@@ -274,7 +275,7 @@ function(data,
          group_col,
          target_group,
          plot.score = TRUE,
-         normalize = TRUE,
+         normalize = FALSE,
          method = "t.test",
          slot = "counts",
          gene_id = "SYMBOL") {

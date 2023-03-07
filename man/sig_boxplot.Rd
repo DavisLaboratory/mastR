@@ -18,7 +18,7 @@ sig_boxplot(
   group_col,
   target_group,
   plot.score = TRUE,
-  normalize = TRUE,
+  normalize = FALSE,
   method = "t.test",
   slot = "counts",
   gene_id = "SYMBOL"
@@ -30,7 +30,7 @@ sig_boxplot(
   group_col,
   target_group,
   plot.score = TRUE,
-  normalize = TRUE,
+  normalize = FALSE,
   method = "t.test",
   gene_id = "SYMBOL"
 )
@@ -41,7 +41,7 @@ sig_boxplot(
   group_col,
   target_group,
   plot.score = TRUE,
-  normalize = TRUE,
+  normalize = FALSE,
   method = "t.test",
   gene_id = "SYMBOL"
 )
@@ -52,7 +52,7 @@ sig_boxplot(
   group_col,
   target_group,
   plot.score = TRUE,
-  normalize = TRUE,
+  normalize = FALSE,
   method = "t.test",
   gene_id = "SYMBOL"
 )
@@ -63,8 +63,9 @@ sig_boxplot(
   group_col,
   target_group,
   plot.score = TRUE,
-  normalize = TRUE,
+  normalize = FALSE,
   method = "t.test",
+  slot = "counts",
   gene_id = "SYMBOL"
 )
 
@@ -74,7 +75,7 @@ sig_boxplot(
   group_col,
   target_group,
   plot.score = TRUE,
-  normalize = TRUE,
+  normalize = FALSE,
   method = "t.test",
   gene_id = "SYMBOL"
 )
@@ -85,7 +86,7 @@ sig_boxplot(
   group_col,
   target_group,
   plot.score = TRUE,
-  normalize = TRUE,
+  normalize = FALSE,
   method = "t.test",
   slot = "counts",
   gene_id = "SYMBOL"
@@ -97,7 +98,7 @@ sig_boxplot(
   group_col,
   target_group,
   plot.score = TRUE,
-  normalize = TRUE,
+  normalize = FALSE,
   method = "t.test",
   slot = "counts",
   gene_id = "SYMBOL"
@@ -109,7 +110,7 @@ sig_boxplot(
   group_col,
   target_group,
   plot.score = TRUE,
-  normalize = TRUE,
+  normalize = FALSE,
   method = "t.test",
   slot = "counts",
   gene_id = "SYMBOL"
@@ -133,7 +134,7 @@ calculate cpm}
 \code{stat_compare_means()} to compare the means across groups,
 could be "t.test", 'wilcox.test', 'anova'..., default "t.test"}
 
-\item{slot}{character, indicate which slot used for seurat/sce object}
+\item{slot}{character, indicate which slot used as expression, optional}
 
 \item{gene_id}{character, indicate the ID type of rowname of expression data's ,
 could be one of 'ENSEMBL', 'SYMBOL', ... default 'SYMBOL'}

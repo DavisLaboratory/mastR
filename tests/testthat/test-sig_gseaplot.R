@@ -24,17 +24,6 @@ test_that("sig_gseaplot works", {
   )
   expect_true(is.ggplot(p))
 
-  ### test score boxplot
-  suppressWarnings(
-    p <- sig_gseaplot(
-      im_data_6,
-      sigs = NK_markers$HGNC_Symbol[1:20],
-      group_col = "celltype:ch1", target_group = "NK",
-      gene_id = "ENSEMBL"
-    )
-  )
-  expect_true(is.ggplot(p))
-
   ## test DGEList object
   dge <- edgeR::DGEList(counts = im_data_6@assayData$exprs,
                         group = im_data_6$`celltype:ch1`)
@@ -68,6 +57,17 @@ test_that("sig_gseaplot works", {
                   b = NK_markers$HGNC_Symbol[21:35]),
       group_col = "celltype:ch1", target_group = "NK",
       gene_id = "ENSEMBL"
+    )
+  )
+  expect_true(is.ggplot(p))
+
+  ## test dotplot
+  suppressWarnings(
+    p <- sig_gseaplot(
+      im_data_6,
+      sigs = NK_markers$HGNC_Symbol[1:20],
+      group_col = "celltype:ch1", target_group = "NK",
+      gene_id = "ENSEMBL", method = "dotplot"
     )
   )
   expect_true(is.ggplot(p))

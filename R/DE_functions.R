@@ -9,7 +9,7 @@ filterGenes <- function(dge, group_col, filter = c(10, 10), normalize = TRUE,
                                      gene_id, "SYMBOL")
   }
 
-  if(normalize) {
+  if(normalize == TRUE) {
     keep <- edgeR::filterByExpr(dge, group = dge$samples[[group_col]],
                                 min.count = filter[1],
                                 large.n = filter[2]) |
@@ -25,7 +25,7 @@ filterGenes <- function(dge, group_col, filter = c(10, 10), normalize = TRUE,
 voom_lm_fit <- function(dge, group_col, target_group,
                         feature_selection = c('auto', "rankproduct", "none"),
                         group = FALSE, plot = FALSE, normalize = TRUE,
-                        lfc = 0, p = 0.05, batch = NULL) {
+                        lfc = 0, p = 0.05, batch = NULL, summary = TRUE) {
 
   feature_selection <- match.arg(feature_selection)
 
@@ -84,7 +84,8 @@ voom_lm_fit <- function(dge, group_col, target_group,
   tfit <- limma::contrasts.fit(fit, contrasts = contrast.mat) |>
     limma::treat(lfc = lfc)
   ## summarize the total number of DEGs
-  show(limma::decideTests(tfit, lfc = lfc, p.value = p) |> summary())
+  if(summary == TRUE)
+    show(limma::decideTests(tfit, lfc = lfc, p.value = p) |> summary())
   if (plot) limma::plotSA(tfit, main = "Final model: Mean-variance trend")
   if (plot && normalize) par(op)
   return(list(tfit = tfit, proc_data = proc_data))
@@ -110,10 +111,12 @@ voom_lm_fit <- function(dge, group_col, target_group,
 #'                   or group to be kept
 #' @param ... omitted
 #' @return A list of "UP" and "DOWN" genes
-DEGs_RP <- function(tfit, lfc = 0, p = 0.05, assemble = "intersect",
+DEGs_RP <- function(tfit, lfc = NULL, p = 0.05, assemble = "intersect",
                     Rank = "adj.P.Val", nperm = 1e5, thres = 0.05,
                     keep.top = NULL, keep.group = NULL,
                     ...) {
+
+  if(is.null(lfc)) lfc <- tfit$treat.lfc
 
   stopifnot(is.character(assemble), is.character(Rank),
             is.numeric(lfc), is.numeric(p), is.numeric(nperm))
@@ -198,10 +201,12 @@ DEGs_RP <- function(tfit, lfc = 0, p = 0.05, assemble = "intersect",
 #'
 #' @inheritParams DEGs_RP
 #' @return A list of "UP" and "DOWN" genes
-DEGs_Group <- function(tfit, lfc = 0, p = 0.05,
+DEGs_Group <- function(tfit, lfc = NULL, p = 0.05,
                        assemble = "intersect", Rank = "adj.P.Val",
                        keep.top = NULL, keep.group = NULL,
                        ...) {
+
+  if(is.null(lfc)) lfc <- tfit$treat.lfc
 
   stopifnot(is.character(assemble), is.character(Rank),
             is.numeric(lfc), is.numeric(p))
@@ -252,6 +257,86 @@ DEGs_Group <- function(tfit, lfc = 0, p = 0.05,
   }
 
   return(DEGs)
+}
+
+#helper: make design and apply voom, lmfit and treat
+#' return DGEList containing vfit by limma::voom (if normalize = TRUE) and
+#' tfit by limma::treat
+#'
+#' @inheritParams de_analysis
+#' @return A DGEList containing vfit and tfit
+voom_fit_treat <- function(dge,
+                           group_col,
+                           target_group,
+                           normalize = TRUE,
+                           group = FALSE,
+                           lfc = 0,
+                           p = 0.05,
+                           batch = NULL,
+                           summary = TRUE,
+                           ...) {
+
+  stopifnot("Please provide column names as batch!" =
+              is.null(batch) | is.vector(batch))
+
+  stopifnot(is.logical(normalize),
+            is.logical(summary),
+            is.logical(group),
+            is.numeric(lfc),
+            is.numeric(p))
+
+  ## group samples into binary groups if group = TRUE,
+  ## otherwise use as multiple groups asis
+  if (group == TRUE) {
+    dge$samples$group <- ifelse(grepl(target_group, dge$samples[[group_col]]),
+                                make.names(target_group),
+                                "Others") |>
+      factor(levels = c(make.names(target_group), "Others"))
+    ## set target_group to be the first level
+  } else {
+    dge$samples$group <- ifelse(grepl(target_group, dge$samples[[group_col]]),
+                                make.names(target_group),
+                                make.names(dge$samples[[group_col]]))
+    ## set target_group to be the first level
+    dge$samples$group <- factor(
+      dge$samples$group,
+      levels = c(make.names(target_group),
+                 unique(dge$samples$group[dge$samples$group != make.names(target_group)]))
+    )
+  }
+
+  ## make contrast design
+  form <- formula(paste(c("~0", "group", batch), collapse = "+"))
+  design <- model.matrix(form, dge$samples)
+  colnames(design) <- gsub("group", "", colnames(design))
+  rownames(design) <- colnames(dge)
+  contrast.mat <- limma::makeContrasts(
+    contrasts = c(paste(levels(dge$samples$group)[1],
+                        levels(dge$samples$group)[-1],
+                        sep = "-"
+    )),
+    ## target_group vs all the rest respectively
+    ## if group = TRUE, it's target_group vs Others
+    levels = design
+  )
+
+  ## voom fit if data is raw counts data
+  if(normalize == TRUE) {
+    vfit <- limma::voom(dge, design = design)
+    dge$vfit <- vfit
+  }else dge$vfit <- dge$counts
+
+  ## linear regression fit
+  fit <- limma::lmFit(dge$vfit, design = design)
+  tfit <- limma::contrasts.fit(fit, contrasts = contrast.mat) |>
+    limma::treat(lfc = lfc)
+  ## summarize the total number of DEGs
+  if(summary == TRUE)
+    show(limma::decideTests(tfit, lfc = lfc, p.value = p) |> summary())
+
+  dge$tfit <- tfit
+
+  return(dge)
 }
 
 utils::globalVariables(c("logFC", "adj.P.Val"))

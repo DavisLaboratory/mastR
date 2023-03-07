@@ -9,7 +9,8 @@ tableau_20 <-  c("#4E79A7", "#A0CBE8", "#F28E2B", "#FFBE7D", "#59A14F",
 ## plot functions for comparing unfiltered and filtered data
 ##---------------------------------------------------------------
 #helper: logCPM density plot between filtered and unfiltered
-plot_density <- function(dge, group_col, keep = TRUE, normalize = TRUE, filter = 10) {
+plot_density <- function(dge, group_col, keep = TRUE,
+                         normalize = TRUE, filter = 10) {
   ## set colors for each cell type
   col <- dge$samples[[group_col]] |> as.factor() |> as.numeric()
   colors <- colorRampPalette(colors = tableau_20)(unique(dge$samples[[group_col]]) |> length())
@@ -181,8 +182,99 @@ plot_MDS <- function(dge, group_col, keep = TRUE, normalize = TRUE) {
   mtext("Input Data", side = 3, line = 0, outer = TRUE)
   ## set par back to original
   par(op)
+  return(NULL)
 }
 
+#helper: Mean-Variance plot after voom
+plot_voom <- function(vfit, span = 0.5) {
+
+  stopifnot("vfit must be EList class!" = is(vfit, "EList"))
+
+  ## Fit linear model to data
+  fit <- limma::lmFit(vfit$E, design = vfit$design)
+  ## Fit lowess trend to sqrt-sigma by log-expression
+  l <- lowess(fit$Amean, sqrt(fit$sigma), f = span)
+
+  limma::plotSA(fit)
+  title("voom: Mean-variance trend")
+  lines(l, col="red")
+}
+
+
+#helper: density plot init
+plot_density_init <- function(data1, data2, abl = 2) {
+  (ggplot(data1, aes(x = logcounts, col = Group, group = Sample)) +
+     geom_density() +
+     geom_vline(xintercept = abl, lty = 2) +
+     ggtitle("Original data") + ## original data1
+     ggplot(data2, aes(x = logcounts, col = Group, group = Sample)) +
+     geom_density() +
+     geom_vline(xintercept = abl, lty = 2) +
+     ggtitle("Processed data")) * ## processed data2
+    theme_classic() *
+    scale_color_manual(values = tableau_20) +
+    patchwork::plot_layout(guides = "collect")
+}
+
+#helper: rle plot init
+plot_rle_init <- function(expr1, expr2, group_col) {
+
+  ## set colors for each cell type
+  col <- group_col |> as.factor() |> as.numeric()
+  colors <- colorRampPalette(colors = tableau_20)(length(unique(group_col)))
+  ## set par for boxplot and legend
+  op <- par(no.readonly = TRUE)
+  par(mfrow = c(3, 1), mar = c(1, 2.5, 2, 1), oma = c(0, 0, 1, 0))
+
+  ## plot unfiltered data
+  rle(expr1[, order(col)]) |>
+    boxplot(
+      outline = FALSE, xaxt = "n", col = colors[sort(col)],
+      main = "RLE plot before filtration"
+    )
+  abline(h = 0)
+  ##plot filtered data
+  rle(expr2[, order(col)]) |>
+    boxplot(
+      outline = FALSE, xaxt = "n", col = colors[sort(col)],
+      main = "RLE plot after filtration"
+    )
+  abline(h = 0)
+  ## add legend
+  plot(0, type = "n", axes = FALSE, xlab = "", ylab = "")
+  legend("center",
+         legend = unique(group_col) |> sort(),
+         fill = colors, xpd = TRUE, ncol = 4
+  )
+  ## set par back to original
+  par(op)
+  return(NULL)
+}
+
+#helper: MDS plot init
+plot_MDS_init <- function(expr1, expr2, group_col) {
+  ## get MDS data
+  mds1 <- limma::plotMDS(expr1, plot = FALSE)
+  mds2 <- limma::plotMDS(expr2, plot = FALSE)
+
+  mds1 <- data.frame(Sample = colnames(expr1),
+                     Group = group_col,
+                     "logFC_dim_1" = mds1$x,
+                     "logFC_dim_2" = mds1$y)
+  mds2 <- data.frame(Sample = colnames(expr2),
+                     Group = group_col,
+                     "logFC_dim_1" = mds2$x,
+                     "logFC_dim_2" = mds2$y)
+  p1 <- ggplot(mds1, aes(x = logFC_dim_1, y = logFC_dim_2, col = Group)) +
+    geom_point(alpha = 0.5) +
+    scale_color_manual(values = tableau_20) +
+    theme_classic()
+  p2 <- ggplot(mds2, aes(x = logFC_dim_1, y = logFC_dim_2, col = Group)) +
+    geom_point(alpha = 0.5) +
+    scale_color_manual(values = tableau_20) +
+    theme_classic()
+  p1 + p2 + patchwork::plot_layout(guides = "collect")
+}
 
 ## matrix plot function for PCA
 ##---------------------------------------------------------------
@@ -293,7 +385,7 @@ plotPCAbiplot <- function(prcomp,
 #' @param features vector of gene symbols or 'all', specify the genes used for
 #'                 PCA, default 'all'
 #' @param normalize logical, TRUE indicates raw counts data to normalize and
-#'                  calculate cpm before PCA
+#'                  calculate logCPM before PCA
 #' @param scale logical, if to scale data for PCA, default TRUE
 #' @param n num, specify top n PCs to plot
 #' @param gene_id character, specify which column of IDs used to calculate TPM,
@@ -304,7 +396,7 @@ plotPCAbiplot <- function(prcomp,
 #' @return matrix plot of PCA
 pca_matrix_plot_init <- function(data,
                                  features = "all",
-                                 normalize = TRUE,
+                                 normalize = FALSE,
                                  group_by = NULL,
                                  scale = TRUE,
                                  n = 4,
@@ -409,7 +501,7 @@ pca_matrix_plot_init <- function(data,
 ## scatter_plot function
 ##---------------------------------------------------------------
 scatter_plot_init <- function(expr, sigs, target_group, by,
-                              normalize = TRUE,
+                              normalize = FALSE,
                               xint = 1, yint = 1,
                               gene_id = "SYMBOL") {
   stopifnot(is.logical(normalize), is.numeric(xint),
@@ -459,7 +551,7 @@ scatter_plot_init <- function(expr, sigs, target_group, by,
 
 ## boxplot of expression for signatures
 ##---------------------------------------------------------------
-exp_boxplot_init <- function(expr, sigs, target_group, by, normalize = TRUE,
+exp_boxplot_init <- function(expr, sigs, target_group, by, normalize = FALSE,
                              method = "t.test", gene_id = "SYMBOL") {
 
   stopifnot(is.logical(normalize), is.character(gene_id))
@@ -515,7 +607,7 @@ exp_boxplot_init <- function(expr, sigs, target_group, by, normalize = TRUE,
 ## score boexplot
 ##---------------------------------------------------------------
 #helper: calculate singscores
-singscore_init <- function(expr, sigs, by, normalize = TRUE,
+singscore_init <- function(expr, sigs, by, normalize = FALSE,
                            gene_id = "SYMBOL") {
   ## calculate log-normalized data if raw counts data
   if (normalize) {
@@ -559,8 +651,9 @@ score_boxplot_init <- function(scores, by, target_group, method) {
 
 ## GSEA plot for signatures
 ##---------------------------------------------------------------
-gsea_plot_init <- function(tDEG, gsets, gene_id = "SYMBOL", digits = 2) {
-  p <- lapply(names(tDEG), function(n) {
+## gse analysis
+gsea_analysis <- function(tDEG, gsets, gene_id = "SYMBOL", digits = 2) {
+  gse <- lapply(names(tDEG), function(n) {
     glist <- tDEG[[n]][,"logFC"]
     names(glist) <- rownames(tDEG[[n]])
     glist <- sort(glist, decreasing = TRUE)
@@ -572,27 +665,59 @@ gsea_plot_init <- function(tDEG, gsets, gene_id = "SYMBOL", digits = 2) {
     if(nrow(gse) == 0) {
       ms <- paste("No term was found enriched in", n, ".")
       message(ms)
-      p <- grid::textGrob(ms)
+      return(NULL)
     } else {
-      p <- enrichplot::gseaplot2(gse, geneSetID = seq_len(nrow(gse)),
-                                 pvalue_table = FALSE,
-                                 title = paste("GSEA with signatures in", n))
-      p <- p - patchwork::inset_element(gridExtra::tableGrob(
-        gse[,c("pvalue", "p.adjust")] |> signif(digits),
-        theme = gridExtra::ttheme_default(base_size = 5)
-      ),
-      left = 0.6, bottom = 0.8, right = 1, top = 1)
+      ## only keep 2 digits for pvalue table
+      gse@result$p.adjust <- signif(gse@result$p.adjust, digits = digits)
+      gse@result$pvalue <- signif(gse@result$pvalue, digits = digits)
+      ## save comparison info
+      gse@result$group = n
+      return(gse)
     }
   })
-  names(p) <- names(tDEG)
+  names(gse) <- names(tDEG)
+  return(gse)
+}
+## gseaplot
+gsea_plot_init <- function(gse) {
+  p <- lapply(names(gse), function(n) {
+    if(nrow(gse[[n]]) == 0) {
+      ms <- paste("No term was found enriched in", n, ".")
+      message(ms)
+      p <- grid::textGrob(ms)
+    } else {
+      p <- enrichplot::gseaplot2(gse[[n]], geneSetID = seq_len(nrow(gse[[n]])),
+                                 pvalue_table = TRUE,
+                                 title = n)
+      # ## add pvalue_table
+      # p <- p - patchwork::inset_element(gridExtra::tableGrob(
+      #   gse[[n]][,c("pvalue", "p.adjust")] |> signif(digits),
+      #   theme = gridExtra::ttheme_default(base_size = 5)
+      # ),
+      # left = 0.6, bottom = 0.8, right = 1, top = 1)
+    }
+  })
+  names(p) <- names(gse)
+  return(p)
+}
+## dotplot
+gsea_dotplot_init <- function(gse) {
+  res <- do.call(rbind, lapply(gse, \(x) x@result))
+
+  p <- ggplot(res) +
+    geom_point(aes(x = group, y = ID, col = -log10(p.adjust),
+                   size = NES)) +
+    labs(x = "Comparison", y = "Signature") +
+    theme_bw() +
+    scale_color_viridis_c() +
+    theme(axis.text.x = element_text(angle = 90))
   return(p)
 }
 
 
-
 ## heatmap for comparing signature with original markers pool
 ##---------------------------------------------------------------
-heatmap_init <- function(expr, sigs, by, markers, normalize = TRUE,
+heatmap_init <- function(expr, sigs, by, markers, normalize = FALSE,
                          scale = "none", min_max = FALSE,
                          gene_id = "SYMBOL", ranks_plot = FALSE,
                          col = grDevices::colorRampPalette(c("#76B7B2",
@@ -686,7 +811,7 @@ add_spacer <- function(x, ns) {
 }
 
 #helper: make matrix plot of rankdensity
-rankdensity_init <- function(expr, sigs, by, normalize = TRUE,
+rankdensity_init <- function(expr, sigs, by, normalize = FALSE,
                              aggregate = FALSE, gene_id = "SYMBOL") {
   ## calculate log-norm expression
   if (normalize) {
@@ -694,7 +819,7 @@ rankdensity_init <- function(expr, sigs, by, normalize = TRUE,
                            group = by)
     expr <- edgeR::calcNormFactors(expr, method = "TMM")
     expr <- edgeR::cpm(expr, log = TRUE)
-  }
+  }else expr <- as.matrix(expr)
 
   ## calculate ranks of genes using singscore
   rank_data <- singscore::rankGenes(expr)
@@ -776,6 +901,9 @@ scatter_hdb_cl <- function(sig_matrix, markers_list) {
   return(p)
 }
 
-utils::globalVariables(c("median", "Gene", "Expression", "Type",
-                         "Group", "TotalScore", "Proportion of Variance", "Rank",
-                         "Sample", "max_den", "y_s", "y_e", "x_end", "y_end"))
+utils::globalVariables(c("median", "Gene", "Expression", "Group", "Type",
+                         "target_group", "group_col", "TotalScore",
+                         "Proportion of Variance", "Rank", "Sample",
+                         "max_den", "y_s", "y_e", "x_end", "y_end",
+                         "group", "ID", "NES", "logFC_dim_1",
+                         "logFC_dim_2", "logcounts"))

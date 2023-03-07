@@ -14,15 +14,16 @@ NULL
 #' @param data expression object
 #' @param group_col vector or character, specify the group factor or column name of
 #'           coldata for DE comparisons
-#' @param slot character, specify which slot to use only for sce or seurat
-#'             object, optional, default 'counts'
+#' @param slot character, specify which slot to use only for DGEList, sce or
+#'             seurat object, optional, default 'counts'
 #' @param batch vector of column name(s) or dataframe, specify the batch effect
 #'              factor(s), default NULL
-#' @param ... params for [de_analysis()] and [DEGs_RP()] or [DEGs_Group()]
+#' @param ... params for [process_data()] and [select_sig()]
 #'
-#' @return A list of 'UP' and 'DOWN' data frame of all differentially expressed
-#'         genes. Both are ordered by rank product or 'Rank' variable if
-#'         keep.top is NULL
+#' @return A list of 'UP', 'DOWN' geneset of all differentially expressed
+#'         genes, and a DGEList 'proc_data' containing data after process
+#'         (filtration, normalization and voom fit). Both 'UP' and 'DOWN' are
+#'         ordered by rank product or 'Rank' variable if keep.top is NULL
 #'
 #' @examples
 #' data("im_data_6")
@@ -35,7 +36,7 @@ setGeneric("get_degs",
                     group_col,
                     target_group,
                     normalize = TRUE,
-                    feature_selection = c('auto', "rankproduct", "none"),
+                    feature_selection = c("auto", "rankproduct", "none"),
                     slot = "counts",
                     batch = NULL,
                     ...)
@@ -52,41 +53,87 @@ function(data,
          target_group,
          normalize = TRUE,
          feature_selection = c('auto', "rankproduct", "none"),
+         slot = "counts",
          batch = NULL,
          ...) {
 
   feature_selection <- match.arg(feature_selection)
   stopifnot("Please provide column names as batch!" =
-              is.null(batch) | is.vector(batch))
+              is.null(batch) | is.vector(batch),
+            "slot must be character!" = is.character(slot))
 
-  DGE <- data
-  DGE$samples$group <- DGE$samples[[group_col]]
-  rm(data)
-
-  ## standard DE analysis with edgeR and limma::voom pipeline
-  voom_res <- de_analysis(
-    dge = DGE,
+  ## process data, filtration, normalization, fit
+  proc_data <- process_data(
+    data = data,
     group_col = group_col,
     target_group = target_group,
     normalize = normalize,
-    feature_selection = feature_selection,
+    slot = slot,
     batch = batch,
     ...
   )
 
-  ## assemble DEGs from comparisons by Rank Product or simply intersect/union
-  if(feature_selection == "auto") {
-    DEGs <- DEGs_RP(tfit = voom_res$tfit, ...)
-    if(all(lengths(DEGs) < 5))
-      DEGs <- DEGs_Group(tfit = voom_res$tfit, ...)
-  }else if(feature_selection == "rankproduct") {
-    DEGs <- DEGs_RP(tfit = voom_res$tfit, ...)
-  }else {
-    DEGs <- DEGs_Group(tfit = voom_res$tfit, ...)
+  ## plot diagnostics before and after process_data()
+  if(!is.null(list(...)$plot) && list(...)$plot == TRUE) {
+    ## generate expr1 adn expr2 to compare before and after process
+    if(slot == "counts") {
+      expr1 <- proc_data$original_counts
+    }else {
+      expr1 <- proc_data[[slot]]
+    }
+    if(normalize == TRUE) {
+      expr1 <- edgeR::cpm(expr1, log = TRUE)
+      expr2 <- proc_data$vfit$E
+    }else expr2 <- proc_data$counts
+
+    plot_diagnostics(expr1, expr2,
+                     group_col = proc_data$samples[[group_col]])
+    if(normalize == TRUE) {
+      plot_mean_var(proc_data)
+    }else limma::plotSA(proc_data$tfit,
+                        main = "Final model: Mean-variance trend")
+
   }
 
-  ## save the processed DGEList
-  DEGs$proc_data <- voom_res$proc_data
+  ## select DEGs from multiple comparsions
+  DEGs <- select_sig(
+    tfit = proc_data$tfit,
+    feature_selection = feature_selection,
+    ...
+  )
+
+  DEGs <- list(DEGs = DEGs, proc_data = proc_data)
+
+  # DGE <- data
+  # DGE$samples$group <- DGE$samples[[group_col]]
+  # DGE$original <- DGE$counts
+  # DGE$counts <- data[[slot]]
+  # rm(data)
+  #
+  # ## standard DE analysis with edgeR and limma::voom pipeline
+  # voom_res <- de_analysis(
+  #   dge = DGE,
+  #   group_col = group_col,
+  #   target_group = target_group,
+  #   normalize = normalize,
+  #   feature_selection = feature_selection,
+  #   batch = batch,
+  #   ...
+  # )
+  #
+  # ## assemble DEGs from comparisons by Rank Product or simply intersect/union
+  # if(feature_selection == "auto") {
+  #   DEGs <- DEGs_RP(tfit = voom_res$tfit, ...)
+  #   if(all(lengths(DEGs) < 5))
+  #     DEGs <- DEGs_Group(tfit = voom_res$tfit, ...)
+  # }else if(feature_selection == "rankproduct") {
+  #   DEGs <- DEGs_RP(tfit = voom_res$tfit, ...)
+  # }else {
+  #   DEGs <- DEGs_Group(tfit = voom_res$tfit, ...)
+  # }
+  #
+  # ## save the processed DGEList
+  # DEGs$proc_data <- voom_res$proc_data
 
   return(DEGs)
 })
@@ -107,8 +154,8 @@ function(data,
 
   DGE <- edgeR::DGEList(counts = data, group = group_col)
   if(!is.null(batch)) {
-    DGE$samples <- data.frame(group = group_col, batch)
-    batch <- colnames(DGE$samples)[-1]
+    DGE$samples <- data.frame(DGE$samples, batch)
+    batch <- colnames(DGE$samples)[-(1:3)]
   }
   group_col <- "group"
   rm(data)
@@ -117,7 +164,7 @@ function(data,
                    target_group = target_group,
                    normalize = normalize,
                    feature_selection = feature_selection,
-                   batch = batch,
+                   batch = batch, slot = "counts",
                    ...)
   return(DEGs)
 })
@@ -138,8 +185,8 @@ function(data,
 
   DGE <- edgeR::DGEList(counts = data, group = group_col)
   if(!is.null(batch)) {
-    DGE$samples <- data.frame(group = group_col, batch)
-    batch <- colnames(DGE$samples)[-1]
+    DGE$samples <- data.frame(DGE$samples, batch)
+    batch <- colnames(DGE$samples)[-(1:3)]
   }
   group_col <- "group"
   rm(data)
@@ -148,7 +195,7 @@ function(data,
                    target_group = target_group,
                    normalize = normalize,
                    feature_selection = feature_selection,
-                   batch = batch,
+                   batch = batch, slot = "counts",
                    ...)
   return(DEGs)
 })
@@ -181,7 +228,7 @@ function(data,
                    target_group = target_group,
                    normalize = normalize,
                    feature_selection = feature_selection,
-                   batch = batch,
+                   batch = batch, slot = "counts",
                    ...)
   return(DEGs)
 })
@@ -215,7 +262,7 @@ function(data,
                    target_group = target_group,
                    normalize = normalize,
                    feature_selection = feature_selection,
-                   batch = batch,
+                   batch = batch, slot = "counts",
                    ...)
   return(DEGs)
 })
@@ -249,7 +296,7 @@ function(data,
                    target_group = target_group,
                    normalize = normalize,
                    feature_selection = feature_selection,
-                   batch = batch,
+                   batch = batch, slot = "counts",
                    ...)
   return(DEGs)
 })
@@ -263,11 +310,11 @@ function(data,
 #' @param group_col character, column name of coldata to specify the DE comparisons
 #' @param target_group pattern, specify the group of interest, e.g. NK
 #' @param normalize logical, if the expr in data is raw counts needs to be normalized
-#' @param feature_selection one of 'auto', "rankproduct" or "none", choose if to
+#' @param feature_selection one of "auto", "rankproduct" or "none", choose if to
 #'                          use rank product or not to select DEGs from multiple
 #'                          comparisons of DE analysis, default 'auto' uses
-#'                          'rankproduct' but change to 'none' if final genes < 5
-#'                          for both UP and DOWN.
+#'                          'rankproduct' but change to 'none' if final
+#'                          genes < 5 for both UP and DOWN.
 #' @param group logical, TRUE to separate samples into only 2 groups:
 #'              `target_group`` and 'Others'; FALSE to set each level as a group
 #' @param filter a vector of 2 numbers, filter condition to remove low expression
@@ -285,6 +332,7 @@ function(data,
 #'                'ENTREZ'..., default 'SYMBOL'
 #' @param batch vector of character, column name(s) of coldata to be treated as
 #'              batch effect factor, default NULL
+#' @param summary logical, if to show the summary of DE analysis
 #' @param ... omitted
 #'
 #' @return MArrayLM object generated by [limma::treat()]
@@ -303,6 +351,7 @@ de_analysis <- function(dge,
                         markers = NULL,
                         gene_id = "SYMBOL",
                         batch = NULL,
+                        summary = TRUE,
                         ...) {
 
   stopifnot(is.logical(normalize), is.character(feature_selection),
@@ -342,7 +391,7 @@ de_analysis <- function(dge,
                      target_group = target_group,
                      feature_selection = feature_selection,
                      group = group, plot = plot, normalize = normalize,
-                     lfc = lfc, p = p, batch = batch)
+                     lfc = lfc, p = p, batch = batch, summary = summary)
 
   return(res)
 }

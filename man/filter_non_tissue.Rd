@@ -5,8 +5,8 @@
 \alias{filter_non_tissue,matrix,vector,character-method}
 \alias{filter_non_tissue,Matrix,vector,character-method}
 \alias{filter_non_tissue,data.frame,vector,character-method}
-\alias{filter_non_tissue,character,missing,character-method}
-\alias{filter_non_tissue,missing,missing,character-method}
+\alias{filter_non_tissue,character,character,character-method}
+\alias{filter_non_tissue,missing,character,character-method}
 \alias{filter_non_tissue,DGEList,character,character-method}
 \alias{filter_non_tissue,ExpressionSet,character,character-method}
 \alias{filter_non_tissue,SummarizedExperiment,character,character-method}
@@ -22,7 +22,9 @@ filter_non_tissue(
   q = 0.25,
   markers = NULL,
   ignore.case = TRUE,
-  slot = "counts"
+  slot = "counts",
+  ccle_tpm = NULL,
+  ccle_meta = NULL
 )
 
 \S4method{filter_non_tissue}{matrix,vector,character}(
@@ -34,7 +36,9 @@ filter_non_tissue(
   q = 0.25,
   markers = NULL,
   ignore.case = TRUE,
-  slot = "counts"
+  slot = "counts",
+  ccle_tpm = NULL,
+  ccle_meta = NULL
 )
 
 \S4method{filter_non_tissue}{Matrix,vector,character}(
@@ -46,7 +50,9 @@ filter_non_tissue(
   q = 0.25,
   markers = NULL,
   ignore.case = TRUE,
-  slot = "counts"
+  slot = "counts",
+  ccle_tpm = NULL,
+  ccle_meta = NULL
 )
 
 \S4method{filter_non_tissue}{data.frame,vector,character}(
@@ -58,10 +64,12 @@ filter_non_tissue(
   q = 0.25,
   markers = NULL,
   ignore.case = TRUE,
-  slot = "counts"
+  slot = "counts",
+  ccle_tpm = NULL,
+  ccle_meta = NULL
 )
 
-\S4method{filter_non_tissue}{character,missing,character}(
+\S4method{filter_non_tissue}{character,character,character}(
   data = "CCLE",
   group_col,
   target_group,
@@ -70,10 +78,12 @@ filter_non_tissue(
   q = 0.25,
   markers = NULL,
   ignore.case = TRUE,
-  slot = "counts"
+  slot = "counts",
+  ccle_tpm = NULL,
+  ccle_meta = NULL
 )
 
-\S4method{filter_non_tissue}{missing,missing,character}(
+\S4method{filter_non_tissue}{missing,character,character}(
   data = "CCLE",
   group_col,
   target_group,
@@ -82,7 +92,9 @@ filter_non_tissue(
   q = 0.25,
   markers = NULL,
   ignore.case = TRUE,
-  slot = "counts"
+  slot = "counts",
+  ccle_tpm = NULL,
+  ccle_meta = NULL
 )
 
 \S4method{filter_non_tissue}{DGEList,character,character}(
@@ -94,7 +106,9 @@ filter_non_tissue(
   q = 0.25,
   markers = NULL,
   ignore.case = TRUE,
-  slot = "counts"
+  slot = "counts",
+  ccle_tpm = NULL,
+  ccle_meta = NULL
 )
 
 \S4method{filter_non_tissue}{ExpressionSet,character,character}(
@@ -106,7 +120,9 @@ filter_non_tissue(
   q = 0.25,
   markers = NULL,
   ignore.case = TRUE,
-  slot = "counts"
+  slot = "counts",
+  ccle_tpm = NULL,
+  ccle_meta = NULL
 )
 
 \S4method{filter_non_tissue}{SummarizedExperiment,character,character}(
@@ -118,7 +134,9 @@ filter_non_tissue(
   q = 0.25,
   markers = NULL,
   ignore.case = TRUE,
-  slot = "counts"
+  slot = "counts",
+  ccle_tpm = NULL,
+  ccle_meta = NULL
 )
 
 \S4method{filter_non_tissue}{Seurat,character,character}(
@@ -130,16 +148,20 @@ filter_non_tissue(
   q = 0.25,
   markers = NULL,
   ignore.case = TRUE,
-  slot = "counts"
+  slot = "counts",
+  ccle_tpm = NULL,
+  ccle_meta = NULL
 )
 }
 \arguments{
 \item{data}{'CCLE' or expression object}
 
-\item{group_col}{vector or character, to specify the group of tumor/tissue target_groups}
+\item{group_col}{vector or character, to specify the group of tumor/tissue
+target_groups, or column name of \code{\link[depmap:metadata]{depmap::depmap_metadata()}},
+e.g. 'primary_disease'}
 
-\item{target_group}{pattern, specify the target_group of interest, e.g. 'colorectal', match
-to primary_disease of CCLE if data is 'CCLE'}
+\item{target_group}{pattern, specify the target_group of interest,
+e.g. 'colorectal'}
 
 \item{...}{params for \code{\link[=grep]{grep()}} to find matched cell lines in CCLE}
 
@@ -155,6 +177,12 @@ filtered. Default 'NULL' means all genes}
 
 \item{slot}{character, specify which slot to use only for sce or seurat
 object, optional, default 'counts'}
+
+\item{ccle_tpm}{ccle_tpm data from \code{\link[depmap:TPM]{depmap::depmap_TPM()}}, only used when
+data = 'CCLE', default NULL}
+
+\item{ccle_meta}{ccle_meta data from \code{\link[depmap:metadata]{depmap::depmap_metadata()}}, only used
+when data = 'CCLE', default NULL}
 }
 \value{
 a vector of gene symbols

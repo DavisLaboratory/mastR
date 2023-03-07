@@ -16,7 +16,7 @@ sig_scatter_plot(
   sigs,
   group_col,
   target_group,
-  normalize = TRUE,
+  normalize = FALSE,
   slot = "counts",
   xint = 1,
   yint = 1,
@@ -28,7 +28,7 @@ sig_scatter_plot(
   sigs,
   group_col,
   target_group,
-  normalize = TRUE,
+  normalize = FALSE,
   xint = 1,
   yint = 1,
   gene_id = "SYMBOL"
@@ -39,7 +39,7 @@ sig_scatter_plot(
   sigs,
   group_col,
   target_group,
-  normalize = TRUE,
+  normalize = FALSE,
   xint = 1,
   yint = 1,
   gene_id = "SYMBOL"
@@ -50,7 +50,8 @@ sig_scatter_plot(
   sigs,
   group_col,
   target_group,
-  normalize = TRUE,
+  normalize = FALSE,
+  slot = "counts",
   xint = 1,
   yint = 1,
   gene_id = "SYMBOL"
@@ -61,7 +62,7 @@ sig_scatter_plot(
   sigs,
   group_col,
   target_group,
-  normalize = TRUE,
+  normalize = FALSE,
   xint = 1,
   yint = 1,
   gene_id = "SYMBOL"
@@ -72,7 +73,7 @@ sig_scatter_plot(
   sigs,
   group_col,
   target_group,
-  normalize = TRUE,
+  normalize = FALSE,
   slot = "counts",
   xint = 1,
   yint = 1,
@@ -84,7 +85,7 @@ sig_scatter_plot(
   sigs,
   group_col,
   target_group,
-  normalize = TRUE,
+  normalize = FALSE,
   slot = "counts",
   xint = 1,
   yint = 1,
@@ -96,7 +97,7 @@ sig_scatter_plot(
   sigs,
   group_col,
   target_group,
-  normalize = TRUE,
+  normalize = FALSE,
   slot = "counts",
   xint = 1,
   yint = 1,
@@ -115,7 +116,7 @@ sig_scatter_plot(
 \item{normalize}{logical, TRUE indicates raw counts data to normalize and
 calculate cpm}
 
-\item{slot}{character, indicate which slot used for seurat/sce object}
+\item{slot}{character, indicate which slot used as expression, optional}
 
 \item{xint}{intercept of vertical dashed line}
 

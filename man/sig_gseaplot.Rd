@@ -17,6 +17,7 @@ sig_gseaplot(
   gene_id = "SYMBOL",
   digits = 2,
   slot = "counts",
+  method = c("gseaplot", "dotplot"),
   ...
 )
 
@@ -28,6 +29,7 @@ sig_gseaplot(
   gene_id = "SYMBOL",
   digits = 2,
   slot = "counts",
+  method = c("gseaplot", "dotplot"),
   ...
 )
 
@@ -39,6 +41,7 @@ sig_gseaplot(
   gene_id = "SYMBOL",
   digits = 2,
   slot = "counts",
+  method = c("gseaplot", "dotplot"),
   ...
 )
 
@@ -50,6 +53,7 @@ sig_gseaplot(
   gene_id = "SYMBOL",
   digits = 2,
   slot = "counts",
+  method = c("gseaplot", "dotplot"),
   ...
 )
 
@@ -61,6 +65,7 @@ sig_gseaplot(
   gene_id = "SYMBOL",
   digits = 2,
   slot = "counts",
+  method = c("gseaplot", "dotplot"),
   ...
 )
 
@@ -72,6 +77,7 @@ sig_gseaplot(
   gene_id = "SYMBOL",
   digits = 2,
   slot = "counts",
+  method = c("gseaplot", "dotplot"),
   ...
 )
 }
@@ -89,7 +95,9 @@ could be one of 'ENSEMBL', 'SYMBOL', ... default 'SYMBOL'}
 
 \item{digits}{num, specify the number of significant digits of pvalue table}
 
-\item{slot}{character, indicate which slot used for seurat/sce object}
+\item{slot}{character, indicate which slot used as expression, optional}
+
+\item{method}{one of "gseaplot" and "dotplot", how to plot GSEA result}
 
 \item{...}{params for function \code{\link[=get_de_table]{get_de_table()}}}
 }

@@ -5,6 +5,7 @@
 #' of datasets to integrate the signatures into one.
 #'
 #' @inheritParams de_analysis
+#' @inheritParams process_data
 #' @param data An expression data or a list of expression data objects
 #' @param group_col vector or character, specify the group factor or column name of
 #'           coldata for DE comparisons
@@ -62,6 +63,8 @@ function(data,
          comb = union,
          filter = c(10, 10),
          s_thres = 0.05,
+         slot = "counts",
+         batch = NULL,
          ...) {
 
   stopifnot(is.character(dir), is.character(feature_selection),
@@ -93,6 +96,10 @@ function(data,
     target_group <- rep(target_group, length(data))
   if(length(normalize) == 1)
     normalize <- rep(normalize, length(data))
+  if(length(slot) == 1)
+    slot <- rep(slot, length(data))
+  if(length(batch) == 1)
+    batch <- rep(batch, length(data))
   if(length(gene_id) == 1)
     gene_id <- rep(gene_id, length(data))
   if(!is.list(filter) & length(filter) == 2)
@@ -103,10 +110,13 @@ function(data,
     DEGs <- get_degs(data = data[[i]], group_col = group_col[[i]],
                      target_group = target_group[[i]],
                      normalize = normalize[[i]],
+                     slot = slot[[i]],
+                     batch = batch[[i]],
                      feature_selection = feature_selection,
                      markers = markers$SYMBOL |> unique(),
                      filter = filter[[i]],
-                     gene_id = gene_id[[i]], ...)[[dir]]
+                     gene_id = gene_id[[i]], ...)
+    DEGs <- DEGs$DEGs[[dir]]@geneIds
 
     if(is.null(markers)) {
       NK_against_subsets[[i]] <- DEGs
@@ -171,7 +181,8 @@ function(data,
                    feature_selection = feature_selection,
                    markers = markers$SYMBOL |> unique(),
                    filter = filter,
-                   gene_id = gene_id, ...)[[dir]]
+                   gene_id = gene_id, ...)
+  DEGs <- DEGs$DEGs[[dir]]@geneIds
 
   if(is.null(markers)) {
     NK_against_subsets <- DEGs
@@ -230,7 +241,8 @@ function(data,
                    feature_selection = feature_selection,
                    markers = markers$SYMBOL |> unique(),
                    filter = filter,
-                   gene_id = gene_id, ...)[[dir]]
+                   gene_id = gene_id, ...)
+  DEGs <- DEGs$DEGs[[dir]]@geneIds
 
   if(is.null(markers)) {
     NK_against_subsets <- DEGs

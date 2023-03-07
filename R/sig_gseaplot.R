@@ -7,6 +7,7 @@ NULL
 #'
 #' @inheritParams sig_boxplot
 #' @param digits num, specify the number of significant digits of pvalue table
+#' @param method one of "gseaplot" and "dotplot", how to plot GSEA result
 #' @param ... params for function [get_de_table()]
 #'
 #' @return patchwork object for all comparisons
@@ -28,6 +29,7 @@ setGeneric("sig_gseaplot",
                     gene_id = "SYMBOL",
                     digits = 2,
                     slot = "counts",
+                    method = c("gseaplot", "dotplot"),
                     ...)
              standardGeneric("sig_gseaplot"))
 
@@ -45,12 +47,15 @@ function(data,
          gene_id = "SYMBOL",
          digits = 2,
          slot = "counts",
+         method = c("gseaplot", "dotplot"),
          ...) {
 
   stopifnot(is.character(gene_id), is.numeric(digits))
+  method <- match.arg(method)
 
   ## get DEGs tables list with statistics
-  tDEG <- get_de_table(data = data, group_col = group_col, target_group = target_group,
+  tDEG <- get_de_table(data = data, group_col = group_col,
+                       target_group = target_group,
                        markers = Reduce(union, sigs),
                        gene_id = gene_id,
                        slot = slot,
@@ -64,9 +69,15 @@ function(data,
                                keytype = "SYMBOL")
   gsets <- merge(gsets, ids, all = TRUE, by.x = "SYMBOL", by.y = "SYMBOL")
 
-  p <- gsea_plot_init(tDEG = tDEG, gsets = gsets,
-                      gene_id = gene_id, digits = digits) |>
-    patchwork::wrap_plots() + patchwork::plot_layout(guides = "collect")
+  ## gsea
+  gse <- gsea_analysis(tDEG = tDEG, gsets = gsets,
+                       gene_id = gene_id, digits = digits)
+
+  if(method == "gseaplot") {
+    p <- gsea_plot_init(gse)
+  } else p <- gsea_dotplot_init(gse)
+
+  p <-  patchwork::wrap_plots(p) + patchwork::plot_layout(guides = "collect")
   return(p)
 })
 
@@ -84,12 +95,15 @@ function(data,
          gene_id = "SYMBOL",
          digits = 2,
          slot = "counts",
+         method = c("gseaplot", "dotplot"),
          ...) {
 
   stopifnot(is.character(gene_id), is.numeric(digits))
+  method <- match.arg(method)
 
   ## get DEGs tables list with statistics
-  tDEG <- get_de_table(data = data, group_col = group_col, target_group = target_group,
+  tDEG <- get_de_table(data = data, group_col = group_col,
+                       target_group = target_group,
                        markers = Reduce(union, sigs),
                        gene_id = gene_id,
                        slot = slot,
@@ -107,9 +121,15 @@ function(data,
                                keytype = "SYMBOL")
   gsets <- merge(gsets, ids, all = TRUE, by.x = "SYMBOL", by.y = "SYMBOL")
 
-  p <- gsea_plot_init(tDEG = tDEG, gsets = gsets,
-                      gene_id = gene_id, digits = digits) |>
-    patchwork::wrap_plots() + patchwork::plot_layout(guides = "collect")
+  ## gsea
+  gse <- gsea_analysis(tDEG = tDEG, gsets = gsets,
+                       gene_id = gene_id, digits = digits)
+
+  if(method == "gseaplot") {
+    p <- gsea_plot_init(gse)
+  } else p <- gsea_dotplot_init(gse)
+
+  p <- patchwork::wrap_plots(p) + patchwork::plot_layout(guides = "collect")
   return(p)
 })
 
@@ -126,12 +146,15 @@ function(data,
          target_group,
          gene_id = "SYMBOL",
          digits = 2,
+         method = c("gseaplot", "dotplot"),
          ...) {
 
   stopifnot(is.character(gene_id), is.numeric(digits))
+  method <- match.arg(method)
 
   ## get DEGs tables list with statistics
-  tDEG <- get_de_table(data = data, group_col = group_col, target_group = target_group,
+  tDEG <- get_de_table(data = data, group_col = group_col,
+                       target_group = target_group,
                        markers = Reduce(union, sigs),
                        gene_id = gene_id,
                        ...)
@@ -144,9 +167,15 @@ function(data,
                                keytype = "SYMBOL")
   gsets <- merge(gsets, ids, all = TRUE, by.x = "SYMBOL", by.y = "SYMBOL")
 
-  p <- gsea_plot_init(tDEG = tDEG, gsets = gsets,
-                      gene_id = gene_id, digits = digits) |>
-    patchwork::wrap_plots() + patchwork::plot_layout(guides = "collect")
+  ## gsea
+  gse <- gsea_analysis(tDEG = tDEG, gsets = gsets,
+                       gene_id = gene_id, digits = digits)
+
+  if(method == "gseaplot") {
+    p <- gsea_plot_init(gse)
+  } else p <- gsea_dotplot_init(gse)
+
+  p <- patchwork::wrap_plots(p) + patchwork::plot_layout(guides = "collect")
   return(p)
 })
 
@@ -163,12 +192,15 @@ function(data,
          target_group,
          gene_id = "SYMBOL",
          digits = 2,
+         method = c("gseaplot", "dotplot"),
          ...) {
 
   stopifnot(is.character(gene_id), is.numeric(digits))
+  method <- match.arg(method)
 
   ## get DEGs tables list with statistics
-  tDEG <- get_de_table(data = data, group_col = group_col, target_group = target_group,
+  tDEG <- get_de_table(data = data, group_col = group_col,
+                       target_group = target_group,
                        markers = Reduce(union, sigs),
                        gene_id = gene_id,
                        ...)
@@ -185,9 +217,15 @@ function(data,
                                keytype = "SYMBOL")
   gsets <- merge(gsets, ids, all = TRUE, by.x = "SYMBOL", by.y = "SYMBOL")
 
-  p <- gsea_plot_init(tDEG = tDEG, gsets = gsets,
-                      gene_id = gene_id, digits = digits) |>
-    patchwork::wrap_plots() + patchwork::plot_layout(guides = "collect")
+  ## gsea
+  gse <- gsea_analysis(tDEG = tDEG, gsets = gsets,
+                       gene_id = gene_id, digits = digits)
+
+  if(method == "gseaplot") {
+    p <- gsea_plot_init(gse)
+  } else p <- gsea_dotplot_init(gse)
+
+  p <- patchwork::wrap_plots(p) + patchwork::plot_layout(guides = "collect")
   return(p)
 })
 
@@ -205,9 +243,11 @@ function(data,
          gene_id = "SYMBOL",
          digits = 2,
          slot = "counts",
+         method = c("gseaplot", "dotplot"),
          ...) {
 
   stopifnot(is.character(gene_id), is.numeric(digits))
+  method <- match.arg(method)
 
   if(length(target_group) == 1)
     target_group <- rep(target_group, length(data))
@@ -227,6 +267,7 @@ function(data,
                            gene_id = gene_id[i],
                            digits = digits,
                            slot = slot[i],
+                           method = method,
                            ...)
     p[[i]] <- patchwork::patchworkGrob(p[[i]]) |> ggpubr::as_ggplot()
     if(!is.null(names(data)))

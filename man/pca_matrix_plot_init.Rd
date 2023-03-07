@@ -7,7 +7,7 @@
 pca_matrix_plot_init(
   data,
   features = "all",
-  normalize = TRUE,
+  normalize = FALSE,
   group_by = NULL,
   scale = TRUE,
   n = 4,
@@ -23,7 +23,7 @@ pca_matrix_plot_init(
 PCA, default 'all'}
 
 \item{normalize}{logical, TRUE indicates raw counts data to normalize and
-calculate cpm before PCA}
+calculate logCPM before PCA}
 
 \item{group_by}{character, specify the column to be grouped and colored,
 default NULL}

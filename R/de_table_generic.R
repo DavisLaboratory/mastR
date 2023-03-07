@@ -35,15 +35,26 @@ setMethod("get_de_table", signature(
 function(data,
          group_col,
          target_group,
+         slot = "counts",
          ...) {
+
+  stopifnot("slot must be character!" = is.character(slot))
 
   DGE <- data
   DGE$samples$group <- DGE$samples[[group_col]]
+  DGE$original <- DGE$counts
+  DGE$counts <- DGE[[slot]]
   rm(data)
 
-  ## standard DE analysis with edgeR and limma::voom pipeline
-  voom_res <- de_analysis(
-    dge = DGE,
+  # ## standard DE analysis with edgeR and limma::voom pipeline
+  # voom_res <- de_analysis(
+  #   dge = DGE,
+  #   group_col = group_col,
+  #   target_group = target_group,
+  #   ...
+  # )
+  proc_data <- process_data(
+    data = DGE,
     group_col = group_col,
     target_group = target_group,
     ...
@@ -51,14 +62,13 @@ function(data,
 
   ## save DE result tables into list
   DE_table <- list()
-  for (i in seq_len(ncol(voom_res$tfit))) {
+  for (i in seq_len(ncol(proc_data$tfit))) {
     ## use limma::topTreat() to get statistics of DEA
-    DE_table[[i]] <- limma::topTreat(voom_res$tfit, coef = i, number = Inf) |> na.omit()
+    DE_table[[i]] <- na.omit(limma::topTreat(proc_data$tfit,
+                                             coef = i,
+                                             number = Inf))
   }
-  names(DE_table) <- colnames(voom_res$tfit)
-
-  ## save the processed DGEList
-  DE_table$proc_data <- voom_res$proc_data
+  names(DE_table) <- colnames(proc_data$tfit)
 
   return(DE_table)
 })
@@ -78,7 +88,9 @@ function(data,
   group_col <- "group"
   rm(data)
 
-  DE_table <- get_de_table(data = DGE, group_col = group_col, target_group = target_group, ...)
+  DE_table <- get_de_table(data = DGE, group_col = group_col,
+                           target_group = target_group,
+                           slot = "counts", ...)
 
   return(DE_table)
 })
@@ -98,7 +110,9 @@ function(data,
   group_col <- "group"
   rm(data)
 
-  DE_table <- get_de_table(data = DGE, group_col = group_col, target_group = target_group, ...)
+  DE_table <- get_de_table(data = DGE, group_col = group_col,
+                           target_group = target_group,
+                           slot = "counts", ...)
 
   return(DE_table)
 })
@@ -123,7 +137,9 @@ function(data,
   group_col <- make.names(group_col)
   rm(data, expr, coldata)
 
-  DE_table <- get_de_table(data = DGE, group_col = group_col, target_group = target_group, ...)
+  DE_table <- get_de_table(data = DGE, group_col = group_col,
+                           target_group = target_group,
+                           slot = "counts", ...)
 
   return(DE_table)
 })
@@ -149,7 +165,9 @@ function(data,
   group_col <- make.names(group_col)
   rm(data, expr, coldata)
 
-  DE_table <- get_de_table(data = DGE, group_col = group_col, target_group = target_group, ...)
+  DE_table <- get_de_table(data = DGE, group_col = group_col,
+                           target_group = target_group,
+                           slot = "counts", ...)
 
   return(DE_table)
 })
@@ -175,7 +193,9 @@ function(data,
   group_col <- make.names(group_col)
   rm(data, expr, coldata)
 
-  DE_table <- get_de_table(data = DGE, group_col = group_col, target_group = target_group, ...)
+  DE_table <- get_de_table(data = DGE, group_col = group_col,
+                           target_group = target_group,
+                           slot = "counts", ...)
 
   return(DE_table)
 })

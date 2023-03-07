@@ -16,7 +16,7 @@ sig_rankdensity_plot(
   data,
   sigs,
   group_col,
-  normalize = TRUE,
+  normalize = FALSE,
   aggregate = FALSE,
   slot = "counts",
   gene_id = "SYMBOL"
@@ -26,7 +26,7 @@ sig_rankdensity_plot(
   data,
   sigs,
   group_col,
-  normalize = TRUE,
+  normalize = FALSE,
   aggregate = FALSE,
   gene_id = "SYMBOL"
 )
@@ -35,7 +35,7 @@ sig_rankdensity_plot(
   data,
   sigs,
   group_col,
-  normalize = TRUE,
+  normalize = FALSE,
   aggregate = FALSE,
   gene_id = "SYMBOL"
 )
@@ -44,7 +44,7 @@ sig_rankdensity_plot(
   data,
   sigs,
   group_col,
-  normalize = TRUE,
+  normalize = FALSE,
   aggregate = FALSE,
   gene_id = "SYMBOL"
 )
@@ -53,8 +53,9 @@ sig_rankdensity_plot(
   data,
   sigs,
   group_col,
-  normalize = TRUE,
+  normalize = FALSE,
   aggregate = FALSE,
+  slot = "counts",
   gene_id = "SYMBOL"
 )
 
@@ -62,7 +63,7 @@ sig_rankdensity_plot(
   data,
   sigs,
   group_col,
-  normalize = TRUE,
+  normalize = FALSE,
   aggregate = FALSE,
   gene_id = "SYMBOL"
 )
@@ -71,7 +72,7 @@ sig_rankdensity_plot(
   data,
   sigs,
   group_col,
-  normalize = TRUE,
+  normalize = FALSE,
   aggregate = FALSE,
   slot = "counts",
   gene_id = "SYMBOL"
@@ -81,7 +82,7 @@ sig_rankdensity_plot(
   data,
   sigs,
   group_col,
-  normalize = TRUE,
+  normalize = FALSE,
   aggregate = FALSE,
   slot = "counts",
   gene_id = "SYMBOL"
@@ -91,7 +92,7 @@ sig_rankdensity_plot(
   data,
   sigs,
   group_col,
-  normalize = TRUE,
+  normalize = FALSE,
   aggregate = FALSE,
   slot = "counts",
   gene_id = "SYMBOL"
@@ -110,7 +111,7 @@ calculate cpm}
 \item{aggregate}{logical, if to aggregate expression according to \code{group_col},
 default FALSE}
 
-\item{slot}{character, indicate which slot used for seurat/sce object}
+\item{slot}{character, indicate which slot used as expression, optional}
 
 \item{gene_id}{character, indicate the ID type of rowname of expression data's ,
 could be one of 'ENSEMBL', 'SYMBOL', ... default 'SYMBOL'}

@@ -15,7 +15,7 @@ pca_matrix_plot(
   data,
   features = "all",
   slot = "counts",
-  normalize = TRUE,
+  normalize = FALSE,
   group_by = NULL,
   scale = TRUE,
   n = 4,
@@ -27,7 +27,7 @@ pca_matrix_plot(
 \S4method{pca_matrix_plot}{matrix}(
   data,
   features = "all",
-  normalize = TRUE,
+  normalize = FALSE,
   group_by = NULL,
   scale = TRUE,
   n = 4,
@@ -39,7 +39,7 @@ pca_matrix_plot(
 \S4method{pca_matrix_plot}{Matrix}(
   data,
   features = "all",
-  normalize = TRUE,
+  normalize = FALSE,
   group_by = NULL,
   scale = TRUE,
   n = 4,
@@ -51,7 +51,7 @@ pca_matrix_plot(
 \S4method{pca_matrix_plot}{data.frame}(
   data,
   features = "all",
-  normalize = TRUE,
+  normalize = FALSE,
   group_by = NULL,
   scale = TRUE,
   n = 4,
@@ -63,7 +63,7 @@ pca_matrix_plot(
 \S4method{pca_matrix_plot}{ExpressionSet}(
   data,
   features = "all",
-  normalize = TRUE,
+  normalize = FALSE,
   group_by = NULL,
   scale = TRUE,
   n = 4,
@@ -75,7 +75,8 @@ pca_matrix_plot(
 \S4method{pca_matrix_plot}{DGEList}(
   data,
   features = "all",
-  normalize = TRUE,
+  slot = "counts",
+  normalize = FALSE,
   group_by = NULL,
   scale = TRUE,
   n = 4,
@@ -88,7 +89,7 @@ pca_matrix_plot(
   data,
   features = "all",
   slot = "counts",
-  normalize = TRUE,
+  normalize = FALSE,
   group_by = NULL,
   scale = TRUE,
   n = 4,
@@ -101,7 +102,7 @@ pca_matrix_plot(
   data,
   features = "all",
   slot = "counts",
-  normalize = TRUE,
+  normalize = FALSE,
   group_by = NULL,
   scale = TRUE,
   n = 4,
@@ -116,11 +117,11 @@ pca_matrix_plot(
 \item{features}{vector of gene symbols or 'all', specify the genes used for
 PCA, default 'all'}
 
-\item{slot}{character, specify the slot name of seurat or sce object,
+\item{slot}{character, specify the slot name of expression to be used,
 optional}
 
 \item{normalize}{logical, TRUE indicates raw counts data to normalize and
-calculate cpm before PCA}
+calculate logCPM before PCA}
 
 \item{group_by}{character, specify the column to be grouped and colored,
 default NULL}
@@ -147,6 +148,6 @@ Make a matrix plot of PCA with top PCs
 }
 \examples{
 data("im_data_6")
-pca_matrix_plot(data = im_data_6)
+pca_matrix_plot(data = im_data_6, normalize = TRUE)
 
 }

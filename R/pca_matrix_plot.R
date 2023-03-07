@@ -5,21 +5,21 @@ NULL
 #'
 #' @inheritParams pca_matrix_plot_init
 #' @param data expression data, can be matrix, eSet, seurat...
-#' @param slot character, specify the slot name of seurat or sce object,
+#' @param slot character, specify the slot name of expression to be used,
 #'             optional
 #'
 #' @return matrix plot of PCA
 #'
 #' @examples
 #' data("im_data_6")
-#' pca_matrix_plot(data = im_data_6)
+#' pca_matrix_plot(data = im_data_6, normalize = TRUE)
 #'
 #' @export
 setGeneric("pca_matrix_plot",
            function(data,
                     features = "all",
                     slot = "counts",
-                    normalize = TRUE,
+                    normalize = FALSE,
                     group_by = NULL,
                     scale = TRUE,
                     n = 4,
@@ -34,7 +34,7 @@ setMethod("pca_matrix_plot", signature(
 ),
 function(data,
          features = "all",
-         normalize = TRUE,
+         normalize = FALSE,
          group_by = NULL,
          scale = TRUE,
          n = 4,
@@ -55,7 +55,7 @@ setMethod("pca_matrix_plot", signature(
 ),
 function(data,
          features = "all",
-         normalize = TRUE,
+         normalize = FALSE,
          group_by = NULL,
          scale = TRUE,
          n = 4,
@@ -76,7 +76,7 @@ setMethod("pca_matrix_plot", signature(
 ),
 function(data,
          features = "all",
-         normalize = TRUE,
+         normalize = FALSE,
          group_by = NULL,
          scale = TRUE,
          n = 4,
@@ -84,7 +84,7 @@ function(data,
          n_loadings = 10,
          gene_id = "SYMBOL") {
 
-  p <- pca_matrix_plot_init(data = data |> as.matrix(), features = features,
+  p <- pca_matrix_plot_init(data = as.matrix(data), features = features,
                             normalize = normalize, group_by = group_by,
                             scale = scale, n = n, loading = loading,
                             n_loadings = n_loadings, gene_id = gene_id)
@@ -97,7 +97,7 @@ setMethod("pca_matrix_plot", signature(
 ),
 function(data,
          features = "all",
-         normalize = TRUE,
+         normalize = FALSE,
          group_by = NULL,
          scale = TRUE,
          n = 4,
@@ -122,7 +122,8 @@ setMethod("pca_matrix_plot", signature(
 ),
 function(data,
          features = "all",
-         normalize = TRUE,
+         slot = "counts",
+         normalize = FALSE,
          group_by = NULL,
          scale = TRUE,
          n = 4,
@@ -132,7 +133,7 @@ function(data,
 
   if(is.character(group_by))
     group_by <- data$samples[[group_by]]
-  data <- data$counts
+  data <- data[[slot]]
 
   p <- pca_matrix_plot(data = data, features = features,
                        normalize = normalize, group_by = group_by,
@@ -148,7 +149,7 @@ setMethod("pca_matrix_plot", signature(
 function(data,
          features = "all",
          slot = "counts",
-         normalize = TRUE,
+         normalize = FALSE,
          group_by = NULL,
          scale = TRUE,
          n = 4,
@@ -174,7 +175,7 @@ setMethod("pca_matrix_plot", signature(
 function(data,
          features = "all",
          slot = "counts",
-         normalize = TRUE,
+         normalize = FALSE,
          group_by = NULL,
          scale = TRUE,
          n = 4,

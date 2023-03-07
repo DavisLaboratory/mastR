@@ -23,6 +23,7 @@ Depends:
 LazyData: true
 Suggests: 
     clusterProfiler,
+    depmap,
     enrichplot,
     ggrepel,
     jsonlite,
@@ -37,7 +38,6 @@ Config/testthat/edition: 3
 Imports: 
     AnnotationDbi,
     Biobase,
-    depmap,
     dplyr,
     edgeR,
     ggplot2,
@@ -83,6 +83,7 @@ Collate:
     'sig_heatmap.R'
     'sig_rankdensity_plot.R'
     'sig_scatter_plot.R'
+    'subset_sig_by_step.R'
 URL: https://davislaboratory.github.io/mastR
 BugReports: https://github.com/DavisLaboratory/mastR/issues
 VignetteBuilder: knitr
