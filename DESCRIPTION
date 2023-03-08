@@ -56,6 +56,7 @@ Imports:
     Seurat,
     SingleCellExperiment,
     stats,
+    Seurat,
     SummarizedExperiment,
     tidyr,
     utils
