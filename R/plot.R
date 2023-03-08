@@ -306,9 +306,9 @@ plotPCAbiplot <- function(prcomp,
               is.numeric(dims) && length(dims) == 2)
   ## basic PCA plot
   p <- ggplot() +
-    geom_point(aes_q(x = prcomp$x[,dims[1]],
-                     y = prcomp$x[,dims[2]],
-                     col = group_by)) +
+    geom_point(aes(x = prcomp$x[,dims[1]],
+                   y = prcomp$x[,dims[2]],
+                   col = group_by)) +
     ggplot2::scale_color_manual(values = tableau_20) +
     ggplot2::theme_classic()
 
@@ -356,7 +356,7 @@ plotPCAbiplot <- function(prcomp,
         aes(x = 0, y = 0, xend = x_end, yend = y_end),
         arrow = arrow(length = unit(1 / 2, "picas"), ends = "last"),
         color = "grey",
-        size = .5,
+        linewidth = .5,
         alpha = 1,
         show.legend = NA
       ) +
@@ -538,8 +538,8 @@ scatter_plot_init <- function(expr, sigs, target_group, by,
   p <- tidyr::pivot_longer(expr, -target_group,
                            names_to = "celltype",
                            values_to = "Median Expression") |>
-    ggplot2::ggplot(ggplot2::aes_q(x = as.name("Median Expression"),
-                                   y = as.name(target_group))) +
+    ggplot2::ggplot(ggplot2::aes(x = !!sym("Median Expression"),
+                                 y = !!sym(target_group))) +
     ggplot2::geom_point(alpha = 0.4, shape = 1) +
     ggplot2::geom_vline(xintercept = xint, lty = 2) +
     ggplot2::geom_hline(yintercept = yint, lty = 2) +
@@ -588,8 +588,8 @@ exp_boxplot_init <- function(expr, sigs, target_group, by, normalize = FALSE,
   p <- tidyr::pivot_longer(expr, -Gene,
                            names_to = "Group",
                            values_to = "Median Expression") |>
-    ggplot2::ggplot(ggplot2::aes_q(x = as.name("Group"),
-                                   y = as.name("Median Expression"))) +
+    ggplot2::ggplot(ggplot2::aes(x = !!sym("Group"),
+                                 y = !!sym("Median Expression"))) +
     ggplot2::geom_boxplot(ggplot2::aes(col = Group)) +
     ggplot2::geom_point(ggplot2::aes(col = Group)) +
     ggplot2::geom_line(ggplot2::aes(group = Gene), col = "grey", alpha = .5) +
@@ -681,14 +681,16 @@ gsea_analysis <- function(tDEG, gsets, gene_id = "SYMBOL", digits = 2) {
 ## gseaplot
 gsea_plot_init <- function(gse) {
   p <- lapply(names(gse), function(n) {
-    if(nrow(gse[[n]]) == 0) {
+    if(is.null(gse[[n]])) {
       ms <- paste("No term was found enriched in", n, ".")
       message(ms)
-      p <- grid::textGrob(ms)
+      p <- grid::textGrob(ms) |> ggpubr::as_ggplot()
     } else {
       p <- enrichplot::gseaplot2(gse[[n]], geneSetID = seq_len(nrow(gse[[n]])),
                                  pvalue_table = TRUE,
-                                 title = n)
+                                 title = n) |>
+        patchwork::wrap_plots(ncol = 1) |>
+        patchwork::wrap_elements()
       # ## add pvalue_table
       # p <- p - patchwork::inset_element(gridExtra::tableGrob(
       #   gse[[n]][,c("pvalue", "p.adjust")] |> signif(digits),

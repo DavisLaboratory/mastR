@@ -8,5 +8,6 @@ test_that("gls2gsc works", {
   gsc2 <- gls2gsc(msigdb_gobp_nk[[1]]@geneIds,
                   msigdb_gobp_nk[[2]]@geneIds,
                   msigdb_gobp_nk[[3]]@geneIds)
+  names(gsc2) <- names(gsc1)
   expect_setequal(GSEABase::geneIds(gsc1), GSEABase::geneIds(gsc2))
 })

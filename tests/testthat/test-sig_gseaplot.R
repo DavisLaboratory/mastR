@@ -61,13 +61,13 @@ test_that("sig_gseaplot works", {
   )
   expect_true(is.ggplot(p))
 
-  ## test dotplot
+  ## test gseaplot2
   suppressWarnings(
     p <- sig_gseaplot(
       im_data_6,
       sigs = NK_markers$HGNC_Symbol[1:20],
       group_col = "celltype:ch1", target_group = "NK",
-      gene_id = "ENSEMBL", method = "dotplot"
+      gene_id = "ENSEMBL", method = "gseaplot"
     )
   )
   expect_true(is.ggplot(p))

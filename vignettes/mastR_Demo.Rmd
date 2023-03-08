@@ -803,6 +803,127 @@ filter_subset_sig(pb, group_col = "group", target_group = "A")
 ```
 
 
+# Application on Simulated data {.tabset .tabset-fade .tabset-pills}
+
+Here we will simulate a scRNA data using `splatter`. Then randomly pseudo-bulking it to generate pseudo bulk data for scoring and deconvolution.
+
+```{r simulation, eval=FALSE}
+library(splatter)
+## set seed for reproduce as there's permutation inside
+set.seed(123)
+
+sim_params <- newSplatParams(
+  nGenes = 1000,
+  batchCells = 3000,
+  group.prob = seq(0.1, 0.4, length.out = 4),
+  de.prob = 0.02,
+  # de.downProb = 0,  ## only set up-regulated genes for each group
+  de.facLoc = 0.5,
+  de.facScale = 0.4
+)
+
+data_sim <- splatSimulate(sim_params, method = "groups")
+
+markers_list <- rowData(data_sim)[,paste0("DEFacGroup", 1:4)] |> 
+  lapply(\(x) rownames(data_sim[x > 1]))
+
+## aggregate into pseudo-bulk samples
+pb <- pseudo_samples(data_sim,
+                     by = c("Batch", "Group"),
+                     min.cells = 50, max.cells = 100)
+dge <- DGEList(
+  counts = pb,
+  samples = data.frame(group = gsub(".*\\.(.*)_.*", "\\1",colnames(pb)),
+                       Batch = gsub("(.*)\\..*", "\\1",colnames(pb)),
+                       sampleID = gsub("(.*)_.*", "\\1",colnames(pb)))
+)
+```
+
+```{r get sigs, eval=FALSE, fig.height=4}
+set.seed(123)
+sig_ls <- lapply(paste0("Group", 1:4), \(x) {
+  filter_subset_sig(
+    data = dge,
+    markers = NULL,
+    group_col = "group",
+    target_group = x,
+    lfc = 0,
+    assemble = "intersect"  ## get intersected DEGs across all comparisons
+  )
+}) |> setNames(paste0("Group", 1:4))
+
+p <- lapply(1:4, \(i) ggvenn::ggvenn(list(sig = sig_ls[[i]],
+                                          marker = markers_list[[i]]),
+                                     show_percentage = FALSE) +
+              ggtitle(names(sig_ls)[i]))
+patchwork::wrap_plots(p)
+```
+
+```{r random pseudo-bulk, eval=FALSE}
+## randomly generate aggregating idx
+set.seed(123)
+data_sim$rand_idx <- sample.int(30, ncol(data_sim), replace = TRUE)
+
+## aggregate into pseudo-bulk samples based on rand_idx
+pb_r <- pseudo_samples(data_sim, by = c("Batch", "rand_idx"))
+dge_r <- DGEList(
+  counts = pb_r,
+  samples = data.frame(group = gsub(".*\\.(.*)_.*", "\\1",colnames(pb_r)),
+                       Batch = gsub("(.*)\\..*", "\\1",colnames(pb_r)),
+                       sampleID = gsub("(.*)_.*", "\\1",colnames(pb_r)))
+)
+
+## append cellular composition
+tmp <- as.data.frame(data_sim@colData) |>
+  group_by(rand_idx, Group) |>
+  summarise(count = n()) |>
+  pivot_wider(names_from = Group, values_from = count) |>
+  mutate(rand_idx = factor(rand_idx))
+tmp[,-1] <- signif(tmp[,-1] / rowSums(tmp[,-1]), 2)
+dge_r$samples <- left_join(dge_r$samples, tmp, by = c("group" = "rand_idx"))
+
+## data process
+keep <- filterByExpr(dge_r)
+dge_r <- dge_r[keep,, keep.lib.sizes = FALSE]
+dge_r <- calcNormFactors(dge_r, method = "TMM")
+```
+
+## Score
+
+```{r score, eval=FALSE}
+library(singscore)
+
+rank_data <- rankGenes(edgeR::cpm(dge_r, log = TRUE))
+scores <- multiScore(rank_data, upSetColc = gls2gsc(sig_ls))
+
+tmp <- cbind(Sample = colnames(dge_r), dge_r$samples[,6:9]) |> 
+  pivot_longer(-Sample, names_to = "Group", values_to = "Prop")
+
+tmp <- t(scores$Scores) |> 
+  data.frame(Sample = colnames(scores$Scores)) |> 
+  pivot_longer(-Sample, names_to = "Group", values_to = "Score") |> 
+  left_join(tmp)
+
+ggplot(tmp, aes(x = Prop, y = Score, col = Group)) +
+  geom_point() +
+  facet_wrap(~Group, scales = "free") +
+  ggpubr::stat_cor() +
+  theme_classic()
+```
+
+## Deconvolution
+
+```{r deconv, eval=FALSE}
+sig_matrix <- DWLS::buildSignatureMatrixMAST(
+  scdata = data_sim@assays@data$counts[unique(unlist(sig_ls)),],
+  id = data_sim$Group,
+  path = tempdir()
+)
+```
+
+
+## Annotation
+
 
 # Session Info
 

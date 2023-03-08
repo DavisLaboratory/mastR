@@ -29,7 +29,7 @@ setGeneric("sig_gseaplot",
                     gene_id = "SYMBOL",
                     digits = 2,
                     slot = "counts",
-                    method = c("gseaplot", "dotplot"),
+                    method = c("dotplot", "gseaplot"),
                     ...)
              standardGeneric("sig_gseaplot"))
 
@@ -47,7 +47,7 @@ function(data,
          gene_id = "SYMBOL",
          digits = 2,
          slot = "counts",
-         method = c("gseaplot", "dotplot"),
+         method = c("dotplot", "gseaplot"),
          ...) {
 
   stopifnot(is.character(gene_id), is.numeric(digits))
@@ -95,7 +95,7 @@ function(data,
          gene_id = "SYMBOL",
          digits = 2,
          slot = "counts",
-         method = c("gseaplot", "dotplot"),
+         method = c("dotplot", "gseaplot"),
          ...) {
 
   stopifnot(is.character(gene_id), is.numeric(digits))
@@ -146,7 +146,7 @@ function(data,
          target_group,
          gene_id = "SYMBOL",
          digits = 2,
-         method = c("gseaplot", "dotplot"),
+         method = c("dotplot", "gseaplot"),
          ...) {
 
   stopifnot(is.character(gene_id), is.numeric(digits))
@@ -192,7 +192,7 @@ function(data,
          target_group,
          gene_id = "SYMBOL",
          digits = 2,
-         method = c("gseaplot", "dotplot"),
+         method = c("dotplot", "gseaplot"),
          ...) {
 
   stopifnot(is.character(gene_id), is.numeric(digits))
@@ -243,7 +243,7 @@ function(data,
          gene_id = "SYMBOL",
          digits = 2,
          slot = "counts",
-         method = c("gseaplot", "dotplot"),
+         method = c("dotplot", "gseaplot"),
          ...) {
 
   stopifnot(is.character(gene_id), is.numeric(digits))
