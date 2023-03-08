@@ -17,7 +17,7 @@ sig_gseaplot(
   gene_id = "SYMBOL",
   digits = 2,
   slot = "counts",
-  method = c("gseaplot", "dotplot"),
+  method = c("dotplot", "gseaplot"),
   ...
 )
 
@@ -29,7 +29,7 @@ sig_gseaplot(
   gene_id = "SYMBOL",
   digits = 2,
   slot = "counts",
-  method = c("gseaplot", "dotplot"),
+  method = c("dotplot", "gseaplot"),
   ...
 )
 
@@ -41,7 +41,7 @@ sig_gseaplot(
   gene_id = "SYMBOL",
   digits = 2,
   slot = "counts",
-  method = c("gseaplot", "dotplot"),
+  method = c("dotplot", "gseaplot"),
   ...
 )
 
@@ -53,7 +53,7 @@ sig_gseaplot(
   gene_id = "SYMBOL",
   digits = 2,
   slot = "counts",
-  method = c("gseaplot", "dotplot"),
+  method = c("dotplot", "gseaplot"),
   ...
 )
 
@@ -65,7 +65,7 @@ sig_gseaplot(
   gene_id = "SYMBOL",
   digits = 2,
   slot = "counts",
-  method = c("gseaplot", "dotplot"),
+  method = c("dotplot", "gseaplot"),
   ...
 )
 
@@ -77,7 +77,7 @@ sig_gseaplot(
   gene_id = "SYMBOL",
   digits = 2,
   slot = "counts",
-  method = c("gseaplot", "dotplot"),
+  method = c("dotplot", "gseaplot"),
   ...
 )
 }
