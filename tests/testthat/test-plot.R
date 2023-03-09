@@ -1,37 +1,37 @@
 # library(vdiffr)
 
-test_that("plot_density works", {
+test_that("plot_density_init works", {
   data("im_data_6")
-  dge <- edgeR::DGEList(counts = Biobase::exprs(im_data_6),
-                        group = im_data_6$`celltype:ch1`)
+  data <- data.frame(
+    logcounts = rnorm(100),
+    Group = rep(c("a","b"), 50),
+    Sample = rep(1:4, each = 25)
+  )
 
-  p <- function() plot_density(dge = dge, group_col = "group",
-                               keep = 1:1e4, normalize = TRUE)
+  p <- plot_density_init(data1 = data, data2 = data[1:80,])
 
   # expect_doppelganger("basic density plot", p)
-  expect_silent(p())
+  expect_true(is.ggplot(p))
 })
 
-test_that("plot_rle works", {
+test_that("plot_rle_init works", {
   data("im_data_6")
-  dge <- edgeR::DGEList(counts = Biobase::exprs(im_data_6),
-                        group = im_data_6$`celltype:ch1`)
 
-  p <- function() plot_rle(dge = dge, group_col = "group",
-                           keep = 1:1e4, normalize = TRUE)
+  p <- function() plot_rle_init(expr1 = Biobase::exprs(im_data_6)[1:1000,],
+                                expr2 = Biobase::exprs(im_data_6)[1001:2000,],
+                                group_col = im_data_6$`celltype:ch1`)
 
-  expect_true(is(rle(dge$counts), "matrix"))
+  expect_true(is(rle(Biobase::exprs(im_data_6)[1:100,]), "matrix"))
   # expect_doppelganger("basic RLE boxplot", p)
   expect_silent(p())
 })
 
-test_that("plot_MDS works", {
+test_that("plot_MDS_init works", {
   data("im_data_6")
-  dge <- edgeR::DGEList(counts = Biobase::exprs(im_data_6),
-                        group = im_data_6$`celltype:ch1`)
 
-  p <- function() plot_MDS(dge = dge, group_col = "group",
-                           keep = 1:1e4, normalize = TRUE)
+  p <- function() plot_MDS_init(expr1 = Biobase::exprs(im_data_6)[1:1000,],
+                                expr2 = Biobase::exprs(im_data_6)[1001:2000,],
+                                group_col = im_data_6$`celltype:ch1`)
 
   # expect_doppelganger("basic MDS plot", p)
   expect_silent(p())

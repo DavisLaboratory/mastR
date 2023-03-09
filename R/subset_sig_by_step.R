@@ -342,11 +342,11 @@ plot_mean_var <- function(proc_data, span = 0.5) {
 #' select DEGs from multiple comparisons
 #'
 #' @param tfit processed tfit returned by [process_data()]
-#' @param feature_selection one of "auto", "rankproduct" or "none", choose if to
-#'                          use rank product or not to select DEGs from multiple
-#'                          comparisons of DE analysis, default 'auto' uses
-#'                          'rankproduct' but change to 'none' if final
-#'                          genes < 5 for both UP and DOWN.
+#' @param feature_selection one of "auto" (default), "rankproduct" or "none",
+#'                          choose if to use rank product or not to select DEGs
+#'                          from multiple comparisons of DE analysis, 'auto'
+#'                          uses 'rankproduct' but change to 'none' if final
+#'                          genes < 5 for both UP and DOWN
 #' @param ... params for [DEGs_RP()] or [DEGs_Group()]
 #'
 #' @return GeneSetCollection contains UP and DOWN genesets

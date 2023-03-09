@@ -202,8 +202,10 @@ plot_voom <- function(vfit, span = 0.5) {
 
 
 #helper: density plot init
-plot_density_init <- function(data1, data2, abl = 2) {
-  (ggplot(data1, aes(x = logcounts, col = Group, group = Sample)) +
+plot_density_init <- function(data1, data2, abl = 2,
+                              expr = "logcounts", col = "Group",
+                              sample = "Sample") {
+  (ggplot(data1, aes(x = !!sym(expr), col = !!sym(col), group = !!sym(sample))) +
      geom_density() +
      geom_vline(xintercept = abl, lty = 2) +
      ggtitle("Original data") + ## original data1

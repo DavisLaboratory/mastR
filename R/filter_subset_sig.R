@@ -4,8 +4,8 @@
 #' either "union", "intersect" or "RRA" can be specified when input is a list
 #' of datasets to integrate the signatures into one.
 #'
-#' @inheritParams de_analysis
 #' @inheritParams process_data
+#' @inheritParams select_sig
 #' @param data An expression data or a list of expression data objects
 #' @param group_col vector or character, specify the group factor or column name of
 #'           coldata for DE comparisons

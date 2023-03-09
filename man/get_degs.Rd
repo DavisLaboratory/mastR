@@ -97,11 +97,11 @@ coldata for DE comparisons}
 
 \item{normalize}{logical, if the expr in data is raw counts needs to be normalized}
 
-\item{feature_selection}{one of "auto", "rankproduct" or "none", choose if to
-use rank product or not to select DEGs from multiple
-comparisons of DE analysis, default 'auto' uses
-'rankproduct' but change to 'none' if final
-genes < 5 for both UP and DOWN.}
+\item{feature_selection}{one of "auto" (default), "rankproduct" or "none",
+choose if to use rank product or not to select DEGs
+from multiple comparisons of DE analysis, 'auto'
+uses 'rankproduct' but change to 'none' if final
+genes < 5 for both UP and DOWN}
 
 \item{slot}{character, specify which slot to use only for DGEList, sce or
 seurat object, optional, default 'counts'}

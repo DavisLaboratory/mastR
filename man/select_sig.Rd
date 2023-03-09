@@ -9,11 +9,11 @@ select_sig(tfit, feature_selection = c("auto", "rankproduct", "none"), ...)
 \arguments{
 \item{tfit}{processed tfit returned by \code{\link[=process_data]{process_data()}}}
 
-\item{feature_selection}{one of "auto", "rankproduct" or "none", choose if to
-use rank product or not to select DEGs from multiple
-comparisons of DE analysis, default 'auto' uses
-'rankproduct' but change to 'none' if final
-genes < 5 for both UP and DOWN.}
+\item{feature_selection}{one of "auto" (default), "rankproduct" or "none",
+choose if to use rank product or not to select DEGs
+from multiple comparisons of DE analysis, 'auto'
+uses 'rankproduct' but change to 'none' if final
+genes < 5 for both UP and DOWN}
 
 \item{...}{params for \code{\link[=DEGs_RP]{DEGs_RP()}} or \code{\link[=DEGs_Group]{DEGs_Group()}}}
 }

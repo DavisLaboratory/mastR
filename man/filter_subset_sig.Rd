@@ -90,11 +90,11 @@ down-expressed genes}
 when markers is not NULL, could be one of 'ENSEMBL', 'SYMBOL',
 'ENTREZ'..., default 'SYMBOL'}
 
-\item{feature_selection}{one of "auto", "rankproduct" or "none", choose if to
-use rank product or not to select DEGs from multiple
-comparisons of DE analysis, default 'auto' uses
-'rankproduct' but change to 'none' if final
-genes < 5 for both UP and DOWN.}
+\item{feature_selection}{one of "auto" (default), "rankproduct" or "none",
+choose if to use rank product or not to select DEGs
+from multiple comparisons of DE analysis, 'auto'
+uses 'rankproduct' but change to 'none' if final
+genes < 5 for both UP and DOWN}
 
 \item{comb}{'RRA' or Fun for combining sigs from multiple datasets, keep all
 passing genes or only intersected genes, could be \code{union} or

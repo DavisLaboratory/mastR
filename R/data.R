@@ -10,7 +10,7 @@
 #'   \item{B cells}{gene median expression in B cells}
 #'   \item{T CD4}{gene median expression in T CD4 cells}
 #'   \item{T CD8}{gene median expression in T CD8 cells}
-#'   \item{T γδ}{gene median expression in T γδ cells}
+#'   \item{T gamma delta}{gene median expression in T γδ cells}
 #'   \item{NK}{gene median expression in NK cells}
 #'   \item{MoMaDC}{gene median expression in MoMaDC cells}
 #'   \item{granulocytes}{gene median expression in granulocytes}
