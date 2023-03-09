@@ -677,10 +677,11 @@ when markers is not NULL, could be one of ‘ENSEMBL’, ‘SYMBOL’,
 <span>  summary <span class="op">=</span> <span class="cn">TRUE</span> <span class="co">## if to show the summary of tfit result</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:many mapping between keys and columns</span></span>
+<span><span class="co">#&gt; No group or design set. Assuming all samples belong to one group.</span></span>
 <span><span class="co">#&gt;        NK-Neutrophils NK-Monocytes NK-B.cells NK-CD4 NK-CD8</span></span>
-<span><span class="co">#&gt; Down             4012         3949       3143   2697   2157</span></span>
-<span><span class="co">#&gt; NotSig           1498         2698       4435   5007   6203</span></span>
-<span><span class="co">#&gt; Up               4948         3811       2880   2754   2098</span></span>
+<span><span class="co">#&gt; Down             2554         2256       1740   1581   1187</span></span>
+<span><span class="co">#&gt; NotSig            768         1675       2701   2923   3684</span></span>
+<span><span class="co">#&gt; Up               2896         2287       1777   1714   1347</span></span>
 <span><span class="co"># summary(limma::decideTests(proc_data$tfit))</span></span></code></pre></div>
 <p>mastR also provides visualizations for data process, to compare the
 data before and after <code><a href="../reference/process_data.html">process_data()</a></code> and see how well the
@@ -760,14 +761,16 @@ variance in PC1 compared with non-intersected DEGs.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">m_ct</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">deg_up</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/match.html" class="external-link">match</a></span><span class="op">(</span><span class="va">m_ct</span>, <span class="va">deg_up</span><span class="op">)</span><span class="op">]</span>  <span class="co">## set ensembl ID as names for downstream visualization</span></span>
 <span></span>
 <span><span class="va">m_ct</span></span>
-<span><span class="co">#&gt; ENSG00000122223 ENSG00000198821 ENSG00000172543 ENSG00000145649 ENSG00000197540 </span></span>
-<span><span class="co">#&gt;         "CD244"         "CD247"          "CTSW"          "GZMA"          "GZMM" </span></span>
-<span><span class="co">#&gt; ENSG00000100385 ENSG00000183542 ENSG00000150045 ENSG00000149294 ENSG00000189430 </span></span>
-<span><span class="co">#&gt;         "IL2RB"         "KLRC4"         "KLRF1"         "NCAM1"          "NCR1" </span></span>
-<span><span class="co">#&gt; ENSG00000168229 ENSG00000041353 ENSG00000198574 ENSG00000074966 ENSG00000115085 </span></span>
-<span><span class="co">#&gt;         "PTGDR"        "RAB27B"        "SH2D1B"           "TXK"         "ZAP70" </span></span>
-<span><span class="co">#&gt; ENSG00000134545 ENSG00000150637 ENSG00000027869 ENSG00000171476 </span></span>
-<span><span class="co">#&gt;         "KLRC1"         "CD226"        "SH2D2A"          "HOPX"</span></span>
+<span><span class="co">#&gt; ENSG00000117281 ENSG00000122223 ENSG00000198821 ENSG00000172543 ENSG00000145649 </span></span>
+<span><span class="co">#&gt;         "CD160"         "CD244"         "CD247"          "CTSW"          "GZMA" </span></span>
+<span><span class="co">#&gt; ENSG00000197540 ENSG00000081985 ENSG00000100385 ENSG00000183542 ENSG00000150045 </span></span>
+<span><span class="co">#&gt;          "GZMM"       "IL12RB2"         "IL2RB"         "KLRC4"         "KLRF1" </span></span>
+<span><span class="co">#&gt; ENSG00000168060 ENSG00000149294 ENSG00000189430 ENSG00000168229 ENSG00000041353 </span></span>
+<span><span class="co">#&gt;      "NAALADL1"         "NCAM1"          "NCR1"         "PTGDR"        "RAB27B" </span></span>
+<span><span class="co">#&gt; ENSG00000164483 ENSG00000198574 ENSG00000074966 ENSG00000115085 ENSG00000134545 </span></span>
+<span><span class="co">#&gt;         "SAMD3"        "SH2D1B"           "TXK"         "ZAP70"         "KLRC1" </span></span>
+<span><span class="co">#&gt; ENSG00000150637 ENSG00000135077 ENSG00000027869 ENSG00000171476 </span></span>
+<span><span class="co">#&gt;         "CD226"        "HAVCR2"        "SH2D2A"          "HOPX"</span></span>
 <span></span>
 <span><span class="co">## PCA shows clear separation of NK cells</span></span>
 <span><span class="fu"><a href="../reference/pca_matrix_plot.html">pca_matrix_plot</a></span><span class="op">(</span><span class="va">proc_data</span><span class="op">$</span><span class="va">vfit</span><span class="op">$</span><span class="va">E</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">m_ct</span><span class="op">)</span>,<span class="op">]</span>,</span>
@@ -902,8 +905,10 @@ cell line.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sig_NK_CRC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/sets.html" class="external-link">intersect</a></span><span class="op">(</span><span class="va">m_ct</span>, <span class="va">m_ccl</span><span class="op">)</span></span>
 <span><span class="va">sig_NK_CRC</span></span>
-<span><span class="co">#&gt;  [1] "CD244"  "CD247"  "CTSW"   "GZMA"   "GZMM"   "IL2RB"  "KLRC4"  "KLRF1" </span></span>
-<span><span class="co">#&gt;  [9] "NCAM1"  "NCR1"   "PTGDR"  "SH2D1B" "ZAP70"  "KLRC1"  "CD226"  "HOPX"</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1] "CD160"    "CD244"    "CD247"    "CTSW"     "GZMA"     "GZMM"    </span></span>
+<span><span class="co">#&gt;  [7] "IL12RB2"  "IL2RB"    "KLRC4"    "KLRF1"    "NAALADL1" "NCAM1"   </span></span>
+<span><span class="co">#&gt; [13] "NCR1"     "PTGDR"    "SAMD3"    "SH2D1B"   "ZAP70"    "KLRC1"   </span></span>
+<span><span class="co">#&gt; [19] "CD226"    "HAVCR2"   "HOPX"</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -943,14 +948,10 @@ and result shows most of signature genes are indicating NK cells.</p>
 <span>  slot <span class="op">=</span> <span class="st">"voomE"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:many mapping between keys and columns</span></span>
-<span><span class="co">#&gt; Warning: ggrepel: 1 unlabeled data points (too many overlaps). Consider</span></span>
-<span><span class="co">#&gt; increasing max.overlaps</span></span>
-<span><span class="co">#&gt; Warning: ggrepel: 7 unlabeled data points (too many overlaps). Consider increasing max.overlaps</span></span>
-<span><span class="co">#&gt; ggrepel: 7 unlabeled data points (too many overlaps). Consider increasing max.overlaps</span></span>
-<span><span class="co">#&gt; Warning: ggrepel: 2 unlabeled data points (too many overlaps). Consider</span></span>
-<span><span class="co">#&gt; increasing max.overlaps</span></span>
 <span><span class="co">#&gt; Warning: ggrepel: 3 unlabeled data points (too many overlaps). Consider</span></span>
-<span><span class="co">#&gt; increasing max.overlaps</span></span></code></pre></div>
+<span><span class="co">#&gt; increasing max.overlaps</span></span>
+<span><span class="co">#&gt; Warning: ggrepel: 4 unlabeled data points (too many overlaps). Consider increasing max.overlaps</span></span>
+<span><span class="co">#&gt; ggrepel: 4 unlabeled data points (too many overlaps). Consider increasing max.overlaps</span></span></code></pre></div>
 <p><img src="mastR_Demo_files/figure-html/pca-2.png" width="768"></p>
 </div>
 <div class="section level3">
@@ -1159,10 +1160,11 @@ comparisons.</p>
 <span>  method <span class="op">=</span> <span class="st">"dotplot"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:many mapping between keys and columns</span></span>
+<span><span class="co">#&gt; No group or design set. Assuming all samples belong to one group.</span></span>
 <span><span class="co">#&gt;        NK-Neutrophils NK-Monocytes NK-B.cells NK-CD4 NK-CD8</span></span>
-<span><span class="co">#&gt; Down             3995         3931       3137   2680   2141</span></span>
-<span><span class="co">#&gt; NotSig           1471         2653       4360   4936   6131</span></span>
-<span><span class="co">#&gt; Up               4872         3754       2841   2722   2066</span></span>
+<span><span class="co">#&gt; Down             2526         2221       1704   1539   1160</span></span>
+<span><span class="co">#&gt; NotSig            735         1651       2677   2891   3630</span></span>
+<span><span class="co">#&gt; Up               2815         2204       1695   1646   1286</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:many mapping between keys and columns</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; preparing geneSet collections...</span></span>
@@ -1229,16 +1231,18 @@ DEGs.</p>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:many mapping between keys and columns</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:many mapping between keys and columns</span></span>
+<span><span class="co">#&gt; No group or design set. Assuming all samples belong to one group.</span></span>
 <span><span class="co">#&gt;        NK-Neutrophils NK-Monocytes NK-B.cells NK-CD4 NK-CD8</span></span>
-<span><span class="co">#&gt; Down             4012         3949       3143   2697   2157</span></span>
-<span><span class="co">#&gt; NotSig           1498         2698       4435   5007   6203</span></span>
-<span><span class="co">#&gt; Up               4948         3811       2880   2754   2098</span></span>
+<span><span class="co">#&gt; Down             2554         2256       1740   1581   1187</span></span>
+<span><span class="co">#&gt; NotSig            768         1675       2701   2923   3684</span></span>
+<span><span class="co">#&gt; Up               2896         2287       1777   1714   1347</span></span>
 <span></span>
 <span><span class="co">## get 8 more new signature genes</span></span>
 <span><span class="va">sig_NK_CRC_refine</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/sets.html" class="external-link">intersect</a></span><span class="op">(</span><span class="va">m_ct_refine</span>, <span class="va">m_ccl</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/sets.html" class="external-link">setdiff</a></span><span class="op">(</span><span class="va">sig_NK_CRC_refine</span>, <span class="va">sig_NK_CRC</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "CD160"    "IL12RB2"  "NAALADL1" "NME8"     "XCL2"     "HAVCR2"   "ITGAX"   </span></span>
-<span><span class="co">#&gt; [8] "SIGLEC7"</span></span>
+<span><span class="co">#&gt;  [1] "CDHR1"   "CLNK"    "FASLG"   "FCGR3A"  "IL18R1"  "IL18RAP" "KIR2DL1"</span></span>
+<span><span class="co">#&gt;  [8] "KIR2DL4" "KIR2DS4" "KLRD1"   "MGAM"    "NME8"    "S1PR5"   "XCL2"   </span></span>
+<span><span class="co">#&gt; [15] "ITGAM"   "ITGAX"   "SIGLEC7"</span></span>
 <span></span>
 <span><span class="co">## most NK-CD8 top DEGs are not in the markers pool</span></span>
 <span><span class="va">deg_tables</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_de_table.html">get_de_table</a></span><span class="op">(</span></span>
@@ -1246,19 +1250,17 @@ DEGs.</p>
 <span>  group_col <span class="op">=</span> <span class="st">"celltype:ch1"</span>,</span>
 <span>  target_group <span class="op">=</span> <span class="st">"NK"</span></span>
 <span><span class="op">)</span></span>
+<span><span class="co">#&gt; No group or design set. Assuming all samples belong to one group.</span></span>
 <span><span class="co">#&gt;        NK-Neutrophils NK-Monocytes NK-B.cells NK-CD4 NK-CD8</span></span>
-<span><span class="co">#&gt; Down             4009         3944       3146   2694   2153</span></span>
-<span><span class="co">#&gt; NotSig           1476         2678       4405   4985   6183</span></span>
-<span><span class="co">#&gt; Up               4926         3789       2860   2732   2075</span></span>
+<span><span class="co">#&gt; Down             2530         2201       1673   1494   1099</span></span>
+<span><span class="co">#&gt; NotSig            737         1711       2738   2978   3727</span></span>
+<span><span class="co">#&gt; Up               2805         2160       1661   1600   1246</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/sets.html" class="external-link">intersect</a></span><span class="op">(</span><span class="fu">mapIds</span><span class="op">(</span><span class="fu">org.Hs.eg.db</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/org.Hs.eg.db/man/org.Hs.egBASE.html" class="external-link">org.Hs.eg.db</a></span>,</span>
 <span>                 <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">deg_tables</span><span class="op">$</span><span class="va">`NK-CD8`</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">200</span><span class="op">]</span>,</span>
 <span>                 <span class="st">"SYMBOL"</span>, <span class="st">"ENSEMBL"</span><span class="op">)</span>,</span>
 <span>          <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span><span class="op">)</span>  <span class="co">## only 19 out of top 200 DEGs are in the pool</span></span>
-<span><span class="co">#&gt; 'select()' returned 1:many mapping between keys and columns</span></span>
-<span><span class="co">#&gt;  [1] "CD8A"     "NCAM1"    "KLRF1"    "SH2D1B"   "LTB"      "PTGDR"   </span></span>
-<span><span class="co">#&gt;  [7] "CD3G"     "IL2RB"    "KLRC1"    "CD27"     "NCR1"     "RAB27B"  </span></span>
-<span><span class="co">#&gt; [13] "CD247"    "SIGLEC7"  "NAALADL1" "HAVCR2"   "SH2D2A"   "CD244"   </span></span>
-<span><span class="co">#&gt; [19] "HOPX"</span></span></code></pre></div>
+<span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
+<span><span class="co">#&gt; [1] "LTB"</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="visualization-after-refinement">Visualization after refinement<a class="anchor" aria-label="anchor" href="#visualization-after-refinement"></a>
 </h3>
