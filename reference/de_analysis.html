@@ -65,7 +65,6 @@
 <span>  <span class="va">group_col</span>,</span>
 <span>  <span class="va">target_group</span>,</span>
 <span>  normalize <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  feature_selection <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"auto"</span>, <span class="st">"rankproduct"</span>, <span class="st">"none"</span><span class="op">)</span>,</span>
 <span>  group <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span>,</span>
 <span>  plot <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -73,6 +72,7 @@
 <span>  p <span class="op">=</span> <span class="fl">0.05</span>,</span>
 <span>  markers <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  gene_id <span class="op">=</span> <span class="st">"SYMBOL"</span>,</span>
+<span>  slot <span class="op">=</span> <span class="st">"counts"</span>,</span>
 <span>  batch <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  summary <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -95,14 +95,6 @@
 
 <dt>normalize</dt>
 <dd><p>logical, if the expr in data is raw counts needs to be normalized</p></dd>
-
-
-<dt>feature_selection</dt>
-<dd><p>one of "auto", "rankproduct" or "none", choose if to
-use rank product or not to select DEGs from multiple
-comparisons of DE analysis, default 'auto' uses
-'rankproduct' but change to 'none' if final
-genes &lt; 5 for both UP and DOWN.</p></dd>
 
 
 <dt>group</dt>
@@ -141,6 +133,11 @@ when markers is not NULL, could be one of 'ENSEMBL', 'SYMBOL',
 'ENTREZ'..., default 'SYMBOL'</p></dd>
 
 
+<dt>slot</dt>
+<dd><p>character, specify which slot to use for DGEList,
+default 'counts'</p></dd>
+
+
 <dt>batch</dt>
 <dd><p>vector of character, column name(s) of coldata to be treated as
 batch effect factor, default NULL</p></dd>
@@ -163,6 +160,645 @@ batch effect factor, default NULL</p></dd>
 
     </div>
 
+    <div id="ref-examples">
+    <h2>Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">dge</span> <span class="op">&lt;-</span> <span class="fu">edgeR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/edgeR/man/DGEList.html" class="external-link">DGEList</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="fu">Biobase</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/exprs.html" class="external-link">exprs</a></span><span class="op">(</span><span class="fu">mastR</span><span class="fu">::</span><span class="va"><a href="im_data_6.html">im_data_6</a></span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                      samples <span class="op">=</span> <span class="fu">Biobase</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="fu">mastR</span><span class="fu">::</span><span class="va"><a href="im_data_6.html">im_data_6</a></span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">de_analysis</span><span class="op">(</span><span class="va">dge</span>, group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>, target_group <span class="op">=</span> <span class="st">"NK"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        NK-Neutrophils NK-Monocytes NK-B.cells NK-CD4 NK-CD8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Down             4009         3944       3146   2694   2153</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NotSig           1476         2678       4405   4985   6183</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Up               4926         3789       2860   2732   2075</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> An object of class "DGEList"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $counts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 GSM1479438 GSM1479439 GSM1479440 GSM1479441 GSM1479442</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000419         41         18         12         14         20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000457         32          9         24         19         16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000460          4          5          9          4          6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000938       2804       1711        105          1         56</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000001036          2         58          4          6          7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 GSM1479443 GSM1479499 GSM1479500 GSM1479501 GSM1479502</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000419         15         48         23         16         24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000457         14         34          8         20         24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000460          6          4          6         12         10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000938        560       2085       1722        156          1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000001036         12          4         85          8          6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 GSM1479503 GSM1479504 GSM1479506 GSM1479507 GSM1479508</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000419         20         18         39         24         18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000457         17         16         40          9         18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000460         12         10          7          4         12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000938         43        657       2406       1672        150</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000001036          4         14          4         83          7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 GSM1479509 GSM1479510 GSM1479511 GSM1479520 GSM1479521</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000419         19         25         21         45         19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000457         18         12         15         33          7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000460          7          7          7          3          5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000938         22        176        573       2963       1529</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000001036          6          6         18          8         83</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 GSM1479522 GSM1479523 GSM1479524 GSM1479525</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000419         20         20         30         21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000457         17         18         14         15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000460          9          7          7          6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000938        217          2         63        494</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000001036          8          7          5         13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10406 more rows ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $samples</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  group lib.size norm.factors  title geo_accession</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438 Neutrophils  1788397    0.4912341 lib226    GSM1479438</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439   Monocytes  1187419    0.8737218 lib227    GSM1479439</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440     B.cells   905677    1.1114484 lib228    GSM1479440</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441         CD4   804306    1.2167386 lib229    GSM1479441</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442         CD8   898835    1.1699504 lib230    GSM1479442</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                           status submission_date last_update_date type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438 Public on Jan 06 2015     Aug 14 2014      May 15 2019  SRA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439 Public on Jan 06 2015     Aug 14 2014      May 15 2019  SRA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440 Public on Jan 06 2015     Aug 14 2014      May 15 2019  SRA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441 Public on Jan 06 2015     Aug 14 2014      May 15 2019  SRA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442 Public on Jan 06 2015     Aug 14 2014      May 15 2019  SRA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            channel_count source_name_ch1 organism_ch1 characteristics_ch1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438             1     Whole Blood Homo sapiens             age: 32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439             1     Whole Blood Homo sapiens             age: 32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440             1     Whole Blood Homo sapiens             age: 32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441             1     Whole Blood Homo sapiens             age: 32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442             1     Whole Blood Homo sapiens             age: 32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            characteristics_ch1.1 characteristics_ch1.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438   cellcount: 14737500 celltype: Neutrophils</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439    cellcount: 2000000   celltype: Monocytes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440    cellcount: 1012333     celltype: B-cells</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441    cellcount: 1071990         celltype: CD4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442    cellcount: 1011154         celltype: CD8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   characteristics_ch1.3          characteristics_ch1.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438 collectiondate: June 26 2012 diseasestatus: Healthy Control</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439 collectiondate: June 26 2012 diseasestatus: Healthy Control</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440 collectiondate: June 26 2012 diseasestatus: Healthy Control</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441 collectiondate: June 26 2012 diseasestatus: Healthy Control</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442 collectiondate: June 26 2012 diseasestatus: Healthy Control</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            characteristics_ch1.5 characteristics_ch1.6 characteristics_ch1.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438           donorid: 44             gender: F              index: 5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439           donorid: 44             gender: F             index: 23</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440           donorid: 44             gender: F              index: 6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441           donorid: 44             gender: F             index: 25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442           donorid: 44             gender: F             index: 12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            characteristics_ch1.8      characteristics_ch1.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438        race: Hispanic samplename: 44_Neutrophils</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439        race: Hispanic   samplename: 44_Monocytes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440        race: Hispanic      samplename: 44_Bcells</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441        race: Hispanic        samplename: 44_CD4T</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442        race: Hispanic        samplename: 44_CD8T</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            characteristics_ch1.10             characteristics_ch1.11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438             smoker: -- time since last flare (months): --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439             smoker: -- time since last flare (months): --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440             smoker: -- time since last flare (months): --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441             smoker: -- time since last flare (months): --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442             smoker: -- time since last flare (months): --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 characteristics_ch1.12             characteristics_ch1.13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438 time since steroid dose: -- time since symptom onset (yrs): --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439 time since steroid dose: -- time since symptom onset (yrs): --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440 time since steroid dose: -- time since symptom onset (yrs): --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441 time since steroid dose: -- time since symptom onset (yrs): --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442 time since steroid dose: -- time since symptom onset (yrs): --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>               characteristics_ch1.14 molecule_ch1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438 years since diagnosis: --    total RNA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439 years since diagnosis: --    total RNA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440 years since diagnosis: --    total RNA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441 years since diagnosis: --    total RNA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442 years since diagnosis: --    total RNA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     extract_protocol_ch1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438 Fresh blood samples were collected from healthy subjects and subjects diagnosed type 1 diabetes, amyotrophic lateral sclerosis, and sepsis, as well as multiple sclerosis patients before and 24 hours after the first treatment with IFN-beta. At the time of blood draw, an aliquot of whole blood was collected into a Tempus tube (Invitrogen), while the remainder of the primary fresh blood sample was processed to highly pure populations of neutrophils, monocytes, B cells, CD4 T cells, CD8 T cells, and natural killer cells. RNA was extracted from each of these cell subsets, as well as the whole blood samples, and processed into RNA sequencing (RNAseq) libraries (Illumina TruSeq). Sequencing libraries were analyzed on an Illumina HiScan, with a target read depth of ~20M reads. Reads were demultiplexed, mapped to human gene models (ENSEMBL), and tabulated using HTSeq. Read count data were normalized by the TMM procedure (edgeR package).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439 Fresh blood samples were collected from healthy subjects and subjects diagnosed type 1 diabetes, amyotrophic lateral sclerosis, and sepsis, as well as multiple sclerosis patients before and 24 hours after the first treatment with IFN-beta. At the time of blood draw, an aliquot of whole blood was collected into a Tempus tube (Invitrogen), while the remainder of the primary fresh blood sample was processed to highly pure populations of neutrophils, monocytes, B cells, CD4 T cells, CD8 T cells, and natural killer cells. RNA was extracted from each of these cell subsets, as well as the whole blood samples, and processed into RNA sequencing (RNAseq) libraries (Illumina TruSeq). Sequencing libraries were analyzed on an Illumina HiScan, with a target read depth of ~20M reads. Reads were demultiplexed, mapped to human gene models (ENSEMBL), and tabulated using HTSeq. Read count data were normalized by the TMM procedure (edgeR package).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440 Fresh blood samples were collected from healthy subjects and subjects diagnosed type 1 diabetes, amyotrophic lateral sclerosis, and sepsis, as well as multiple sclerosis patients before and 24 hours after the first treatment with IFN-beta. At the time of blood draw, an aliquot of whole blood was collected into a Tempus tube (Invitrogen), while the remainder of the primary fresh blood sample was processed to highly pure populations of neutrophils, monocytes, B cells, CD4 T cells, CD8 T cells, and natural killer cells. RNA was extracted from each of these cell subsets, as well as the whole blood samples, and processed into RNA sequencing (RNAseq) libraries (Illumina TruSeq). Sequencing libraries were analyzed on an Illumina HiScan, with a target read depth of ~20M reads. Reads were demultiplexed, mapped to human gene models (ENSEMBL), and tabulated using HTSeq. Read count data were normalized by the TMM procedure (edgeR package).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441 Fresh blood samples were collected from healthy subjects and subjects diagnosed type 1 diabetes, amyotrophic lateral sclerosis, and sepsis, as well as multiple sclerosis patients before and 24 hours after the first treatment with IFN-beta. At the time of blood draw, an aliquot of whole blood was collected into a Tempus tube (Invitrogen), while the remainder of the primary fresh blood sample was processed to highly pure populations of neutrophils, monocytes, B cells, CD4 T cells, CD8 T cells, and natural killer cells. RNA was extracted from each of these cell subsets, as well as the whole blood samples, and processed into RNA sequencing (RNAseq) libraries (Illumina TruSeq). Sequencing libraries were analyzed on an Illumina HiScan, with a target read depth of ~20M reads. Reads were demultiplexed, mapped to human gene models (ENSEMBL), and tabulated using HTSeq. Read count data were normalized by the TMM procedure (edgeR package).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442 Fresh blood samples were collected from healthy subjects and subjects diagnosed type 1 diabetes, amyotrophic lateral sclerosis, and sepsis, as well as multiple sclerosis patients before and 24 hours after the first treatment with IFN-beta. At the time of blood draw, an aliquot of whole blood was collected into a Tempus tube (Invitrogen), while the remainder of the primary fresh blood sample was processed to highly pure populations of neutrophils, monocytes, B cells, CD4 T cells, CD8 T cells, and natural killer cells. RNA was extracted from each of these cell subsets, as well as the whole blood samples, and processed into RNA sequencing (RNAseq) libraries (Illumina TruSeq). Sequencing libraries were analyzed on an Illumina HiScan, with a target read depth of ~20M reads. Reads were demultiplexed, mapped to human gene models (ENSEMBL), and tabulated using HTSeq. Read count data were normalized by the TMM procedure (edgeR package).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            taxid_ch1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438      9606</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439      9606</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440      9606</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441      9606</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442      9606</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                 data_processing</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438 fastq files were created from .bcl files via Illumina's CASAVA 1.8.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439 fastq files were created from .bcl files via Illumina's CASAVA 1.8.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440 fastq files were created from .bcl files via Illumina's CASAVA 1.8.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441 fastq files were created from .bcl files via Illumina's CASAVA 1.8.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442 fastq files were created from .bcl files via Illumina's CASAVA 1.8.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                       data_processing.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438 reads were aligned to Hg19 via Omicsoft sequence aligner (OSA) version 2.0.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439 reads were aligned to Hg19 via Omicsoft sequence aligner (OSA) version 2.0.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440 reads were aligned to Hg19 via Omicsoft sequence aligner (OSA) version 2.0.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441 reads were aligned to Hg19 via Omicsoft sequence aligner (OSA) version 2.0.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442 reads were aligned to Hg19 via Omicsoft sequence aligner (OSA) version 2.0.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                              data_processing.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438 gene counts were generated by HTSeq version 0.5.4p3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439 gene counts were generated by HTSeq version 0.5.4p3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440 gene counts were generated by HTSeq version 0.5.4p3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441 gene counts were generated by HTSeq version 0.5.4p3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442 gene counts were generated by HTSeq version 0.5.4p3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                              data_processing.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438 TMMs were generated with Bioconductor package EdgeR</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439 TMMs were generated with Bioconductor package EdgeR</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440 TMMs were generated with Bioconductor package EdgeR</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441 TMMs were generated with Bioconductor package EdgeR</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442 TMMs were generated with Bioconductor package EdgeR</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             data_processing.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438 Genome_build: Hg19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439 Genome_build: Hg19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440 Genome_build: Hg19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441 Genome_build: Hg19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442 Genome_build: Hg19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                    data_processing.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438 Supplementary_files_format_and_content: tab delimited file contains TMM normalized counts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439 Supplementary_files_format_and_content: tab delimited file contains TMM normalized counts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440 Supplementary_files_format_and_content: tab delimited file contains TMM normalized counts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441 Supplementary_files_format_and_content: tab delimited file contains TMM normalized counts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442 Supplementary_files_format_and_content: tab delimited file contains TMM normalized counts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            platform_id    contact_name                  contact_email</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438    GPL15456 Scott,,Presnell SPresnell@benaroyaresearch.org</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439    GPL15456 Scott,,Presnell SPresnell@benaroyaresearch.org</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440    GPL15456 Scott,,Presnell SPresnell@benaroyaresearch.org</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441    GPL15456 Scott,,Presnell SPresnell@benaroyaresearch.org</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442    GPL15456 Scott,,Presnell SPresnell@benaroyaresearch.org</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            contact_department           contact_institute contact_address</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438 Systems Immunology Benaroya Research Institute 1201 Ninth Ave.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439 Systems Immunology Benaroya Research Institute 1201 Ninth Ave.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440 Systems Immunology Benaroya Research Institute 1201 Ninth Ave.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441 Systems Immunology Benaroya Research Institute 1201 Ninth Ave.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442 Systems Immunology Benaroya Research Institute 1201 Ninth Ave.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            contact_city contact_state contact_zip.postal_code contact_country</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438      Seattle            WA                   98101             USA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439      Seattle            WA                   98101             USA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440      Seattle            WA                   98101             USA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441      Seattle            WA                   98101             USA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442      Seattle            WA                   98101             USA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            data_row_count  instrument_model library_selection library_source</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438              0 Illumina HiScanSQ              cDNA transcriptomic</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439              0 Illumina HiScanSQ              cDNA transcriptomic</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440              0 Illumina HiScanSQ              cDNA transcriptomic</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441              0 Illumina HiScanSQ              cDNA transcriptomic</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442              0 Illumina HiScanSQ              cDNA transcriptomic</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            library_strategy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438          RNA-Seq</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439          RNA-Seq</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440          RNA-Seq</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441          RNA-Seq</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442          RNA-Seq</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                  relation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN02990322</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN02990323</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN02990324</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN02990325</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN02990331</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                      relation.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX680546</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX680547</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX680548</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX680549</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX680550</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            supplementary_file_1 age.ch1 cellcount.ch1 celltype.ch1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438                 NONE      32      14737500  Neutrophils</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439                 NONE      32       2000000    Monocytes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440                 NONE      32       1012333      B-cells</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441                 NONE      32       1071990          CD4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442                 NONE      32       1011154          CD8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            collectiondate.ch1 diseasestatus.ch1 donorid.ch1 gender.ch1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438       June 26 2012   Healthy Control          44          F</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439       June 26 2012   Healthy Control          44          F</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440       June 26 2012   Healthy Control          44          F</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441       June 26 2012   Healthy Control          44          F</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442       June 26 2012   Healthy Control          44          F</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            index.ch1 race.ch1 samplename.ch1 smoker.ch1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438         5 Hispanic 44_Neutrophils         --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439        23 Hispanic   44_Monocytes         --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440         6 Hispanic      44_Bcells         --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441        25 Hispanic        44_CD4T         --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442        12 Hispanic        44_CD8T         --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            time.since.last.flare..months..ch1 time.since.steroid.dose.ch1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438                                 --                          --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439                                 --                          --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440                                 --                          --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441                                 --                          --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442                                 --                          --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            time.since.symptom.onset..yrs..ch1 years.since.diagnosis.ch1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438                                 --                        --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439                                 --                        --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440                                 --                        --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441                                 --                        --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442                                 --                        --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19 more rows ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $original_counts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 GSM1479438 GSM1479439 GSM1479440 GSM1479441 GSM1479442</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000003          0          0          0          2          1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000005          0          0          0          0          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000419         41         18         12         14         20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000457         32          9         24         19         16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000460          4          5          9          4          6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 GSM1479443 GSM1479499 GSM1479500 GSM1479501 GSM1479502</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000003          0          0          0          0          3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000005          0          0          0          0          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000419         15         48         23         16         24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000457         14         34          8         20         24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000460          6          4          6         12         10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 GSM1479503 GSM1479504 GSM1479506 GSM1479507 GSM1479508</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000003          2          0          0          0          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000005          0          0          0          0          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000419         20         18         39         24         18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000457         17         16         40          9         18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000460         12         10          7          4         12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 GSM1479509 GSM1479510 GSM1479511 GSM1479520 GSM1479521</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000003          2          1          0          0          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000005          0          0          0          0          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000419         19         25         21         45         19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000457         18         12         15         33          7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000460          7          7          7          3          5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 GSM1479522 GSM1479523 GSM1479524 GSM1479525</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000003          0          2          1          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000005          0          0          0          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000419         20         20         30         21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000457         17         18         14         15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000460          9          7          7          6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 50040 more rows ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $vfit</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $targets</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  group  lib.size norm.factors  title geo_accession</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438 Neutrophils  878521.6    0.4912341 lib226    GSM1479438</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439   Monocytes 1037473.8    0.8737218 lib227    GSM1479439</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440     B.cells 1006613.2    1.1114484 lib228    GSM1479440</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441         CD4  978630.2    1.2167386 lib229    GSM1479441</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442         CD8 1051592.3    1.1699504 lib230    GSM1479442</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                           status submission_date last_update_date type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438 Public on Jan 06 2015     Aug 14 2014      May 15 2019  SRA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439 Public on Jan 06 2015     Aug 14 2014      May 15 2019  SRA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440 Public on Jan 06 2015     Aug 14 2014      May 15 2019  SRA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441 Public on Jan 06 2015     Aug 14 2014      May 15 2019  SRA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442 Public on Jan 06 2015     Aug 14 2014      May 15 2019  SRA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            channel_count source_name_ch1 organism_ch1 characteristics_ch1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438             1     Whole Blood Homo sapiens             age: 32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439             1     Whole Blood Homo sapiens             age: 32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440             1     Whole Blood Homo sapiens             age: 32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441             1     Whole Blood Homo sapiens             age: 32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442             1     Whole Blood Homo sapiens             age: 32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            characteristics_ch1.1 characteristics_ch1.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438   cellcount: 14737500 celltype: Neutrophils</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439    cellcount: 2000000   celltype: Monocytes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440    cellcount: 1012333     celltype: B-cells</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441    cellcount: 1071990         celltype: CD4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442    cellcount: 1011154         celltype: CD8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   characteristics_ch1.3          characteristics_ch1.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438 collectiondate: June 26 2012 diseasestatus: Healthy Control</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439 collectiondate: June 26 2012 diseasestatus: Healthy Control</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440 collectiondate: June 26 2012 diseasestatus: Healthy Control</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441 collectiondate: June 26 2012 diseasestatus: Healthy Control</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442 collectiondate: June 26 2012 diseasestatus: Healthy Control</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            characteristics_ch1.5 characteristics_ch1.6 characteristics_ch1.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438           donorid: 44             gender: F              index: 5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439           donorid: 44             gender: F             index: 23</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440           donorid: 44             gender: F              index: 6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441           donorid: 44             gender: F             index: 25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442           donorid: 44             gender: F             index: 12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            characteristics_ch1.8      characteristics_ch1.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438        race: Hispanic samplename: 44_Neutrophils</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439        race: Hispanic   samplename: 44_Monocytes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440        race: Hispanic      samplename: 44_Bcells</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441        race: Hispanic        samplename: 44_CD4T</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442        race: Hispanic        samplename: 44_CD8T</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            characteristics_ch1.10             characteristics_ch1.11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438             smoker: -- time since last flare (months): --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439             smoker: -- time since last flare (months): --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440             smoker: -- time since last flare (months): --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441             smoker: -- time since last flare (months): --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442             smoker: -- time since last flare (months): --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 characteristics_ch1.12             characteristics_ch1.13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438 time since steroid dose: -- time since symptom onset (yrs): --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439 time since steroid dose: -- time since symptom onset (yrs): --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440 time since steroid dose: -- time since symptom onset (yrs): --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441 time since steroid dose: -- time since symptom onset (yrs): --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442 time since steroid dose: -- time since symptom onset (yrs): --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>               characteristics_ch1.14 molecule_ch1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438 years since diagnosis: --    total RNA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439 years since diagnosis: --    total RNA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440 years since diagnosis: --    total RNA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441 years since diagnosis: --    total RNA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442 years since diagnosis: --    total RNA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     extract_protocol_ch1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438 Fresh blood samples were collected from healthy subjects and subjects diagnosed type 1 diabetes, amyotrophic lateral sclerosis, and sepsis, as well as multiple sclerosis patients before and 24 hours after the first treatment with IFN-beta. At the time of blood draw, an aliquot of whole blood was collected into a Tempus tube (Invitrogen), while the remainder of the primary fresh blood sample was processed to highly pure populations of neutrophils, monocytes, B cells, CD4 T cells, CD8 T cells, and natural killer cells. RNA was extracted from each of these cell subsets, as well as the whole blood samples, and processed into RNA sequencing (RNAseq) libraries (Illumina TruSeq). Sequencing libraries were analyzed on an Illumina HiScan, with a target read depth of ~20M reads. Reads were demultiplexed, mapped to human gene models (ENSEMBL), and tabulated using HTSeq. Read count data were normalized by the TMM procedure (edgeR package).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439 Fresh blood samples were collected from healthy subjects and subjects diagnosed type 1 diabetes, amyotrophic lateral sclerosis, and sepsis, as well as multiple sclerosis patients before and 24 hours after the first treatment with IFN-beta. At the time of blood draw, an aliquot of whole blood was collected into a Tempus tube (Invitrogen), while the remainder of the primary fresh blood sample was processed to highly pure populations of neutrophils, monocytes, B cells, CD4 T cells, CD8 T cells, and natural killer cells. RNA was extracted from each of these cell subsets, as well as the whole blood samples, and processed into RNA sequencing (RNAseq) libraries (Illumina TruSeq). Sequencing libraries were analyzed on an Illumina HiScan, with a target read depth of ~20M reads. Reads were demultiplexed, mapped to human gene models (ENSEMBL), and tabulated using HTSeq. Read count data were normalized by the TMM procedure (edgeR package).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440 Fresh blood samples were collected from healthy subjects and subjects diagnosed type 1 diabetes, amyotrophic lateral sclerosis, and sepsis, as well as multiple sclerosis patients before and 24 hours after the first treatment with IFN-beta. At the time of blood draw, an aliquot of whole blood was collected into a Tempus tube (Invitrogen), while the remainder of the primary fresh blood sample was processed to highly pure populations of neutrophils, monocytes, B cells, CD4 T cells, CD8 T cells, and natural killer cells. RNA was extracted from each of these cell subsets, as well as the whole blood samples, and processed into RNA sequencing (RNAseq) libraries (Illumina TruSeq). Sequencing libraries were analyzed on an Illumina HiScan, with a target read depth of ~20M reads. Reads were demultiplexed, mapped to human gene models (ENSEMBL), and tabulated using HTSeq. Read count data were normalized by the TMM procedure (edgeR package).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441 Fresh blood samples were collected from healthy subjects and subjects diagnosed type 1 diabetes, amyotrophic lateral sclerosis, and sepsis, as well as multiple sclerosis patients before and 24 hours after the first treatment with IFN-beta. At the time of blood draw, an aliquot of whole blood was collected into a Tempus tube (Invitrogen), while the remainder of the primary fresh blood sample was processed to highly pure populations of neutrophils, monocytes, B cells, CD4 T cells, CD8 T cells, and natural killer cells. RNA was extracted from each of these cell subsets, as well as the whole blood samples, and processed into RNA sequencing (RNAseq) libraries (Illumina TruSeq). Sequencing libraries were analyzed on an Illumina HiScan, with a target read depth of ~20M reads. Reads were demultiplexed, mapped to human gene models (ENSEMBL), and tabulated using HTSeq. Read count data were normalized by the TMM procedure (edgeR package).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442 Fresh blood samples were collected from healthy subjects and subjects diagnosed type 1 diabetes, amyotrophic lateral sclerosis, and sepsis, as well as multiple sclerosis patients before and 24 hours after the first treatment with IFN-beta. At the time of blood draw, an aliquot of whole blood was collected into a Tempus tube (Invitrogen), while the remainder of the primary fresh blood sample was processed to highly pure populations of neutrophils, monocytes, B cells, CD4 T cells, CD8 T cells, and natural killer cells. RNA was extracted from each of these cell subsets, as well as the whole blood samples, and processed into RNA sequencing (RNAseq) libraries (Illumina TruSeq). Sequencing libraries were analyzed on an Illumina HiScan, with a target read depth of ~20M reads. Reads were demultiplexed, mapped to human gene models (ENSEMBL), and tabulated using HTSeq. Read count data were normalized by the TMM procedure (edgeR package).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            taxid_ch1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438      9606</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439      9606</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440      9606</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441      9606</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442      9606</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                 data_processing</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438 fastq files were created from .bcl files via Illumina's CASAVA 1.8.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439 fastq files were created from .bcl files via Illumina's CASAVA 1.8.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440 fastq files were created from .bcl files via Illumina's CASAVA 1.8.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441 fastq files were created from .bcl files via Illumina's CASAVA 1.8.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442 fastq files were created from .bcl files via Illumina's CASAVA 1.8.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                       data_processing.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438 reads were aligned to Hg19 via Omicsoft sequence aligner (OSA) version 2.0.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439 reads were aligned to Hg19 via Omicsoft sequence aligner (OSA) version 2.0.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440 reads were aligned to Hg19 via Omicsoft sequence aligner (OSA) version 2.0.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441 reads were aligned to Hg19 via Omicsoft sequence aligner (OSA) version 2.0.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442 reads were aligned to Hg19 via Omicsoft sequence aligner (OSA) version 2.0.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                              data_processing.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438 gene counts were generated by HTSeq version 0.5.4p3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439 gene counts were generated by HTSeq version 0.5.4p3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440 gene counts were generated by HTSeq version 0.5.4p3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441 gene counts were generated by HTSeq version 0.5.4p3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442 gene counts were generated by HTSeq version 0.5.4p3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                              data_processing.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438 TMMs were generated with Bioconductor package EdgeR</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439 TMMs were generated with Bioconductor package EdgeR</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440 TMMs were generated with Bioconductor package EdgeR</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441 TMMs were generated with Bioconductor package EdgeR</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442 TMMs were generated with Bioconductor package EdgeR</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             data_processing.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438 Genome_build: Hg19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439 Genome_build: Hg19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440 Genome_build: Hg19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441 Genome_build: Hg19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442 Genome_build: Hg19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                    data_processing.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438 Supplementary_files_format_and_content: tab delimited file contains TMM normalized counts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439 Supplementary_files_format_and_content: tab delimited file contains TMM normalized counts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440 Supplementary_files_format_and_content: tab delimited file contains TMM normalized counts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441 Supplementary_files_format_and_content: tab delimited file contains TMM normalized counts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442 Supplementary_files_format_and_content: tab delimited file contains TMM normalized counts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            platform_id    contact_name                  contact_email</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438    GPL15456 Scott,,Presnell SPresnell@benaroyaresearch.org</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439    GPL15456 Scott,,Presnell SPresnell@benaroyaresearch.org</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440    GPL15456 Scott,,Presnell SPresnell@benaroyaresearch.org</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441    GPL15456 Scott,,Presnell SPresnell@benaroyaresearch.org</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442    GPL15456 Scott,,Presnell SPresnell@benaroyaresearch.org</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            contact_department           contact_institute contact_address</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438 Systems Immunology Benaroya Research Institute 1201 Ninth Ave.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439 Systems Immunology Benaroya Research Institute 1201 Ninth Ave.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440 Systems Immunology Benaroya Research Institute 1201 Ninth Ave.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441 Systems Immunology Benaroya Research Institute 1201 Ninth Ave.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442 Systems Immunology Benaroya Research Institute 1201 Ninth Ave.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            contact_city contact_state contact_zip.postal_code contact_country</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438      Seattle            WA                   98101             USA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439      Seattle            WA                   98101             USA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440      Seattle            WA                   98101             USA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441      Seattle            WA                   98101             USA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442      Seattle            WA                   98101             USA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            data_row_count  instrument_model library_selection library_source</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438              0 Illumina HiScanSQ              cDNA transcriptomic</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439              0 Illumina HiScanSQ              cDNA transcriptomic</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440              0 Illumina HiScanSQ              cDNA transcriptomic</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441              0 Illumina HiScanSQ              cDNA transcriptomic</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442              0 Illumina HiScanSQ              cDNA transcriptomic</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            library_strategy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438          RNA-Seq</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439          RNA-Seq</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440          RNA-Seq</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441          RNA-Seq</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442          RNA-Seq</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                  relation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN02990322</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN02990323</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN02990324</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN02990325</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN02990331</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                      relation.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX680546</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX680547</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX680548</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX680549</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX680550</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            supplementary_file_1 age.ch1 cellcount.ch1 celltype.ch1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438                 NONE      32      14737500  Neutrophils</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439                 NONE      32       2000000    Monocytes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440                 NONE      32       1012333      B-cells</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441                 NONE      32       1071990          CD4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442                 NONE      32       1011154          CD8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            collectiondate.ch1 diseasestatus.ch1 donorid.ch1 gender.ch1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438       June 26 2012   Healthy Control          44          F</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439       June 26 2012   Healthy Control          44          F</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440       June 26 2012   Healthy Control          44          F</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441       June 26 2012   Healthy Control          44          F</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442       June 26 2012   Healthy Control          44          F</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            index.ch1 race.ch1 samplename.ch1 smoker.ch1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438         5 Hispanic 44_Neutrophils         --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439        23 Hispanic   44_Monocytes         --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440         6 Hispanic      44_Bcells         --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441        25 Hispanic        44_CD4T         --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442        12 Hispanic        44_CD8T         --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            time.since.last.flare..months..ch1 time.since.steroid.dose.ch1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438                                 --                          --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439                                 --                          --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440                                 --                          --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441                                 --                          --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442                                 --                          --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            time.since.symptom.onset..yrs..ch1 years.since.diagnosis.ch1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438                                 --                        --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439                                 --                        --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440                                 --                        --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441                                 --                        --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442                                 --                        --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19 more rows ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $E</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 GSM1479438 GSM1479439 GSM1479440 GSM1479441 GSM1479442</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000419   5.561888   4.156377   3.634345  3.8891439   4.284975</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000457   5.209216   3.194851   4.605199  4.3165651   3.971817</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000460   2.356774   2.406355   3.238417  2.2010879   2.627863</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000938  11.640376  10.687969   6.711588  0.6161254   5.747602</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000001036   1.508777   5.817288   2.160414  2.7316026   2.834314</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 GSM1479443 GSM1479499 GSM1479500 GSM1479501 GSM1479502</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000419   4.045304   5.745972   4.540885   4.067716  4.5665245</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000457   3.949089   5.254584   3.073759   4.380874  4.5665245</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000460   2.791548   2.315984   2.686736   3.667178  3.3441321</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000938   9.221678  11.172237  10.736584   7.313340  0.5367771</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000001036   3.734964   2.315984   6.404149   3.110784  2.6522544</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 GSM1479503 GSM1479504 GSM1479506 GSM1479507 GSM1479508</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000419   4.426140   4.190749   5.374778   4.575686   4.137289</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000457   4.197871   4.025690   5.410847   3.208904   4.137289</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000460   3.712444   3.373613   2.977888   2.130901   3.571692</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000938   5.511532   9.342143  11.303718  10.668767   7.161455</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000001036   2.238513   3.839277   2.240922   6.344680   2.834726</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 GSM1479509 GSM1479510 GSM1479511 GSM1479520 GSM1479521</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000419   4.310208   4.697389   4.334526   5.623372   4.272855</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000457   4.234259   3.668820   3.862458   5.181666   2.894343</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000460   2.931697   2.931855   2.815152   1.922932   2.446884</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000938   4.516659   7.488488   9.071911  11.648663  10.566297</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000001036   2.725246   2.725404   4.117715   3.203040   6.371157</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 GSM1479522 GSM1479523 GSM1479524 GSM1479525</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000419   4.352512   4.398337   4.944876   4.405879</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000457   4.124243   4.250238   3.872119   3.933810</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000460   3.242887   2.947675   2.921029   2.680054</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000938   7.759831   1.362713   6.002823   8.929441</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000001036   3.082422   2.947675   2.473570   3.734501</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10406 more rows ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $weights</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           [,1]      [,2]      [,3]      [,4]      [,5]     [,6]      [,7]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 21.081591 15.225924 13.040102 14.184000 16.529104 13.57572 21.342178</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] 19.069471  8.147300 14.538571 14.476242 12.722322 11.90197 19.329896</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]  5.072784  5.643265  9.645769  6.772721  8.028387  6.76890  5.148148</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,] 17.930722 19.113163 26.851705  4.384886 25.671321 23.13860 17.843145</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5,]  4.947266 25.764631  6.703949  6.439601  6.131992 11.42502  5.011334</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           [,8]      [,9]     [,10]     [,11]     [,12]     [,13]     [,14]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 14.995871 12.856636 14.643379 15.697280 14.200630 21.832334 15.143312</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]  7.962217 14.347984 14.937717 11.941789 12.509128 19.805415  8.080631</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]  5.542574  9.468695  7.084220  7.396865  7.204429  5.293314  5.606339</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,] 19.202068 26.878913  4.489187 25.127831 22.852165 17.682074 19.144835</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5,] 25.625806  6.584327  6.725297  5.719272 12.029642  5.146002 25.720647</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          [,15]     [,16]     [,17]     [,18]     [,19]     [,20]     [,21]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 13.392960 14.220132 15.953070 14.623401 21.539551 14.989181 13.014929</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] 14.903115 14.513308 12.179474 12.911372 19.522159  7.956862 14.512435</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]  9.980621  6.797037  7.585686  7.513552  5.205385  5.539855  9.621417</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,] 26.796226  4.393136 25.309223 22.663097 17.777537 19.204686 26.855408</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5,]  6.944336  6.461924  5.837830 12.434619  5.063746 25.621486  6.687502</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          [,22]     [,23]     [,24]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 14.129527 16.017353 14.210193</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] 14.420363 12.239372 12.518724</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]  6.736345  7.633475  7.211367</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,]  4.372437 25.349095 22.847811</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5,]  6.405998  5.867726 12.038781</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10406 more rows ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $design</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            NK Neutrophils Monocytes B.cells CD4 CD8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438  0           1         0       0   0   0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439  0           0         1       0   0   0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440  0           0         0       1   0   0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441  0           0         0       0   1   0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442  0           0         0       0   0   1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19 more rows ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $tfit</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $coefficients</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  Contrasts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   NK-Neutrophils NK-Monocytes NK-B.cells      NK-CD4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ENSG00000000419     -1.3284904   -0.1390368  0.1986597 -0.04616467</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ENSG00000000457     -1.3229214    0.8480238 -0.3686330 -0.40165793</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ENSG00000000460      0.5195102    0.4989879 -0.5144683  0.05419011</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ENSG00000000938     -2.2999151   -1.5231729  1.9050683  7.38928195</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ENSG00000001036      1.5387902   -2.3735193  1.0644773  1.09763610</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  Contrasts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                        NK-CD8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ENSG00000000419 -0.33961447</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ENSG00000000457  0.01526575</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ENSG00000000460 -0.12209992</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ENSG00000000938  2.95452137</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ENSG00000001036  1.28751737</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10406 more rows ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $stdev.unscaled</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  Contrasts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   NK-Neutrophils NK-Monocytes NK-B.cells    NK-CD4    NK-CD8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ENSG00000000419      0.1712318    0.1850232  0.1917903 0.1874947 0.1823235</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ENSG00000000457      0.1814643    0.2262097  0.1929139 0.1928792 0.2010905</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ENSG00000000460      0.2882859    0.2821774  0.2463212 0.2671228 0.2597647</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ENSG00000000938      0.1580098    0.1548308  0.1422719 0.2600370 0.1441704</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ENSG00000001036      0.2654190    0.1749246  0.2408559 0.2434700 0.2516250</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10406 more rows ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $sigma</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9368969 0.5956268 0.9710709 2.6598431 1.0524317</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10406 more elements ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $df.residual</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 18 18 18 18 18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10406 more elements ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $cov.coefficients</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 Contrasts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Contrasts        NK-Neutrophils NK-Monocytes NK-B.cells NK-CD4 NK-CD8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   NK-Neutrophils           0.50         0.25       0.25   0.25   0.25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   NK-Monocytes             0.25         0.50       0.25   0.25   0.25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   NK-B.cells               0.25         0.25       0.50   0.25   0.25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   NK-CD4                   0.25         0.25       0.25   0.50   0.25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   NK-CD8                   0.25         0.25       0.25   0.25   0.50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $pivot</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1 2 3 4 5 6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $rank</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $Amean</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000419 ENSG00000000457 ENSG00000000460 ENSG00000000938 ENSG00000001036 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        4.522405        4.146876        2.843449        7.738280        3.422891 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10406 more elements ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $method</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ls"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $design</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            NK Neutrophils Monocytes B.cells CD4 CD8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479438  0           1         0       0   0   0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479439  0           0         1       0   0   0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479440  0           0         0       1   0   0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479441  0           0         0       0   1   0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GSM1479442  0           0         0       0   0   1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19 more rows ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $contrasts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              Contrasts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Levels        NK-Neutrophils NK-Monocytes NK-B.cells NK-CD4 NK-CD8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   NK                       1            1          1      1      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Neutrophils             -1            0          0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Monocytes                0           -1          0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   B.cells                  0            0         -1      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   CD4                      0            0          0     -1      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   CD8                      0            0          0      0     -1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $df.prior</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3.955315</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $s2.prior</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.7780205</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $s2.post</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.8598046 0.4310209 0.9132609 5.9403881 1.0482354</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10406 more elements ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $df.total</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 21.95532 21.95532 21.95532 21.95532 21.95532</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10406 more elements ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $t</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  Contrasts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   NK-Neutrophils NK-Monocytes NK-B.cells     NK-CD4     NK-CD8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ENSG00000000419      -8.367082   -0.8104083   1.117077 -0.2655344 -2.0088328</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ENSG00000000457     -11.104367    5.7101526  -2.910594 -3.1719169  0.1156318</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ENSG00000000460       1.885703    1.8504203  -2.185544  0.2122813 -0.4918558</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ENSG00000000938      -5.972007   -4.0363102   5.493942 11.6589564  8.4082104</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ENSG00000001036       5.662627  -13.2529470   4.316679  4.4033525  4.9976960</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10406 more rows ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $p.value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  Contrasts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   NK-Neutrophils NK-Monocytes   NK-B.cells       NK-CD4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ENSG00000000419   2.824919e-08 4.264031e-01 2.760372e-01 7.930752e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ENSG00000000457   1.779197e-10 9.695341e-06 8.116642e-03 4.421964e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ENSG00000000460   7.263599e-02 7.775660e-02 3.980415e-02 8.338460e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ENSG00000000938   5.245672e-06 5.538663e-04 1.618494e-05 7.081695e-11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ENSG00000001036   1.084705e-05 5.946509e-12 2.794616e-04 2.261660e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  Contrasts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                         NK-CD8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ENSG00000000419 5.700893e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ENSG00000000457 9.089954e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ENSG00000000460 6.277031e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ENSG00000000938 2.599667e-08</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ENSG00000001036 5.327634e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10406 more rows ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $treat.lfc</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
