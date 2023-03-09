@@ -10,7 +10,7 @@ filterGenes <- function(dge, group_col, filter = c(10, 10), normalize = TRUE,
   }
 
   if(normalize == TRUE) {
-    keep <- edgeR::filterByExpr(dge, group = dge$samples[[group_col]],
+    keep <- edgeR::filterByExpr(dge$counts,# group = dge$samples[[group_col]],
                                 min.count = filter[1],
                                 large.n = filter[2]) |
       (rownames(dge) %in% markers[[gene_id]])
@@ -145,9 +145,9 @@ DEGs_RP <- function(tfit, lfc = NULL, p = 0.05, assemble = "intersect",
     up_dist <- lapply(UPs, function(x) {
       sample.int(length(genes), nperm, replace = TRUE)
     })
-    pr_up_dist <- do.call(cbind, up_dist) |> apply(1, prod)
+    pr_up_dist <- do.call(cbind, up_dist) |> log10() |> rowSums()
     up_pr <- lapply(DEG, function(x) rank(x[genes, Rank])) |>
-      do.call(what = cbind) |> apply(1, prod)
+      do.call(what = cbind) |> log10() |> rowSums()
     names(up_pr) <- genes
     up_pr <- up_pr[up_pr < quantile(pr_up_dist, thres)]  ## keep top rank genes
     DEGs[["UP"]] <- names(sort(up_pr))
@@ -165,9 +165,9 @@ DEGs_RP <- function(tfit, lfc = NULL, p = 0.05, assemble = "intersect",
     dw_dist <- lapply(DWs, function(x) {
       sample.int(length(genes), nperm, replace = TRUE)
     })
-    pr_dw_dist <- do.call(cbind, dw_dist) |> apply(1, prod)
+    pr_dw_dist <- do.call(cbind, dw_dist) |> log10() |> rowSums()
     dw_pr <- lapply(DEG, function(x) rank(x[genes, Rank])) |>
-      do.call(what = cbind) |> apply(1, prod)
+      do.call(what = cbind) |> log10() |> rowSums()
     names(dw_pr) <- genes
     dw_pr <- dw_pr[dw_pr < quantile(pr_dw_dist, thres)] ## keep top rank genes
     DEGs[["DOWN"]] <- names(sort(dw_pr))
