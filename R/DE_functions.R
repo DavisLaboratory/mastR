@@ -10,7 +10,8 @@ filterGenes <- function(dge, group_col, filter = c(10, 10), normalize = TRUE,
   }
 
   if(normalize == TRUE) {
-    keep <- edgeR::filterByExpr(dge$counts,# group = dge$samples[[group_col]],
+    keep <- edgeR::filterByExpr(dge$counts,
+                                group = dge$samples[[group_col]],
                                 min.count = filter[1],
                                 large.n = filter[2]) |
       (rownames(dge) %in% markers[[gene_id]])

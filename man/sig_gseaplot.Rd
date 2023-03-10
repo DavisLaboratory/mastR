@@ -18,6 +18,7 @@ sig_gseaplot(
   digits = 2,
   slot = "counts",
   method = c("dotplot", "gseaplot"),
+  size = "enrichmentScore",
   ...
 )
 
@@ -30,6 +31,7 @@ sig_gseaplot(
   digits = 2,
   slot = "counts",
   method = c("dotplot", "gseaplot"),
+  size = "enrichmentScore",
   ...
 )
 
@@ -42,6 +44,7 @@ sig_gseaplot(
   digits = 2,
   slot = "counts",
   method = c("dotplot", "gseaplot"),
+  size = "enrichmentScore",
   ...
 )
 
@@ -54,6 +57,7 @@ sig_gseaplot(
   digits = 2,
   slot = "counts",
   method = c("dotplot", "gseaplot"),
+  size = "enrichmentScore",
   ...
 )
 
@@ -66,6 +70,7 @@ sig_gseaplot(
   digits = 2,
   slot = "counts",
   method = c("dotplot", "gseaplot"),
+  size = "enrichmentScore",
   ...
 )
 
@@ -78,6 +83,7 @@ sig_gseaplot(
   digits = 2,
   slot = "counts",
   method = c("dotplot", "gseaplot"),
+  size = "enrichmentScore",
   ...
 )
 }
@@ -98,6 +104,9 @@ could be one of 'ENSEMBL', 'SYMBOL', ... default 'SYMBOL'}
 \item{slot}{character, indicate which slot used as expression, optional}
 
 \item{method}{one of "gseaplot" and "dotplot", how to plot GSEA result}
+
+\item{size}{column name of \code{\link[clusterProfiler:GSEA]{clusterProfiler::GSEA()}} result, used for dot
+size when method = "dotplot"}
 
 \item{...}{params for function \code{\link[=get_de_table]{get_de_table()}}}
 }

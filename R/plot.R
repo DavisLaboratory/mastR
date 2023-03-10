@@ -661,7 +661,7 @@ gsea_analysis <- function(tDEG, gsets, gene_id = "SYMBOL", digits = 2) {
     glist <- sort(glist, decreasing = TRUE)
 
     ## pick common genes in glist and gsets
-    gsets <- gsets[match(names(glist), gsets[, gene_id]) |> na.omit(),]
+    gsets <- gsets[gsets[, gene_id] %in% names(glist),]
 
     gse <- clusterProfiler::GSEA(glist, TERM2GENE = gsets[, c("set", gene_id)])
     if(nrow(gse) == 0) {
@@ -705,12 +705,12 @@ gsea_plot_init <- function(gse) {
   return(p)
 }
 ## dotplot
-gsea_dotplot_init <- function(gse) {
+gsea_dotplot_init <- function(gse, size = "enrichmentScore") {
   res <- do.call(rbind, lapply(gse, \(x) x@result))
 
   p <- ggplot(res) +
     geom_point(aes(x = group, y = ID, col = -log10(p.adjust),
-                   size = NES)) +
+                   size = !!sym(size))) +
     labs(x = "Comparison", y = "Signature") +
     theme_bw() +
     scale_color_viridis_c() +
