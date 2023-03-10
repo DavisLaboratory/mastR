@@ -23,9 +23,11 @@ Depends:
 LazyData: true
 Suggests: 
     clusterProfiler,
+    ComplexHeatmap,
     depmap,
     enrichplot,
     ggrepel,
+    gridExtra,
     jsonlite,
     knitr,
     rmarkdown,
@@ -44,7 +46,6 @@ Imports:
     ggpubr,
     graphics,
     grDevices,
-    gridExtra,
     GSEABase,
     limma,
     Matrix,
@@ -52,7 +53,6 @@ Imports:
     msigdb,
     org.Hs.eg.db,
     patchwork,
-    pheatmap,
     Seurat,
     SingleCellExperiment,
     stats,

@@ -17,7 +17,9 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.width = 8,
+  fig.height = 5
 )
 ```
 
@@ -276,7 +278,7 @@ proc_data <- process_data(
 
 mastR also provides visualizations for data process, to compare the data before and after `process_data()` and see how well the QC is done.
 
-```{r plot diagnostics, fig.width=8, fig.height=5}
+```{r plot diagnostics, fig.width=10, fig.height=5}
 expr1 <- edgeR::cpm(proc_data$original_counts, log = TRUE)
 expr2 <- proc_data$vfit$E
 ## plot expression distribution, RLE and MDS
@@ -329,7 +331,7 @@ Then we will only keep those UP regulated genes which are also in our markers po
 
 We can see PCA shows clearer separation between NK cells and other cells by using screened UP DEGs. And intersected genes explain more variance in PC1 compared with non-intersected DEGs.
 
-```{r markers for cell type, fig.width=8, fig.height=4}
+```{r markers for cell type, fig.width=10, fig.height=4}
 ## convert ensembl IDs into symbols to match markers pool
 deg_up <- mapIds(org.Hs.eg.db::org.Hs.eg.db,
                  geneIds(sig_ct[["UP"]]),
@@ -342,9 +344,11 @@ m_ct
 
 ## PCA shows clear separation of NK cells
 pca_matrix_plot(proc_data$vfit$E[names(m_ct),],
-                group_by = proc_data$samples$celltype.ch1) +
+                group_by = proc_data$samples$celltype.ch1,
+                n = 3) +
   pca_matrix_plot(proc_data$vfit$E[names(deg_up),],
-                  group_by = proc_data$samples$celltype.ch1)
+                  group_by = proc_data$samples$celltype.ch1,
+                  n = 3)
 ```
 
 There's a wrapper function `filter_subset_sig()` which can directly do the whole in one step. The result would be the same as running the workflow step by step
@@ -438,7 +442,8 @@ pca_matrix_plot(
   features = sig_NK_CRC, 
   group_by = "celltype.ch1",
   gene_id = "ENSEMBL",
-  slot = "voomE"
+  slot = "voomE",
+  n = 3
 )
 
 ## loadings can be shown by setting loading = TRUE
@@ -448,7 +453,8 @@ pca_matrix_plot(
   loading = TRUE,
   group_by = "celltype.ch1",
   gene_id = "ENSEMBL",
-  slot = "voomE"
+  slot = "voomE",
+  n = 3
 )
 ```
 
@@ -851,14 +857,24 @@ sig_ls <- lapply(paste0("Group", 1:4), \(x) {
   )
 }) |> setNames(paste0("Group", 1:4))
 
+## venn plot
 p <- lapply(1:4, \(i) ggvenn::ggvenn(list(sig = sig_ls[[i]],
                                           marker = markers_list[[i]]),
                                      show_percentage = FALSE) +
               ggtitle(names(sig_ls)[i]))
 patchwork::wrap_plots(p)
+
+## heatmap
+ComplexHeatmap::Heatmap(edgeR::cpm(dge, log = T)[unlist(sig_ls),] |> 
+                          t() |> scale() |> t(),
+                        column_split = dge$samples$group,
+                        row_split = stack(sig_ls)$ind,
+                        show_column_dend = FALSE,
+                        show_row_dend = FALSE)
 ```
 
 ```{r random pseudo-bulk, eval=FALSE}
+library(dplyr)
 ## randomly generate aggregating idx
 set.seed(123)
 data_sim$rand_idx <- sample.int(30, ncol(data_sim), replace = TRUE)
@@ -893,10 +909,30 @@ dge_r <- calcNormFactors(dge_r, method = "TMM")
 library(singscore)
 
 rank_data <- rankGenes(edgeR::cpm(dge_r, log = TRUE))
+
+## score based on sig_ls
 scores <- multiScore(rank_data, upSetColc = gls2gsc(sig_ls))
 
 tmp <- cbind(Sample = colnames(dge_r), dge_r$samples[,6:9]) |> 
   pivot_longer(-Sample, names_to = "Group", values_to = "Prop")
+
+tmp <- t(scores$Scores) |> 
+  data.frame(Sample = colnames(scores$Scores)) |> 
+  pivot_longer(-Sample, names_to = "Group", values_to = "Score") |> 
+  left_join(tmp)
+
+ggplot(tmp, aes(x = Prop, y = Score, col = Group)) +
+  geom_point() +
+  facet_wrap(~Group, scales = "free") +
+  ggpubr::stat_cor() +
+  theme_classic()
+
+## score based on markers_list
+scores <- multiScore(rank_data, upSetColc = gls2gsc(markers_list))
+
+tmp <- cbind(Sample = colnames(dge_r), dge_r$samples[,6:9]) |> 
+  pivot_longer(-Sample, names_to = "Group", values_to = "Prop")
+tmp$Group <- paste0("DEFac", tmp$Group)
 
 tmp <- t(scores$Scores) |> 
   data.frame(Sample = colnames(scores$Scores)) |> 
@@ -918,6 +954,8 @@ sig_matrix <- DWLS::buildSignatureMatrixMAST(
   id = data_sim$Group,
   path = tempdir()
 )
+
+res <- DWLS::solveDampenedWLS(sig_matrix, pb_r[rownames(sig_matrix),])
 ```
 
 
@@ -930,8 +968,14 @@ data_sim <- scuttle::computePooledFactors(data_sim, clusters = data_sim$Group)
 data_sim <- scuttle::logNormCounts(data_sim)
 ## use singscore for annotation
 rank_data <- rankGenes(data_sim@assays@data$logcounts)
-scores <- multiScore(rank_data, upSetColc = gls2gsc(sig_ls))
 
+## score using sig_ls
+scores <- multiScore(rank_data, upSetColc = gls2gsc(sig_ls))
+data_sim$Pred <- paste0("Group", apply(scores$Scores, 2, which.max))
+table(data_sim$Pred == data_sim$Group)
+
+## score using markers_list
+scores <- multiScore(rank_data, upSetColc = gls2gsc(markers_list))
 data_sim$Pred <- paste0("Group", apply(scores$Scores, 2, which.max))
 table(data_sim$Pred == data_sim$Group)
 ```

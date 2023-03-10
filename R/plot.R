@@ -722,70 +722,59 @@ gsea_dotplot_init <- function(gse, size = "enrichmentScore") {
 ## heatmap for comparing signature with original markers pool
 ##---------------------------------------------------------------
 heatmap_init <- function(expr, sigs, by, markers, normalize = FALSE,
-                         scale = "none", min_max = FALSE,
+                         scale = c("none", "row", "column"),
                          gene_id = "SYMBOL", ranks_plot = FALSE,
-                         col = grDevices::colorRampPalette(c("#76B7B2",
-                                                             "#E15759"))(256)) {
-  if (normalize) {
-    expr <- edgeR::DGEList(expr)
-    expr <- edgeR::calcNormFactors(expr, method = "TMM")
-    expr <- edgeR::cpm(expr, log = TRUE)
-    expr <- expr[, order(by)] ## order samples based on by factor
-  } else {
-    expr <- expr[, order(by)]
+                         ...) {
+  scale <- match.arg(scale)
+  ## name sigs list
+  if(is.null(names(sigs)))
+    names(sigs) <- seq_along(sigs)
+  idx <- which(names(sigs) == "")
+  names(sigs)[idx] <- idx
+  ## normalize
+  if (normalize == TRUE) {
+  expr <- edgeR::DGEList(expr)
+  expr <- edgeR::calcNormFactors(expr, method = "TMM")
+  expr <- edgeR::cpm(expr, log = TRUE)
   }
-
-  ## convert markers and sigs into gene IDs matched to expr rownames
-  tmp <- AnnotationDbi::select(org.Hs.eg.db::org.Hs.eg.db, rownames(expr),
-                               columns = "SYMBOL", keytype = gene_id)
-
-  ## get index of matched genes between markers/sigs and expr data
-  index.1 <- tmp[[gene_id]][tmp$SYMBOL %in% markers] |>
-    unique() |> sort() |> match(rownames(expr)) |> na.omit()
-  index.2 <- tmp[[gene_id]][tmp$SYMBOL %in% sigs] |>
-    unique() |> sort() |> match(rownames(expr)) |> na.omit()
-
-  ## set color for annotation bar
-  anno_col <- data.frame(cell_type = sort(by))
-  rownames(anno_col) <- colnames(expr)
-  ann_colors <- list(cell_type = colorRampPalette(
-    tableau_20[seq_len(min(20, length(unique(by))))])(length(unique(by)))
-  )
-  names(ann_colors$cell_type) <- sort(unique(by))
-
-  ## if to convert expression matrix to rank matrix
-  if (ranks_plot)
+  ## plot rank instead of expression
+  if (ranks_plot == TRUE)
     expr <- apply(expr, 2, rank) |> log2()
-  ## scale genes expression across samples using min_max(z-score) way
-  if (min_max)
-    expr <- apply(expr, 1, function(x) (x - min(x)) / (max(x) - min(x))) |>
-      Matrix::t()
-  ## heatmap for markers pool genes
-  p1 <- pheatmap::pheatmap(expr[c(setdiff(index.1, index.2), index.2),],
-                           silent = TRUE, scale = scale,
-                           border_color = NA, annotation_col = anno_col,
-                           show_rownames = FALSE,
-                           gaps_col = table(by) |> cumsum(),
-                           show_colnames = FALSE,
-                           main = "Original Markers Pool",
-                           gaps_row = length(index.1) - length(index.2),
-                           cluster_cols = FALSE, cluster_rows = FALSE,
-                           color = col,
-                           annotation_colors = ann_colors
-  )$gtable |> ggpubr::as_ggplot()
-  ## heatmap for final signature genes
-  p2 <- pheatmap::pheatmap(expr[index.2,],
-                           silent = TRUE, scale = scale,
-                           border_color = NA, annotation_col = anno_col,
-                           show_rownames = FALSE,
-                           gaps_col = table(by) |> cumsum(),
-                           show_colnames = FALSE, main = "Screened Signature",
-                           cluster_cols = FALSE, cluster_rows = FALSE,
-                           color = col,
-                           annotation_colors = ann_colors
-  )$gtable |> ggpubr::as_ggplot()
+  ## scale
+  if(scale == "row") {
+    expr <- t(scale(t(expr)))
+  } else if(scale == "column") {
+    expr <- scale(expr)
+  }
+  ## convert sigs
+  sigs <- utils::stack(sigs)
+  sigs[[gene_id]] <- AnnotationDbi::mapIds(org.Hs.eg.db::org.Hs.eg.db,
+                                           sigs$values, gene_id, "SYMBOL")
+  ## kepp common genes
+  idx <- sigs[[gene_id]] %in% rownames(expr)
+  if(any(idx == FALSE))
+    message(paste("Gene", sigs$values[!idx], "is not in data\n"))
+  sigs <- sigs[idx,]
 
-  return(list(p1, p2))
+  ## subset expr
+  expr <- expr[sigs[[gene_id]], ]
+  rownames(expr) <- sigs$values
+
+  ## annotation
+  top_ann <- ComplexHeatmap::columnAnnotation(Group = by)
+  left_ann <- ComplexHeatmap::rowAnnotation(Sigs = sigs$ind)
+
+  ## plot
+  p <- ComplexHeatmap::Heatmap(
+    expr,
+    column_split = by,
+    row_split = sigs$ind,
+    top_annotation = top_ann,
+    left_annotation = left_ann,
+    ...
+  )
+
+  return(p)
 }
 
 

@@ -16,20 +16,9 @@ test_that("sig_heatmap works", {
     im_data_6,
     sigs = NK_markers$HGNC_Symbol[1:20],
     group_col = "celltype:ch1",
-    markers = NK_markers$HGNC_Symbol,
     gene_id = "ENSEMBL"
   )
-  expect_true(is.ggplot(p))
-
-  ### test score boxplot
-  p <- sig_heatmap(
-    im_data_6,
-    sigs = NK_markers$HGNC_Symbol[1:20],
-    group_col = "celltype:ch1",
-    markers = NK_markers$HGNC_Symbol,
-    gene_id = "ENSEMBL"
-  )
-  expect_true(is.ggplot(p))
+  expect_true(is(p, "Heatmap"))
 
   ## test DGEList object
   dge <- edgeR::DGEList(counts = im_data_6@assayData$exprs,
@@ -37,10 +26,9 @@ test_that("sig_heatmap works", {
   p <- sig_heatmap(
     dge, sigs = NK_markers$HGNC_Symbol[1:20],
     group_col = "group",
-    markers = NK_markers$HGNC_Symbol,
     gene_id = "ENSEMBL"
   )
-  expect_true(is.ggplot(p))
+  expect_true(is(p, "Heatmap"))
 
   ## test seurat object
   data_seurat <- Seurat::CreateSeuratObject(counts = im_data_6@assayData$exprs,
@@ -49,10 +37,9 @@ test_that("sig_heatmap works", {
     data_seurat,
     sigs = NK_markers$HGNC_Symbol[1:20],
     group_col = "group",
-    markers = NK_markers$HGNC_Symbol,
     gene_id = "ENSEMBL"
   )
-  expect_true(is.ggplot(p))
+  expect_true(is(p, "Heatmap"))
 
   ## test list objects
   p <- sig_heatmap(
@@ -63,4 +50,15 @@ test_that("sig_heatmap works", {
     gene_id = "ENSEMBL"
   )
   expect_true(is.ggplot(p))
+
+  ## test list sigs
+  p <- sig_heatmap(
+    im_data_6,
+    sigs = list(A = NK_markers$HGNC_Symbol[1:10],
+                B = NK_markers$HGNC_Symbol[21:40]),
+    group_col = "celltype:ch1",
+    gene_id = "ENSEMBL",
+    scale = "row"
+  )
+  expect_true(is(p, "Heatmap"))
 })

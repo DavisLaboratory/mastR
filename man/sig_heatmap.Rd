@@ -2,14 +2,16 @@
 % Please edit documentation in R/sig_heatmap.R
 \name{sig_heatmap}
 \alias{sig_heatmap}
-\alias{sig_heatmap,matrix,vector,vector,vector-method}
-\alias{sig_heatmap,Matrix,vector,vector,vector-method}
-\alias{sig_heatmap,data.frame,vector,vector,vector-method}
-\alias{sig_heatmap,DGEList,vector,character,vector-method}
-\alias{sig_heatmap,ExpressionSet,vector,character,vector-method}
-\alias{sig_heatmap,Seurat,vector,character,vector-method}
-\alias{sig_heatmap,SummarizedExperiment,vector,character,vector-method}
-\alias{sig_heatmap,list,vector,character,vector-method}
+\alias{sig_heatmap,matrix,character,vector,missing-method}
+\alias{sig_heatmap,matrix,character,vector,vector-method}
+\alias{sig_heatmap,matrix,list,vector,missing-method}
+\alias{sig_heatmap,Matrix,ANY,vector,ANY-method}
+\alias{sig_heatmap,data.frame,ANY,vector,ANY-method}
+\alias{sig_heatmap,DGEList,ANY,character,ANY-method}
+\alias{sig_heatmap,ExpressionSet,ANY,character,ANY-method}
+\alias{sig_heatmap,Seurat,ANY,character,ANY-method}
+\alias{sig_heatmap,SummarizedExperiment,ANY,character,ANY-method}
+\alias{sig_heatmap,list,ANY,character,ANY-method}
 \title{Heatmap original markers and screened signature}
 \usage{
 sig_heatmap(
@@ -18,126 +20,147 @@ sig_heatmap(
   group_col,
   markers,
   normalize = FALSE,
-  scale = "none",
-  min_max = FALSE,
+  scale = c("none", "row", "column"),
   gene_id = "SYMBOL",
   ranks_plot = FALSE,
   slot = "counts",
-  col = colorRampPalette(c("#76B7B2", "#E15759"))(256)
+  ...
 )
 
-\S4method{sig_heatmap}{matrix,vector,vector,vector}(
+\S4method{sig_heatmap}{matrix,character,vector,missing}(
   data,
   sigs,
   group_col,
   markers,
   normalize = FALSE,
-  scale = "none",
-  min_max = FALSE,
-  gene_id = "SYMBOL",
-  ranks_plot = FALSE,
-  col = colorRampPalette(c("#76B7B2", "#E15759"))(256)
-)
-
-\S4method{sig_heatmap}{Matrix,vector,vector,vector}(
-  data,
-  sigs,
-  group_col,
-  markers,
-  normalize = FALSE,
-  scale = "none",
-  min_max = FALSE,
-  gene_id = "SYMBOL",
-  ranks_plot = FALSE,
-  col = colorRampPalette(c("#76B7B2", "#E15759"))(256)
-)
-
-\S4method{sig_heatmap}{data.frame,vector,vector,vector}(
-  data,
-  sigs,
-  group_col,
-  markers,
-  normalize = FALSE,
-  scale = "none",
-  min_max = FALSE,
-  gene_id = "SYMBOL",
-  ranks_plot = FALSE,
-  col = colorRampPalette(c("#76B7B2", "#E15759"))(256)
-)
-
-\S4method{sig_heatmap}{DGEList,vector,character,vector}(
-  data,
-  sigs,
-  group_col,
-  markers,
-  normalize = FALSE,
-  scale = "none",
-  min_max = FALSE,
+  scale = c("none", "row", "column"),
   gene_id = "SYMBOL",
   ranks_plot = FALSE,
   slot = "counts",
-  col = colorRampPalette(c("#76B7B2", "#E15759"))(256)
+  ...
 )
 
-\S4method{sig_heatmap}{ExpressionSet,vector,character,vector}(
+\S4method{sig_heatmap}{matrix,character,vector,vector}(
   data,
   sigs,
   group_col,
   markers,
   normalize = FALSE,
-  scale = "none",
-  min_max = FALSE,
-  gene_id = "SYMBOL",
-  ranks_plot = FALSE,
-  col = colorRampPalette(c("#76B7B2", "#E15759"))(256)
-)
-
-\S4method{sig_heatmap}{Seurat,vector,character,vector}(
-  data,
-  sigs,
-  group_col,
-  markers,
-  normalize = FALSE,
-  scale = "none",
-  min_max = FALSE,
+  scale = c("none", "row", "column"),
   gene_id = "SYMBOL",
   ranks_plot = FALSE,
   slot = "counts",
-  col = colorRampPalette(c("#76B7B2", "#E15759"))(256)
+  ...
 )
 
-\S4method{sig_heatmap}{SummarizedExperiment,vector,character,vector}(
+\S4method{sig_heatmap}{matrix,list,vector,missing}(
+  data,
+  sigs,
+  group_col,
+  markers,
+  normalize = FALSE,
+  scale = c("none", "row", "column"),
+  gene_id = "SYMBOL",
+  ranks_plot = FALSE,
+  slot = "counts",
+  ...
+)
+
+\S4method{sig_heatmap}{Matrix,ANY,vector,ANY}(
+  data,
+  sigs,
+  group_col,
+  markers,
+  normalize = FALSE,
+  scale = c("none", "row", "column"),
+  gene_id = "SYMBOL",
+  ranks_plot = FALSE,
+  slot = "counts",
+  ...
+)
+
+\S4method{sig_heatmap}{data.frame,ANY,vector,ANY}(
+  data,
+  sigs,
+  group_col,
+  markers,
+  normalize = FALSE,
+  scale = c("none", "row", "column"),
+  gene_id = "SYMBOL",
+  ranks_plot = FALSE,
+  slot = "counts",
+  ...
+)
+
+\S4method{sig_heatmap}{DGEList,ANY,character,ANY}(
   data,
   sigs,
   group_col,
   markers,
   normalize = FALSE,
   scale = "none",
-  min_max = FALSE,
   gene_id = "SYMBOL",
   ranks_plot = FALSE,
   slot = "counts",
-  col = colorRampPalette(c("#76B7B2", "#E15759"))(256)
+  ...
 )
 
-\S4method{sig_heatmap}{list,vector,character,vector}(
+\S4method{sig_heatmap}{ExpressionSet,ANY,character,ANY}(
+  data,
+  sigs,
+  group_col,
+  markers,
+  normalize = FALSE,
+  scale = c("none", "row", "column"),
+  gene_id = "SYMBOL",
+  ranks_plot = FALSE,
+  slot = "counts",
+  ...
+)
+
+\S4method{sig_heatmap}{Seurat,ANY,character,ANY}(
   data,
   sigs,
   group_col,
   markers,
   normalize = FALSE,
   scale = "none",
-  min_max = FALSE,
   gene_id = "SYMBOL",
   ranks_plot = FALSE,
   slot = "counts",
-  col = colorRampPalette(c("#76B7B2", "#E15759"))(256)
+  ...
+)
+
+\S4method{sig_heatmap}{SummarizedExperiment,ANY,character,ANY}(
+  data,
+  sigs,
+  group_col,
+  markers,
+  normalize = FALSE,
+  scale = "none",
+  gene_id = "SYMBOL",
+  ranks_plot = FALSE,
+  slot = "counts",
+  ...
+)
+
+\S4method{sig_heatmap}{list,ANY,character,ANY}(
+  data,
+  sigs,
+  group_col,
+  markers,
+  normalize = FALSE,
+  scale = "none",
+  gene_id = "SYMBOL",
+  ranks_plot = FALSE,
+  slot = "counts",
+  ...
 )
 }
 \arguments{
 \item{data}{expression data, can be matrix, DGEList, eSet, seurat, sce...}
 
-\item{sigs}{a vector of signature (Symbols)}
+\item{sigs}{a vector of signature (Symbols) or a list of signatures}
 
 \item{group_col}{character or vector, specify the column name to compare in coldata}
 
@@ -147,9 +170,7 @@ markers pool}
 \item{normalize}{logical, TRUE indicates raw counts data to normalize and
 calculate cpm}
 
-\item{scale}{could be 'none', 'row' or 'column'}
-
-\item{min_max}{logical, if to use min_max to normalize data by rows}
+\item{scale}{could be one of 'none' (default), 'row' or 'column'}
 
 \item{gene_id}{character, indicate the ID type of rowname of expression data's ,
 could be one of 'ENSEMBL', 'SYMBOL', ... default 'SYMBOL'}
@@ -159,7 +180,7 @@ draw heatmap}
 
 \item{slot}{character, indicate which slot used as expression, optional}
 
-\item{col}{vactor of color to draw heatmap}
+\item{...}{params for \code{\link[ComplexHeatmap:Heatmap]{ComplexHeatmap::Heatmap()}}}
 }
 \value{
 patchwork object of pheatmaps

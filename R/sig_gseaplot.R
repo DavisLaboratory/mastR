@@ -6,6 +6,7 @@ NULL
 #' Visualize GSEA result with multiple lists of genes by using `clusterProfiler`.
 #'
 #' @inheritParams sig_boxplot
+#' @param sigs a vector of signature (Symbols) or a list of signatures
 #' @param digits num, specify the number of significant digits of pvalue table
 #' @param method one of "gseaplot" and "dotplot", how to plot GSEA result
 #' @param size column name of [clusterProfiler::GSEA()] result, used for dot

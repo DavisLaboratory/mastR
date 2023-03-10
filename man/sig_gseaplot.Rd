@@ -90,7 +90,7 @@ sig_gseaplot(
 \arguments{
 \item{data}{expression data, can be matrix, DGEList, eSet, seurat, sce...}
 
-\item{sigs}{a vector of signature (Symbols)}
+\item{sigs}{a vector of signature (Symbols) or a list of signatures}
 
 \item{group_col}{character or vector, specify the column name to compare in coldata}
 
