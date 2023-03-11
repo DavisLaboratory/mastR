@@ -65,6 +65,7 @@
 <span>  <span class="va">sigs</span>,</span>
 <span>  <span class="va">group_col</span>,</span>
 <span>  <span class="va">target_group</span>,</span>
+<span>  normalize <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  gene_id <span class="op">=</span> <span class="st">"SYMBOL"</span>,</span>
 <span>  digits <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  slot <span class="op">=</span> <span class="st">"counts"</span>,</span>
@@ -79,6 +80,7 @@
 <span>  <span class="va">sigs</span>,</span>
 <span>  <span class="va">group_col</span>,</span>
 <span>  <span class="va">target_group</span>,</span>
+<span>  normalize <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  gene_id <span class="op">=</span> <span class="st">"SYMBOL"</span>,</span>
 <span>  digits <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  slot <span class="op">=</span> <span class="st">"counts"</span>,</span>
@@ -93,6 +95,7 @@
 <span>  <span class="va">sigs</span>,</span>
 <span>  <span class="va">group_col</span>,</span>
 <span>  <span class="va">target_group</span>,</span>
+<span>  normalize <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  gene_id <span class="op">=</span> <span class="st">"SYMBOL"</span>,</span>
 <span>  digits <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  slot <span class="op">=</span> <span class="st">"counts"</span>,</span>
@@ -107,6 +110,7 @@
 <span>  <span class="va">sigs</span>,</span>
 <span>  <span class="va">group_col</span>,</span>
 <span>  <span class="va">target_group</span>,</span>
+<span>  normalize <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  gene_id <span class="op">=</span> <span class="st">"SYMBOL"</span>,</span>
 <span>  digits <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  slot <span class="op">=</span> <span class="st">"counts"</span>,</span>
@@ -121,6 +125,7 @@
 <span>  <span class="va">sigs</span>,</span>
 <span>  <span class="va">group_col</span>,</span>
 <span>  <span class="va">target_group</span>,</span>
+<span>  normalize <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  gene_id <span class="op">=</span> <span class="st">"SYMBOL"</span>,</span>
 <span>  digits <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  slot <span class="op">=</span> <span class="st">"counts"</span>,</span>
@@ -135,6 +140,7 @@
 <span>  <span class="va">sigs</span>,</span>
 <span>  <span class="va">group_col</span>,</span>
 <span>  <span class="va">target_group</span>,</span>
+<span>  normalize <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  gene_id <span class="op">=</span> <span class="st">"SYMBOL"</span>,</span>
 <span>  digits <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  slot <span class="op">=</span> <span class="st">"counts"</span>,</span>
@@ -160,6 +166,11 @@
 
 <dt>target_group</dt>
 <dd><p>pattern, specify the group of interest as reference</p></dd>
+
+
+<dt>normalize</dt>
+<dd><p>logical, TRUE indicates raw counts data to normalize and
+calculate cpm</p></dd>
 
 
 <dt>gene_id</dt>
@@ -204,39 +215,40 @@ size when method = "dotplot"</p></dd>
 <span class="r-in"><span>             data <span class="op">=</span> <span class="va">im_data_6</span>, group_col <span class="op">=</span> <span class="st">"celltype:ch1"</span>,</span></span>
 <span class="r-in"><span>             target_group <span class="op">=</span> <span class="st">"NK"</span>, gene_id <span class="op">=</span> <span class="st">"ENSEMBL"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 'select()' returned 1:many mapping between keys and columns</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Zero sample variances detected, have been offset away from zero</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        NK-Neutrophils NK-Monocytes NK-B.cells NK-CD4 NK-CD8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Down             4009         3946       3143   2698   2153</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NotSig           1486         2683       4418   4991   6191</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Up               4926         3792       2860   2732   2077</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Down             3059         2845       2168   1784   1432</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NotSig           1275         2704       4226   4645   5561</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Up               3920         2705       1860   1825   1261</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 'select()' returned 1:many mapping between keys and columns</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> preparing geneSet collections...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> GSEA analysis...</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There are ties in the preranked stats (1.78% of the list).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There are ties in the preranked stats (71.07% of the list).</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> The order of those tied genes will be arbitrary, which may produce unexpected results.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> leading edge analysis...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> done...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> preparing geneSet collections...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> GSEA analysis...</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There are ties in the preranked stats (1.16% of the list).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There are ties in the preranked stats (78.48% of the list).</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> The order of those tied genes will be arbitrary, which may produce unexpected results.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> leading edge analysis...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> done...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> preparing geneSet collections...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> GSEA analysis...</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There are ties in the preranked stats (0.8% of the list).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There are ties in the preranked stats (82.06% of the list).</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> The order of those tied genes will be arbitrary, which may produce unexpected results.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> leading edge analysis...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> done...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> preparing geneSet collections...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> GSEA analysis...</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There are ties in the preranked stats (1.75% of the list).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There are ties in the preranked stats (83.6% of the list).</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> The order of those tied genes will be arbitrary, which may produce unexpected results.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> leading edge analysis...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> done...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> preparing geneSet collections...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> GSEA analysis...</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There are ties in the preranked stats (2.1% of the list).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There are ties in the preranked stats (81.14% of the list).</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> The order of those tied genes will be arbitrary, which may produce unexpected results.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> leading edge analysis...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> done...</span>

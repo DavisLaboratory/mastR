@@ -85,7 +85,7 @@ Biology, University of Melbourne, Parkville, VIC 3010,
 Australia<br><a class="author_email" href="mailto:#"></a><a href="mailto:chen.j@wehi.edu.au" class="email">chen.j@wehi.edu.au</a>
       </address>
                   
-            <h4 data-toc-skip class="date">10 Mar 2023</h4>
+            <h4 data-toc-skip class="date">11 Mar 2023</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DavisLaboratory/mastR/blob/HEAD/vignettes/mastR_Demo.Rmd" class="external-link"><code>vignettes/mastR_Demo.Rmd</code></a></small>
       <div class="hidden name"><code>mastR_Demo.Rmd</code></div>
@@ -954,7 +954,7 @@ and result shows most of signature genes are indicating NK cells.</p>
 <div class="section level3">
 <h3 id="heatmap">Heatmap<a class="anchor" aria-label="anchor" href="#heatmap"></a>
 </h3>
-<p><code>result_heatmap()</code> function can plot the original NK cells
+<p><code><a href="../reference/sig_heatmap.html">sig_heatmap()</a></code> function can plot the original NK cells
 markers and curated signatures expression pattern heatmaps in immune
 datasets.</p>
 <ul>
@@ -966,9 +966,8 @@ while <code>markers</code> param is the original markers pool.<br>
 <code>scale</code> could specify the <code>column</code> or
 <code>row</code> to be scaled or no scaling by <code>none</code>.<br>
 </li>
-<li>
-<code>min_max</code> is used to decide if to apply min-max
-normalization to each row of expression data.</li>
+<li>`rank_plot`` is used to decide if to gene rank instead of expression
+for heatmap.</li>
 <li>
 <code>normalize</code> means whether to normalize and calculate
 logCPM or not.<br>
@@ -985,7 +984,12 @@ distinguishable in NK cells.</p>
 <span>  group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>, </span>
 <span>  markers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span>,</span>
 <span>  gene_id <span class="op">=</span> <span class="st">"ENSEMBL"</span>,</span>
-<span>  slot <span class="op">=</span> <span class="st">"voomE"</span></span>
+<span>  slot <span class="op">=</span> <span class="st">"voomE"</span>,</span>
+<span>  scale <span class="op">=</span> <span class="st">"row"</span>,</span>
+<span>  show_column_den <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  show_row_den <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  show_column_names <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  show_row_names <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:many mapping between keys and columns</span></span>
 <span><span class="co">#&gt; Gene CCL4 is not in data</span></span>
@@ -1078,20 +1082,21 @@ NK cells.</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co">## To make boxplots for more than 1 immune datasets at once:</span></span>
-<span><span class="co"># result_score_boxplot(data = list(data_6 = im_data_6,</span></span>
-<span><span class="co">#                                  proc_data = proc_data), </span></span>
-<span><span class="co">#                      sigs = sig_NK_CRC,</span></span>
-<span><span class="co">#                      group_col = c("celltype:ch1", "celltype.ch1"),</span></span>
-<span><span class="co">#                      target_group = "NK",</span></span>
-<span><span class="co">#                      normalize = TRUE,</span></span>
-<span><span class="co">#                      gene_id = "ENSEMBL") *</span></span>
-<span><span class="co">#   guides(col = "none")</span></span></code></pre></div>
+<span><span class="co"># sig_boxplot(</span></span>
+<span><span class="co">#   data = list(data_6 = im_data_6,</span></span>
+<span><span class="co">#               proc_data = proc_data), </span></span>
+<span><span class="co">#   sigs = sig_NK_CRC,</span></span>
+<span><span class="co">#   group_col = c("celltype:ch1", "celltype.ch1"),</span></span>
+<span><span class="co">#   target_group = "NK",</span></span>
+<span><span class="co">#   normalize = TRUE,</span></span>
+<span><span class="co">#   gene_id = "ENSEMBL"</span></span>
+<span><span class="co"># ) * guides(col = "none")</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="nk-signature-abundance-boxplot">NK Signature Abundance Boxplot<a class="anchor" aria-label="anchor" href="#nk-signature-abundance-boxplot"></a>
 </h3>
-<p><code>result_exp_boxplot()</code> function can also generate boxplot
-of the NK signature abundance for all subsets in the data by setting
+<p><code><a href="../reference/sig_boxplot.html">sig_boxplot()</a></code> function can also generate boxplot of the
+NK signature abundance for all subsets in the data by setting
 <code>plot.score = FALSE</code>.</p>
 <p>It’s clear the score can increase the difference between NK cells and
 others.</p>
@@ -1172,9 +1177,9 @@ comparisons.</p>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:many mapping between keys and columns</span></span>
 <span><span class="co">#&gt;        NK-Neutrophils NK-Monocytes NK-B.cells NK-CD4 NK-CD8</span></span>
-<span><span class="co">#&gt; Down             4012         3949       3143   2697   2157</span></span>
-<span><span class="co">#&gt; NotSig           1498         2698       4435   5007   6203</span></span>
-<span><span class="co">#&gt; Up               4948         3811       2880   2754   2098</span></span>
+<span><span class="co">#&gt; Down               70           80         60     55     62</span></span>
+<span><span class="co">#&gt; NotSig             46           65         66     91    105</span></span>
+<span><span class="co">#&gt; Up                148          119        138    118     97</span></span>
 <span><span class="co">#&gt; 'select()' returned many:many mapping between keys and columns</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; preparing geneSet collections...</span></span>
@@ -1463,12 +1468,16 @@ deconvolution.</p>
 <span><span class="fu">patchwork</span><span class="fu">::</span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## heatmap</span></span>
-<span><span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/Heatmap.html" class="external-link">Heatmap</a></span><span class="op">(</span><span class="fu">edgeR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/edgeR/man/cpm.html" class="external-link">cpm</a></span><span class="op">(</span><span class="va">dge</span>, log <span class="op">=</span> <span class="cn">T</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">sig_ls</span><span class="op">)</span>,<span class="op">]</span> <span class="op">|&gt;</span> </span>
-<span>                          <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>                        column_split <span class="op">=</span> <span class="va">dge</span><span class="op">$</span><span class="va">samples</span><span class="op">$</span><span class="va">group</span>,</span>
-<span>                        row_split <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/stack.html" class="external-link">stack</a></span><span class="op">(</span><span class="va">sig_ls</span><span class="op">)</span><span class="op">$</span><span class="va">ind</span>,</span>
-<span>                        show_column_dend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>                        show_row_dend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/sig_heatmap.html">sig_heatmap</a></span><span class="op">(</span></span>
+<span>  <span class="fu">cpm</span><span class="op">(</span><span class="va">dge</span>, log <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  sigs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">sig_ls</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"TP53"</span><span class="op">)</span><span class="op">)</span>, <span class="co">## add a real gene to pass gene check</span></span>
+<span>  group_col <span class="op">=</span> <span class="va">dge</span><span class="op">$</span><span class="va">samples</span><span class="op">$</span><span class="va">group</span>,</span>
+<span>  scale <span class="op">=</span> <span class="st">"row"</span>,</span>
+<span>  show_column_den <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  show_row_den <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  cluster_column_slices <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  cluster_row_slices <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="co">## randomly generate aggregating idx</span></span>

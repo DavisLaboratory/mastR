@@ -271,25 +271,8 @@ draw heatmap</p></dd>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"im_data_6"</span>, <span class="st">"NK_markers"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">sig_heatmap</span><span class="op">(</span>data <span class="op">=</span> <span class="va">im_data_6</span>, sigs <span class="op">=</span> <span class="va">NK_markers</span><span class="op">$</span><span class="va">HGNC_Symbol</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>,</span></span>
-<span class="r-in"><span>            group_col <span class="op">=</span> <span class="st">"celltype:ch1"</span>, markers <span class="op">=</span> <span class="va">NK_markers</span><span class="op">$</span><span class="va">HGNC_Symbol</span>,</span></span>
+<span class="r-in"><span>            group_col <span class="op">=</span> <span class="st">"celltype:ch1"</span>,</span></span>
 <span class="r-in"><span>            gene_id <span class="op">=</span> <span class="st">"ENSEMBL"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 'select()' returned 1:many mapping between keys and columns</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Gene KIR2DL2 is not in data</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Gene KIR2DL5A is not in data</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Gene KIR2DS2 is not in data</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Gene KIR2DS5 is not in data</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Gene KLRA1P is not in data</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Gene LOC653757 is not in data</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Gene MGC24103 is not in data</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Gene TRDC is not in data</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Gene CCL4 is not in data</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Gene CCL5 is not in data</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The automatically generated colors map from the 1^st and 99^th of the</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> values in the matrix. There are outliers in the matrix whose patterns</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> might be hidden by this color mapping. You can manually set the color</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> to `col` argument.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Use `suppressMessages()` to turn off this message.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 'select()' returned 1:many mapping between keys and columns</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Gene CCL4 is not in data</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Gene CCL5 is not in data</span>
