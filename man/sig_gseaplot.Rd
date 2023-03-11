@@ -14,6 +14,7 @@ sig_gseaplot(
   sigs,
   group_col,
   target_group,
+  normalize = FALSE,
   gene_id = "SYMBOL",
   digits = 2,
   slot = "counts",
@@ -27,6 +28,7 @@ sig_gseaplot(
   sigs,
   group_col,
   target_group,
+  normalize = FALSE,
   gene_id = "SYMBOL",
   digits = 2,
   slot = "counts",
@@ -40,6 +42,7 @@ sig_gseaplot(
   sigs,
   group_col,
   target_group,
+  normalize = FALSE,
   gene_id = "SYMBOL",
   digits = 2,
   slot = "counts",
@@ -53,6 +56,7 @@ sig_gseaplot(
   sigs,
   group_col,
   target_group,
+  normalize = FALSE,
   gene_id = "SYMBOL",
   digits = 2,
   slot = "counts",
@@ -66,6 +70,7 @@ sig_gseaplot(
   sigs,
   group_col,
   target_group,
+  normalize = FALSE,
   gene_id = "SYMBOL",
   digits = 2,
   slot = "counts",
@@ -79,6 +84,7 @@ sig_gseaplot(
   sigs,
   group_col,
   target_group,
+  normalize = FALSE,
   gene_id = "SYMBOL",
   digits = 2,
   slot = "counts",
@@ -95,6 +101,9 @@ sig_gseaplot(
 \item{group_col}{character or vector, specify the column name to compare in coldata}
 
 \item{target_group}{pattern, specify the group of interest as reference}
+
+\item{normalize}{logical, TRUE indicates raw counts data to normalize and
+calculate cpm}
 
 \item{gene_id}{character, indicate the ID type of rowname of expression data's ,
 could be one of 'ENSEMBL', 'SYMBOL', ... default 'SYMBOL'}

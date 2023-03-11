@@ -461,11 +461,11 @@ pca_matrix_plot(
 
 ## Heatmap
 
-`result_heatmap()` function can plot the original NK cells markers and curated signatures expression pattern heatmaps in immune datasets.
+`sig_heatmap()` function can plot the original NK cells markers and curated signatures expression pattern heatmaps in immune datasets.
 
 * `sigs` param is the final curated signature symbols, while `markers` param is the original markers pool.  
 * `scale` could specify the `column` or `row` to be scaled or no scaling by `none`.  
-* `min_max` is used to decide if to apply min-max normalization to each row of expression data.
+* `rank_plot`` is used to decide if to gene rank instead of expression for heatmap.
 * `normalize` means whether to normalize and calculate logCPM or not.    
 * Users are able to specify the color of heatmap by setting `color` param.
 
@@ -479,7 +479,12 @@ sig_heatmap(
   group_col = "celltype.ch1", 
   markers = geneIds(Markers),
   gene_id = "ENSEMBL",
-  slot = "voomE"
+  slot = "voomE",
+  scale = "row",
+  show_column_den = FALSE,
+  show_row_den = FALSE,
+  show_column_names = FALSE,
+  show_row_names = FALSE
 )
 
 ## for multiple datasets
@@ -550,20 +555,21 @@ sig_boxplot(
 )
 
 ## To make boxplots for more than 1 immune datasets at once:
-# result_score_boxplot(data = list(data_6 = im_data_6,
-#                                  proc_data = proc_data), 
-#                      sigs = sig_NK_CRC,
-#                      group_col = c("celltype:ch1", "celltype.ch1"),
-#                      target_group = "NK",
-#                      normalize = TRUE,
-#                      gene_id = "ENSEMBL") *
-#   guides(col = "none")
+# sig_boxplot(
+#   data = list(data_6 = im_data_6,
+#               proc_data = proc_data), 
+#   sigs = sig_NK_CRC,
+#   group_col = c("celltype:ch1", "celltype.ch1"),
+#   target_group = "NK",
+#   normalize = TRUE,
+#   gene_id = "ENSEMBL"
+# ) * guides(col = "none")
 ```
 
 
 ## NK Signature Abundance Boxplot
 
-`result_exp_boxplot()` function can also generate boxplot of the NK signature abundance for all subsets in the data by setting `plot.score = FALSE`.
+`sig_boxplot()` function can also generate boxplot of the NK signature abundance for all subsets in the data by setting `plot.score = FALSE`.
 
 It's clear the score can increase the difference between NK cells and others.
 
@@ -865,12 +871,16 @@ p <- lapply(1:4, \(i) ggvenn::ggvenn(list(sig = sig_ls[[i]],
 patchwork::wrap_plots(p)
 
 ## heatmap
-ComplexHeatmap::Heatmap(edgeR::cpm(dge, log = T)[unlist(sig_ls),] |> 
-                          t() |> scale() |> t(),
-                        column_split = dge$samples$group,
-                        row_split = stack(sig_ls)$ind,
-                        show_column_dend = FALSE,
-                        show_row_dend = FALSE)
+sig_heatmap(
+  cpm(dge, log = TRUE),
+  sigs = c(sig_ls, list("TP53")), ## add a real gene to pass gene check
+  group_col = dge$samples$group,
+  scale = "row",
+  show_column_den = FALSE,
+  show_row_den = FALSE,
+  cluster_column_slices = FALSE,
+  cluster_row_slices = FALSE
+)
 ```
 
 ```{r random pseudo-bulk, eval=FALSE}

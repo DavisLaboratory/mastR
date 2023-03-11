@@ -706,7 +706,11 @@ gsea_plot_init <- function(gse) {
 }
 ## dotplot
 gsea_dotplot_init <- function(gse, size = "enrichmentScore") {
-  res <- do.call(rbind, lapply(gse, \(x) x@result))
+  res <- do.call(rbind, lapply(gse, \(x) {
+    if(is.null(x)) {
+      return(NULL)
+    } else return(x@result)
+  }))
 
   p <- ggplot(res) +
     geom_point(aes(x = group, y = ID, col = -log10(p.adjust),
@@ -762,7 +766,7 @@ heatmap_init <- function(expr, sigs, by, markers, normalize = FALSE,
 
   ## annotation
   top_ann <- ComplexHeatmap::columnAnnotation(Group = by)
-  left_ann <- ComplexHeatmap::rowAnnotation(Sigs = sigs$ind)
+  right_ann <- ComplexHeatmap::rowAnnotation(Sigs = sigs$ind)
 
   ## plot
   p <- ComplexHeatmap::Heatmap(
@@ -770,7 +774,7 @@ heatmap_init <- function(expr, sigs, by, markers, normalize = FALSE,
     column_split = by,
     row_split = sigs$ind,
     top_annotation = top_ann,
-    left_annotation = left_ann,
+    right_annotation = right_ann,
     ...
   )
 
