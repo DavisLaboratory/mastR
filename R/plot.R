@@ -577,7 +577,7 @@ exp_boxplot_init <- function(expr, sigs, target_group, by, normalize = FALSE,
   sigs <- intersect(rownames(expr), sigs)
 
   ## calculate median expression of sigs by aggregating samples on group
-  group <- ifelse(grepl(target_group, by), target_group, by)
+  group <- ifelse(grepl(target_group, by), target_group, as.character(by))
   expr <- dplyr::group_by(expr[sigs, ] |> Matrix::t() |> as.data.frame(),
                           group |> factor()) |>
     dplyr::summarise_all(.funs = median, na.rm = TRUE) |> Matrix::t()
@@ -634,7 +634,9 @@ singscore_init <- function(expr, sigs, by, normalize = FALSE,
 #helper: boxplot of comparing scores
 score_boxplot_init <- function(scores, by, target_group, method) {
   ## set Group for samples by given factor
-  scores$Group <- ifelse(grepl(target_group, by), target_group, by)
+  scores$Group <- ifelse(grepl(target_group, by),
+                         target_group,
+                         as.character(by))
 
   ## plot
   p <- ggplot2::ggplot(data = scores,
@@ -712,13 +714,20 @@ gsea_dotplot_init <- function(gse, size = "enrichmentScore") {
     } else return(x@result)
   }))
 
-  p <- ggplot(res) +
-    geom_point(aes(x = group, y = ID, col = -log10(p.adjust),
-                   size = !!sym(size))) +
-    labs(x = "Comparison", y = "Signature") +
-    theme_bw() +
-    scale_color_viridis_c() +
-    theme(axis.text.x = element_text(angle = 90))
+  if(is.null(res)) {
+    ms <- "No term was found enriched in any comparison!"
+    message(ms)
+    p <- grid::textGrob(ms) |> ggpubr::as_ggplot()
+  } else {
+    p <- ggplot(res) +
+      geom_point(aes(x = group, y = ID, col = -log10(p.adjust),
+                     size = !!sym(size))) +
+      labs(x = "Comparison", y = "Signature") +
+      theme_bw() +
+      scale_color_viridis_c() +
+      theme(axis.text.x = element_text(angle = 90))
+  }
+
   return(p)
 }
 
