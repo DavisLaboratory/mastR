@@ -8,7 +8,7 @@ author:
     email: chen.j@wehi.edu.au
 date: "`r format(Sys.time(), '%d %b %Y')`"
 output: 
-  html_document:
+  rmarkdown::html_vignette:
     toc: true
     number_section: true
     toc_depth: 4
