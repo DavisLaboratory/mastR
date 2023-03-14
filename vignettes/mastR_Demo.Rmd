@@ -8,10 +8,7 @@ author:
     email: chen.j@wehi.edu.au
 date: "`r format(Sys.time(), '%d %b %Y')`"
 output: 
-  rmarkdown::html_vignette:
-    toc: true
-    number_section: true
-    toc_depth: 4
+  rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{mastR_Demo}
   %\VignetteEngine{knitr::rmarkdown}
@@ -21,9 +18,7 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>",
-  fig.width = 8,
-  fig.height = 5
+  comment = "#>"
 )
 ```
 
