@@ -8,7 +8,7 @@ author:
     email: chen.j@wehi.edu.au
 date: "`r format(Sys.time(), '%d %b %Y')`"
 output: 
-  BiocStyle::html_document:
+  html_document:
     toc: true
     number_section: true
     toc_depth: 4
@@ -64,16 +64,18 @@ This report demonstrates the main functions of mastR `r packageVersion("mastR")`
 As a simple demo, here the report will specifically demonstrate the signature screening workflow of NK cells in colorectal cancer (CRC), then assess the final result by using some visualization functions.
 
 **How does mastR screen the signature**  
+
 - step 1. markers pool generation  
 - step 2. screen markers for group specificity  
 - step 3. screen markers for cancer/tissue specificity  
-- step 4. combine results of step 2 & 3
+- step 4. combine results of step 2 & 3  
 - step 5. visualize signature performance
        
 **Applications**  
-- a) score samples
-- b) estimate cellular proportion
-- c) single cell annotation
+
+- a) score samples  
+- b) estimate cellular proportion  
+- c) single cell annotation  
 
 # Installation
 
@@ -429,10 +431,11 @@ pca_matrix_plot(proc_data$vfit$E[names(m_ct),],
 ### combination of multiple datasets (optional)
 
 After the intersection, for:  
+
 - 1) single dataset  
-    Return the intersection result as the signature.  
+      Return the intersection result as the signature.  
 - 2) multiple datasets  
-    After Step 2d (4.1.4), choose one combination method (`union` default) to aggregate signature lists generated from different datasets. Robust Rank Aggregation ("RRA") is another method to select in mastR, which detects genes that are ranked consistently better than expected under null hypothesis of uncorrelated inputs and assigns a significance score for each gene. It's better than "RemoveBatchEffect" sometimes.  
+      After Step 2d (4.1.4), choose one combination method (`union` default) to aggregate signature lists generated from different datasets. Robust Rank Aggregation ("RRA") is another method to select in mastR, which detects genes that are ranked consistently better than expected under null hypothesis of uncorrelated inputs and assigns a significance score for each gene. It's better than "RemoveBatchEffect" sometimes.  
     More details in section \@ref(multi).
 
 
@@ -465,7 +468,10 @@ After screening signature for subset specificity, we need to increase the tissue
 
 mastR provides function `filter_non_tissue()` to remove cancer cells expressing genes from the markers pool. This can ensure our immune signature won't be affected by tumor purity.
 
-Based on the `data` input format, this function can be used in 2 ways:
+Based on the `data` input format, this function can be used in 2 ways:  
+
+* use CCLE as input  
+* use customized data as input
 
 ### use CCLE as input
 
