@@ -232,14 +232,14 @@ plot_rle_init <- function(expr1, expr2, group_col) {
   rle(expr1[, order(col)]) |>
     boxplot(
       outline = FALSE, xaxt = "n", col = colors[sort(col)],
-      main = "RLE plot before filtration"
+      main = "RLE plot before process"
     )
   abline(h = 0)
   ##plot filtered data
   rle(expr2[, order(col)]) |>
     boxplot(
       outline = FALSE, xaxt = "n", col = colors[sort(col)],
-      main = "RLE plot after filtration"
+      main = "RLE plot after process"
     )
   abline(h = 0)
   ## add legend
@@ -270,10 +270,12 @@ plot_MDS_init <- function(expr1, expr2, group_col) {
   p1 <- ggplot(mds1, aes(x = logFC_dim_1, y = logFC_dim_2, col = Group)) +
     geom_point(alpha = 0.5) +
     scale_color_manual(values = tableau_20) +
+    ggtitle("Original data") +
     theme_classic()
   p2 <- ggplot(mds2, aes(x = logFC_dim_1, y = logFC_dim_2, col = Group)) +
     geom_point(alpha = 0.5) +
     scale_color_manual(values = tableau_20) +
+    ggtitle("Processed data") +
     theme_classic()
   p1 + p2 + patchwork::plot_layout(guides = "collect")
 }
