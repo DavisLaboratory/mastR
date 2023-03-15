@@ -41,8 +41,7 @@ get_lm_sig <- function(lm7.pattern, lm22.pattern, ...) {
 
     LM22 <- mastR::LM22
     idx <- grep(lm22.pattern, colnames(LM22)[-1], ...)
-    idx <- Reduce(function(x, y) {x == 1 | y == 1}, LM22[,-1][,idx]) |>
-      as.logical()
+    idx <- as.logical(Reduce(function(x, y) {x == 1 | y == 1}, LM22[,-1][,idx]))
     gs_22 <- LM22$Gene[idx]
     gs_22 <- GSEABase::GeneSet(gs_22, setName = "LM22",
                               geneIdType = GSEABase::SymbolIdentifier())

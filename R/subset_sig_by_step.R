@@ -328,11 +328,11 @@ plot_diagnostics <- function(expr1, expr2, group_col, abl = 2) {
                             by = "Sample")
 
   ## density plot for each sample
-  plot_density_init(data1, data2, abl) |> print()
+  print(plot_density_init(data1, data2, abl))
   ## boxplot of RLE
   plot_rle_init(expr1, expr2, group_col)
   ## MDS plot
-  plot_MDS_init(expr1, expr2, group_col) |> print()
+  print(plot_MDS_init(expr1, expr2, group_col))
 
   return()
 }
@@ -363,7 +363,8 @@ plot_mean_var <- function(proc_data, span = 0.5) {
 
 #' select DEGs from multiple comparisons
 #'
-#' @param tfit processed tfit returned by [process_data()]
+#' @param tfit processed tfit by [limma::treat()] or
+#'             processed data returned by [process_data()]
 #' @param feature_selection one of "auto" (default), "rankproduct" or "none",
 #'                          choose if to use rank product or not to select DEGs
 #'                          from multiple comparisons of DE analysis, 'auto'
@@ -382,6 +383,12 @@ plot_mean_var <- function(proc_data, span = 0.5) {
 select_sig <- function(tfit,
                        feature_selection = c("auto", "rankproduct", "none"),
                        ...) {
+  if(is(tfit, "DGEList")) {
+    stopifnot("Input is not a valid result of process_data(), no 'tfit' is found!" =
+                "tfit" %in% names(tfit))
+    tfit <- tfit$tfit
+  }
+
   stopifnot("tfit is not MArrayLM!" = is(tfit, "MArrayLM"))
   feature_selection <- match.arg(feature_selection)
 

@@ -18,7 +18,7 @@ test_that("get_degs works", {
   expect_identical(names(DEGs), c("DEGs", "proc_data"))
 
   ## test Matrix object
-  DEGs <- get_degs(im_data_6@assayData$exprs |> Matrix::Matrix(),
+  DEGs <- get_degs(Matrix::Matrix(im_data_6@assayData$exprs),
                    group_col = im_data_6$`celltype:ch1`,
                    target_group = "NK")
   expect_identical(names(DEGs), c("DEGs", "proc_data"))

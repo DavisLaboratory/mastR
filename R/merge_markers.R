@@ -34,16 +34,15 @@ merge_markers <- function(...) {
     colnames(d) <- c("Gene", x)
     d
     })
-  markers_list <- Reduce(function(x, y) merge(x, y, all = TRUE),
-                         markers_list) |>
-    as.data.frame()
+  markers_list <- as.data.frame(Reduce(function(x, y) merge(x, y, all = TRUE),
+                                       markers_list))
 
   markers_list$y <- NULL
   markers_list[is.na(markers_list)] <- "-"
 
   ## save the tbl into GeneSet
-  GSEABase::longDescription(markers) <- jsonlite::toJSON(markers_list) |>
-    as.character()  ## convert tbl into json character format
+  ## convert tbl into json character format
+  GSEABase::longDescription(markers) <- as.character(jsonlite::toJSON(markers_list))
 
   return(markers)
 }

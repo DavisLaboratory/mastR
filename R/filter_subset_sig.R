@@ -113,7 +113,7 @@ function(data,
                      slot = slot[[i]],
                      batch = batch[[i]],
                      feature_selection = feature_selection,
-                     markers = markers$SYMBOL |> unique(),
+                     markers = unique(markers$SYMBOL),
                      filter = filter[[i]],
                      gene_id = gene_id[[i]], ...)
     DEGs <- DEGs$DEGs[[dir]]@geneIds
@@ -179,7 +179,7 @@ function(data,
                    target_group = target_group,
                    normalize = normalize,
                    feature_selection = feature_selection,
-                   markers = markers$SYMBOL |> unique(),
+                   markers = unique(markers$SYMBOL),
                    filter = filter,
                    gene_id = gene_id, ...)
   DEGs <- DEGs$DEGs[[dir]]@geneIds
@@ -239,7 +239,7 @@ function(data,
                    target_group = target_group,
                    normalize = normalize,
                    feature_selection = feature_selection,
-                   markers = markers$SYMBOL |> unique(),
+                   markers = unique(markers$SYMBOL),
                    filter = filter,
                    gene_id = gene_id, ...)
   DEGs <- DEGs$DEGs[[dir]]@geneIds

@@ -30,7 +30,7 @@ test_that("filter_non_tissue works", {
 
   ## test Matrix object
   non_tissue_genes_2 <- filter_non_tissue(
-    ccle_crc_5$counts |> Matrix::Matrix(),
+    Matrix::Matrix(ccle_crc_5$counts),
     group_col = ccle_crc_5$samples$cancer,
     target_group = "CRC",
     markers = NK_markers$HGNC_Symbol

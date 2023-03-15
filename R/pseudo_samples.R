@@ -60,10 +60,9 @@ function(data,
   l <- pseudo_sample_list(data = data, by = by,
                           min.cells = min.cells,
                           max.cells = max.cells)
-  p_samples <- lapply(names(l), function(x) {
+  p_samples <- unlist(lapply(names(l), function(x) {
     paste(x, names(l[[x]]), sep = "_")
-    }) |>
-    unlist()
+  }))
   p_samples <- p_samples[!grepl("_$", p_samples)]
   pb <- lapply(l, function(i) sapply(i, function(j) {
     if(fun == "mean") {
@@ -118,7 +117,7 @@ function(data,
   stopifnot(is.character(fun), is.numeric(min.cells),
             is.numeric(max.cells), is.character(slot))
 
-  expr <- Seurat::GetAssayData(data, slot = slot) |> as.matrix()
+  expr <- as.matrix(Seurat::GetAssayData(data, slot = slot))
   coldata <- data@meta.data[,by]
   rm(data)
 
@@ -144,8 +143,8 @@ function(data,
   stopifnot(is.character(fun), is.numeric(min.cells),
             is.numeric(max.cells), is.character(slot))
 
-  expr <- SummarizedExperiment::assay(data, slot) |> as.matrix()
-  coldata <- SummarizedExperiment::colData(data)[,by] |> as.data.frame()
+  expr <- as.matrix(SummarizedExperiment::assay(data, slot))
+  coldata <- as.data.frame(SummarizedExperiment::colData(data)[,by])
   rm(data)
 
   pb <- pseudo_samples(data = expr, by = coldata, fun = fun,

@@ -296,7 +296,7 @@ function(data,
                            method = method,
                            size = size,
                            ...)
-    p[[i]] <- patchwork::patchworkGrob(p[[i]]) |> ggpubr::as_ggplot()
+    p[[i]] <- ggpubr::as_ggplot(patchwork::patchworkGrob(p[[i]]))
     if(!is.null(names(data)))
       p[[i]] <- p[[i]] + ggplot2::labs(subtitle = names(data)[i]) +
         ggplot2::theme(plot.subtitle = element_text(hjust = 0.5))

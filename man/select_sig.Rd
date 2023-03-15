@@ -7,7 +7,8 @@
 select_sig(tfit, feature_selection = c("auto", "rankproduct", "none"), ...)
 }
 \arguments{
-\item{tfit}{processed tfit returned by \code{\link[=process_data]{process_data()}}}
+\item{tfit}{processed tfit by \code{\link[limma:ebayes]{limma::treat()}} or
+processed data returned by \code{\link[=process_data]{process_data()}}}
 
 \item{feature_selection}{one of "auto" (default), "rankproduct" or "none",
 choose if to use rank product or not to select DEGs

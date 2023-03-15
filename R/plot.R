@@ -12,8 +12,8 @@ tableau_20 <-  c("#4E79A7", "#A0CBE8", "#F28E2B", "#FFBE7D", "#59A14F",
 plot_density <- function(dge, group_col, keep = TRUE,
                          normalize = TRUE, filter = 10) {
   ## set colors for each cell type
-  col <- dge$samples[[group_col]] |> as.factor() |> as.numeric()
-  colors <- colorRampPalette(colors = tableau_20)(unique(dge$samples[[group_col]]) |> length())
+  col <- as.numeric(as.factor(dge$samples[[group_col]]))
+  colors <- colorRampPalette(colors = tableau_20)(length(unique(dge$samples[[group_col]])))
 
   ## set par for plot to make 2 plots in one page
   op <- par(no.readonly = TRUE)
@@ -87,9 +87,8 @@ rle <- function(expr_mat, log = FALSE) {
 #helper: RLE plot between before and after filtration
 plot_rle <- function(dge, group_col, keep = TRUE, normalize = TRUE) {
   ## set colors for each cell type
-  col <- dge$samples[[group_col]] |> as.factor() |> as.numeric()
-  colors <- colorRampPalette(colors = tableau_20)(unique(dge$samples[[group_col]]) |>
-                                                    length())
+  col <- as.numeric(as.factor(dge$samples[[group_col]]))
+  colors <- colorRampPalette(colors = tableau_20)(length(unique(dge$samples[[group_col]])))
 
   ## calculate logCPM
   if(normalize) {
@@ -113,23 +112,23 @@ plot_rle <- function(dge, group_col, keep = TRUE, normalize = TRUE) {
   par(mfrow = c(3, 1), mar = c(1, 2.5, 2, 1), oma = c(0, 0, 1, 0))
 
   ## plot unfiltered data
-  rle(lcpm.1[, order(col)]) |>
-    boxplot(
-      outline = FALSE, xaxt = "n", col = sort(col) |> (\(x) colors[x])(),
-      main = "RLE plot before filtration"
-    )
+  boxplot(
+    rle(lcpm.1[, order(col)]),
+    outline = FALSE, xaxt = "n", col = colors[sort(col)],
+    main = "RLE plot before filtration"
+  )
   abline(h = 0)
   ##plot filtered data
-  rle(lcpm.2[, order(col)]) |>
-    boxplot(
-      outline = FALSE, xaxt = "n", col = sort(col) |> (\(x) colors[x])(),
-      main = "RLE plot after filtration"
-    )
+  boxplot(
+    rle(lcpm.2[, order(col)]),
+    outline = FALSE, xaxt = "n", col = colors[sort(col)],
+    main = "RLE plot after filtration"
+  )
   abline(h = 0)
   ## add legend
   plot(0, type = "n", axes = FALSE, xlab = "", ylab = "")
   legend("center",
-         legend = unique(dge$samples[[group_col]]) |> sort(),
+         legend = sort(unique(dge$samples[[group_col]])),
          fill = colors, xpd = TRUE, ncol = 4
   )
   ## set par back to original
@@ -139,9 +138,8 @@ plot_rle <- function(dge, group_col, keep = TRUE, normalize = TRUE) {
 #helper: MDS plot before and after filtration
 plot_MDS <- function(dge, group_col, keep = TRUE, normalize = TRUE) {
   ## set colors for each cell type
-  col <- dge$samples[[group_col]] |> as.factor() |> as.numeric()
-  colors <- colorRampPalette(colors = tableau_20)(unique(dge$samples[[group_col]]) |>
-                                                    length())
+  col <- as.numeric(as.factor(dge$samples[[group_col]]))
+  colors <- colorRampPalette(colors = tableau_20)(length(unique(dge$samples[[group_col]])))
 
   ## calculate logCPM
   if(normalize) {
@@ -176,7 +174,7 @@ plot_MDS <- function(dge, group_col, keep = TRUE, normalize = TRUE) {
   ## add legend
   plot(0, type = "n", axes = FALSE, xlab = "", ylab = "")
   legend("center",
-         legend = unique(dge$samples[[group_col]]) |> sort(),
+         legend = sort(unique(dge$samples[[group_col]])),
          fill = colors, xpd = TRUE
   )
   mtext("Input Data", side = 3, line = 0, outer = TRUE)
@@ -222,30 +220,30 @@ plot_density_init <- function(data1, data2, abl = 2,
 plot_rle_init <- function(expr1, expr2, group_col) {
 
   ## set colors for each cell type
-  col <- group_col |> as.factor() |> as.numeric()
+  col <- as.numeric(as.factor(group_col))
   colors <- colorRampPalette(colors = tableau_20)(length(unique(group_col)))
   ## set par for boxplot and legend
   op <- par(no.readonly = TRUE)
   par(mfrow = c(3, 1), mar = c(1, 2.5, 2, 1), oma = c(0, 0, 1, 0))
 
   ## plot unfiltered data
-  rle(expr1[, order(col)]) |>
-    boxplot(
-      outline = FALSE, xaxt = "n", col = colors[sort(col)],
-      main = "RLE plot before process"
-    )
+  boxplot(
+    rle(expr1[, order(col)]),
+    outline = FALSE, xaxt = "n", col = colors[sort(col)],
+    main = "RLE plot before process"
+  )
   abline(h = 0)
   ##plot filtered data
-  rle(expr2[, order(col)]) |>
-    boxplot(
-      outline = FALSE, xaxt = "n", col = colors[sort(col)],
-      main = "RLE plot after process"
-    )
+  boxplot(
+    rle(expr2[, order(col)]),
+    outline = FALSE, xaxt = "n", col = colors[sort(col)],
+    main = "RLE plot after process"
+  )
   abline(h = 0)
   ## add legend
   plot(0, type = "n", axes = FALSE, xlab = "", ylab = "")
   legend("center",
-         legend = unique(group_col) |> sort(),
+         legend = sort(unique(group_col)),
          fill = colors, xpd = TRUE, ncol = 4
   )
   ## set par back to original
@@ -331,8 +329,7 @@ plotPCAbiplot <- function(prcomp,
     } else if (is.character(n_loadings)) {
       stopifnot("Not all n_loadings are in input prcomp data" =
                   n_loadings %in% rownames(prcomp$rotation))
-      pc1_genes <- pc2_genes <- prcomp$rotation[n_loadings, ] |>
-        rownames()
+      pc1_genes <- pc2_genes <- rownames(prcomp$rotation[n_loadings, ])
     }
 
     genes2plot <- unique(pc1_genes, pc2_genes)
@@ -424,9 +421,8 @@ pca_matrix_plot_init <- function(data,
   if (length(features) == 1 && features[1] == "all") {
     tmp <- stats::prcomp(Matrix::t(data), scale = scale)
   }else {
-    id <- AnnotationDbi::mapIds(org.Hs.eg.db::org.Hs.eg.db,
-                                features, gene_id, "SYMBOL") |>
-      na.omit()
+    id <- na.omit(AnnotationDbi::mapIds(org.Hs.eg.db::org.Hs.eg.db,
+                                        features, gene_id, "SYMBOL"))
     id <- id[id %in% rownames(data)]
     tmp <- stats::prcomp(Matrix::t(data[id,]), scale = scale)
     rownames(tmp$rotation) <- names(id)
@@ -476,17 +472,16 @@ pca_matrix_plot_init <- function(data,
     }
   }
 
-  p3 <- ggpubr::get_legend(
+  p3 <- ggpubr::as_ggplot(ggpubr::get_legend(
     ggplot() +
       geom_point(aes(x = 1, y = 1, col = group_by)) +
       scale_color_manual(values = tableau_20) +
       theme_classic()
-  ) |> ggpubr::as_ggplot()  ## get legend
+  ))  ## get legend
 
   ## add color for group_by factor
   if(!is.null(group_by)) {
-    p0 <- (p0 + patchwork::inset_element(p3, 0.6, 0.2, 0.8, 0.9)) |>
-      patchwork::patchworkGrob()
+    p0 <- patchwork::patchworkGrob(p0 + patchwork::inset_element(p3, 0.6, 0.2, 0.8, 0.9))
   }
 
   layout_mat <- matrix(NA, n, n)
@@ -531,12 +526,11 @@ scatter_plot_init <- function(expr, sigs, target_group, by,
 
   ## calculate median expression of sigs by aggregating cells based on by group
   group <- ifelse(grepl(target_group, by), target_group, by)
-  expr <- dplyr::group_by(expr[sigs,] |> Matrix::t() |> as.data.frame(),
-                          group |> factor()) |>
+  expr <- dplyr::group_by(as.data.frame(Matrix::t(expr[sigs,])),
+                          factor(group)) |>
     dplyr::summarise_all(.funs = mean, na.rm = TRUE) |> Matrix::t()
   colnames(expr) <- expr[1,]
-  expr <- expr[-1, ] |> apply(MARGIN = c(1, 2), FUN = as.numeric) |>
-    as.data.frame()
+  expr <- as.data.frame(apply(expr[-1, ], MARGIN = c(1, 2), FUN = as.numeric))
 
   ## biplot of specified target_group vs all other types
   p <- tidyr::pivot_longer(expr, -target_group,
@@ -580,12 +574,11 @@ exp_boxplot_init <- function(expr, sigs, target_group, by, normalize = FALSE,
 
   ## calculate median expression of sigs by aggregating samples on group
   group <- ifelse(grepl(target_group, by), target_group, as.character(by))
-  expr <- dplyr::group_by(expr[sigs, ] |> Matrix::t() |> as.data.frame(),
-                          group |> factor()) |>
+  expr <- dplyr::group_by(as.data.frame(Matrix::t(expr[sigs, ])),
+                          factor(group)) |>
     dplyr::summarise_all(.funs = median, na.rm = TRUE) |> Matrix::t()
   colnames(expr) <- expr[1, ]
-  expr <- expr[-1, ] |> apply(MARGIN = c(1, 2), FUN = as.numeric) |>
-    as.data.frame()
+  expr <- as.data.frame(apply(expr[-1, ], MARGIN = c(1, 2), FUN = as.numeric))
   expr$Gene <- rownames(expr)
 
   ## boxplot of signature in specified target_group vs all other types
@@ -623,11 +616,10 @@ singscore_init <- function(expr, sigs, by, normalize = FALSE,
 
   ## singscore samples using given signature genes
   rank_data <- singscore::rankGenes(expr)
-  UP <- AnnotationDbi::mapIds(org.Hs.eg.db::org.Hs.eg.db,
-                              sigs,
-                              column = gene_id,
-                              keytype = "SYMBOL") |>
-    na.omit()
+  UP <- na.omit(AnnotationDbi::mapIds(org.Hs.eg.db::org.Hs.eg.db,
+                                      sigs,
+                                      column = gene_id,
+                                      keytype = "SYMBOL"))
 
   scores <- singscore::simpleScore(rank_data, upSet = UP)
   return(scores)
@@ -690,7 +682,7 @@ gsea_plot_init <- function(gse) {
     if(is.null(gse[[n]])) {
       ms <- paste("No term was found enriched in", n, ".")
       message(ms)
-      p <- grid::textGrob(ms) |> ggpubr::as_ggplot()
+      p <- ggpubr::as_ggplot(grid::textGrob(ms))
     } else {
       p <- enrichplot::gseaplot2(gse[[n]], geneSetID = seq_len(nrow(gse[[n]])),
                                  pvalue_table = TRUE,
@@ -719,7 +711,7 @@ gsea_dotplot_init <- function(gse, size = "enrichmentScore") {
   if(is.null(res)) {
     ms <- "No term was found enriched in any comparison!"
     message(ms)
-    p <- grid::textGrob(ms) |> ggpubr::as_ggplot()
+    p <- ggpubr::as_ggplot(grid::textGrob(ms))
   } else {
     p <- ggplot(res) +
       geom_point(aes(x = group, y = ID, col = -log10(p.adjust),
@@ -754,7 +746,7 @@ heatmap_init <- function(expr, sigs, by, markers, normalize = FALSE,
   }
   ## plot rank instead of expression
   if (ranks_plot == TRUE)
-    expr <- apply(expr, 2, rank) |> log2()
+    expr <- log2(apply(expr, 2, rank))
   ## scale
   if(scale == "row") {
     expr <- t(scale(t(expr)))
@@ -797,8 +789,8 @@ heatmap_init <- function(expr, sigs, by, markers, normalize = FALSE,
 ##---------------------------------------------------------------
 #helper: aggregate samples of the same group to one sample with mean expression
 agg_mean <- function(expr, by) {
-  expr <- split(colnames(expr), by) |>
-    sapply(FUN = function(x) Matrix::rowMeans(expr[,x], na.rm = TRUE))
+  expr <- sapply(split(colnames(expr), by),
+                 FUN = function(x) Matrix::rowMeans(expr[,x], na.rm = TRUE))
   return(expr)
 }
 
@@ -835,11 +827,9 @@ rankdensity_init <- function(expr, sigs, by, normalize = FALSE,
                               sigs,
                               columns = gene_id,
                               keytype = "SYMBOL")
-  UP <- UP[!duplicated(UP[[gene_id]]), gene_id] |>
-    intersect(rownames(expr))
+  UP <- intersect(UP[!duplicated(UP[[gene_id]]), gene_id], rownames(expr))
 
-  data <- t(rank_data[UP,]/nrow(rank_data)) |>
-    data.frame(Group = by)
+  data <- data.frame(t(rank_data[UP,]/nrow(rank_data)), Group = by)
   data$Sample <- rownames(data)
 
   if(aggregate == TRUE) {
@@ -883,12 +873,13 @@ scatter_hdb_cl <- function(sig_matrix, markers_list) {
   stopifnot("sig_matrix must be a matrix or data.frame!" = is.matrix(sig_matrix) | is.data.frame(sig_matrix),
             "markers_list is not a list!" = is.list(markers_list))
 
-  ml <- utils::stack(markers_list) |> (\(x) split(x$ind, x$values))()
+  ml <- utils::stack(markers_list)
+  ml <- split(ml$ind, ml$values)
 
   p <- lapply(rownames(sig_matrix), function(m) {
     p <- ggplot2::ggplot(data.frame(
       Gene = m,
-      Expression = sig_matrix[m,] |> as.numeric(),
+      Expression = as.numeric(sig_matrix[m,]),
       Type = ifelse(colnames(sig_matrix) %in% ml[[m]],
                     colnames(sig_matrix),
                     "")

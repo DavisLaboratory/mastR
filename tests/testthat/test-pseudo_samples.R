@@ -20,7 +20,7 @@ test_that("pseudo_samples works", {
   expect_true(ncol(pb) == 8)
 
   # test sce
-  pb <- pseudo_samples(scRNA |> Seurat::as.SingleCellExperiment(),
+  pb <- pseudo_samples(Seurat::as.SingleCellExperiment(scRNA),
                        by = c("subset", "level"),
                        min.cells = 10, max.cells = 20)
 

@@ -19,7 +19,7 @@ test_that("get_de_table works", {
   expect_true(all(sapply(DEG_table, is.data.frame)))
 
   ## test Matrix object
-  DEG_table <- get_de_table(im_data_6@assayData$exprs |> Matrix::Matrix(),
+  DEG_table <- get_de_table(Matrix::Matrix(im_data_6@assayData$exprs),
                             group_col = im_data_6$`celltype:ch1`,
                             target_group = "NK")
   expect_true(all(sapply(DEG_table, is.data.frame)))

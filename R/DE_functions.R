@@ -35,16 +35,22 @@ voom_lm_fit <- function(dge, group_col, target_group,
   if (group == TRUE && feature_selection == "none") {
     dge$samples$group <- ifelse(grepl(target_group, dge$samples[[group_col]]),
                                 make.names(target_group),
-                                "Others") |>
-      factor(levels = c(make.names(target_group), "Others"))
-      ## set target_group to be the first level
+                                "Others")
+    ## set target_group to be the first level
+    dge$samples$group <- factor(dge$samples$group,
+                                levels = c(make.names(target_group), "Others"))
   } else {
     dge$samples$group <- ifelse(grepl(target_group, dge$samples[[group_col]]),
                                 make.names(target_group),
-                                dge$samples[[group_col]] |> make.names()) |>
-      (\(x) factor(x, levels = c(make.names(target_group),
-                                 unique(x[x != make.names(target_group)]))))()
-                                 ## set target_group to be the first level
+                                make.names(dge$samples[[group_col]]))
+    ## set target_group to be the first level
+    dge$samples$group <- factor(
+      dge$samples$group,
+      levels = c(
+        make.names(target_group),
+        unique(dge$samples$group[dge$samples$group != make.names(target_group)])
+      )
+    )
   }
 
   ## make contrast design
@@ -77,16 +83,13 @@ voom_lm_fit <- function(dge, group_col, target_group,
     proc_data$counts <- v$E
   }else v <- dge$counts
 
-  ## assign proc_data as global variable
-  # assign("proc_data", proc_data, envir = .GlobalEnv)
-
   ## linear regression fit
   fit <- limma::lmFit(v, design = design)
-  tfit <- limma::contrasts.fit(fit, contrasts = contrast.mat) |>
-    limma::treat(lfc = lfc)
+  tfit <- limma::treat(limma::contrasts.fit(fit, contrasts = contrast.mat),
+                       lfc = lfc, trend = !normalize)
   ## summarize the total number of DEGs
   if(summary == TRUE)
-    show(limma::decideTests(tfit, lfc = lfc, p.value = p) |> summary())
+    show(summary(limma::decideTests(tfit, lfc = lfc, p.value = p)))
   if (plot) limma::plotSA(tfit, main = "Final model: Mean-variance trend")
   if (plot && normalize) par(op)
   return(list(tfit = tfit, proc_data = proc_data))
@@ -127,8 +130,9 @@ DEGs_RP <- function(tfit, lfc = NULL, p = 0.05, assemble = "intersect",
   DWs <- list()
   DEGs <- list()
   for (i in seq_len(ncol(tfit))) {
-    DEG[[i]] <- limma::topTreat(tfit, coef = i, number = Inf,
-                                sort.by = "none") |> na.omit()
+    DEG[[i]] <- na.omit(limma::topTreat(tfit, coef = i,
+                                        number = Inf,
+                                        sort.by = "none"))
     UPs[[i]] <- subset(DEG[[i]], logFC > lfc & adj.P.Val < p)
     DWs[[i]] <- subset(DEG[[i]], logFC < -lfc & adj.P.Val < p)
     DEG[[i]]$lfc <- DEG[[i]]$logFC
@@ -136,9 +140,8 @@ DEGs_RP <- function(tfit, lfc = NULL, p = 0.05, assemble = "intersect",
   }
 
   ## product of rank distribution for UPs
-  genes <- lapply(UPs, rownames) |> Reduce(f = assemble)
-  genes <- intersect(genes, lapply(DEG, rownames) |>
-                       Reduce(f = intersect))
+  genes <- Reduce(f = assemble, lapply(UPs, rownames))
+  genes <- intersect(genes, Reduce(intersect, lapply(DEG, rownames)))
   if(length(genes) == 0) {
     DEGs[["UP"]] <- genes
   }else {
@@ -146,7 +149,7 @@ DEGs_RP <- function(tfit, lfc = NULL, p = 0.05, assemble = "intersect",
     up_dist <- lapply(UPs, function(x) {
       sample.int(length(genes), nperm, replace = TRUE)
     })
-    pr_up_dist <- do.call(cbind, up_dist) |> log10() |> rowSums()
+    pr_up_dist <- rowSums(log10(do.call(cbind, up_dist)))
     up_pr <- lapply(DEG, function(x) rank(x[genes, Rank])) |>
       do.call(what = cbind) |> log10() |> rowSums()
     names(up_pr) <- genes
@@ -156,9 +159,8 @@ DEGs_RP <- function(tfit, lfc = NULL, p = 0.05, assemble = "intersect",
 
 
   ## PR distribution for DWs
-  genes <- lapply(DWs, rownames) |> Reduce(f = assemble)
-  genes <- intersect(genes, lapply(DEG, rownames) |>
-                       Reduce(f = intersect))
+  genes <- Reduce(f = assemble, lapply(DWs, rownames))
+  genes <- intersect(genes, Reduce(intersect, lapply(DEG, rownames)))
   if(length(genes) == 0) {
     DEGs[["DOWN"]] <- genes
   }else {
@@ -166,7 +168,7 @@ DEGs_RP <- function(tfit, lfc = NULL, p = 0.05, assemble = "intersect",
     dw_dist <- lapply(DWs, function(x) {
       sample.int(length(genes), nperm, replace = TRUE)
     })
-    pr_dw_dist <- do.call(cbind, dw_dist) |> log10() |> rowSums()
+    pr_dw_dist <- rowSums(log10(do.call(cbind, dw_dist)))
     dw_pr <- lapply(DEG, function(x) rank(x[genes, Rank])) |>
       do.call(what = cbind) |> log10() |> rowSums()
     names(dw_pr) <- genes
@@ -181,13 +183,13 @@ DEGs_RP <- function(tfit, lfc = NULL, p = 0.05, assemble = "intersect",
       stop("Please specify at least one valid comparison for keep.group!")
     ## get top n UP DEGs for specified comparison
     tmp <- lapply(which(grepl(keep.group, colnames(tfit))), \(i) {
-      tmp <- DEG[[i]] |> dplyr::arrange(!!sym(Rank))
+      tmp <- dplyr::arrange(DEG[[i]], !!sym(Rank))
       tmp <- rownames(tmp)[tmp$lfc > 0][seq_len(keep.top)]
     })
     DEGs[["UP"]] <- Reduce(union, c(list(DEGs[["UP"]]), tmp))
     ## get top n DOWN DEGs for specified comparison
     tmp <- lapply(which(grepl(keep.group, colnames(tfit))), \(i) {
-      tmp <- DEG[[i]] |> dplyr::arrange(!!sym(Rank))
+      tmp <- dplyr::arrange(DEG[[i]], !!sym(Rank))
       tmp <- rownames(tmp)[tmp$lfc < 0][seq_len(keep.top)]
     })
     DEGs[["DOWN"]] <- Reduce(union, c(list(DEGs[["DOWN"]]), tmp))
@@ -218,14 +220,14 @@ DEGs_Group <- function(tfit, lfc = NULL, p = 0.05,
   DWs <- list()
   DEGs <- list()
   for (i in seq_len(ncol(tfit))) {
-    DEG[[i]] <- limma::topTreat(tfit, coef = i, number = Inf) |> na.omit()
+    DEG[[i]] <- na.omit(limma::topTreat(tfit, coef = i, number = Inf))
     UPs[[i]] <- subset(DEG[[i]], logFC > lfc & adj.P.Val < p)
     DWs[[i]] <- subset(DEG[[i]], logFC < -lfc & adj.P.Val < p)
     DEG[[i]]$lfc <- DEG[[i]]$logFC
     DEG[[i]]$logFC <- -abs(DEG[[i]]$logFC)
   }
-  DEGs[["UP"]] <- lapply(UPs, rownames) |> Reduce(f = assemble)
-  DEGs[["DOWN"]] <- lapply(DWs, rownames) |> Reduce(f = assemble)
+  DEGs[["UP"]] <- Reduce(f = assemble, lapply(UPs, rownames))
+  DEGs[["DOWN"]] <- Reduce(f = assemble, lapply(DWs, rownames))
   DEGs[["UP"]] <- do.call(function(...) {
                             apply(cbind(...), 1, mean, na.rm = TRUE)
                           },
@@ -245,13 +247,13 @@ DEGs_Group <- function(tfit, lfc = NULL, p = 0.05,
       stop("Please specify at least one valid comparison for keep.group!")
     ## get top n UP DEGs for specified comparison
     tmp <- lapply(which(grepl(keep.group, colnames(tfit))), \(i) {
-      tmp <- DEG[[i]] |> dplyr::arrange(!!sym(Rank))
+      tmp <- dplyr::arrange(DEG[[i]], !!sym(Rank))
       tmp <- rownames(tmp)[tmp$lfc > 0][seq_len(keep.top)]
     })
     DEGs[["UP"]] <- Reduce(union, c(list(DEGs[["UP"]]), tmp))
     ## get top n DOWN DEGs for specified comparison
     tmp <- lapply(which(grepl(keep.group, colnames(tfit))), \(i) {
-      tmp <- DEG[[i]] |> dplyr::arrange(!!sym(Rank))
+      tmp <- dplyr::arrange(DEG[[i]], !!sym(Rank))
       tmp <- rownames(tmp)[tmp$lfc < 0][seq_len(keep.top)]
     })
     DEGs[["DOWN"]] <- Reduce(union, c(list(DEGs[["DOWN"]]), tmp))
@@ -291,9 +293,10 @@ voom_fit_treat <- function(dge,
   if (group == TRUE) {
     dge$samples$group <- ifelse(grepl(target_group, dge$samples[[group_col]]),
                                 make.names(target_group),
-                                "Others") |>
-      factor(levels = c(make.names(target_group), "Others"))
+                                "Others")
     ## set target_group to be the first level
+    dge$samples$group <- factor(dge$samples$group,
+                                levels = c(make.names(target_group), "Others"))
   } else {
     dge$samples$group <- ifelse(grepl(target_group, dge$samples[[group_col]]),
                                 make.names(target_group),
@@ -301,8 +304,10 @@ voom_fit_treat <- function(dge,
     ## set target_group to be the first level
     dge$samples$group <- factor(
       dge$samples$group,
-      levels = c(make.names(target_group),
-                 unique(dge$samples$group[dge$samples$group != make.names(target_group)]))
+      levels = c(
+        make.names(target_group),
+        unique(dge$samples$group[dge$samples$group != make.names(target_group)])
+      )
     )
   }
 
@@ -329,11 +334,11 @@ voom_fit_treat <- function(dge,
 
   ## linear regression fit
   fit <- limma::lmFit(dge$vfit, design = design)
-  tfit <- limma::contrasts.fit(fit, contrasts = contrast.mat) |>
-    limma::treat(lfc = lfc)
+  tfit <- limma::treat(limma::contrasts.fit(fit, contrasts = contrast.mat),
+                       lfc = lfc, trend = !normalize)
   ## summarize the total number of DEGs
   if(summary == TRUE)
-    show(limma::decideTests(tfit, lfc = lfc, p.value = p) |> summary())
+    show(summary(limma::decideTests(tfit, lfc = lfc, p.value = p)))
 
   dge$tfit <- tfit
 

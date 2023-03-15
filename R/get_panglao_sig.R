@@ -27,7 +27,7 @@ get_panglao_sig <- function(type, species = c('Hs', 'Mm', 'Mm Hs')) {
             "Please provide valid cell types, which can be listed by list_Panglao_types()!" = type %in% table$`Cell type`)
 
   gs <- subset(table, grepl(species, Species) & `Cell type` %in% type)
-  gs <- gs$`Official gene symbol` |> unique()
+  gs <- unique(gs$`Official gene symbol`)
   gs <- GSEABase::GeneSet(gs, setName = "PanglaoDB",
                           geneIdType = GSEABase::SymbolIdentifier())
   return(gs)
