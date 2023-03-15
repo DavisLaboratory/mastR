@@ -591,9 +591,9 @@ details in <code><a href="../reference/im_data_6.html">?mastR::im_data_6</a></co
 <span><span class="co">#&gt; experimentData: use 'experimentData(object)'</span></span>
 <span><span class="co">#&gt;   pubMedIds: 25314013 </span></span>
 <span><span class="co">#&gt; Annotation: GPL15456</span></span></code></pre></div>
-<div class="section level4">
-<h4 id="process-data">process data<a class="anchor" aria-label="anchor" href="#process-data"></a>
-</h4>
+<div class="section level3">
+<h3 id="process-data">process data<a class="anchor" aria-label="anchor" href="#process-data"></a>
+</h3>
 <p>To screen signature for cell subset specificity, some processes need
 to be done on the data first.</p>
 <p><code><a href="../reference/process_data.html">process_data()</a></code> provided by mastR can do the genes
@@ -666,9 +666,9 @@ when markers is not NULL, could be one of ‘ENSEMBL’, ‘SYMBOL’,
 <span><span class="co">#&gt; Up               4945         3806       2874   2750   2093</span></span>
 <span><span class="co"># summary(limma::decideTests(proc_data$tfit))</span></span></code></pre></div>
 </div>
-<div class="section level4">
-<h4 id="visualize-qc-before-and-after">visualize QC before and after<a class="anchor" aria-label="anchor" href="#visualize-qc-before-and-after"></a>
-</h4>
+<div class="section level3">
+<h3 id="visualize-qc-before-and-after">visualize QC before and after<a class="anchor" aria-label="anchor" href="#visualize-qc-before-and-after"></a>
+</h3>
 <p>After data processing, we need to check whether the data has been
 well filtered , normalized and fitted.</p>
 <p>mastR provides visualization functions for this, to compare the data
@@ -708,9 +708,9 @@ can select how many top n PCs to be plot by param <code>n</code>.</p>
 <span><span class="fu"><a href="../reference/pca_matrix_plot.html">pca_matrix_plot</a></span><span class="op">(</span><span class="va">expr2</span>, group_by <span class="op">=</span> <span class="va">proc_data</span><span class="op">$</span><span class="va">samples</span><span class="op">$</span><span class="va">celltype.ch1</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <p><img src="mastR_Demo_files/figure-html/plot%20PCA%20mat-2.png" width="768"></p>
 </div>
-<div class="section level4">
-<h4 id="select-signature-genes">select signature genes<a class="anchor" aria-label="anchor" href="#select-signature-genes"></a>
-</h4>
+<div class="section level3">
+<h3 id="select-signature-genes">select signature genes<a class="anchor" aria-label="anchor" href="#select-signature-genes"></a>
+</h3>
 <p>Now we get processed data with DE statistic for each gene in each
 comparison, then the proc_data can be passed into
 <code><a href="../reference/select_sig.html">select_sig()</a></code> function for further genes selection based on
@@ -762,9 +762,9 @@ GeneSetCollection (‘UP’ and ‘DOWN’) will be returned as output.</p>
 <span><span class="fu">GSEABase</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">DEG_6</span><span class="op">$</span><span class="va">DEGs</span><span class="op">)</span></span>
 <span><span class="va">DEG_6</span><span class="op">$</span><span class="va">proc_data</span><span class="op">$</span><span class="va">vfit</span><span class="op">$</span><span class="va">design</span> <span class="co">## show the design matrix</span></span></code></pre></div>
 </div>
-<div class="section level4">
-<h4 id="intersect-pool">intersect with markers pool<a class="anchor" aria-label="anchor" href="#intersect-pool"></a>
-</h4>
+<div class="section level3">
+<h3 id="intersect-pool">intersect with markers pool<a class="anchor" aria-label="anchor" href="#intersect-pool"></a>
+</h3>
 <p>After getting specific signature genes for the target group, we will
 only keep those UP regulated genes which are also present in our markers
 pool <code>Markers</code>, to constrain the final signature wthin the
