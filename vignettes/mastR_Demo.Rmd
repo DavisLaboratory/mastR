@@ -289,7 +289,7 @@ data("im_data_6")
 im_data_6
 ```
 
-### process data
+## process data
 
 To screen signature for cell subset specificity, some processes need to be done on the data first.
 
@@ -335,7 +335,7 @@ proc_data <- process_data(
 # summary(limma::decideTests(proc_data$tfit))
 ```
 
-### visualize QC before and after
+## visualize QC before and after
 
 After data processing, we need to check whether the data has been well filtered , normalized and fitted.
 
@@ -371,7 +371,7 @@ pca_matrix_plot(expr1, group_by = proc_data$samples$celltype.ch1, n = 3)
 pca_matrix_plot(expr2, group_by = proc_data$samples$celltype.ch1, n = 3)
 ```
 
-### select signature genes
+## select signature genes
 
 Now we get processed data with DE statistic for each gene in each comparison, then the proc_data can be passed into `select_sig()` function for further genes selection based on rank product scoring. Cell type specific signature can be obtained by this.
 
@@ -408,7 +408,7 @@ GSEABase::geneIds(DEG_6$DEGs)
 DEG_6$proc_data$vfit$design ## show the design matrix
 ```
 
-### intersect with markers pool {#intersect-pool}
+## intersect with markers pool {#intersect-pool}
 
 After getting specific signature genes for the target group, we will only keep those UP regulated genes which are also present in our markers pool `Markers`, to constrain the final signature wthin the interested gene list.
 
