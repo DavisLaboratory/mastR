@@ -680,7 +680,7 @@ Obviously, our signature always shows significantly higher score in NK cells.
 
 ## Signature Abundance Boxplot
 
-`sig_boxplot()` function can also generate boxplot of the NK signature abundance for all cell subsets in the data by setting `plot.score = FALSE`.
+`sig_boxplot()` function can also generate boxplot of the NK signature abundance for all cell subsets in the data by setting `type = "expression"`.
 
 ```{r abundance boxplot, warning=FALSE}
 sig_boxplot(
@@ -688,7 +688,7 @@ sig_boxplot(
   sigs = sig_NK_CRC,
   group_col = "celltype.ch1", 
   target_group = "NK",
-  plot.score = FALSE,
+  type = "expression",
   gene_id = "ENSEMBL",
   slot = "voomE"
 )

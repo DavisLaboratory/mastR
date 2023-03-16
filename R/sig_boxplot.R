@@ -10,7 +10,8 @@ NULL
 #' @param sigs a vector of signature (Symbols)
 #' @param group_col character or vector, specify the column name to compare in coldata
 #' @param target_group pattern, specify the group of interest as reference
-#' @param plot.score logical, if to plot score instead of expression of signature
+#' @param type one of "score" and "expression", to plot score or expression of
+#'             the signature
 #' @param normalize logical, TRUE indicates raw counts data to normalize and
 #'                  calculate cpm
 #' @param method a character string indicating which method to be used for
@@ -36,7 +37,7 @@ setGeneric("sig_boxplot",
                     sigs,
                     group_col,
                     target_group,
-                    plot.score = TRUE,
+                    type = c("score", "expression"),
                     normalize = FALSE,
                     method = "t.test",
                     slot = "counts",
@@ -54,14 +55,15 @@ function(data,
          sigs,
          group_col,
          target_group,
-         plot.score = TRUE,
+         type = c("score", "expression"),
          normalize = FALSE,
          method = "t.test",
          gene_id = "SYMBOL") {
 
   stopifnot(is.logical(normalize), is.character(method), is.character(gene_id))
+  type <- match.arg(type)
 
-  if(plot.score == TRUE) {
+  if(type == "score") {
     ## plot scores of signature
     ## calculate scores
     scores <- singscore_init(expr = data, sigs = sigs, by = group_col,
@@ -92,14 +94,15 @@ function(data,
          sigs,
          group_col,
          target_group,
-         plot.score = TRUE,
+         type = c("score", "expression"),
          normalize = FALSE,
          method = "t.test",
          gene_id = "SYMBOL") {
 
   stopifnot(is.logical(normalize), is.character(method), is.character(gene_id))
+  type <- match.arg(type)
 
-  if(plot.score == TRUE) {
+  if(type == "score") {
     ## plot scores of signature
     ## calculate scores
     scores <- singscore_init(expr = as.matrix(data),
@@ -133,18 +136,19 @@ function(data,
          sigs,
          group_col,
          target_group,
-         plot.score = TRUE,
+         type = c("score", "expression"),
          normalize = FALSE,
          method = "t.test",
          gene_id = "SYMBOL") {
 
   stopifnot(is.logical(normalize), is.character(method), is.character(gene_id))
+  type <- match.arg(type)
 
   p <- sig_boxplot(data = as.matrix(data),
                    sigs = sigs,
                    group_col = group_col,
                    target_group = target_group,
-                   plot.score = plot.score,
+                   type = type,
                    normalize = normalize,
                    method = method,
                    gene_id = gene_id)
@@ -163,7 +167,7 @@ function(data,
          sigs,
          group_col,
          target_group,
-         plot.score = TRUE,
+         type = c("score", "expression"),
          normalize = FALSE,
          method = "t.test",
          slot = "counts",
@@ -173,7 +177,7 @@ function(data,
                    sigs = sigs,
                    group_col = data$samples[[group_col]],
                    target_group = target_group,
-                   plot.score = plot.score,
+                   type = type,
                    normalize = normalize,
                    method = method,
                    gene_id = gene_id)
@@ -191,7 +195,7 @@ function(data,
          sigs,
          group_col,
          target_group,
-         plot.score = TRUE,
+         type = c("score", "expression"),
          normalize = FALSE,
          method = "t.test",
          gene_id = "SYMBOL") {
@@ -200,7 +204,7 @@ function(data,
                    sigs = sigs,
                    group_col = Biobase::pData(data)[[group_col]],
                    target_group = target_group,
-                   plot.score = plot.score,
+                   type = type,
                    normalize = normalize,
                    method = method,
                    gene_id = gene_id)
@@ -218,7 +222,7 @@ function(data,
          sigs,
          group_col,
          target_group,
-         plot.score = TRUE,
+         type = c("score", "expression"),
          normalize = FALSE,
          method = "t.test",
          slot = "counts",
@@ -228,7 +232,7 @@ function(data,
                    sigs = sigs,
                    group_col = data@meta.data[[group_col]],
                    target_group = target_group,
-                   plot.score = plot.score,
+                   type = type,
                    normalize = normalize,
                    method = method,
                    gene_id = gene_id)
@@ -246,7 +250,7 @@ function(data,
          sigs,
          group_col,
          target_group,
-         plot.score = TRUE,
+         type = c("score", "expression"),
          normalize = FALSE,
          method = "t.test",
          slot = "counts",
@@ -256,7 +260,7 @@ function(data,
                    sigs = sigs,
                    group_col = data@colData[[group_col]],
                    target_group = target_group,
-                   plot.score = plot.score,
+                   type = type,
                    normalize = normalize,
                    method = method,
                    gene_id = gene_id)
@@ -274,7 +278,7 @@ function(data,
          sigs,
          group_col,
          target_group,
-         plot.score = TRUE,
+         type = c("score", "expression"),
          normalize = FALSE,
          method = "t.test",
          slot = "counts",
@@ -290,8 +294,8 @@ function(data,
     slot <- rep(slot, length(data))
   if(length(gene_id) == 1)
     gene_id <- rep(gene_id, length(data))
-  if(length(plot.score) == 1)
-    plot.score <- rep(plot.score, length(data))
+  if(length(type) == 1)
+    type <- rep(type, length(data))
 
   p <- list()
   for (i in seq_along(data)) {
@@ -299,7 +303,7 @@ function(data,
                           sigs = sigs,
                           group_col = group_col[[i]],
                           target_group = target_group[i],
-                          plot.score = plot.score[i],
+                          type = type[i],
                           normalize = normalize[i],
                           method = method,
                           slot = slot[i],

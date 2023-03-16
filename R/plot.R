@@ -623,7 +623,7 @@ gsea_dotplot_init <- function(gse, size = "enrichmentScore") {
     p <- ggpubr::as_ggplot(grid::textGrob(ms))
   } else {
     p <- ggplot(res) +
-      geom_point(aes(x = group, y = ID, col = -log10(p.adjust),
+      geom_point(aes(x = ID, y = group, col = -log10(p.adjust),
                      size = !!sym(size))) +
       labs(x = "Comparison", y = "Signature") +
       theme_bw() +
@@ -814,4 +814,5 @@ utils::globalVariables(c("median", "Gene", "Expression", "Group", "Type",
                          "Proportion of Variance", "Rank", "Sample",
                          "max_den", "y_s", "y_e", "x_end", "y_end",
                          "group", "ID", "NES", "logFC_dim_1",
-                         "logFC_dim_2", "logcounts"))
+                         "logFC_dim_2", "logcounts", "x", "middle",
+                         "ymin", "ymax", "upper", "lower"))

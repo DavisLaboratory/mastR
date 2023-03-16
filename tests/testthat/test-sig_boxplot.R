@@ -5,7 +5,7 @@ test_that("sig_boxplot works", {
   p <- sig_boxplot(
     im_data_6, sigs = NK_markers$HGNC_Symbol[10:30],
     group_col = "celltype:ch1", target_group = "NK",
-    plot.score = FALSE,
+    type = "expression",
     gene_id = "ENSEMBL"
   )
   expect_true(is.ggplot(p))
@@ -14,7 +14,7 @@ test_that("sig_boxplot works", {
   p <- sig_boxplot(
     im_data_6, sigs = NK_markers$HGNC_Symbol[10:30],
     group_col = "celltype:ch1", target_group = "NK",
-    plot.score = TRUE,
+    type = "score",
     gene_id = "ENSEMBL"
   )
   expect_true(is.ggplot(p))
@@ -44,7 +44,7 @@ test_that("sig_boxplot works", {
     list(A = im_data_6, B = im_data_6),
     sigs = NK_markers$HGNC_Symbol[10:30],
     group_col = "celltype:ch1", target_group = "NK",
-    plot.score = c(TRUE, FALSE),
+    type = c("score", "expression"),
     gene_id = "ENSEMBL"
   )
   expect_true(is.ggplot(p))

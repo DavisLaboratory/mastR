@@ -11,8 +11,8 @@ test_that("subset_sig_by_step works", {
   expect_true(is.list(p))
 
   ## test plot_mean_var()
-  plot_mean_var(proc_data)
-  expect_null(plot_mean_var(proc_data))
+  p <- plot_mean_var(proc_data)
+  expect_true(is.ggplot(p))
 
   ## test select_sig()
   sig <- select_sig(proc_data$tfit)
