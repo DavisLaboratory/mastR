@@ -328,13 +328,15 @@ plot_diagnostics <- function(expr1, expr2, group_col, abl = 2) {
                             by = "Sample")
 
   ## density plot for each sample
-  print(plot_density_init(data1, data2, abl))
+  p1 <- plot_density_init(data1, data2, abl)
   ## boxplot of RLE
-  plot_rle_init(expr1, expr2, group_col)
+  p2 <- plot_rle_init(expr1, group_col) + ggtitle("Original data") +
+    plot_rle_init(expr1, group_col) + ggtitle("Processed data") +
+    patchwork::plot_layout(guides = "collect", ncol = 1)
   ## MDS plot
-  print(plot_MDS_init(expr1, expr2, group_col))
+  p3 <- plot_MDS_init(expr1, expr2, group_col)
 
-  return()
+  return(list("density" = p1, "RLE" = p2, "MDS" = p3))
 }
 
 #' plot Mean-variance trend after voom and after final linear fit
@@ -353,12 +355,10 @@ plot_diagnostics <- function(expr1, expr2, group_col, abl = 2) {
 plot_mean_var <- function(proc_data, span = 0.5) {
   if(is.null(proc_data$vfit) | is.null(proc_data$tfit))
     stop("vfit or tfit is not found in proc_data!")
-  par(mfrow = c(1, 2))
-  plot_voom(proc_data$vfit, span = span)
-  limma::plotSA(proc_data$tfit, main = "Final model: Mean-variance trend")
-  par(mfrow = c(1, 1))
+  p1 <- plot_voom(proc_data$vfit, span = span)
+  p2 <- plot_sa(proc_data$tfit, title = "Final model: Mean-variance trend")
 
-  return()
+  p1 + p2
 }
 
 #' select DEGs from multiple comparisons
@@ -384,8 +384,7 @@ select_sig <- function(tfit,
                        feature_selection = c("auto", "rankproduct", "none"),
                        ...) {
   if(is(tfit, "DGEList")) {
-    stopifnot("Input is not a valid result of process_data(), no 'tfit' is found!" =
-                "tfit" %in% names(tfit))
+    stopifnot("No 'tfit' is found!" = "tfit" %in% names(tfit))
     tfit <- tfit$tfit
   }
 

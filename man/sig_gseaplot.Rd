@@ -16,10 +16,11 @@ sig_gseaplot(
   target_group,
   normalize = FALSE,
   gene_id = "SYMBOL",
-  digits = 2,
   slot = "counts",
   method = c("dotplot", "gseaplot"),
   size = "enrichmentScore",
+  pvalue_table = FALSE,
+  digits = 2,
   ...
 )
 
@@ -30,10 +31,11 @@ sig_gseaplot(
   target_group,
   normalize = FALSE,
   gene_id = "SYMBOL",
-  digits = 2,
   slot = "counts",
   method = c("dotplot", "gseaplot"),
   size = "enrichmentScore",
+  pvalue_table = FALSE,
+  digits = 2,
   ...
 )
 
@@ -44,10 +46,11 @@ sig_gseaplot(
   target_group,
   normalize = FALSE,
   gene_id = "SYMBOL",
-  digits = 2,
   slot = "counts",
   method = c("dotplot", "gseaplot"),
   size = "enrichmentScore",
+  pvalue_table = FALSE,
+  digits = 2,
   ...
 )
 
@@ -58,10 +61,11 @@ sig_gseaplot(
   target_group,
   normalize = FALSE,
   gene_id = "SYMBOL",
-  digits = 2,
   slot = "counts",
   method = c("dotplot", "gseaplot"),
   size = "enrichmentScore",
+  pvalue_table = FALSE,
+  digits = 2,
   ...
 )
 
@@ -72,10 +76,11 @@ sig_gseaplot(
   target_group,
   normalize = FALSE,
   gene_id = "SYMBOL",
-  digits = 2,
   slot = "counts",
   method = c("dotplot", "gseaplot"),
   size = "enrichmentScore",
+  pvalue_table = FALSE,
+  digits = 2,
   ...
 )
 
@@ -86,10 +91,11 @@ sig_gseaplot(
   target_group,
   normalize = FALSE,
   gene_id = "SYMBOL",
-  digits = 2,
   slot = "counts",
   method = c("dotplot", "gseaplot"),
   size = "enrichmentScore",
+  pvalue_table = FALSE,
+  digits = 2,
   ...
 )
 }
@@ -108,14 +114,16 @@ calculate cpm}
 \item{gene_id}{character, indicate the ID type of rowname of expression data's ,
 could be one of 'ENSEMBL', 'SYMBOL', ... default 'SYMBOL'}
 
-\item{digits}{num, specify the number of significant digits of pvalue table}
-
 \item{slot}{character, indicate which slot used as expression, optional}
 
 \item{method}{one of "gseaplot" and "dotplot", how to plot GSEA result}
 
 \item{size}{column name of \code{\link[clusterProfiler:GSEA]{clusterProfiler::GSEA()}} result, used for dot
 size when method = "dotplot"}
+
+\item{pvalue_table}{logical, if to add p value table if method = "gseaplot"}
+
+\item{digits}{num, specify the number of significant digits of pvalue table}
 
 \item{...}{params for function \code{\link[=get_de_table]{get_de_table()}}}
 }

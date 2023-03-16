@@ -17,12 +17,8 @@ test_that("plot_density_init works", {
 test_that("plot_rle_init works", {
   data("im_data_6")
 
-  p <- function() plot_rle_init(expr1 = Biobase::exprs(im_data_6)[1:1000,],
-                                expr2 = Biobase::exprs(im_data_6)[1001:2000,],
+  p <- function() plot_rle_init(expr = Biobase::exprs(im_data_6)[1:1000,],
                                 group_col = im_data_6$`celltype:ch1`)
-
-  expect_true(is(rle(Biobase::exprs(im_data_6)[1:100,]), "matrix"))
-  # expect_doppelganger("basic RLE boxplot", p)
   expect_silent(p())
 })
 

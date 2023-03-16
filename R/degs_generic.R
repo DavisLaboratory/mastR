@@ -105,37 +105,6 @@ function(data,
 
   DEGs <- list(DEGs = DEGs, proc_data = proc_data)
 
-  # DGE <- data
-  # DGE$samples$group <- DGE$samples[[group_col]]
-  # DGE$original <- DGE$counts
-  # DGE$counts <- data[[slot]]
-  # rm(data)
-  #
-  # ## standard DE analysis with edgeR and limma::voom pipeline
-  # voom_res <- de_analysis(
-  #   dge = DGE,
-  #   group_col = group_col,
-  #   target_group = target_group,
-  #   normalize = normalize,
-  #   feature_selection = feature_selection,
-  #   batch = batch,
-  #   ...
-  # )
-  #
-  # ## assemble DEGs from comparisons by Rank Product or simply intersect/union
-  # if(feature_selection == "auto") {
-  #   DEGs <- DEGs_RP(tfit = voom_res$tfit, ...)
-  #   if(all(lengths(DEGs) < 5))
-  #     DEGs <- DEGs_Group(tfit = voom_res$tfit, ...)
-  # }else if(feature_selection == "rankproduct") {
-  #   DEGs <- DEGs_RP(tfit = voom_res$tfit, ...)
-  # }else {
-  #   DEGs <- DEGs_Group(tfit = voom_res$tfit, ...)
-  # }
-  #
-  # ## save the processed DGEList
-  # DEGs$proc_data <- voom_res$proc_data
-
   return(DEGs)
 })
 

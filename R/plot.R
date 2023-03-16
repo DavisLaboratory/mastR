@@ -6,181 +6,27 @@ tableau_20 <-  c("#4E79A7", "#A0CBE8", "#F28E2B", "#FFBE7D", "#59A14F",
                  "#E15759", "#FF9D9A", "#79706E", "#BAB0AC", "#D37295",
                  "#FABFD2", "#B07AA1", "#D4A6C8", "#9D7660", "#D7B5A6")
 
-## plot functions for comparing unfiltered and filtered data
+## plot functions for comparing unprocessed and processed data
 ##---------------------------------------------------------------
-#helper: logCPM density plot between filtered and unfiltered
-plot_density <- function(dge, group_col, keep = TRUE,
-                         normalize = TRUE, filter = 10) {
-  ## set colors for each cell type
-  col <- as.numeric(as.factor(dge$samples[[group_col]]))
-  colors <- colorRampPalette(colors = tableau_20)(length(unique(dge$samples[[group_col]])))
-
-  ## set par for plot to make 2 plots in one page
-  op <- par(no.readonly = TRUE)
-  par(mfrow = c(1, 2), oma = c(0, 0, 3, 0))
-
-  ## calculate logCPM
-  if(normalize) {
-    M <- median(dge$samples$lib.size) * 1e-6
-    L <- mean(dge$samples$lib.size) * 1e-6
-    lcpm.1 <- edgeR::cpm(
-      edgeR::calcNormFactors(dge, method = "TMM"),
-      log = TRUE
-    )
-    lcpm.2 <- edgeR::cpm(
-      edgeR::calcNormFactors(dge[keep,, keep.lib.sizes = FALSE]),
-      log = TRUE
-    )
-    abl <- log2(filter/M + 2/L)
-  }else {
-    # lcpm.1 <- log1p(dge$counts)
-    # lcpm.2 <- log1p(dge$counts[keep,])
-    # abl <- log1p(filter[1])
-    lcpm.1 <- dge$counts
-    lcpm.2 <- dge$counts[keep,]
-    abl <- filter[1]
-  }
-
-  ## plot unfiltered data
-  plot(stats::density(lcpm.1[,1]), col = colors[col[1]],
-       main = "Unfiltered", xlab = ifelse(normalize, "logCPM", "logcounts"),
-       ylim = c(0, max(stats::density(lcpm.1)$y) * 1.2))
-  abline(v = abl, lty = 3)
-  lapply(2:ncol(dge), function(i) lines(stats::density(lcpm.1[,i]),
-                                        col = colors[col[i]]))
-  legend("topright", legend = unique(dge$samples[[group_col]]),
-         text.col = colors[unique(col)], bty = "n", inset = c(-0.3, 0))
-
-  ## plot filtered data
-  plot(stats::density(lcpm.2[,1]), col = colors[col[1]],
-       main = "Filtered", xlab = ifelse(normalize, "logCPM", "logcounts"),
-       ylim = c(0, max(stats::density(lcpm.2)$y) * 1.2))
-  abline(v = abl, lty = 3)
-  lapply(2:ncol(dge), function(i) lines(stats::density(lcpm.2[,i]),
-                                        col = colors[col[i]]))
-  legend("topright", legend = unique(dge$samples[[group_col]]),
-         text.col = colors[unique(col)], bty = "n", inset = c(-0.3, 0))
-
-  mtext("Input Dataset", side = 3, line = 0, outer = TRUE)
-  ## set par back to original setting
-  par(op)
-}
-
 #helper: calculate RLE
 rle <- function(expr_mat, log = FALSE) {
+  ## compute RLE
   if (log) {
     geomeans <- Matrix::rowMeans(log1p(expr_mat), na.rm = TRUE)
   } else {
     geomeans <- Matrix::rowMeans(expr_mat, na.rm = TRUE)
   }
-  RLE <- function(cnts) {
-    return(cnts - geomeans)
-  }
   if (log) {
-    dev <- apply(log1p(expr_mat), 2, RLE)
+    dev <- log1p(expr_mat) - geomeans
   } else {
-    dev <- apply(expr_mat, 2, RLE)
+    dev <- expr_mat - geomeans
   }
-  return(dev)
-}
+  ## compute boxplot
+  rledf <- t(apply(dev, 2, function(x) grDevices::boxplot.stats(x)$stats))
+  rledf <- as.data.frame(rledf)
+  colnames(rledf) <- c('ymin', 'lower', 'middle', 'upper', 'ymax')
 
-#helper: RLE plot between before and after filtration
-plot_rle <- function(dge, group_col, keep = TRUE, normalize = TRUE) {
-  ## set colors for each cell type
-  col <- as.numeric(as.factor(dge$samples[[group_col]]))
-  colors <- colorRampPalette(colors = tableau_20)(length(unique(dge$samples[[group_col]])))
-
-  ## calculate logCPM
-  if(normalize) {
-    lcpm.1 <- edgeR::cpm(
-      edgeR::calcNormFactors(dge, method = "TMM"),
-      log = TRUE
-    )
-    lcpm.2 <- edgeR::cpm(
-      edgeR::calcNormFactors(dge[keep,, keep.lib.sizes = FALSE]),
-      log = TRUE
-    )
-  }else {
-    # lcpm.1 <- log1p(dge$counts)
-    # lcpm.2 <- log1p(dge$counts[keep,])
-    lcpm.1 <- dge$counts
-    lcpm.2 <- dge$counts[keep, ]
-  }
-
-  ## set par for boxplot and legend
-  op <- par(no.readonly = TRUE)
-  par(mfrow = c(3, 1), mar = c(1, 2.5, 2, 1), oma = c(0, 0, 1, 0))
-
-  ## plot unfiltered data
-  boxplot(
-    rle(lcpm.1[, order(col)]),
-    outline = FALSE, xaxt = "n", col = colors[sort(col)],
-    main = "RLE plot before filtration"
-  )
-  abline(h = 0)
-  ##plot filtered data
-  boxplot(
-    rle(lcpm.2[, order(col)]),
-    outline = FALSE, xaxt = "n", col = colors[sort(col)],
-    main = "RLE plot after filtration"
-  )
-  abline(h = 0)
-  ## add legend
-  plot(0, type = "n", axes = FALSE, xlab = "", ylab = "")
-  legend("center",
-         legend = sort(unique(dge$samples[[group_col]])),
-         fill = colors, xpd = TRUE, ncol = 4
-  )
-  ## set par back to original
-  par(op)
-}
-
-#helper: MDS plot before and after filtration
-plot_MDS <- function(dge, group_col, keep = TRUE, normalize = TRUE) {
-  ## set colors for each cell type
-  col <- as.numeric(as.factor(dge$samples[[group_col]]))
-  colors <- colorRampPalette(colors = tableau_20)(length(unique(dge$samples[[group_col]])))
-
-  ## calculate logCPM
-  if(normalize) {
-    lcpm.1 <- edgeR::cpm(
-      edgeR::calcNormFactors(dge, method = "TMM"),
-      log = TRUE
-    )
-    lcpm.2 <- edgeR::cpm(
-      edgeR::calcNormFactors(dge[keep,, keep.lib.sizes = FALSE]),
-      log = TRUE
-    )
-  }else {
-    # lcpm.1 <- log1p(dge$counts)
-    # lcpm.2 <- log1p(dge$counts[keep,])
-    lcpm.1 <- dge$counts
-    lcpm.2 <- dge$counts[keep, ]
-  }
-
-  ## set par to make 2 plots in one page
-  op <- par(no.readonly = TRUE)
-  par(mfrow = c(1, 3), oma = c(0, 0, 3, 0))
-  limma::plotMDS(lcpm.1,
-                 pch = 1,
-                 col = colors[col],
-                 main = "MDS plot before filtration"
-  )
-  limma::plotMDS(lcpm.2,
-                 pch = 1,
-                 col = colors[col],
-                 main = "MDS plot after filtrattion"
-  )
-  ## add legend
-  plot(0, type = "n", axes = FALSE, xlab = "", ylab = "")
-  legend("center",
-         legend = sort(unique(dge$samples[[group_col]])),
-         fill = colors, xpd = TRUE
-  )
-  mtext("Input Data", side = 3, line = 0, outer = TRUE)
-  ## set par back to original
-  par(op)
-  return(NULL)
+  return(rledf)
 }
 
 #helper: Mean-Variance plot after voom
@@ -190,16 +36,79 @@ plot_voom <- function(vfit, span = 0.5) {
 
   ## Fit linear model to data
   fit <- limma::lmFit(vfit$E, design = vfit$design)
-  ## Fit lowess trend to sqrt-sigma by log-expression
-  l <- lowess(fit$Amean, sqrt(fit$sigma), f = span)
+  ## calculate plot
+  sx <- fit$Amean + mean(log2(vfit$targets$lib.size + 1)) - log2(1e+06)
+  sy <- sqrt(fit$sigma)
+  allzero <- rowSums(vfit$E) == 0
+  if (any(allzero)) {
+    sx <- sx[!allzero]
+    sy <- sy[!allzero]
+  }
+  l <- lowess(sx, sy, f = span)
 
-  limma::plotSA(fit)
-  title("voom: Mean-variance trend")
-  lines(l, col="red")
+  ggplot(data.frame(x = sx, y = sy)) +
+    geom_point(aes(x = x, y = y), size = 0.01) +
+    geom_line(data = as.data.frame(l),
+              aes(x = x, y = y),
+              col = "red", linewidth = 0.5) +
+    theme_classic() +
+    labs(x = "Average log-expression",
+         y = "sqrt(sigma)",
+         title = "voom:Mean-variance trend")
+}
+
+plot_sa <- function(fit,
+                    xlab = "Average log-expression",
+                    ylab = "sqrt(sigma)",
+                    title = "Final model: Mean-variance trend",
+                    zero.weights = FALSE,
+                    col = c("black", "red")) {
+  if (!is(fit, "MArrayLM"))
+    stop("fit must be an MArrayLM object")
+  x <- fit$Amean
+  y <- sqrt(fit$sigma)
+  if (!(is.null(fit$weights) || zero.weights)) {
+    allzero <- rowSums(fit$weights > 0, na.rm = TRUE) == 0
+    y[allzero] <- NA
+  }
+  colv <- rep_len("Normal", nrow(fit))
+  if (length(fit$df.prior) > 1L) {
+    df2 <- max(fit$df.prior)
+    s2 <- fit$sigma^2/fit$s2.prior
+    pdn <- pf(s2, df1 = fit$df.residual, df2 = df2)
+    pup <- pf(s2, df1 = fit$df.residual, df2 = df2, lower.tail = FALSE)
+    FDR <- p.adjust(2 * pmin(pdn, pup), method = "BH")
+    colv[FDR <= 0.5] <- "Outlier"
+  }
+
+  p <- ggplot(data.frame(x = x, y = y, col = colv)) +
+    geom_point(aes(x = x, y = y, col = col), size = 0.01) +
+    scale_color_manual(values = c("Normal" = col[1], "Outlier" = col[2])) +
+    theme_classic() +
+    labs(x = xlab,
+         y = ylab,
+         title = title)
+
+  if (!is.null(fit$s2.prior)) {
+    if (length(fit$s2.prior) == 1L) {
+      p <- p + geom_hline(yintercept = sqrt(sqrt(fit$s2.prior)), col = "blue")
+    }
+    else {
+      o <- order(x)
+      p <- p + geom_line(data = data.frame(x = x[o],
+                                           y = sqrt(sqrt(fit$s2.prior[o]))),
+                         aes(x = x, y = y),
+                         col = "blue", linewidth = 0.5)
+    }
+  }
+  if (length(fit$df.prior) <= 1L)
+    p <- p + guides(col = "none")
+
+  return(p)
 }
 
 
-#helper: density plot init
+#helper: logCPM density plot between the 2 datasets
 plot_density_init <- function(data1, data2, abl = 2,
                               expr = "logcounts", col = "Group",
                               sample = "Sample") {
@@ -216,42 +125,42 @@ plot_density_init <- function(data1, data2, abl = 2,
     patchwork::plot_layout(guides = "collect")
 }
 
-#helper: rle plot init
-plot_rle_init <- function(expr1, expr2, group_col) {
+#helper: RLE plot between 2 datasets
+plot_rle_init <- function(expr, group_col) {
+  #constant - sample size at which standard plot becomes dense
+  dense_thresh = 50
 
-  ## set colors for each cell type
-  col <- as.numeric(as.factor(group_col))
-  colors <- colorRampPalette(colors = tableau_20)(length(unique(group_col)))
-  ## set par for boxplot and legend
-  op <- par(no.readonly = TRUE)
-  par(mfrow = c(3, 1), mar = c(1, 2.5, 2, 1), oma = c(0, 0, 1, 0))
+  rledf <- rle(expr, log = FALSE)
+  ## annotate samples
+  rledf$MtchID = rownames(rledf)
+  rledf$Group <- group_col
+  ## reorder samples
+  rledf <- rledf[order(group_col), ]
+  rledf$x <- seq_len(nrow(rledf))
 
-  ## plot unfiltered data
-  boxplot(
-    rle(expr1[, order(col)]),
-    outline = FALSE, xaxt = "n", col = colors[sort(col)],
-    main = "RLE plot before process"
-  )
-  abline(h = 0)
-  ##plot filtered data
-  boxplot(
-    rle(expr2[, order(col)]),
-    outline = FALSE, xaxt = "n", col = colors[sort(col)],
-    main = "RLE plot after process"
-  )
-  abline(h = 0)
-  ## add legend
-  plot(0, type = "n", axes = FALSE, xlab = "", ylab = "")
-  legend("center",
-         legend = sort(unique(group_col)),
-         fill = colors, xpd = TRUE, ncol = 4
-  )
-  ## set par back to original
-  par(op)
-  return(NULL)
+  #build plot
+  p1 <- ggplot2::ggplot(rledf, aes(x = x, y = middle, group = x,
+                                   col = Group)) +
+    ggplot2::geom_boxplot(
+      aes(ymin = ymin, ymax = ymax, upper = upper,
+          middle = middle, lower = lower),
+      stat = 'identity') +
+    ggplot2::geom_hline(yintercept = 0, colour = 2, lty = 2) +
+    ggplot2::labs(x = "Samples", y = 'Relative log expression') +
+    ggplot2::theme_classic() +
+    ggplot2::theme(axis.text.x = element_blank())
+
+  #update plot if too many samples are plot
+  if (nrow(rledf) > dense_thresh) {
+    ## geom_point will inherit relevant aesthetics from top `aes`
+    ## include y=middle
+    p1 <- p1 + ggplot2::geom_point()
+  }
+
+  return(p1)
 }
 
-#helper: MDS plot init
+#helper: MDS plot between 2 datasets
 plot_MDS_init <- function(expr1, expr2, group_col) {
   ## get MDS data
   mds1 <- limma::plotMDS(expr1, plot = FALSE)
@@ -663,7 +572,7 @@ gsea_analysis <- function(tDEG, gsets, gene_id = "SYMBOL", digits = 2) {
     if(nrow(gse) == 0) {
       ms <- paste("No term was found enriched in", n, ".")
       message(ms)
-      return(NULL)
+      invisible()
     } else {
       ## only keep 2 digits for pvalue table
       gse@result$p.adjust <- signif(gse@result$p.adjust, digits = digits)
@@ -677,7 +586,7 @@ gsea_analysis <- function(tDEG, gsets, gene_id = "SYMBOL", digits = 2) {
   return(gse)
 }
 ## gseaplot
-gsea_plot_init <- function(gse) {
+gsea_plot_init <- function(gse, pvalue_table = FALSE) {
   p <- lapply(names(gse), function(n) {
     if(is.null(gse[[n]])) {
       ms <- paste("No term was found enriched in", n, ".")
@@ -685,7 +594,7 @@ gsea_plot_init <- function(gse) {
       p <- ggpubr::as_ggplot(grid::textGrob(ms))
     } else {
       p <- enrichplot::gseaplot2(gse[[n]], geneSetID = seq_len(nrow(gse[[n]])),
-                                 pvalue_table = TRUE,
+                                 pvalue_table = pvalue_table,
                                  title = n) |>
         patchwork::wrap_plots(ncol = 1) |>
         patchwork::wrap_elements()
@@ -704,7 +613,7 @@ gsea_plot_init <- function(gse) {
 gsea_dotplot_init <- function(gse, size = "enrichmentScore") {
   res <- do.call(rbind, lapply(gse, \(x) {
     if(is.null(x)) {
-      return(NULL)
+      invisible()
     } else return(x@result)
   }))
 

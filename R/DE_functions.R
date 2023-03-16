@@ -21,18 +21,35 @@ filterGenes <- function(dge, group_col, filter = c(10, 10), normalize = TRUE,
   return(keep)
 }
 
+#helper: make design and apply voom, lmfit and treat
+#' return DGEList containing vfit by limma::voom (if normalize = TRUE) and
+#' tfit by limma::treat
+#'
+#' @inheritParams de_analysis
+#' @return A DGEList containing vfit and tfit
+voom_fit_treat <- function(dge,
+                           group_col,
+                           target_group,
+                           normalize = TRUE,
+                           group = FALSE,
+                           lfc = 0,
+                           p = 0.05,
+                           batch = NULL,
+                           summary = TRUE,
+                           ...) {
 
-#helper: voom and linear regression fit for DE based on limma
-voom_lm_fit <- function(dge, group_col, target_group,
-                        feature_selection = c('auto', "rankproduct", "none"),
-                        group = FALSE, plot = FALSE, normalize = TRUE,
-                        lfc = 0, p = 0.05, batch = NULL, summary = TRUE) {
+  stopifnot("Please provide column names as batch!" =
+              is.null(batch) | is.vector(batch))
 
-  feature_selection <- match.arg(feature_selection)
+  stopifnot(is.logical(normalize),
+            is.logical(summary),
+            is.logical(group),
+            is.numeric(lfc),
+            is.numeric(p))
 
   ## group samples into binary groups if group = TRUE,
   ## otherwise use as multiple groups asis
-  if (group == TRUE && feature_selection == "none") {
+  if (group == TRUE) {
     dge$samples$group <- ifelse(grepl(target_group, dge$samples[[group_col]]),
                                 make.names(target_group),
                                 "Others")
@@ -63,38 +80,29 @@ voom_lm_fit <- function(dge, group_col, target_group,
                         levels(dge$samples$group)[-1],
                         sep = "-"
     )),
-    ## target_group vs all the rest respectively, if group = TRUE, it's target_group vs Others
+    ## target_group vs all the rest respectively
+    ## if group = TRUE, it's target_group vs Others
     levels = design
   )
 
-  ## save normalized data into proc_data
-  proc_data <- dge
-
-  ## set par for plot
-  if (plot && normalize) {
-    op <- par(no.readonly = TRUE)
-    par(mfrow = c(1, 2))
-  }
-
   ## voom fit if data is raw counts data
-  if(normalize) {
-    v <- limma::voom(dge, design = design, plot = plot)
-    ## save voom fitted counts into global variable
-    proc_data$counts <- v$E
-  }else v <- dge$counts
+  if(normalize == TRUE) {
+    vfit <- limma::voom(dge, design = design)
+    dge$vfit <- vfit
+  }else dge$vfit <- dge$counts
 
   ## linear regression fit
-  fit <- limma::lmFit(v, design = design)
+  fit <- limma::lmFit(dge$vfit, design = design)
   tfit <- limma::treat(limma::contrasts.fit(fit, contrasts = contrast.mat),
                        lfc = lfc, trend = !normalize)
   ## summarize the total number of DEGs
   if(summary == TRUE)
     show(summary(limma::decideTests(tfit, lfc = lfc, p.value = p)))
-  if (plot) limma::plotSA(tfit, main = "Final model: Mean-variance trend")
-  if (plot && normalize) par(op)
-  return(list(tfit = tfit, proc_data = proc_data))
-}
 
+  dge$tfit <- tfit
+
+  return(dge)
+}
 
 #helper: return DEGs UP and DOWN list based on Rank Product
 #' return DEGs UP and DOWN list based on Rank Product
@@ -260,89 +268,6 @@ DEGs_Group <- function(tfit, lfc = NULL, p = 0.05,
   }
 
   return(DEGs)
-}
-
-#helper: make design and apply voom, lmfit and treat
-#' return DGEList containing vfit by limma::voom (if normalize = TRUE) and
-#' tfit by limma::treat
-#'
-#' @inheritParams de_analysis
-#' @return A DGEList containing vfit and tfit
-voom_fit_treat <- function(dge,
-                           group_col,
-                           target_group,
-                           normalize = TRUE,
-                           group = FALSE,
-                           lfc = 0,
-                           p = 0.05,
-                           batch = NULL,
-                           summary = TRUE,
-                           ...) {
-
-  stopifnot("Please provide column names as batch!" =
-              is.null(batch) | is.vector(batch))
-
-  stopifnot(is.logical(normalize),
-            is.logical(summary),
-            is.logical(group),
-            is.numeric(lfc),
-            is.numeric(p))
-
-  ## group samples into binary groups if group = TRUE,
-  ## otherwise use as multiple groups asis
-  if (group == TRUE) {
-    dge$samples$group <- ifelse(grepl(target_group, dge$samples[[group_col]]),
-                                make.names(target_group),
-                                "Others")
-    ## set target_group to be the first level
-    dge$samples$group <- factor(dge$samples$group,
-                                levels = c(make.names(target_group), "Others"))
-  } else {
-    dge$samples$group <- ifelse(grepl(target_group, dge$samples[[group_col]]),
-                                make.names(target_group),
-                                make.names(dge$samples[[group_col]]))
-    ## set target_group to be the first level
-    dge$samples$group <- factor(
-      dge$samples$group,
-      levels = c(
-        make.names(target_group),
-        unique(dge$samples$group[dge$samples$group != make.names(target_group)])
-      )
-    )
-  }
-
-  ## make contrast design
-  form <- formula(paste(c("~0", "group", batch), collapse = "+"))
-  design <- model.matrix(form, dge$samples)
-  colnames(design) <- gsub("group", "", colnames(design))
-  rownames(design) <- colnames(dge)
-  contrast.mat <- limma::makeContrasts(
-    contrasts = c(paste(levels(dge$samples$group)[1],
-                        levels(dge$samples$group)[-1],
-                        sep = "-"
-    )),
-    ## target_group vs all the rest respectively
-    ## if group = TRUE, it's target_group vs Others
-    levels = design
-  )
-
-  ## voom fit if data is raw counts data
-  if(normalize == TRUE) {
-    vfit <- limma::voom(dge, design = design)
-    dge$vfit <- vfit
-  }else dge$vfit <- dge$counts
-
-  ## linear regression fit
-  fit <- limma::lmFit(dge$vfit, design = design)
-  tfit <- limma::treat(limma::contrasts.fit(fit, contrasts = contrast.mat),
-                       lfc = lfc, trend = !normalize)
-  ## summarize the total number of DEGs
-  if(summary == TRUE)
-    show(summary(limma::decideTests(tfit, lfc = lfc, p.value = p)))
-
-  dge$tfit <- tfit
-
-  return(dge)
 }
 
 utils::globalVariables(c("logFC", "adj.P.Val"))

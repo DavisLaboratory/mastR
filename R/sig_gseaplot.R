@@ -7,10 +7,11 @@ NULL
 #'
 #' @inheritParams sig_boxplot
 #' @param sigs a vector of signature (Symbols) or a list of signatures
-#' @param digits num, specify the number of significant digits of pvalue table
 #' @param method one of "gseaplot" and "dotplot", how to plot GSEA result
 #' @param size column name of [clusterProfiler::GSEA()] result, used for dot
 #'             size when method = "dotplot"
+#' @param pvalue_table logical, if to add p value table if method = "gseaplot"
+#' @param digits num, specify the number of significant digits of pvalue table
 #' @param ... params for function [get_de_table()]
 #'
 #' @return patchwork object for all comparisons
@@ -31,10 +32,11 @@ setGeneric("sig_gseaplot",
                     target_group,
                     normalize = FALSE,
                     gene_id = "SYMBOL",
-                    digits = 2,
                     slot = "counts",
                     method = c("dotplot", "gseaplot"),
                     size = "enrichmentScore",
+                    pvalue_table = FALSE,
+                    digits = 2,
                     ...)
              standardGeneric("sig_gseaplot"))
 
@@ -51,10 +53,11 @@ function(data,
          target_group,
          normalize = FALSE,
          gene_id = "SYMBOL",
-         digits = 2,
          slot = "counts",
          method = c("dotplot", "gseaplot"),
          size = "enrichmentScore",
+         pvalue_table = FALSE,
+         digits = 2,
          ...) {
 
   stopifnot(is.character(gene_id), is.numeric(digits))
@@ -82,7 +85,7 @@ function(data,
                        gene_id = gene_id, digits = digits)
 
   if(method == "gseaplot") {
-    p <- gsea_plot_init(gse)
+    p <- gsea_plot_init(gse, pvalue_table = pvalue_table)
   } else p <- gsea_dotplot_init(gse, size = size)
 
   p <-  patchwork::wrap_plots(p) + patchwork::plot_layout(guides = "collect")
@@ -102,10 +105,11 @@ function(data,
          target_group,
          normalize = FALSE,
          gene_id = "SYMBOL",
-         digits = 2,
          slot = "counts",
          method = c("dotplot", "gseaplot"),
          size = "enrichmentScore",
+         pvalue_table = FALSE,
+         digits = 2,
          ...) {
 
   stopifnot(is.character(gene_id), is.numeric(digits))
@@ -137,7 +141,7 @@ function(data,
                        gene_id = gene_id, digits = digits)
 
   if(method == "gseaplot") {
-    p <- gsea_plot_init(gse)
+    p <- gsea_plot_init(gse, pvalue_table = pvalue_table)
   } else p <- gsea_dotplot_init(gse, size = size)
 
   p <- patchwork::wrap_plots(p) + patchwork::plot_layout(guides = "collect")
@@ -157,10 +161,11 @@ function(data,
          target_group,
          normalize = FALSE,
          gene_id = "SYMBOL",
-         digits = 2,
          slot = "counts",
          method = c("dotplot", "gseaplot"),
          size = "enrichmentScore",
+         pvalue_table = FALSE,
+         digits = 2,
          ...) {
 
   stopifnot(is.character(gene_id), is.numeric(digits))
@@ -188,7 +193,7 @@ function(data,
                        gene_id = gene_id, digits = digits)
 
   if(method == "gseaplot") {
-    p <- gsea_plot_init(gse)
+    p <- gsea_plot_init(gse, pvalue_table = pvalue_table)
   } else p <- gsea_dotplot_init(gse, size = size)
 
   p <- patchwork::wrap_plots(p) + patchwork::plot_layout(guides = "collect")
@@ -208,10 +213,11 @@ function(data,
          target_group,
          normalize = FALSE,
          gene_id = "SYMBOL",
-         digits = 2,
          slot = "counts",
          method = c("dotplot", "gseaplot"),
          size = "enrichmentScore",
+         pvalue_table = FALSE,
+         digits = 2,
          ...) {
 
   stopifnot(is.character(gene_id), is.numeric(digits))
@@ -243,7 +249,7 @@ function(data,
                        gene_id = gene_id, digits = digits)
 
   if(method == "gseaplot") {
-    p <- gsea_plot_init(gse)
+    p <- gsea_plot_init(gse, pvalue_table = pvalue_table)
   } else p <- gsea_dotplot_init(gse, size = size)
 
   p <- patchwork::wrap_plots(p) + patchwork::plot_layout(guides = "collect")
@@ -263,10 +269,11 @@ function(data,
          target_group,
          normalize = FALSE,
          gene_id = "SYMBOL",
-         digits = 2,
          slot = "counts",
          method = c("dotplot", "gseaplot"),
          size = "enrichmentScore",
+         pvalue_table = FALSE,
+         digits = 2,
          ...) {
 
   stopifnot(is.character(gene_id), is.numeric(digits))
@@ -291,10 +298,11 @@ function(data,
                            target_group = target_group[i],
                            normalize = normalize[i],
                            gene_id = gene_id[i],
-                           digits = digits,
                            slot = slot[i],
                            method = method,
                            size = size,
+                           pvalue_table = pvalue_table,
+                           digits = digits,
                            ...)
     p[[i]] <- ggpubr::as_ggplot(patchwork::patchworkGrob(p[[i]]))
     if(!is.null(names(data)))
