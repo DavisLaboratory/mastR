@@ -64,7 +64,6 @@
 <span>  <span class="va">data</span>,</span>
 <span>  features <span class="op">=</span> <span class="st">"all"</span>,</span>
 <span>  slot <span class="op">=</span> <span class="st">"counts"</span>,</span>
-<span>  normalize <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  group_by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  scale <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  n <span class="op">=</span> <span class="fl">4</span>,</span>
@@ -77,7 +76,6 @@
 <span><span class="fu">pca_matrix_plot</span><span class="op">(</span></span>
 <span>  <span class="va">data</span>,</span>
 <span>  features <span class="op">=</span> <span class="st">"all"</span>,</span>
-<span>  normalize <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  group_by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  scale <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  n <span class="op">=</span> <span class="fl">4</span>,</span>
@@ -90,7 +88,6 @@
 <span><span class="fu">pca_matrix_plot</span><span class="op">(</span></span>
 <span>  <span class="va">data</span>,</span>
 <span>  features <span class="op">=</span> <span class="st">"all"</span>,</span>
-<span>  normalize <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  group_by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  scale <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  n <span class="op">=</span> <span class="fl">4</span>,</span>
@@ -103,7 +100,6 @@
 <span><span class="fu">pca_matrix_plot</span><span class="op">(</span></span>
 <span>  <span class="va">data</span>,</span>
 <span>  features <span class="op">=</span> <span class="st">"all"</span>,</span>
-<span>  normalize <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  group_by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  scale <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  n <span class="op">=</span> <span class="fl">4</span>,</span>
@@ -116,7 +112,6 @@
 <span><span class="fu">pca_matrix_plot</span><span class="op">(</span></span>
 <span>  <span class="va">data</span>,</span>
 <span>  features <span class="op">=</span> <span class="st">"all"</span>,</span>
-<span>  normalize <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  group_by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  scale <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  n <span class="op">=</span> <span class="fl">4</span>,</span>
@@ -130,7 +125,6 @@
 <span>  <span class="va">data</span>,</span>
 <span>  features <span class="op">=</span> <span class="st">"all"</span>,</span>
 <span>  slot <span class="op">=</span> <span class="st">"counts"</span>,</span>
-<span>  normalize <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  group_by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  scale <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  n <span class="op">=</span> <span class="fl">4</span>,</span>
@@ -144,7 +138,6 @@
 <span>  <span class="va">data</span>,</span>
 <span>  features <span class="op">=</span> <span class="st">"all"</span>,</span>
 <span>  slot <span class="op">=</span> <span class="st">"counts"</span>,</span>
-<span>  normalize <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  group_by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  scale <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  n <span class="op">=</span> <span class="fl">4</span>,</span>
@@ -158,7 +151,6 @@
 <span>  <span class="va">data</span>,</span>
 <span>  features <span class="op">=</span> <span class="st">"all"</span>,</span>
 <span>  slot <span class="op">=</span> <span class="st">"counts"</span>,</span>
-<span>  normalize <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  group_by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  scale <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  n <span class="op">=</span> <span class="fl">4</span>,</span>
@@ -182,11 +174,6 @@ PCA, default 'all'</p></dd>
 <dt>slot</dt>
 <dd><p>character, specify the slot name of expression to be used,
 optional</p></dd>
-
-
-<dt>normalize</dt>
-<dd><p>logical, TRUE indicates raw counts data to normalize and
-calculate logCPM before PCA</p></dd>
 
 
 <dt>group_by</dt>
@@ -228,8 +215,20 @@ default 'SYMBOL'</p></dd>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"im_data_6"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">pca_matrix_plot</span><span class="op">(</span>data <span class="op">=</span> <span class="va">im_data_6</span>, normalize <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="pca_matrix_plot-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="fu">pca_matrix_plot</span><span class="op">(</span>data <span class="op">=</span> <span class="va">im_data_6</span>, scale <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> TableGrob (4 x 4) "arrange": 11 grobs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     z     cells    name           grob</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   1 (1-1,2-2) arrange gtable[layout]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   2 (1-1,3-3) arrange gtable[layout]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   3 (1-1,4-4) arrange gtable[layout]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   4 (2-2,3-3) arrange gtable[layout]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   5 (2-2,4-4) arrange gtable[layout]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   6 (3-3,4-4) arrange gtable[layout]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7   7 (3-4,1-2) arrange gtable[layout]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8   8 (1-1,1-1) arrange gtable[layout]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9   9 (2-2,2-2) arrange gtable[layout]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 10 (3-3,3-3) arrange gtable[layout]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 11 (4-4,4-4) arrange gtable[layout]</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

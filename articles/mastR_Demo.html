@@ -86,7 +86,7 @@ Biology, University of Melbourne, Parkville, VIC 3010,
 Australia<br><a class="author_email" href="mailto:#"></a><a href="mailto:chen.j@wehi.edu.au" class="email">chen.j@wehi.edu.au</a>
       </address>
                   
-            <h4 data-toc-skip class="date">15 Mar 2023</h4>
+            <h4 data-toc-skip class="date">16 Mar 2023</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DavisLaboratory/mastR/blob/HEAD/vignettes/mastR_Demo.Rmd" class="external-link"><code>vignettes/mastR_Demo.Rmd</code></a></small>
       <div class="hidden name"><code>mastR_Demo.Rmd</code></div>
@@ -685,16 +685,21 @@ distribution, RLE and MDS plots.</p>
 <span>  <span class="va">expr1</span>,</span>
 <span>  <span class="va">expr2</span>,</span>
 <span>  group_col <span class="op">=</span> <span class="va">proc_data</span><span class="op">$</span><span class="va">samples</span><span class="op">$</span><span class="va">celltype.ch1</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<p><img src="mastR_Demo_files/figure-html/plot%20diagnostics-1.png" width="960"><img src="mastR_Demo_files/figure-html/plot%20diagnostics-2.png" width="960"><img src="mastR_Demo_files/figure-html/plot%20diagnostics-3.png" width="960"></p>
-<pre><code><span><span class="co">#&gt; NULL</span></span></code></pre>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; $density</span></span></code></pre></div>
+<p><img src="mastR_Demo_files/figure-html/plot%20diagnostics-1.png" width="960"></p>
+<pre><code><span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $RLE</span></span></code></pre>
+<p><img src="mastR_Demo_files/figure-html/plot%20diagnostics-2.png" width="960"></p>
+<pre><code><span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $MDS</span></span></code></pre>
+<p><img src="mastR_Demo_files/figure-html/plot%20diagnostics-3.png" width="960"></p>
 <p>Mean-variance trend can be plot by <code><a href="../reference/plot_mean_var.html">plot_mean_var()</a></code> to
 show the linear fit result.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## plot mean-variance trend</span></span>
 <span><span class="fu"><a href="../reference/plot_mean_var.html">plot_mean_var</a></span><span class="op">(</span><span class="va">proc_data</span><span class="op">)</span></span></code></pre></div>
 <p><img src="mastR_Demo_files/figure-html/plot%20mean-variance-1.png" width="960"></p>
-<pre><code><span><span class="co">#&gt; NULL</span></span></code></pre>
 <p>PCA can be plot by <code><a href="../reference/pca_matrix_plot.html">pca_matrix_plot()</a></code> to show the
 normalization result and if the samples can be clustered by groups. You
 can select how many top n PCs to be plot by param <code>n</code>.</p>
@@ -1055,6 +1060,8 @@ and result shows most of signature genes are indicating NK cells.</p>
 <span>  n <span class="op">=</span> <span class="fl">3</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:many mapping between keys and columns</span></span>
+<span><span class="co">#&gt; Warning: ggrepel: 1 unlabeled data points (too many overlaps). Consider</span></span>
+<span><span class="co">#&gt; increasing max.overlaps</span></span>
 <span><span class="co">#&gt; Warning: ggrepel: 6 unlabeled data points (too many overlaps). Consider</span></span>
 <span><span class="co">#&gt; increasing max.overlaps</span></span></code></pre></div>
 <p><img src="mastR_Demo_files/figure-html/pca-2.png" width="768"></p>
@@ -1076,9 +1083,6 @@ while <code>markers</code> param is the original markers pool.<br>
 </li>
 <li>`rank_plot`` is used to decide if to gene rank instead of expression
 for heatmap.</li>
-<li>
-<code>normalize</code> means whether to normalize and calculate
-logCPM or not.</li>
 </ul>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sig_heatmap.html">sig_heatmap</a></span><span class="op">(</span></span>
@@ -1118,7 +1122,6 @@ logCPM or not.</li>
 <span><span class="co">#   sigs = sig_NK_CRC,</span></span>
 <span><span class="co">#   group_col = c("celltype:ch1", "celltype.ch1"), </span></span>
 <span><span class="co">#   markers = geneIds(Markers),</span></span>
-<span><span class="co">#   normalize = TRUE,</span></span>
 <span><span class="co">#   gene_id = "ENSEMBL"</span></span>
 <span><span class="co"># ) + patchwork::plot_layout(guides = "collect", ncol = 1)</span></span></code></pre></div>
 <p>We can see the expression pattern of the signature is more
@@ -1140,7 +1143,6 @@ function.</p>
 <span><span class="co">#   data = list(im_data_6 = im_data_6,</span></span>
 <span><span class="co">#               process_Data = proc_data), </span></span>
 <span><span class="co">#   sigs = sig_NK_CRC,</span></span>
-<span><span class="co">#   normalize = c(TRUE, FALSE),</span></span>
 <span><span class="co">#   group_col = c("celltype:ch1", "celltype.ch1"), </span></span>
 <span><span class="co">#   gene_id = "ENSEMBL",</span></span>
 <span><span class="co">#   slot = "voomE"</span></span>
@@ -1174,7 +1176,6 @@ all cell subsets in the data.</p>
 <span>  sigs <span class="op">=</span> <span class="va">sig_NK_CRC</span>,</span>
 <span>  group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>, </span>
 <span>  target_group <span class="op">=</span> <span class="st">"NK"</span>, </span>
-<span>  normalize <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  gene_id <span class="op">=</span> <span class="st">"ENSEMBL"</span>,</span>
 <span>  slot <span class="op">=</span> <span class="st">"voomE"</span></span>
 <span><span class="op">)</span></span>
@@ -1189,7 +1190,6 @@ all cell subsets in the data.</p>
 <span><span class="co">#   sigs = sig_NK_CRC,</span></span>
 <span><span class="co">#   group_col = c("celltype:ch1", "celltype.ch1"),</span></span>
 <span><span class="co">#   target_group = "NK",</span></span>
-<span><span class="co">#   normalize = TRUE,</span></span>
 <span><span class="co">#   gene_id = "ENSEMBL"</span></span>
 <span><span class="co"># ) * guides(col = "none")</span></span></code></pre></div>
 <p>Obviously, our signature always shows significantly higher score in
@@ -1200,14 +1200,14 @@ NK cells.</p>
 </h3>
 <p><code><a href="../reference/sig_boxplot.html">sig_boxplot()</a></code> function can also generate boxplot of the
 NK signature abundance for all cell subsets in the data by setting
-<code>plot.score = FALSE</code>.</p>
+<code>type = "expression"</code>.</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sig_boxplot.html">sig_boxplot</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">proc_data</span>, </span>
 <span>  sigs <span class="op">=</span> <span class="va">sig_NK_CRC</span>,</span>
 <span>  group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>, </span>
 <span>  target_group <span class="op">=</span> <span class="st">"NK"</span>,</span>
-<span>  plot.score <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  type <span class="op">=</span> <span class="st">"expression"</span>,</span>
 <span>  gene_id <span class="op">=</span> <span class="st">"ENSEMBL"</span>,</span>
 <span>  slot <span class="op">=</span> <span class="st">"voomE"</span></span>
 <span><span class="op">)</span></span>
@@ -1245,7 +1245,6 @@ signature abundance for all cell subsets in the data.</p>
 <span><span class="co">#   group_col = c("celltype:ch1", "celltype.ch1"),</span></span>
 <span><span class="co">#   target_group = "NK", </span></span>
 <span><span class="co">#   xint = 4, yint = 4,</span></span>
-<span><span class="co">#   normalize = TRUE, </span></span>
 <span><span class="co">#   gene_id = "ENSEMBL")</span></span></code></pre></div>
 <p>Based on scatter plot result, we can actually do further filtration
 to improve signature specificity by removing signature genes present in
@@ -1267,11 +1266,6 @@ GSEAplot.</p>
 <span>  gene_id <span class="op">=</span> <span class="st">"ENSEMBL"</span>,</span>
 <span>  slot <span class="op">=</span> <span class="st">"voomE"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; 'select()' returned 1:many mapping between keys and columns</span></span>
-<span><span class="co">#&gt;        NK-Neutrophils NK-Monocytes NK-B.cells NK-CD4 NK-CD8</span></span>
-<span><span class="co">#&gt; Down               70           75         56     52     56</span></span>
-<span><span class="co">#&gt; NotSig             31           54         60     79     95</span></span>
-<span><span class="co">#&gt; Up                132          104        117    102     82</span></span>
 <span><span class="co">#&gt; 'select()' returned many:many mapping between keys and columns</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; preparing geneSet collections...</span></span>
@@ -1306,11 +1300,6 @@ GSEAplot.</p>
 <span>  slot <span class="op">=</span> <span class="st">"voomE"</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"gseaplot"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; 'select()' returned 1:many mapping between keys and columns</span></span>
-<span><span class="co">#&gt;        NK-Neutrophils NK-Monocytes NK-B.cells NK-CD4 NK-CD8</span></span>
-<span><span class="co">#&gt; Down               70           75         56     52     56</span></span>
-<span><span class="co">#&gt; NotSig             31           54         60     79     95</span></span>
-<span><span class="co">#&gt; Up                132          104        117    102     82</span></span>
 <span><span class="co">#&gt; 'select()' returned many:many mapping between keys and columns</span></span>
 <span><span class="co">#&gt; preparing geneSet collections...</span></span>
 <span><span class="co">#&gt; GSEA analysis...</span></span>
@@ -1805,11 +1794,11 @@ deconvolution.</p>
 <span><span class="co">#&gt;  [51] treeio_1.22.0               goftest_1.2-3              </span></span>
 <span><span class="co">#&gt;  [53] cluster_2.1.4               DOSE_3.24.2                </span></span>
 <span><span class="co">#&gt;  [55] ape_5.7-1                   lazyeval_0.2.2             </span></span>
-<span><span class="co">#&gt;  [57] crayon_1.5.2                spatstat.explore_3.0-6     </span></span>
+<span><span class="co">#&gt;  [57] crayon_1.5.2                spatstat.explore_3.1-0     </span></span>
 <span><span class="co">#&gt;  [59] edgeR_3.40.2                pkgconfig_2.0.3            </span></span>
 <span><span class="co">#&gt;  [61] labeling_0.4.2              tweenr_2.0.2               </span></span>
 <span><span class="co">#&gt;  [63] GenomeInfoDb_1.34.9         nlme_3.1-162               </span></span>
-<span><span class="co">#&gt;  [65] rlang_1.0.6                 globals_0.16.2             </span></span>
+<span><span class="co">#&gt;  [65] rlang_1.1.0                 globals_0.16.2             </span></span>
 <span><span class="co">#&gt;  [67] lifecycle_1.0.3             miniUI_0.1.1.1             </span></span>
 <span><span class="co">#&gt;  [69] downloader_0.4              rprojroot_2.0.3            </span></span>
 <span><span class="co">#&gt;  [71] polyclip_1.10-4             matrixStats_0.63.0         </span></span>
