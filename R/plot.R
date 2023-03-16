@@ -221,7 +221,15 @@ plotPCAbiplot <- function(prcomp,
                    y = prcomp$x[,dims[2]],
                    col = group_by)) +
     ggplot2::scale_color_manual(values = tableau_20) +
-    ggplot2::theme_classic()
+    ggplot2::theme_classic() +
+    ggplot2::labs(
+      x = paste0("PC", dims[1], "(",
+                 round(summary(prcomp)$importance[2, dims[1]] * 100, 2),
+                 "%)"),
+      y = paste0("PC", dims[2], "(",
+                 round(summary(prcomp)$importance[2, dims[2]] * 100, 2),
+                 "%)")
+    )
 
   ## add loadings
   if (loading == TRUE) {
@@ -275,14 +283,6 @@ plotPCAbiplot <- function(prcomp,
         aes(label = Gene, x = x_end, y = y_end, hjust = 0),
         color = "grey",
         size = 3
-      ) +
-      ggplot2::labs(
-        x = paste0("PC", dims[1], "(",
-                   round(summary(prcomp)$importance[2, dims[1]] * 100, 2),
-                   "%)"),
-        y = paste0("PC", dims[2], "(",
-                   round(summary(prcomp)$importance[2, dims[2]] * 100, 2),
-                   "%)")
       )
   }
   return(p)
@@ -328,19 +328,16 @@ pca_matrix_plot_init <- function(data,
   }
 
   ## screeplot of importance of PCs
-  p0 <- summary(tmp)$importance |>
-    Matrix::t() |>
-    as.data.frame() |> (\(x) {
-      ggplot2::ggplot(data = x,
-                      ggplot2::aes(x = reorder(rownames(x), seq_len(nrow(x))),
-                                   y = `Proportion of Variance`,
-                                   group = 1)) +
-        ggplot2::geom_line() +
-        ggplot2::geom_point() +
-        ggplot2::theme_classic() +
-        ggplot2::labs(x = "PCs") +
-        ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90))
-    })()
+  imp <- as.data.frame(t(summary(tmp)$importance))
+  p0 <- ggplot2::ggplot(data = imp,
+                        aes(x = reorder(rownames(imp), seq_len(nrow(imp))),
+                            y = `Proportion of Variance`,
+                            group = 1)) +
+    ggplot2::geom_line() +
+    ggplot2::geom_point() +
+    ggplot2::theme_classic() +
+    ggplot2::labs(x = "PCs") +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90))
 
   ## top n PCs matrix plot
   p <- list(NA)
@@ -378,11 +375,6 @@ pca_matrix_plot_init <- function(data,
       theme_classic()
   ))  ## get legend
 
-  ## add color for group_by factor
-  if(!is.null(group_by)) {
-    p0 <- patchwork::patchworkGrob(p0 + patchwork::inset_element(p3, 0.6, 0.2, 0.8, 0.9))
-  }
-
   layout_mat <- matrix(NA, n, n)
   layout_mat[lower.tri(layout_mat)] <- seq_along(p)
   layout_mat <- Matrix::t(layout_mat)
@@ -391,7 +383,9 @@ pca_matrix_plot_init <- function(data,
 
   p <- gridExtra::arrangeGrob(grobs = c(p, list(p0), p1),
                               layout_matrix = layout_mat)
-  p <- ggpubr::as_ggplot(p)
+  if(!is.null(group_by))
+    p <- ggpubr::as_ggplot(p) + p3 + patchwork::plot_layout(widths = c(5, 1))
+
   return(p)
 }
 

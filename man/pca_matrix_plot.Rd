@@ -137,6 +137,6 @@ Make a matrix plot of PCA with top PCs
 }
 \examples{
 data("im_data_6")
-pca_matrix_plot(data = im_data_6)
+pca_matrix_plot(data = im_data_6, scale = FALSE)
 
 }

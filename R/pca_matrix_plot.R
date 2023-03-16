@@ -12,7 +12,7 @@ NULL
 #'
 #' @examples
 #' data("im_data_6")
-#' pca_matrix_plot(data = im_data_6)
+#' pca_matrix_plot(data = im_data_6, scale = FALSE)
 #'
 #' @export
 setGeneric("pca_matrix_plot",
