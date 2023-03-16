@@ -17,8 +17,7 @@ sig_boxplot(
   sigs,
   group_col,
   target_group,
-  plot.score = TRUE,
-  normalize = FALSE,
+  type = c("score", "expression"),
   method = "t.test",
   slot = "counts",
   gene_id = "SYMBOL"
@@ -29,8 +28,7 @@ sig_boxplot(
   sigs,
   group_col,
   target_group,
-  plot.score = TRUE,
-  normalize = FALSE,
+  type = c("score", "expression"),
   method = "t.test",
   gene_id = "SYMBOL"
 )
@@ -40,8 +38,7 @@ sig_boxplot(
   sigs,
   group_col,
   target_group,
-  plot.score = TRUE,
-  normalize = FALSE,
+  type = c("score", "expression"),
   method = "t.test",
   gene_id = "SYMBOL"
 )
@@ -51,8 +48,7 @@ sig_boxplot(
   sigs,
   group_col,
   target_group,
-  plot.score = TRUE,
-  normalize = FALSE,
+  type = c("score", "expression"),
   method = "t.test",
   gene_id = "SYMBOL"
 )
@@ -62,8 +58,7 @@ sig_boxplot(
   sigs,
   group_col,
   target_group,
-  plot.score = TRUE,
-  normalize = FALSE,
+  type = c("score", "expression"),
   method = "t.test",
   slot = "counts",
   gene_id = "SYMBOL"
@@ -74,8 +69,7 @@ sig_boxplot(
   sigs,
   group_col,
   target_group,
-  plot.score = TRUE,
-  normalize = FALSE,
+  type = c("score", "expression"),
   method = "t.test",
   gene_id = "SYMBOL"
 )
@@ -85,8 +79,7 @@ sig_boxplot(
   sigs,
   group_col,
   target_group,
-  plot.score = TRUE,
-  normalize = FALSE,
+  type = c("score", "expression"),
   method = "t.test",
   slot = "counts",
   gene_id = "SYMBOL"
@@ -97,8 +90,7 @@ sig_boxplot(
   sigs,
   group_col,
   target_group,
-  plot.score = TRUE,
-  normalize = FALSE,
+  type = c("score", "expression"),
   method = "t.test",
   slot = "counts",
   gene_id = "SYMBOL"
@@ -109,8 +101,7 @@ sig_boxplot(
   sigs,
   group_col,
   target_group,
-  plot.score = TRUE,
-  normalize = FALSE,
+  type = c("score", "expression"),
   method = "t.test",
   slot = "counts",
   gene_id = "SYMBOL"
@@ -125,10 +116,8 @@ sig_boxplot(
 
 \item{target_group}{pattern, specify the group of interest as reference}
 
-\item{plot.score}{logical, if to plot score instead of expression of signature}
-
-\item{normalize}{logical, TRUE indicates raw counts data to normalize and
-calculate cpm}
+\item{type}{one of "score" and "expression", to plot score or expression of
+the signature}
 
 \item{method}{a character string indicating which method to be used for
 \code{stat_compare_means()} to compare the means across groups,

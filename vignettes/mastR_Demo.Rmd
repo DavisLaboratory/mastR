@@ -583,7 +583,6 @@ pca_matrix_plot(
 * `sigs` param is the final curated signature symbols, while `markers` param is the original markers pool.  
 * `scale` could specify the `column` or `row` to be scaled or no scaling by `none`.  
 * `rank_plot`` is used to decide if to gene rank instead of expression for heatmap.
-* `normalize` means whether to normalize and calculate logCPM or not.    
 
 ```{r heatmap, warning=FALSE, fig.width=10, fig.height=7}
 sig_heatmap(
@@ -607,7 +606,6 @@ sig_heatmap(
 #   sigs = sig_NK_CRC,
 #   group_col = c("celltype:ch1", "celltype.ch1"), 
 #   markers = geneIds(Markers),
-#   normalize = TRUE,
 #   gene_id = "ENSEMBL"
 # ) + patchwork::plot_layout(guides = "collect", ncol = 1)
 ```
@@ -628,7 +626,6 @@ We might want to see the rank density plot in more than 1 datasets for compariso
 #   data = list(im_data_6 = im_data_6,
 #               process_Data = proc_data), 
 #   sigs = sig_NK_CRC,
-#   normalize = c(TRUE, FALSE),
 #   group_col = c("celltype:ch1", "celltype.ch1"), 
 #   gene_id = "ENSEMBL",
 #   slot = "voomE"
@@ -659,7 +656,6 @@ sig_boxplot(
   sigs = sig_NK_CRC,
   group_col = "celltype.ch1", 
   target_group = "NK", 
-  normalize = FALSE,
   gene_id = "ENSEMBL",
   slot = "voomE"
 )
@@ -671,7 +667,6 @@ sig_boxplot(
 #   sigs = sig_NK_CRC,
 #   group_col = c("celltype:ch1", "celltype.ch1"),
 #   target_group = "NK",
-#   normalize = TRUE,
 #   gene_id = "ENSEMBL"
 # ) * guides(col = "none")
 ```
@@ -719,7 +714,6 @@ sig_scatter_plot(
 #   group_col = c("celltype:ch1", "celltype.ch1"),
 #   target_group = "NK", 
 #   xint = 4, yint = 4,
-#   normalize = TRUE, 
 #   gene_id = "ENSEMBL")
 ```
 

@@ -294,8 +294,6 @@ plotPCAbiplot <- function(prcomp,
 #' @param data expression matrix
 #' @param features vector of gene symbols or 'all', specify the genes used for
 #'                 PCA, default 'all'
-#' @param normalize logical, TRUE indicates raw counts data to normalize and
-#'                  calculate logCPM before PCA
 #' @param scale logical, if to scale data for PCA, default TRUE
 #' @param n num, specify top n PCs to plot
 #' @param gene_id character, specify which column of IDs used to calculate TPM,
@@ -306,7 +304,6 @@ plotPCAbiplot <- function(prcomp,
 #' @return matrix plot of PCA
 pca_matrix_plot_init <- function(data,
                                  features = "all",
-                                 normalize = FALSE,
                                  group_by = NULL,
                                  scale = TRUE,
                                  n = 4,
@@ -314,17 +311,10 @@ pca_matrix_plot_init <- function(data,
                                  n_loadings = 10,
                                  gene_id = "SYMBOL") {
 
-  stopifnot(is.logical(normalize), is.vector(features),
+  stopifnot(is.vector(features),
             is.null(group_by) | is.vector(group_by),
             is.logical(scale), is.numeric(n),
             is.logical(loading), is.character(gene_id))
-
-  ## calculate logCPM for raw counts data
-  if(normalize) {
-    data <- edgeR::DGEList(counts = data)
-    data <- edgeR::calcNormFactors(data)
-    data <- edgeR::cpm(data, log = TRUE)
-  }
 
   ## scale and do PCA on selected features
   if (length(features) == 1 && features[1] == "all") {
@@ -409,21 +399,9 @@ pca_matrix_plot_init <- function(data,
 ## scatter_plot function
 ##---------------------------------------------------------------
 scatter_plot_init <- function(expr, sigs, target_group, by,
-                              normalize = FALSE,
                               xint = 1, yint = 1,
                               gene_id = "SYMBOL") {
-  stopifnot(is.logical(normalize), is.numeric(xint),
-            is.numeric(yint), is.character(gene_id))
-
-  ## log-normalize data if normalize = T
-  if (normalize) {
-    expr <- edgeR::DGEList(expr,
-                           group = by)
-    expr <- edgeR::calcNormFactors(expr, method = "TMM")
-    expr <- edgeR::cpm(expr, log = TRUE)
-  } else {
-    expr <- expr
-  }
+  stopifnot(is.numeric(xint), is.numeric(yint), is.character(gene_id))
 
   ## convert result gene symbols into gene IDs mapped to data rownames
   sigs <- AnnotationDbi::select(org.Hs.eg.db::org.Hs.eg.db,
@@ -458,20 +436,10 @@ scatter_plot_init <- function(expr, sigs, target_group, by,
 
 ## boxplot of expression for signatures
 ##---------------------------------------------------------------
-exp_boxplot_init <- function(expr, sigs, target_group, by, normalize = FALSE,
+exp_boxplot_init <- function(expr, sigs, target_group, by,
                              method = "t.test", gene_id = "SYMBOL") {
 
-  stopifnot(is.logical(normalize), is.character(gene_id))
-
-  ## log-normalize data if normalize = T
-  if (normalize) {
-    expr <- edgeR::DGEList(expr,
-                           group = by)
-    expr <- edgeR::calcNormFactors(expr, method = "TMM")
-    expr <- edgeR::cpm(expr, log = TRUE)
-  } else {
-    expr <- expr
-  }
+  stopifnot(is.character(gene_id))
 
   ## convert result gene symbols into gene IDs mapped to data rownames
   sigs <- AnnotationDbi::select(org.Hs.eg.db::org.Hs.eg.db,
@@ -513,15 +481,8 @@ exp_boxplot_init <- function(expr, sigs, target_group, by, normalize = FALSE,
 ## score boexplot
 ##---------------------------------------------------------------
 #helper: calculate singscores
-singscore_init <- function(expr, sigs, by, normalize = FALSE,
+singscore_init <- function(expr, sigs, by,
                            gene_id = "SYMBOL") {
-  ## calculate log-normalized data if raw counts data
-  if (normalize) {
-    expr <- edgeR::DGEList(expr,
-                           group = by)
-    expr <- edgeR::calcNormFactors(expr, method = "TMM")
-    expr <- edgeR::cpm(expr, log = TRUE)
-  }
 
   ## singscore samples using given signature genes
   rank_data <- singscore::rankGenes(expr)
@@ -637,7 +598,7 @@ gsea_dotplot_init <- function(gse, size = "enrichmentScore") {
 
 ## heatmap for comparing signature with original markers pool
 ##---------------------------------------------------------------
-heatmap_init <- function(expr, sigs, by, markers, normalize = FALSE,
+heatmap_init <- function(expr, sigs, by, markers,
                          scale = c("none", "row", "column"),
                          gene_id = "SYMBOL", ranks_plot = FALSE,
                          ...) {
@@ -647,12 +608,7 @@ heatmap_init <- function(expr, sigs, by, markers, normalize = FALSE,
     names(sigs) <- seq_along(sigs)
   idx <- which(names(sigs) == "")
   names(sigs)[idx] <- idx
-  ## normalize
-  if (normalize == TRUE) {
-  expr <- edgeR::DGEList(expr)
-  expr <- edgeR::calcNormFactors(expr, method = "TMM")
-  expr <- edgeR::cpm(expr, log = TRUE)
-  }
+
   ## plot rank instead of expression
   if (ranks_plot == TRUE)
     expr <- log2(apply(expr, 2, rank))
@@ -720,15 +676,11 @@ add_spacer <- function(x, ns) {
 }
 
 #helper: make matrix plot of rankdensity
-rankdensity_init <- function(expr, sigs, by, normalize = FALSE,
-                             aggregate = FALSE, gene_id = "SYMBOL") {
-  ## calculate log-norm expression
-  if (normalize) {
-    expr <- edgeR::DGEList(expr,
-                           group = by)
-    expr <- edgeR::calcNormFactors(expr, method = "TMM")
-    expr <- edgeR::cpm(expr, log = TRUE)
-  }else expr <- as.matrix(expr)
+rankdensity_init <- function(expr, sigs, by,
+                             aggregate = FALSE,
+                             gene_id = "SYMBOL") {
+  if(!is.matrix(expr))
+    expr <- as.matrix(expr)
 
   ## calculate ranks of genes using singscore
   rank_data <- singscore::rankGenes(expr)
@@ -814,5 +766,5 @@ utils::globalVariables(c("median", "Gene", "Expression", "Group", "Type",
                          "Proportion of Variance", "Rank", "Sample",
                          "max_den", "y_s", "y_e", "x_end", "y_end",
                          "group", "ID", "NES", "logFC_dim_1",
-                         "logFC_dim_2", "logcounts", "x", "middle",
+                         "logFC_dim_2", "logcounts", "x", "y", "middle",
                          "ymin", "ymax", "upper", "lower"))

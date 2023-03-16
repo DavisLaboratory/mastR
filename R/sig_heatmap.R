@@ -29,7 +29,6 @@ setGeneric("sig_heatmap",
                     sigs,
                     group_col,
                     markers,
-                    normalize = FALSE,
                     scale = c("none", "row", "column"),
                     gene_id = "SYMBOL",
                     ranks_plot = FALSE,
@@ -48,22 +47,18 @@ function(data,
          sigs,
          group_col,
          markers,
-         normalize = FALSE,
          scale = "none",
          gene_id = "SYMBOL",
          ranks_plot = FALSE,
          ...) {
 
   scale <- match.arg(scale)
-  stopifnot(is.logical(normalize),
-            is.character(gene_id),
-            is.logical(ranks_plot))
+  stopifnot(is.character(gene_id), is.logical(ranks_plot))
 
   p <- heatmap_init(
     expr = data,
     sigs = list(Sig = sigs),
     by = factor(group_col),
-    normalize = normalize,
     scale = scale,
     gene_id = gene_id,
     ranks_plot = ranks_plot,
@@ -84,15 +79,12 @@ function(data,
          sigs,
          group_col,
          markers,
-         normalize = FALSE,
          scale = "none",
          gene_id = "SYMBOL",
          ranks_plot = FALSE,
          ...) {
   scale <- match.arg(scale)
-  stopifnot(is.logical(normalize),
-            is.character(gene_id),
-            is.logical(ranks_plot))
+  stopifnot(is.character(gene_id), is.logical(ranks_plot))
 
   ## build sigs
   sigs <- list(Original = setdiff(markers, sigs), Screen_Sig = sigs)
@@ -101,7 +93,6 @@ function(data,
     expr = data,
     sigs = sigs,
     by = factor(group_col),
-    normalize = normalize,
     scale = scale,
     gene_id = gene_id,
     ranks_plot = ranks_plot,
@@ -115,7 +106,6 @@ function(data,
     expr = data,
     sigs = sigs["Screen_Sig"],
     by = factor(group_col),
-    normalize = normalize,
     scale = scale,
     gene_id = gene_id,
     ranks_plot = ranks_plot,
@@ -145,22 +135,18 @@ function(data,
          sigs,
          group_col,
          markers,
-         normalize = FALSE,
          scale = "none",
          gene_id = "SYMBOL",
          ranks_plot = FALSE,
          ...) {
 
   scale <- match.arg(scale)
-  stopifnot(is.logical(normalize),
-            is.character(gene_id),
-            is.logical(ranks_plot))
+  stopifnot(is.character(gene_id), is.logical(ranks_plot))
 
   p <- heatmap_init(
     expr = data,
     sigs = sigs,
     by = factor(group_col),
-    normalize = normalize,
     scale = scale,
     gene_id = gene_id,
     ranks_plot = ranks_plot,
@@ -179,25 +165,24 @@ function(data,
          sigs,
          group_col,
          markers,
-         normalize = FALSE,
          scale = "none",
          gene_id = "SYMBOL",
          ranks_plot = FALSE,
          ...) {
 
-  stopifnot(is.logical(normalize), is.character(scale),
+  stopifnot(is.character(scale),
             is.character(gene_id), is.logical(ranks_plot))
 
   if(missing(markers)) {
     p <- sig_heatmap(data = as.matrix(data), sigs = sigs,
                      group_col = group_col,
-                     normalize = normalize, scale = scale,
-                     gene_id = gene_id, ranks_plot = ranks_plot, ...)
+                     scale = scale, gene_id = gene_id,
+                     ranks_plot = ranks_plot, ...)
   } else {
     p <- sig_heatmap(data = as.matrix(data), sigs = sigs,
                      group_col = group_col, markers = markers,
-                     normalize = normalize, scale = scale,
-                     gene_id = gene_id, ranks_plot = ranks_plot, ...)
+                     scale = scale, gene_id = gene_id,
+                     ranks_plot = ranks_plot, ...)
   }
 
   return(p)
@@ -212,7 +197,6 @@ function(data,
          sigs,
          group_col,
          markers,
-         normalize = FALSE,
          scale = "none",
          gene_id = "SYMBOL",
          ranks_plot = FALSE,
@@ -221,13 +205,13 @@ function(data,
   if(missing(markers)) {
     p <- sig_heatmap(data = as.matrix(data), sigs = sigs,
                      group_col = group_col,
-                     normalize = normalize, scale = scale,
-                     gene_id = gene_id, ranks_plot = ranks_plot, ...)
+                     scale = scale, gene_id = gene_id,
+                     ranks_plot = ranks_plot, ...)
   } else {
     p <- sig_heatmap(data = as.matrix(data), sigs = sigs,
                      group_col = group_col, markers = markers,
-                     normalize = normalize, scale = scale,
-                     gene_id = gene_id, ranks_plot = ranks_plot, ...)
+                     scale = scale, gene_id = gene_id,
+                     ranks_plot = ranks_plot, ...)
   }
 
   return(p)
@@ -242,7 +226,6 @@ function(data,
          sigs,
          group_col,
          markers,
-         normalize = FALSE,
          scale = "none",
          gene_id = "SYMBOL",
          ranks_plot = FALSE,
@@ -252,13 +235,12 @@ function(data,
   if(missing(markers)) {
     p <- sig_heatmap(data = data[[slot]], sigs = sigs,
                      group_col = data$samples[[group_col]],
-                     normalize = normalize,
                      scale = scale, gene_id = gene_id,
                      ranks_plot = ranks_plot, ...)
   } else {
     p <- sig_heatmap(data = data[[slot]], sigs = sigs,
                      group_col = data$samples[[group_col]],
-                     markers = markers, normalize = normalize,
+                     markers = markers,
                      scale = scale, gene_id = gene_id,
                      ranks_plot = ranks_plot, ...)
   }
@@ -274,7 +256,6 @@ setMethod("sig_heatmap", signature(
 function(data,
          sigs,
          group_col,
-         normalize = FALSE,
          scale = "none",
          gene_id = "SYMBOL",
          ranks_plot = FALSE,
@@ -283,13 +264,13 @@ function(data,
   if(missing(markers)) {
     p <- sig_heatmap(data = Biobase::exprs(data), sigs = sigs,
                      group_col = data[[group_col]],
-                     normalize = normalize, scale = scale,
-                     gene_id = gene_id, ranks_plot = ranks_plot, ...)
+                     scale = scale, gene_id = gene_id,
+                     ranks_plot = ranks_plot, ...)
   } else {
     p <- sig_heatmap(data = Biobase::exprs(data), sigs = sigs,
                      group_col = data[[group_col]], markers = markers,
-                     normalize = normalize, scale = scale,
-                     gene_id = gene_id, ranks_plot = ranks_plot, ...)
+                     scale = scale, gene_id = gene_id,
+                     ranks_plot = ranks_plot, ...)
   }
 
   return(p)
@@ -304,7 +285,6 @@ function(data,
          sigs,
          group_col,
          markers,
-         normalize = FALSE,
          scale = "none",
          gene_id = "SYMBOL",
          ranks_plot = FALSE,
@@ -314,13 +294,12 @@ function(data,
   if(missing(markers)) {
     p <- sig_heatmap(data = Seurat::GetAssayData(data, slot = slot),
                      sigs = sigs, group_col = data@meta.data[[group_col]],
-                     normalize = normalize,
                      scale = scale, gene_id = gene_id,
                      ranks_plot = ranks_plot, ...)
   } else {
     p <- sig_heatmap(data = Seurat::GetAssayData(data, slot = slot),
                      sigs = sigs, group_col = data@meta.data[[group_col]],
-                     markers = markers, normalize = normalize,
+                     markers = markers,
                      scale = scale, gene_id = gene_id,
                      ranks_plot = ranks_plot, ...)
   }
@@ -337,7 +316,6 @@ function(data,
          sigs,
          group_col,
          markers,
-         normalize = FALSE,
          scale = "none",
          gene_id = "SYMBOL",
          ranks_plot = FALSE,
@@ -347,13 +325,12 @@ function(data,
   if(missing(markers)) {
     p <- sig_heatmap(data = SummarizedExperiment::assay(data, slot),
                      sigs = sigs, group_col = data@colData[[group_col]],
-                     normalize = normalize,
                      scale = scale, gene_id = gene_id,
                      ranks_plot = ranks_plot, ...)
   } else {
     p <- sig_heatmap(data = SummarizedExperiment::assay(data, slot),
                      sigs = sigs, group_col = data@colData[[group_col]],
-                     markers = markers, normalize = normalize,
+                     markers = markers,
                      scale = scale, gene_id = gene_id,
                      ranks_plot = ranks_plot, ...)
   }
@@ -370,18 +347,15 @@ function(data,
          sigs,
          group_col,
          markers,
-         normalize = FALSE,
          scale = "none",
          gene_id = "SYMBOL",
          ranks_plot = FALSE,
          slot = "counts",
          ...) {
 
-  stopifnot(is.logical(normalize), is.character(scale),
+  stopifnot(is.character(scale),
             is.character(gene_id), is.logical(ranks_plot))
 
-  if(length(normalize) == 1)
-    normalize <- rep(normalize, length(data))
   if(length(group_col) == 1)
     group_col <- rep(group_col, length(data))
   if(length(slot) == 1)
@@ -394,13 +368,12 @@ function(data,
     if(missing(markers)) {
       p[[i]] <- sig_heatmap(data = data[[i]],
                             sigs = sigs, group_col = group_col[[i]],
-                            normalize = normalize[i],
                             scale = scale, gene_id = gene_id[i],
                             slot = slot[i], ranks_plot = ranks_plot, ...)
     } else {
       p[[i]] <- sig_heatmap(data = data[[i]],
                             sigs = sigs, group_col = group_col[[i]],
-                            markers = markers, normalize = normalize[i],
+                            markers = markers,
                             scale = scale, gene_id = gene_id[i],
                             slot = slot[i], ranks_plot = ranks_plot, ...)
     }

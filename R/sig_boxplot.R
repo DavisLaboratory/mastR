@@ -12,8 +12,6 @@ NULL
 #' @param target_group pattern, specify the group of interest as reference
 #' @param type one of "score" and "expression", to plot score or expression of
 #'             the signature
-#' @param normalize logical, TRUE indicates raw counts data to normalize and
-#'                  calculate cpm
 #' @param method a character string indicating which method to be used for
 #'               `stat_compare_means()` to compare the means across groups,
 #'               could be "t.test", 'wilcox.test', 'anova'..., default "t.test"
@@ -38,7 +36,6 @@ setGeneric("sig_boxplot",
                     group_col,
                     target_group,
                     type = c("score", "expression"),
-                    normalize = FALSE,
                     method = "t.test",
                     slot = "counts",
                     gene_id = "SYMBOL")
@@ -56,18 +53,17 @@ function(data,
          group_col,
          target_group,
          type = c("score", "expression"),
-         normalize = FALSE,
          method = "t.test",
          gene_id = "SYMBOL") {
 
-  stopifnot(is.logical(normalize), is.character(method), is.character(gene_id))
+  stopifnot(is.character(method), is.character(gene_id))
   type <- match.arg(type)
 
   if(type == "score") {
     ## plot scores of signature
     ## calculate scores
     scores <- singscore_init(expr = data, sigs = sigs, by = group_col,
-                             normalize = normalize, gene_id = gene_id)
+                             gene_id = gene_id)
     ## boxplot of scores
     p <- score_boxplot_init(scores = scores, by = group_col,
                             target_group = target_group, method = method)
@@ -75,7 +71,7 @@ function(data,
     ## plot median expression of signature
     p <- exp_boxplot_init(expr = data, sigs = sigs,
                           target_group = target_group,
-                          by = group_col, normalize = normalize,
+                          by = group_col,
                           method = method,
                           gene_id = gene_id)
   }
@@ -95,11 +91,10 @@ function(data,
          group_col,
          target_group,
          type = c("score", "expression"),
-         normalize = FALSE,
          method = "t.test",
          gene_id = "SYMBOL") {
 
-  stopifnot(is.logical(normalize), is.character(method), is.character(gene_id))
+  stopifnot(is.character(method), is.character(gene_id))
   type <- match.arg(type)
 
   if(type == "score") {
@@ -108,7 +103,6 @@ function(data,
     scores <- singscore_init(expr = as.matrix(data),
                              sigs = sigs,
                              by = group_col,
-                             normalize = normalize,
                              gene_id = gene_id)
     ## boxplot of scores
     p <- score_boxplot_init(scores = scores, by = group_col,
@@ -117,7 +111,7 @@ function(data,
     ## plot median expression of signature
     p <- exp_boxplot_init(expr = data, sigs = sigs,
                           target_group = target_group,
-                          by = group_col, normalize = normalize,
+                          by = group_col,
                           method = method,
                           gene_id = gene_id)
   }
@@ -137,11 +131,10 @@ function(data,
          group_col,
          target_group,
          type = c("score", "expression"),
-         normalize = FALSE,
          method = "t.test",
          gene_id = "SYMBOL") {
 
-  stopifnot(is.logical(normalize), is.character(method), is.character(gene_id))
+  stopifnot(is.character(method), is.character(gene_id))
   type <- match.arg(type)
 
   p <- sig_boxplot(data = as.matrix(data),
@@ -149,7 +142,6 @@ function(data,
                    group_col = group_col,
                    target_group = target_group,
                    type = type,
-                   normalize = normalize,
                    method = method,
                    gene_id = gene_id)
 
@@ -168,7 +160,6 @@ function(data,
          group_col,
          target_group,
          type = c("score", "expression"),
-         normalize = FALSE,
          method = "t.test",
          slot = "counts",
          gene_id = "SYMBOL") {
@@ -178,7 +169,6 @@ function(data,
                    group_col = data$samples[[group_col]],
                    target_group = target_group,
                    type = type,
-                   normalize = normalize,
                    method = method,
                    gene_id = gene_id)
   return(p)
@@ -196,7 +186,6 @@ function(data,
          group_col,
          target_group,
          type = c("score", "expression"),
-         normalize = FALSE,
          method = "t.test",
          gene_id = "SYMBOL") {
 
@@ -205,7 +194,6 @@ function(data,
                    group_col = Biobase::pData(data)[[group_col]],
                    target_group = target_group,
                    type = type,
-                   normalize = normalize,
                    method = method,
                    gene_id = gene_id)
   return(p)
@@ -223,7 +211,6 @@ function(data,
          group_col,
          target_group,
          type = c("score", "expression"),
-         normalize = FALSE,
          method = "t.test",
          slot = "counts",
          gene_id = "SYMBOL") {
@@ -233,7 +220,6 @@ function(data,
                    group_col = data@meta.data[[group_col]],
                    target_group = target_group,
                    type = type,
-                   normalize = normalize,
                    method = method,
                    gene_id = gene_id)
   return(p)
@@ -251,7 +237,6 @@ function(data,
          group_col,
          target_group,
          type = c("score", "expression"),
-         normalize = FALSE,
          method = "t.test",
          slot = "counts",
          gene_id = "SYMBOL") {
@@ -261,7 +246,6 @@ function(data,
                    group_col = data@colData[[group_col]],
                    target_group = target_group,
                    type = type,
-                   normalize = normalize,
                    method = method,
                    gene_id = gene_id)
   return(p)
@@ -279,13 +263,10 @@ function(data,
          group_col,
          target_group,
          type = c("score", "expression"),
-         normalize = FALSE,
          method = "t.test",
          slot = "counts",
          gene_id = "SYMBOL") {
-
-  if(length(normalize) == 1)
-    normalize <- rep(normalize, length(data))
+  
   if(length(target_group) == 1)
     target_group <- rep(target_group, length(data))
   if(length(group_col) == 1)
@@ -304,7 +285,6 @@ function(data,
                           group_col = group_col[[i]],
                           target_group = target_group[i],
                           type = type[i],
-                          normalize = normalize[i],
                           method = method,
                           slot = slot[i],
                           gene_id = gene_id[i])

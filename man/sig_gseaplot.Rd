@@ -2,10 +2,10 @@
 % Please edit documentation in R/sig_gseaplot.R
 \name{sig_gseaplot}
 \alias{sig_gseaplot}
-\alias{sig_gseaplot,ANY,vector-method}
-\alias{sig_gseaplot,ANY,list-method}
-\alias{sig_gseaplot,DGEList,vector-method}
-\alias{sig_gseaplot,DGEList,list-method}
+\alias{sig_gseaplot,MArrayLM,vector-method}
+\alias{sig_gseaplot,MArrayLM,list-method}
+\alias{sig_gseaplot,DGEList,ANY-method}
+\alias{sig_gseaplot,ANY,ANY-method}
 \alias{sig_gseaplot,list,ANY-method}
 \title{Visualize GSEA result with input list of gene symbols.}
 \usage{
@@ -14,7 +14,6 @@ sig_gseaplot(
   sigs,
   group_col,
   target_group,
-  normalize = FALSE,
   gene_id = "SYMBOL",
   slot = "counts",
   method = c("dotplot", "gseaplot"),
@@ -24,12 +23,11 @@ sig_gseaplot(
   ...
 )
 
-\S4method{sig_gseaplot}{ANY,vector}(
+\S4method{sig_gseaplot}{MArrayLM,vector}(
   data,
   sigs,
   group_col,
   target_group,
-  normalize = FALSE,
   gene_id = "SYMBOL",
   slot = "counts",
   method = c("dotplot", "gseaplot"),
@@ -39,12 +37,11 @@ sig_gseaplot(
   ...
 )
 
-\S4method{sig_gseaplot}{ANY,list}(
+\S4method{sig_gseaplot}{MArrayLM,list}(
   data,
   sigs,
   group_col,
   target_group,
-  normalize = FALSE,
   gene_id = "SYMBOL",
   slot = "counts",
   method = c("dotplot", "gseaplot"),
@@ -54,12 +51,11 @@ sig_gseaplot(
   ...
 )
 
-\S4method{sig_gseaplot}{DGEList,vector}(
+\S4method{sig_gseaplot}{DGEList,ANY}(
   data,
   sigs,
   group_col,
   target_group,
-  normalize = FALSE,
   gene_id = "SYMBOL",
   slot = "counts",
   method = c("dotplot", "gseaplot"),
@@ -69,12 +65,11 @@ sig_gseaplot(
   ...
 )
 
-\S4method{sig_gseaplot}{DGEList,list}(
+\S4method{sig_gseaplot}{ANY,ANY}(
   data,
   sigs,
   group_col,
   target_group,
-  normalize = FALSE,
   gene_id = "SYMBOL",
   slot = "counts",
   method = c("dotplot", "gseaplot"),
@@ -89,7 +84,6 @@ sig_gseaplot(
   sigs,
   group_col,
   target_group,
-  normalize = FALSE,
   gene_id = "SYMBOL",
   slot = "counts",
   method = c("dotplot", "gseaplot"),
@@ -107,9 +101,6 @@ sig_gseaplot(
 \item{group_col}{character or vector, specify the column name to compare in coldata}
 
 \item{target_group}{pattern, specify the group of interest as reference}
-
-\item{normalize}{logical, TRUE indicates raw counts data to normalize and
-calculate cpm}
 
 \item{gene_id}{character, indicate the ID type of rowname of expression data's ,
 could be one of 'ENSEMBL', 'SYMBOL', ... default 'SYMBOL'}

@@ -16,7 +16,6 @@ sig_scatter_plot(
   sigs,
   group_col,
   target_group,
-  normalize = FALSE,
   slot = "counts",
   xint = 1,
   yint = 1,
@@ -28,7 +27,6 @@ sig_scatter_plot(
   sigs,
   group_col,
   target_group,
-  normalize = FALSE,
   xint = 1,
   yint = 1,
   gene_id = "SYMBOL"
@@ -39,7 +37,6 @@ sig_scatter_plot(
   sigs,
   group_col,
   target_group,
-  normalize = FALSE,
   xint = 1,
   yint = 1,
   gene_id = "SYMBOL"
@@ -50,7 +47,6 @@ sig_scatter_plot(
   sigs,
   group_col,
   target_group,
-  normalize = FALSE,
   slot = "counts",
   xint = 1,
   yint = 1,
@@ -62,7 +58,6 @@ sig_scatter_plot(
   sigs,
   group_col,
   target_group,
-  normalize = FALSE,
   xint = 1,
   yint = 1,
   gene_id = "SYMBOL"
@@ -73,7 +68,6 @@ sig_scatter_plot(
   sigs,
   group_col,
   target_group,
-  normalize = FALSE,
   slot = "counts",
   xint = 1,
   yint = 1,
@@ -85,7 +79,6 @@ sig_scatter_plot(
   sigs,
   group_col,
   target_group,
-  normalize = FALSE,
   slot = "counts",
   xint = 1,
   yint = 1,
@@ -97,7 +90,6 @@ sig_scatter_plot(
   sigs,
   group_col,
   target_group,
-  normalize = FALSE,
   slot = "counts",
   xint = 1,
   yint = 1,
@@ -112,9 +104,6 @@ sig_scatter_plot(
 \item{group_col}{character or vector, specify the column name to compare in coldata}
 
 \item{target_group}{pattern, specify the group of interest as reference}
-
-\item{normalize}{logical, TRUE indicates raw counts data to normalize and
-calculate cpm}
 
 \item{slot}{character, indicate which slot used as expression, optional}
 

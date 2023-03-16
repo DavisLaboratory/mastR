@@ -27,7 +27,6 @@ setGeneric("sig_scatter_plot",
                     sigs,
                     group_col,
                     target_group,
-                    normalize = FALSE,
                     slot = "counts",
                     xint = 1,
                     yint = 1,
@@ -45,13 +44,13 @@ function(data,
          sigs,
          group_col,
          target_group,
-         normalize = FALSE,
          xint = 1,
          yint = 1,
          gene_id = "SYMBOL") {
 
-  p <- scatter_plot_init(expr = data, sigs = sigs, normalize = normalize,
-                         target_group = target_group, by = group_col, xint = xint, yint = yint,
+  p <- scatter_plot_init(expr = data, sigs = sigs,
+                         target_group = target_group,
+                         by = group_col, xint = xint, yint = yint,
                          gene_id = gene_id)
   return(p)
 })
@@ -67,12 +66,11 @@ function(data,
          sigs,
          group_col,
          target_group,
-         normalize = FALSE,
          xint = 1,
          yint = 1,
          gene_id = "SYMBOL") {
 
-  p <- scatter_plot_init(expr = data, sigs = sigs, normalize = normalize,
+  p <- scatter_plot_init(expr = data, sigs = sigs,
                          target_group = target_group,
                          by = group_col, xint = xint, yint = yint,
                          gene_id = gene_id)
@@ -90,14 +88,12 @@ function(data,
          sigs,
          group_col,
          target_group,
-         normalize = FALSE,
          slot = "counts",
          xint = 1,
          yint = 1,
          gene_id = "SYMBOL") {
 
   p <- scatter_plot_init(expr = data[[slot]], sigs = sigs,
-                         normalize = normalize,
                          target_group = target_group,
                          by = data$samples[[group_col]],
                          xint = xint, yint = yint,
@@ -116,13 +112,12 @@ function(data,
          sigs,
          group_col,
          target_group,
-         normalize = FALSE,
          xint = 1,
          yint = 1,
          gene_id = "SYMBOL") {
 
   p <- scatter_plot_init(expr = Biobase::exprs(data),
-                         sigs = sigs, normalize = normalize,
+                         sigs = sigs,
                          target_group = target_group, by = data[[group_col]],
                          xint = xint, yint = yint,
                          gene_id = gene_id)
@@ -140,14 +135,13 @@ function(data,
          sigs,
          group_col,
          target_group,
-         normalize = FALSE,
          slot = "counts",
          xint = 1,
          yint = 1,
          gene_id = "SYMBOL") {
 
   p <- scatter_plot_init(expr = Seurat::GetAssayData(data, slot = slot),
-                         sigs = sigs, normalize = normalize,
+                         sigs = sigs,
                          target_group = target_group,
                          by = data@meta.data[[group_col]],
                          xint = xint, yint = yint,
@@ -166,14 +160,13 @@ function(data,
          sigs,
          group_col,
          target_group,
-         normalize = FALSE,
          slot = "counts",
          xint = 1,
          yint = 1,
          gene_id = "SYMBOL") {
 
   p <- scatter_plot_init(expr = SummarizedExperiment::assay(data, slot),
-                         sigs = sigs, normalize = normalize,
+                         sigs = sigs,
                          target_group = target_group,
                          by = data@colData[[group_col]],
                          xint = xint, yint = yint,
@@ -192,14 +185,11 @@ function(data,
          sigs,
          group_col,
          target_group,
-         normalize = FALSE,
          slot = "counts",
          xint = 1,
          yint = 1,
          gene_id = "SYMBOL") {
 
-  if(length(normalize) == 1)
-    normalize <- rep(normalize, length(data))
   if(length(target_group) == 1)
     target_group <- rep(target_group, length(data))
   if(length(group_col) == 1)
@@ -212,7 +202,6 @@ function(data,
   p <- list()
   for (i in seq_along(data)) {
     p[[i]] <- sig_scatter_plot(data = data[[i]], sigs = sigs,
-                               normalize = normalize[i],
                                target_group = target_group[i],
                                slot = slot[i], group_col = group_col[[i]],
                                xint = xint, yint = yint,

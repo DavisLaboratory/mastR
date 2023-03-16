@@ -19,7 +19,6 @@ sig_heatmap(
   sigs,
   group_col,
   markers,
-  normalize = FALSE,
   scale = c("none", "row", "column"),
   gene_id = "SYMBOL",
   ranks_plot = FALSE,
@@ -32,7 +31,6 @@ sig_heatmap(
   sigs,
   group_col,
   markers,
-  normalize = FALSE,
   scale = c("none", "row", "column"),
   gene_id = "SYMBOL",
   ranks_plot = FALSE,
@@ -45,7 +43,6 @@ sig_heatmap(
   sigs,
   group_col,
   markers,
-  normalize = FALSE,
   scale = c("none", "row", "column"),
   gene_id = "SYMBOL",
   ranks_plot = FALSE,
@@ -58,7 +55,6 @@ sig_heatmap(
   sigs,
   group_col,
   markers,
-  normalize = FALSE,
   scale = c("none", "row", "column"),
   gene_id = "SYMBOL",
   ranks_plot = FALSE,
@@ -71,7 +67,6 @@ sig_heatmap(
   sigs,
   group_col,
   markers,
-  normalize = FALSE,
   scale = c("none", "row", "column"),
   gene_id = "SYMBOL",
   ranks_plot = FALSE,
@@ -84,7 +79,6 @@ sig_heatmap(
   sigs,
   group_col,
   markers,
-  normalize = FALSE,
   scale = c("none", "row", "column"),
   gene_id = "SYMBOL",
   ranks_plot = FALSE,
@@ -97,7 +91,6 @@ sig_heatmap(
   sigs,
   group_col,
   markers,
-  normalize = FALSE,
   scale = "none",
   gene_id = "SYMBOL",
   ranks_plot = FALSE,
@@ -110,7 +103,6 @@ sig_heatmap(
   sigs,
   group_col,
   markers,
-  normalize = FALSE,
   scale = c("none", "row", "column"),
   gene_id = "SYMBOL",
   ranks_plot = FALSE,
@@ -123,7 +115,6 @@ sig_heatmap(
   sigs,
   group_col,
   markers,
-  normalize = FALSE,
   scale = "none",
   gene_id = "SYMBOL",
   ranks_plot = FALSE,
@@ -136,7 +127,6 @@ sig_heatmap(
   sigs,
   group_col,
   markers,
-  normalize = FALSE,
   scale = "none",
   gene_id = "SYMBOL",
   ranks_plot = FALSE,
@@ -149,7 +139,6 @@ sig_heatmap(
   sigs,
   group_col,
   markers,
-  normalize = FALSE,
   scale = "none",
   gene_id = "SYMBOL",
   ranks_plot = FALSE,
@@ -166,9 +155,6 @@ sig_heatmap(
 
 \item{markers}{a vector of gene names, listed the gene symbols of original
 markers pool}
-
-\item{normalize}{logical, TRUE indicates raw counts data to normalize and
-calculate cpm}
 
 \item{scale}{could be one of 'none' (default), 'row' or 'column'}
 

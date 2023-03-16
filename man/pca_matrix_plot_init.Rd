@@ -7,7 +7,6 @@
 pca_matrix_plot_init(
   data,
   features = "all",
-  normalize = FALSE,
   group_by = NULL,
   scale = TRUE,
   n = 4,
@@ -21,9 +20,6 @@ pca_matrix_plot_init(
 
 \item{features}{vector of gene symbols or 'all', specify the genes used for
 PCA, default 'all'}
-
-\item{normalize}{logical, TRUE indicates raw counts data to normalize and
-calculate logCPM before PCA}
 
 \item{group_by}{character, specify the column to be grouped and colored,
 default NULL}

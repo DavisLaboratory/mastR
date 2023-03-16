@@ -30,7 +30,6 @@ setGeneric("sig_gseaplot",
                     sigs,
                     group_col,
                     target_group,
-                    normalize = FALSE,
                     gene_id = "SYMBOL",
                     slot = "counts",
                     method = c("dotplot", "gseaplot"),
@@ -42,18 +41,12 @@ setGeneric("sig_gseaplot",
 
 #' @rdname sig_gseaplot
 setMethod("sig_gseaplot", signature(
-  data = 'ANY',
-  sigs = 'vector',
-  group_col = 'ANY',
-  target_group = 'ANY'
+  data = 'MArrayLM',
+  sigs = 'vector'
 ),
 function(data,
          sigs,
-         group_col,
-         target_group,
-         normalize = FALSE,
          gene_id = "SYMBOL",
-         slot = "counts",
          method = c("dotplot", "gseaplot"),
          size = "enrichmentScore",
          pvalue_table = FALSE,
@@ -64,15 +57,14 @@ function(data,
   method <- match.arg(method)
 
   ## get DEGs tables list with statistics
-  tDEG <- get_de_table(data = data, group_col = group_col,
-                       target_group = target_group,
-                       normalize = normalize,
-                       markers = Reduce(union, sigs),
-                       gene_id = gene_id,
-                       slot = slot,
-                       ...)
+  ## save DE result tables into list
+  tDEG <- list()
+  for (i in seq_len(ncol(data))) {
+    ## use limma::topTreat() to get statistics of DEA
+    tDEG[[i]] <- na.omit(limma::topTreat(data, coef = i, number = Inf))
+  }
+  names(tDEG) <- colnames(data)
 
-  tDEG <- tDEG[which(names(tDEG) != "proc_data")]  ## only keep DEG tables
   gsets <- data.frame(SYMBOL = sigs, set = "Signature")
   ids <- AnnotationDbi::select(org.Hs.eg.db::org.Hs.eg.db,
                                gsets[,1],
@@ -88,24 +80,18 @@ function(data,
     p <- gsea_plot_init(gse, pvalue_table = pvalue_table)
   } else p <- gsea_dotplot_init(gse, size = size)
 
-  p <-  patchwork::wrap_plots(p) + patchwork::plot_layout(guides = "collect")
+  p <- patchwork::wrap_plots(p) + patchwork::plot_layout(guides = "collect")
   return(p)
 })
 
 #' @rdname sig_gseaplot
 setMethod("sig_gseaplot", signature(
-  data = 'ANY',
-  sigs = 'list',
-  group_col = 'ANY',
-  target_group = 'ANY'
+  data = 'MArrayLM',
+  sigs = 'list'
 ),
 function(data,
          sigs,
-         group_col,
-         target_group,
-         normalize = FALSE,
          gene_id = "SYMBOL",
-         slot = "counts",
          method = c("dotplot", "gseaplot"),
          size = "enrichmentScore",
          pvalue_table = FALSE,
@@ -116,15 +102,13 @@ function(data,
   method <- match.arg(method)
 
   ## get DEGs tables list with statistics
-  tDEG <- get_de_table(data = data, group_col = group_col,
-                       target_group = target_group,
-                       normalize = normalize,
-                       markers = Reduce(union, sigs),
-                       gene_id = gene_id,
-                       slot = slot,
-                       ...)
-
-  tDEG <- tDEG[which(names(tDEG) != "proc_data")]  ## only keep DEG tables
+  ## save DE result tables into list
+  tDEG <- list()
+  for (i in seq_len(ncol(data))) {
+    ## use limma::topTreat() to get statistics of DEA
+    tDEG[[i]] <- na.omit(limma::topTreat(data, coef = i, number = Inf))
+  }
+  names(tDEG) <- colnames(data)
 
   if(is.null(names(sigs)))
     names(sigs) <- seq_along(sigs)  ## set gene list names
@@ -151,7 +135,7 @@ function(data,
 #' @rdname sig_gseaplot
 setMethod("sig_gseaplot", signature(
   data = 'DGEList',
-  sigs = 'vector',
+  sigs = 'ANY',
   group_col = 'ANY',
   target_group = 'ANY'
 ),
@@ -159,7 +143,6 @@ function(data,
          sigs,
          group_col,
          target_group,
-         normalize = FALSE,
          gene_id = "SYMBOL",
          slot = "counts",
          method = c("dotplot", "gseaplot"),
@@ -171,39 +154,30 @@ function(data,
   stopifnot(is.character(gene_id), is.numeric(digits))
   method <- match.arg(method)
 
-  ## get DEGs tables list with statistics
-  tDEG <- get_de_table(data = data, group_col = group_col,
-                       target_group = target_group,
-                       normalize = normalize,
-                       markers = Reduce(union, sigs),
-                       gene_id = gene_id,
-                       slot = slot,
-                       ...)
+  ## get processed data if there's no tfit in it
+  if(is.null(data$tfit)) {
+    data <- process_data(data = data, group_col = group_col,
+                         target_group = target_group,
+                         markers = Reduce(union, sigs),
+                         gene_id = gene_id,
+                         slot = slot,
+                         ...)
+  }
 
-  tDEG <- tDEG[which(names(tDEG) != "proc_data")]  ## only keep DEG tables
-  gsets <- data.frame(SYMBOL = sigs, set = "Signature")
-  ids <- AnnotationDbi::select(org.Hs.eg.db::org.Hs.eg.db,
-                               gsets[,1],
-                               columns = gene_id,
-                               keytype = "SYMBOL")
-  gsets <- merge(gsets, ids, all = TRUE, by.x = "SYMBOL", by.y = "SYMBOL")
-
-  ## gsea
-  gse <- gsea_analysis(tDEG = tDEG, gsets = gsets,
-                       gene_id = gene_id, digits = digits)
-
-  if(method == "gseaplot") {
-    p <- gsea_plot_init(gse, pvalue_table = pvalue_table)
-  } else p <- gsea_dotplot_init(gse, size = size)
-
-  p <- patchwork::wrap_plots(p) + patchwork::plot_layout(guides = "collect")
+  p <- sig_gseaplot(data = data$tfit, sigs = sigs,
+                    gene_id = gene_id,
+                    method = method,
+                    size = size,
+                    pvalue_table = pvalue_table,
+                    digits = digits,
+                    ...)
   return(p)
 })
 
 #' @rdname sig_gseaplot
 setMethod("sig_gseaplot", signature(
-  data = 'DGEList',
-  sigs = 'list',
+  data = 'ANY',
+  sigs = 'ANY',
   group_col = 'ANY',
   target_group = 'ANY'
 ),
@@ -211,7 +185,6 @@ function(data,
          sigs,
          group_col,
          target_group,
-         normalize = FALSE,
          gene_id = "SYMBOL",
          slot = "counts",
          method = c("dotplot", "gseaplot"),
@@ -223,36 +196,21 @@ function(data,
   stopifnot(is.character(gene_id), is.numeric(digits))
   method <- match.arg(method)
 
-  ## get DEGs tables list with statistics
-  tDEG <- get_de_table(data = data, group_col = group_col,
+  ## get processed data
+  data <- process_data(data = data, group_col = group_col,
                        target_group = target_group,
-                       normalize = normalize,
                        markers = Reduce(union, sigs),
                        gene_id = gene_id,
                        slot = slot,
                        ...)
 
-  tDEG <- tDEG[which(names(tDEG) != "proc_data")]  ## only keep DEG tables
-
-  if(is.null(names(sigs)))
-    names(sigs) <- seq_along(sigs)  ## set gene list names
-  gsets <- utils::stack(sigs)
-  colnames(gsets) <- c("SYMBOL", "set")
-  ids <- AnnotationDbi::select(org.Hs.eg.db::org.Hs.eg.db,
-                               gsets[,1],
-                               columns = gene_id,
-                               keytype = "SYMBOL")
-  gsets <- merge(gsets, ids, all = TRUE, by.x = "SYMBOL", by.y = "SYMBOL")
-
-  ## gsea
-  gse <- gsea_analysis(tDEG = tDEG, gsets = gsets,
-                       gene_id = gene_id, digits = digits)
-
-  if(method == "gseaplot") {
-    p <- gsea_plot_init(gse, pvalue_table = pvalue_table)
-  } else p <- gsea_dotplot_init(gse, size = size)
-
-  p <- patchwork::wrap_plots(p) + patchwork::plot_layout(guides = "collect")
+  p <- sig_gseaplot(data = data$tfit, sigs = sigs,
+                    gene_id = gene_id,
+                    method = method,
+                    size = size,
+                    pvalue_table = pvalue_table,
+                    digits = digits,
+                    ...)
   return(p)
 })
 
@@ -267,7 +225,6 @@ function(data,
          sigs,
          group_col,
          target_group,
-         normalize = FALSE,
          gene_id = "SYMBOL",
          slot = "counts",
          method = c("dotplot", "gseaplot"),
@@ -287,8 +244,6 @@ function(data,
     gene_id <- rep(gene_id, length(data))
   if(length(slot) == 1)
     slot <- rep(slot, length(data))
-  if(length(normalize) == 1)
-    normalize <- rep(normalize, length(data))
 
   p <- list()
   for (i in seq_along(data)) {
@@ -296,7 +251,6 @@ function(data,
                            sigs = sigs,
                            group_col = group_col[[i]],
                            target_group = target_group[i],
-                           normalize = normalize[i],
                            gene_id = gene_id[i],
                            slot = slot[i],
                            method = method,

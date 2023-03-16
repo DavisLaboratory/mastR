@@ -16,7 +16,6 @@ sig_rankdensity_plot(
   data,
   sigs,
   group_col,
-  normalize = FALSE,
   aggregate = FALSE,
   slot = "counts",
   gene_id = "SYMBOL"
@@ -26,7 +25,6 @@ sig_rankdensity_plot(
   data,
   sigs,
   group_col,
-  normalize = FALSE,
   aggregate = FALSE,
   gene_id = "SYMBOL"
 )
@@ -35,7 +33,6 @@ sig_rankdensity_plot(
   data,
   sigs,
   group_col,
-  normalize = FALSE,
   aggregate = FALSE,
   gene_id = "SYMBOL"
 )
@@ -44,7 +41,6 @@ sig_rankdensity_plot(
   data,
   sigs,
   group_col,
-  normalize = FALSE,
   aggregate = FALSE,
   gene_id = "SYMBOL"
 )
@@ -53,7 +49,6 @@ sig_rankdensity_plot(
   data,
   sigs,
   group_col,
-  normalize = FALSE,
   aggregate = FALSE,
   slot = "counts",
   gene_id = "SYMBOL"
@@ -63,7 +58,6 @@ sig_rankdensity_plot(
   data,
   sigs,
   group_col,
-  normalize = FALSE,
   aggregate = FALSE,
   gene_id = "SYMBOL"
 )
@@ -72,7 +66,6 @@ sig_rankdensity_plot(
   data,
   sigs,
   group_col,
-  normalize = FALSE,
   aggregate = FALSE,
   slot = "counts",
   gene_id = "SYMBOL"
@@ -82,7 +75,6 @@ sig_rankdensity_plot(
   data,
   sigs,
   group_col,
-  normalize = FALSE,
   aggregate = FALSE,
   slot = "counts",
   gene_id = "SYMBOL"
@@ -92,7 +84,6 @@ sig_rankdensity_plot(
   data,
   sigs,
   group_col,
-  normalize = FALSE,
   aggregate = FALSE,
   slot = "counts",
   gene_id = "SYMBOL"
@@ -104,9 +95,6 @@ sig_rankdensity_plot(
 \item{sigs}{a vector of signature (Symbols)}
 
 \item{group_col}{character or vector, specify the column name to compare in coldata}
-
-\item{normalize}{logical, TRUE indicates raw counts data to normalize and
-calculate cpm}
 
 \item{aggregate}{logical, if to aggregate expression according to \code{group_col},
 default FALSE}

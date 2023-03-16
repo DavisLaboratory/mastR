@@ -20,7 +20,6 @@ setGeneric("sig_rankdensity_plot",
            function(data,
                     sigs,
                     group_col,
-                    normalize = FALSE,
                     aggregate = FALSE,
                     slot = "counts",
                     gene_id = "SYMBOL")
@@ -35,14 +34,12 @@ setMethod("sig_rankdensity_plot", signature(
 function(data,
          sigs,
          group_col,
-         normalize = FALSE,
          aggregate = FALSE,
          gene_id = "SYMBOL") {
 
-  stopifnot(is.character(gene_id), is.logical(normalize), is.logical(aggregate))
+  stopifnot(is.character(gene_id), is.logical(aggregate))
 
   p <- rankdensity_init(expr = data, sigs = sigs, by = group_col,
-                        normalize = normalize,
                         aggregate = aggregate, gene_id = gene_id)
 
   return(p)
@@ -57,14 +54,12 @@ setMethod("sig_rankdensity_plot", signature(
 function(data,
          sigs,
          group_col,
-         normalize = FALSE,
          aggregate = FALSE,
          gene_id = "SYMBOL") {
 
-  stopifnot(is.character(gene_id), is.logical(normalize), is.logical(aggregate))
+  stopifnot(is.character(gene_id), is.logical(aggregate))
 
   p <- rankdensity_init(expr = data, sigs = sigs, by = group_col,
-                        normalize = normalize,
                         aggregate = aggregate, gene_id = gene_id)
 
   return(p)
@@ -79,15 +74,13 @@ setMethod("sig_rankdensity_plot", signature(
 function(data,
          sigs,
          group_col,
-         normalize = FALSE,
          aggregate = FALSE,
          gene_id = "SYMBOL") {
 
-  stopifnot(is.character(gene_id), is.logical(normalize), is.logical(aggregate))
+  stopifnot(is.character(gene_id), is.logical(aggregate))
 
   p <- rankdensity_init(expr = as.matrix(data), sigs = sigs, by = group_col,
-                        normalize = normalize, aggregate = aggregate,
-                        gene_id = gene_id)
+                        aggregate = aggregate, gene_id = gene_id)
 
   return(p)
 })
@@ -101,16 +94,14 @@ setMethod("sig_rankdensity_plot", signature(
 function(data,
          sigs,
          group_col,
-         normalize = FALSE,
          aggregate = FALSE,
          slot = "counts",
          gene_id = "SYMBOL") {
 
-  stopifnot(is.character(gene_id), is.logical(normalize), is.logical(aggregate))
+  stopifnot(is.character(gene_id), is.logical(aggregate))
 
   p <- sig_rankdensity_plot(data = data[[slot]], sigs = sigs,
                             group_col = data$samples[[group_col]],
-                            normalize = normalize,
                             aggregate = aggregate, gene_id = gene_id)
 
   return(p)
@@ -125,15 +116,13 @@ setMethod("sig_rankdensity_plot", signature(
 function(data,
          sigs,
          group_col,
-         normalize = FALSE,
          aggregate = FALSE,
          gene_id = "SYMBOL") {
 
-  stopifnot(is.character(gene_id), is.logical(normalize), is.logical(aggregate))
+  stopifnot(is.character(gene_id), is.logical(aggregate))
 
   p <- sig_rankdensity_plot(data = Biobase::exprs(data), sigs = sigs,
                             group_col = data[[group_col]],
-                            normalize = normalize,
                             aggregate = aggregate, gene_id = gene_id)
 
   return(p)
@@ -148,16 +137,15 @@ setMethod("sig_rankdensity_plot", signature(
 function(data,
          sigs,
          group_col,
-         normalize = FALSE,
          aggregate = FALSE,
          slot = "counts",
          gene_id = "SYMBOL") {
 
-  stopifnot(is.character(gene_id), is.logical(normalize), is.logical(aggregate))
+  stopifnot(is.character(gene_id), is.logical(aggregate))
 
   p <- sig_rankdensity_plot(data = Seurat::GetAssayData(data, slot = slot),
                             sigs = sigs, group_col = data@meta.data[[group_col]],
-                            normalize = normalize, aggregate = aggregate,
+                            aggregate = aggregate,
                             gene_id = gene_id)
 
   return(p)
@@ -172,17 +160,15 @@ setMethod("sig_rankdensity_plot", signature(
 function(data,
          sigs,
          group_col,
-         normalize = FALSE,
          aggregate = FALSE,
          slot = "counts",
          gene_id = "SYMBOL") {
 
-  stopifnot(is.character(gene_id), is.logical(normalize), is.logical(aggregate))
+  stopifnot(is.character(gene_id), is.logical(aggregate))
 
   p <- sig_rankdensity_plot(data = SummarizedExperiment::assay(data, slot),
                             sigs = sigs, group_col = data@colData[[group_col]],
-                            normalize = normalize, aggregate = aggregate,
-                            gene_id = gene_id)
+                            aggregate = aggregate, gene_id = gene_id)
 
   return(p)
 })
@@ -196,15 +182,12 @@ setMethod("sig_rankdensity_plot", signature(
 function(data,
          sigs,
          group_col,
-         normalize = FALSE,
          aggregate = FALSE,
          slot = "counts",
          gene_id = "SYMBOL") {
 
-  stopifnot(is.character(gene_id), is.logical(normalize), is.logical(aggregate))
+  stopifnot(is.character(gene_id), is.logical(aggregate))
 
-  if(length(normalize) == 1)
-    normalize <- rep(normalize, length(data))
   if(length(group_col) == 1)
     group_col <- rep(group_col, length(data))
   if(length(slot) == 1)
@@ -218,7 +201,6 @@ function(data,
   for (i in seq_along(data)) {
     p[[i]] <- sig_rankdensity_plot(data = data[[i]], sigs = sigs,
                                    group_col = group_col[[i]],
-                                   normalize = normalize[i],
                                    slot = slot[i],
                                    aggregate = aggregate[i],
                                    gene_id = gene_id[i])
