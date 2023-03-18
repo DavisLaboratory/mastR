@@ -107,9 +107,9 @@ sig_scatter_plot(
 
 \item{slot}{character, indicate which slot used as expression, optional}
 
-\item{xint}{intercept of vertical dashed line}
+\item{xint}{intercept of vertical dashed line, default 1}
 
-\item{yint}{intercept of horizontal dashed line}
+\item{yint}{intercept of horizontal dashed line, default 1}
 
 \item{gene_id}{character, indicate the ID type of rowname of expression data's ,
 could be one of 'ENSEMBL', 'SYMBOL', ... default 'SYMBOL'}

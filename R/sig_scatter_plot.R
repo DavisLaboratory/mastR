@@ -8,8 +8,8 @@ NULL
 #'   the specific subset against other cell types.
 #'
 #' @inheritParams sig_boxplot
-#' @param xint intercept of vertical dashed line
-#' @param yint intercept of horizontal dashed line
+#' @param xint intercept of vertical dashed line, default 1
+#' @param yint intercept of horizontal dashed line, default 1
 #'
 #' @return patchwork or ggplot of scatter plot of median expression
 #'
@@ -47,6 +47,8 @@ function(data,
          xint = 1,
          yint = 1,
          gene_id = "SYMBOL") {
+  ## scale data by row
+  data <- t(scale(t(data)))
 
   p <- scatter_plot_init(expr = data, sigs = sigs,
                          target_group = target_group,
@@ -70,10 +72,11 @@ function(data,
          yint = 1,
          gene_id = "SYMBOL") {
 
-  p <- scatter_plot_init(expr = data, sigs = sigs,
-                         target_group = target_group,
-                         by = group_col, xint = xint, yint = yint,
-                         gene_id = gene_id)
+  p <- sig_scatter_plot(data = as.matrix(data), sigs = sigs,
+                        group_col = group_col,
+                        target_group = target_group,
+                        xint = xint, yint = yint,
+                        gene_id = gene_id)
   return(p)
 })
 
@@ -93,11 +96,11 @@ function(data,
          yint = 1,
          gene_id = "SYMBOL") {
 
-  p <- scatter_plot_init(expr = data[[slot]], sigs = sigs,
-                         target_group = target_group,
-                         by = data$samples[[group_col]],
-                         xint = xint, yint = yint,
-                         gene_id = gene_id)
+  p <- sig_scatter_plot(data = data[[slot]], sigs = sigs,
+                        group_col = data$samples[[group_col]],
+                        target_group = target_group,
+                        xint = xint, yint = yint,
+                        gene_id = gene_id)
   return(p)
 })
 
@@ -116,11 +119,12 @@ function(data,
          yint = 1,
          gene_id = "SYMBOL") {
 
-  p <- scatter_plot_init(expr = Biobase::exprs(data),
-                         sigs = sigs,
-                         target_group = target_group, by = data[[group_col]],
-                         xint = xint, yint = yint,
-                         gene_id = gene_id)
+  p <- sig_scatter_plot(data = Biobase::exprs(data),
+                        sigs = sigs,
+                        group_col = data[[group_col]],
+                        target_group = target_group,
+                        xint = xint, yint = yint,
+                        gene_id = gene_id)
   return(p)
 })
 
@@ -140,12 +144,12 @@ function(data,
          yint = 1,
          gene_id = "SYMBOL") {
 
-  p <- scatter_plot_init(expr = Seurat::GetAssayData(data, slot = slot),
-                         sigs = sigs,
-                         target_group = target_group,
-                         by = data@meta.data[[group_col]],
-                         xint = xint, yint = yint,
-                         gene_id = gene_id)
+  p <- sig_scatter_plot(data = Seurat::GetAssayData(data, slot = slot),
+                        sigs = sigs,
+                        group_col = data@meta.data[[group_col]],
+                        target_group = target_group,
+                        xint = xint, yint = yint,
+                        gene_id = gene_id)
   return(p)
 })
 
@@ -165,12 +169,12 @@ function(data,
          yint = 1,
          gene_id = "SYMBOL") {
 
-  p <- scatter_plot_init(expr = SummarizedExperiment::assay(data, slot),
-                         sigs = sigs,
-                         target_group = target_group,
-                         by = data@colData[[group_col]],
-                         xint = xint, yint = yint,
-                         gene_id = gene_id)
+  p <- sig_scatter_plot(data = SummarizedExperiment::assay(data, slot),
+                        sigs = sigs,
+                        group_col = data@colData[[group_col]],
+                        target_group = target_group,
+                        xint = xint, yint = yint,
+                        gene_id = gene_id)
   return(p)
 })
 

@@ -331,7 +331,7 @@ plot_diagnostics <- function(expr1, expr2, group_col, abl = 2) {
   p1 <- plot_density_init(data1, data2, abl)
   ## boxplot of RLE
   p2 <- plot_rle_init(expr1, group_col) + ggtitle("Original data") +
-    plot_rle_init(expr1, group_col) + ggtitle("Processed data") +
+    plot_rle_init(expr2, group_col) + ggtitle("Processed data") +
     patchwork::plot_layout(guides = "collect", ncol = 1)
   ## MDS plot
   p3 <- plot_MDS_init(expr1, expr2, group_col)
