@@ -43,9 +43,6 @@
     <loc>/reference/de_analysis.html</loc>
   </url>
   <url>
-    <loc>/reference/filter_non_tissue.html</loc>
-  </url>
-  <url>
     <loc>/reference/filter_subset_sig.html</loc>
   </url>
   <url>
@@ -113,6 +110,9 @@
   </url>
   <url>
     <loc>/reference/pseudo_samples.html</loc>
+  </url>
+  <url>
+    <loc>/reference/remove_bg_snr.html</loc>
   </url>
   <url>
     <loc>/reference/select_sig.html</loc>

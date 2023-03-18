@@ -86,7 +86,7 @@ Biology, University of Melbourne, Parkville, VIC 3010,
 Australia<br><a class="author_email" href="mailto:#"></a><a href="mailto:chen.j@wehi.edu.au" class="email">chen.j@wehi.edu.au</a>
       </address>
                   
-            <h4 data-toc-skip class="date">16 Mar 2023</h4>
+            <h4 data-toc-skip class="date">18 Mar 2023</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DavisLaboratory/mastR/blob/HEAD/vignettes/mastR_Demo.Rmd" class="external-link"><code>vignettes/mastR_Demo.Rmd</code></a></small>
       <div class="hidden name"><code>mastR_Demo.Rmd</code></div>
@@ -99,7 +99,25 @@ Australia<br><a class="author_email" href="mailto:#"></a><a href="mailto:chen.j@
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <hr>
-<p><strong>Why do we need imm sigs (cell type)</strong></p>
+<p><strong>Why do we need group markers</strong></p>
+<p>Identifying marker genes for specific groups is crucial in various
+biological and medical applications, as it allows us to distinguish
+between different cell types or disease states.</p>
+<p>For example, in cancer research, identifying marker genes that are
+differentially expressed between cancer cells and normal cells can help
+diagnose and monitor the progression of the disease, as well as identify
+potential therapeutic targets. Similarly, in developmental biology,
+identifying marker genes that are specific to certain cell types or
+stages can help us understand the underlying mechanisms of
+differentiation and development.</p>
+<p>Furthermore, marker genes can also be used in diagnostic assays to
+detect specific diseases or monitor treatment responses. For instance,
+the presence of certain marker genes in a patient’s blood or tissue
+sample can indicate the presence or progression of a disease.</p>
+<p>Overall, identifying marker genes for specific groups is crucial for
+understanding biological processes, diagnosing diseases, and developing
+targeted therapies.</p>
+<p><strong>Why do we need immune signature (cell type)</strong></p>
 <p>The tumor microenvironment (TME) is made up of a diverse range of
 cell types (fibroblasts, epithelial cells, endothelial cells, and immune
 cells) as well as various extracellular components (collagens, growth
@@ -137,8 +155,11 @@ signature for researchers interest, which can save a lot of time and
 manual labor work.</p>
 <p><strong>What this package does</strong></p>
 <p><em>mastR</em>, MArkers Screening Tool in R, is a package to
-automatically derive signature for (immune) cell type in (cancer)
-tissues.</p>
+automatically derive signature for specific group of interest in
+specific tissue.</p>
+<p>With mastR, users can simply input their expression data containing
+the groups of interest, along with group labels, to obtain a list of
+marker genes (signature) for the target group.</p>
 <p>Although there’re a lot of tools developed to generate cell type
 specific markers, they are all designed for scRNA-seq data. And most of
 them utilize machine learning to select features contributing to the
@@ -160,33 +181,37 @@ refined by keeping top n DEGs in specified comparison(s), which can help
 to improve the discrimination between similar cell types.</p>
 <p>Another novel point of mastR is that all of the current markers
 generation tools only consider the genes contribution to the
-classification, but ignore the tissue-specificity. However, mastR can
-utilize the updated Cancer Cell Line Encyclopedia (CCLE) to filter out
-those genes with high expression in cancer cell lines. Those genes might
-confound immune infiltration with tumor purity when apply the signature
-on cancer patient sample. So it will be better to remove them and only
-keep the signature genes specific to immune cells only.</p>
+classification, but ignore the background noise of tissue-specificity.
+mastR offers a background noise removal function, designed to eliminate
+parts of the marker genes that are highly expressed in specific tissues
+or cancer cells, thereby avoiding potential confusion caused by
+background or sample purity in specific tissue applications.</p>
 <p>mastR also allows people to build a markers pool before signature
 screening, which might contain all of potential markers or interesting
 genes. The final signature will be integrated with this pool (by
 intersection), which can help to constrain the final signature within
 the interested pathway-related genes or functional gene-sets. People can
 borrow the published knowledge to build this.</p>
+<p>The need for this package arises from the importance of identifying
+specific genes that are differentially expressed in different groups or
+tissues, as these genes can serve as biomarkers for diagnosis,
+prognosis, and therapeutic targeting. However, identifying marker genes
+can be a challenging and time-consuming task, and the presence of
+background noise can lead to erroneous results. Our package simplifies
+and streamlines this process, allowing researchers to focus on their
+analyses and interpretations without the burden of manual marker gene
+selection and background noise removal.</p>
 <p>This report demonstrates the main functions of mastR 0.9.0.</p>
 <p>As a simple demo, here the report will specifically demonstrate the
 signature screening workflow of NK cells in colorectal cancer (CRC),
 then assess the final result by using some visualization functions.</p>
 <p><strong>How does mastR screen the signature</strong></p>
 <ul>
-<li>step 1. markers pool generation<br>
+<li>step 1. generate markers pool<br>
 </li>
-<li>step 2. screen markers for group specificity<br>
+<li>step 2. screen markers from the pool<br>
 </li>
-<li>step 3. screen markers for cancer/tissue specificity<br>
-</li>
-<li>step 4. combine results of step 2 &amp; 3<br>
-</li>
-<li>step 5. visualize signature performance</li>
+<li>step 3. visualize signature performance</li>
 </ul>
 <p><strong>Applications</strong></p>
 <ul>
@@ -537,10 +562,13 @@ specificity.</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="step-2--specify-markers-against-other-cell-subsets">Step 2. Specify Markers Against Other Cell Subsets<a class="anchor" aria-label="anchor" href="#step-2--specify-markers-against-other-cell-subsets"></a>
+<h2 id="step-2--screen-markers-from-the-markers-pool">Step 2. Screen Markers from the Markers Pool<a class="anchor" aria-label="anchor" href="#step-2--screen-markers-from-the-markers-pool"></a>
 </h2>
+<div class="section level3">
+<h3 id="screen-markers-against-other-groups">Screen Markers Against Other Groups<a class="anchor" aria-label="anchor" href="#screen-markers-against-other-groups"></a>
+</h3>
 <hr>
-<p>For cell subset specificity, there’re 4 main steps:</p>
+<p>For group specificity, there’re 4 main steps:</p>
 <ul>
 <li><ol style="list-style-type: lower-alpha">
 <li>process data: filtration, normalization, sample weighting and linear
@@ -564,6 +592,8 @@ samples generated by DICE from pure populations of human immune cells,
 can be used to as input data. It can be loaded by function
 <code>celldex::DatabaseImmuneCellExpressionData()</code>, which contains
 5 main cell types and 15 fine cell types.</p>
+<p><strong><em>Notice</em></strong>: all input data must be raw counts
+data or log-transformed expression data.</p>
 <p>In this demo, we use our imported example data <code>im_data_6</code>
 from <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE60424" class="external-link">GSE60424</a>
 as input. Only samples from healthy individuals are kept, and ‘Whole
@@ -591,18 +621,20 @@ details in <code><a href="../reference/im_data_6.html">?mastR::im_data_6</a></co
 <span><span class="co">#&gt; experimentData: use 'experimentData(object)'</span></span>
 <span><span class="co">#&gt;   pubMedIds: 25314013 </span></span>
 <span><span class="co">#&gt; Annotation: GPL15456</span></span></code></pre></div>
-<div class="section level3">
-<h3 id="process-data">process data<a class="anchor" aria-label="anchor" href="#process-data"></a>
-</h3>
+<div class="section level4">
+<h4 id="process">process data<a class="anchor" aria-label="anchor" href="#process"></a>
+</h4>
 <p>To screen signature for cell subset specificity, some processes need
 to be done on the data first.</p>
 <p><code><a href="../reference/process_data.html">process_data()</a></code> provided by mastR can do the genes
 filtration, data normalization, samples weighting, linear model fit and
 the computation of gene differential expression statistic for you.</p>
-<p>It will return a <code>DGEList</code> object with filtered counts
-(unfiltered counts data will be saved under “original”), vfit
-(<code><a href="https://rdrr.io/pkg/limma/man/voom.html" class="external-link">limma::voom()</a></code> is done), tfit (<code><a href="https://rdrr.io/pkg/limma/man/lmFit.html" class="external-link">limma::lmFit()</a></code>
-and <code><a href="https://rdrr.io/pkg/limma/man/ebayes.html" class="external-link">limma::treat()</a></code> are done).</p>
+<p>Users need to provide an expression data with sample group labels
+(containing interested target group), then it will return a
+<code>DGEList</code> object with filtered counts (unfiltered counts data
+will be saved under “original”), vfit (<code><a href="https://rdrr.io/pkg/limma/man/voom.html" class="external-link">limma::voom()</a></code> is
+done), tfit (<code><a href="https://rdrr.io/pkg/limma/man/lmFit.html" class="external-link">limma::lmFit()</a></code> and <code><a href="https://rdrr.io/pkg/limma/man/ebayes.html" class="external-link">limma::treat()</a></code>
+are done).</p>
 <p>What this function does is:</p>
 <ul>
 <li><p>Data will be filtered by the given cutoff, all gene with low
@@ -664,11 +696,14 @@ when markers is not NULL, could be one of ‘ENSEMBL’, ‘SYMBOL’,
 <span><span class="co">#&gt; Down             4012         3949       3146   2698   2155</span></span>
 <span><span class="co">#&gt; NotSig           1492         2694       4429   5001   6201</span></span>
 <span><span class="co">#&gt; Up               4945         3806       2874   2750   2093</span></span>
-<span><span class="co"># summary(limma::decideTests(proc_data$tfit))</span></span></code></pre></div>
+<span><span class="co"># summary(limma::decideTests(proc_data$tfit))</span></span>
+<span></span>
+<span><span class="co">## add voom fitted expression as a new list of proc_data for use</span></span>
+<span><span class="va">proc_data</span><span class="op">$</span><span class="va">voomE</span> <span class="op">&lt;-</span> <span class="va">proc_data</span><span class="op">$</span><span class="va">vfit</span><span class="op">$</span><span class="va">E</span></span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="visualize-qc-before-and-after">visualize QC before and after<a class="anchor" aria-label="anchor" href="#visualize-qc-before-and-after"></a>
-</h3>
+<div class="section level4">
+<h4 id="visualize-qc-before-and-after">visualize QC before and after<a class="anchor" aria-label="anchor" href="#visualize-qc-before-and-after"></a>
+</h4>
 <p>After data processing, we need to check whether the data has been
 well filtered , normalized and fitted.</p>
 <p>mastR provides visualization functions for this, to compare the data
@@ -679,7 +714,7 @@ done.</p>
 distribution, RLE and MDS plots.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">expr1</span> <span class="op">&lt;-</span> <span class="fu">edgeR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/edgeR/man/cpm.html" class="external-link">cpm</a></span><span class="op">(</span><span class="va">im_data_6</span><span class="op">@</span><span class="va">assayData</span><span class="op">$</span><span class="va">exprs</span>, log <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co">## or proc_data$original_counts</span></span>
-<span><span class="va">expr2</span> <span class="op">&lt;-</span> <span class="va">proc_data</span><span class="op">$</span><span class="va">vfit</span><span class="op">$</span><span class="va">E</span></span>
+<span><span class="va">expr2</span> <span class="op">&lt;-</span> <span class="va">proc_data</span><span class="op">$</span><span class="va">voomE</span></span>
 <span><span class="co">## plot expression distribution, RLE and MDS</span></span>
 <span><span class="fu"><a href="../reference/plot_diagnostics.html">plot_diagnostics</a></span><span class="op">(</span></span>
 <span>  <span class="va">expr1</span>,</span>
@@ -703,6 +738,7 @@ show the linear fit result.</p>
 <p>PCA can be plot by <code><a href="../reference/pca_matrix_plot.html">pca_matrix_plot()</a></code> to show the
 normalization result and if the samples can be clustered by groups. You
 can select how many top n PCs to be plot by param <code>n</code>.</p>
+<p>The input for this function should be log-normalized.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## plot PCA</span></span>
 <span><span class="co">## before process</span></span>
@@ -713,9 +749,9 @@ can select how many top n PCs to be plot by param <code>n</code>.</p>
 <span><span class="fu"><a href="../reference/pca_matrix_plot.html">pca_matrix_plot</a></span><span class="op">(</span><span class="va">expr2</span>, group_by <span class="op">=</span> <span class="va">proc_data</span><span class="op">$</span><span class="va">samples</span><span class="op">$</span><span class="va">celltype.ch1</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <p><img src="mastR_Demo_files/figure-html/plot%20PCA%20mat-2.png" width="768"></p>
 </div>
-<div class="section level3">
-<h3 id="select-signature-genes">select signature genes<a class="anchor" aria-label="anchor" href="#select-signature-genes"></a>
-</h3>
+<div class="section level4">
+<h4 id="selection">select signature genes<a class="anchor" aria-label="anchor" href="#selection"></a>
+</h4>
 <p>Now we get processed data with DE statistic for each gene in each
 comparison, then the proc_data can be passed into
 <code><a href="../reference/select_sig.html">select_sig()</a></code> function for further genes selection based on
@@ -732,7 +768,7 @@ and switch to “none” if the number of final “UP” and “DOWN” genes ar
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## get the same result as there's permutation test for rank product</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
-<span><span class="va">sig_ct</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/select_sig.html">select_sig</a></span><span class="op">(</span>tfit <span class="op">=</span> <span class="va">proc_data</span><span class="op">)</span></span>
+<span><span class="va">sig_ct</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/select_sig.html">select_sig</a></span><span class="op">(</span><span class="va">proc_data</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sig_ct</span><span class="op">)</span></span>
 <span><span class="co">#&gt; GeneSetCollection</span></span>
@@ -741,22 +777,21 @@ and switch to “none” if the number of final “UP” and “DOWN” genes ar
 <span><span class="co">#&gt;   types in collection:</span></span>
 <span><span class="co">#&gt;     geneIdType: NullIdentifier (1 total)</span></span>
 <span><span class="co">#&gt;     collectionType: NullCollection (1 total)</span></span></code></pre></div>
-<p><strong><em>Note</em></strong>: All above steps from 4.1.1 to 4.1.3
-for screening cell subset signature can be done by one integrated
-function <code><a href="../reference/get_degs.html">get_degs()</a></code>.</p>
+<p><strong><em>Note</em></strong>: All above steps from @ref(process) to
+@ref(selection) for screening group signature can be done by one
+integrated function <code><a href="../reference/get_degs.html">get_degs()</a></code>.</p>
 <p><code><a href="../reference/get_degs.html">get_degs()</a></code> function can filter low expression genes out
 from immune dataset, normalize and fit voom model to data if
 <code>normalize = TRUE</code>, then a processed data
 <code>proc_data</code> object and a differentially expressed
 GeneSetCollection (‘UP’ and ‘DOWN’) will be returned as output.</p>
-<p>Plot can also be done at the same time by setting optional param
+<p>QC plots can also be shown at the same time by setting optional param
 <code>plot = TRUE</code>.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">DEG_6</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_degs.html">get_degs</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">im_data_6</span>,  </span>
 <span>  group_col <span class="op">=</span> <span class="st">"celltype:ch1"</span>,</span>
 <span>  target_group <span class="op">=</span> <span class="st">"NK"</span>, </span>
-<span>  plot <span class="op">=</span> <span class="cn">TRUE</span>, <span class="co">## show QC plots after filtration</span></span>
 <span>  markers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span>,</span>
 <span>  gene_id <span class="op">=</span> <span class="st">"ENSEMBL"</span>  <span class="co">## convert ensembl IDs of rownames into symbols if gene_id != "SYMBOL"</span></span>
 <span><span class="op">)</span></span>
@@ -767,9 +802,9 @@ GeneSetCollection (‘UP’ and ‘DOWN’) will be returned as output.</p>
 <span><span class="fu">GSEABase</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">DEG_6</span><span class="op">$</span><span class="va">DEGs</span><span class="op">)</span></span>
 <span><span class="va">DEG_6</span><span class="op">$</span><span class="va">proc_data</span><span class="op">$</span><span class="va">vfit</span><span class="op">$</span><span class="va">design</span> <span class="co">## show the design matrix</span></span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="intersect-pool">intersect with markers pool<a class="anchor" aria-label="anchor" href="#intersect-pool"></a>
-</h3>
+<div class="section level4">
+<h4 id="intersect-pool">intersect with markers pool<a class="anchor" aria-label="anchor" href="#intersect-pool"></a>
+</h4>
 <p>After getting specific signature genes for the target group, we will
 only keep those UP regulated genes which are also present in our markers
 pool <code>Markers</code>, to constrain the final signature wthin the
@@ -830,104 +865,142 @@ datasets.</p>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
-<div class="section level2">
-<h2 id="step-3--specify-markers-against-tissue">Step 3. Specify Markers Against Tissue<a class="anchor" aria-label="anchor" href="#step-3--specify-markers-against-tissue"></a>
-</h2>
-<p>After screening signature for cell subset specificity, we need to
-increase the tissue specificity for the signature now, what we need to
-do is:</p>
+<div class="section level3">
+<h3 id="remove-markers-with-background-noise-in-tissue-optional">Remove Markers with Background Noise in Tissue (optional)<a class="anchor" aria-label="anchor" href="#remove-markers-with-background-noise-in-tissue-optional"></a>
+</h3>
+<p>After screening signature for group specificity, we need to increase
+the tissue specificity by removing background noise for the signature
+now, what we need to do is:</p>
 <ul>
-<li>filter out cancer cell expressed genes<br>
-Collect all interested cancer cell lines from CCLE (default), compute
-the quantile (25% percentile default) expression of all non-0 expressed
-genes. Only keep genes with median expression &lt; quantile cutoff in
-cancer cells. Then keep the intersected genes with markers pool.<br>
-By doing this, we can guarantee the activity of our final signature for
-infiltrating immune cells won’t be affected by tumor purity when it’s
-applied on tumor samples.<br>
+<li>
+<p>filter out cancer cell expressed genes</p>
+<p>In order to remove background noise from the marker genes, we
+utilized a signal-to-noise ratio (SNR) approach to filter out genes with
+low SNR values. This was done to eliminate genes that have similar
+expression patterns across the target group and background tissues,
+which may be due to non-specific expression or technical artifacts.</p>
+<p>The SNR is calculated as the difference between the mean expression
+value of the group of interest and the mean expression value of the
+background group, divided by the standard deviation of the background
+group. Genes with low SNR values are considered to have low
+discriminative power between the group of interest and the background
+group, and are therefore filtered out.</p>
+<p>By removing genes with low SNR values, we are able to improve the
+specificity and accuracy of the marker genes, as well as reduce
+potential confounding effects caused by non-specific expression or
+technical artifacts. This approach is commonly used in gene expression
+analysis to improve the reliability of differential expression analysis
+and biomarker identification.</p>
+<p>By doing this, we can guarantee the activity of our final signature
+for infiltrating immune cells won’t be affected by tumor purity when
+it’s applied on tumor samples.</p>
 </li>
-<li>optional<br>
-DE analysis to compare tumor infiltrating immune cells vs normal immune
-cells (e.g. PBMC or normal tissue resident immune cells), add DEGs into
-markers pool or combine it with the result of step 2. to increase
-tissue/cancer specificity.</li>
+<li>
+<p>optional</p>
+<p>DE analysis to compare tumor infiltrating immune cells vs normal
+immune cells (e.g. PBMC or normal tissue resident immune cells), add
+DEGs into markers pool or combine it with the result of step 2. to
+increase tissue/cancer specificity.</p>
+</li>
 </ul>
-<p>mastR provides function <code><a href="../reference/filter_non_tissue.html">filter_non_tissue()</a></code> to remove
-cancer cells expressing genes from the markers pool. This can ensure our
-immune signature won’t be affected by tumor purity.</p>
-<p>Based on the <code>data</code> input format, this function can be
+<p>mastR provides function <code><a href="../reference/remove_bg_snr.html">remove_bg_snr()</a></code> to remove genes
+with background noise in cancer cells or tissues. Users need to provide
+a data as signal data (e.g. immune cell data) and a data as background
+noise data (e.g. cancer cells or tissue cells), then
+<code><a href="../reference/remove_bg_snr.html">remove_bg_snr()</a></code> will compute SNR (signal to noise ratio)
+for each gene in the given markers, and remove those genes with low SNR.
+This can ensure our immune signature won’t be affected by tumor
+purity.</p>
+<p>Based on the <code>bg_data</code> input format, this function can be
 used in 2 ways:</p>
 <ul>
-<li>use CCLE as input<br>
+<li>use CCLE as <code>bg_data</code> input<br>
 </li>
-<li>use customized data as input</li>
+<li>use customized data as <code>bg_data</code> input</li>
 </ul>
-<div class="section level3">
-<h3 id="use-ccle-as-input">use CCLE as input<a class="anchor" aria-label="anchor" href="#use-ccle-as-input"></a>
-</h3>
-<p>The default setting of this <code><a href="../reference/filter_non_tissue.html">filter_non_tissue()</a></code> uses
-CCLE from <a href="https://depmap.org/portal/download/" class="external-link">DepMap CCLE</a>,
+<div class="section level4">
+<h4 id="use-ccle-as-bg_data">use CCLE as bg_data<a class="anchor" aria-label="anchor" href="#use-ccle-as-bg_data"></a>
+</h4>
+<p>The default setting of this <code><a href="../reference/remove_bg_snr.html">remove_bg_snr()</a></code> uses CCLE
+from <a href="https://depmap.org/portal/download/" class="external-link">DepMap CCLE</a>,
 containing RSEM quantified TPM data of 1392 cancer cell lines (until
 2022.04).</p>
 <p>The Cancer Cell Line Encyclopedia (CCLE) is a compilation of gene
 expression, chromosomal copy number and massively parallel sequencing
 data from more than 1,000 human cancer cell lines.</p>
 <p>To specify cell subset markers for cancer type, use
-<code><a href="../reference/filter_non_tissue.html">filter_non_tissue()</a></code> function to remove failing genes which
-are also highly expressed by CRC adherent cell lines <em>per se</em>.
-This can ensure our immune signature won’t be affected by tumor
-purity.</p>
+<code><a href="../reference/remove_bg_snr.html">remove_bg_snr()</a></code> function to remove failing genes which are
+also highly expressed by CRC adherent cell lines <em>per se</em>. This
+can ensure our immune signature won’t be affected by tumor purity.</p>
 <ul>
 <li>
-<code>data</code> can be either “CCLE” or expression dataset,
+<code>bg_data</code> can be either “CCLE” or expression dataset,
 e.g. matrix, eSet, DGEList, Seurat and so on.<br>
 </li>
 <li>
-<code>group_col</code> param is the group vector of input samples,
-or the name of group column.<br>
+<code>sig_data</code> can be a matrix or DGEList, as signal data,
+always use processed data after <code><a href="../reference/process_data.html">process_data()</a></code>.</li>
+<li>
+<code>b_group_col</code> param is the group vector of
+<code>bg_data</code> samples, or the name of group column.<br>
 </li>
 <li>
-<code>target_group</code> param is an expression pattern to specify
-the tissue of interest, here we choose ‘colorectal’ to select all
-colorectal adherent cell lines.<br>
+<code>b_target_group</code> param is an regex pattern to specify the
+samples of interest, e.g. choose ‘colorectal’ to select all colorectal
+adherent cell lines from CCLE.<br>
 </li>
 <li>
-<code>ignore.case</code> means whether to ignore the capital or
-not.<br>
-</li>
+<code>s_group_col</code> is a vector or character, to specify the
+group of target_group in <code>sig_data</code>, or the name of group
+column.</li>
 <li>
-<code>log = FALSE</code> will not do log transformation to the
-data.<br>
-</li>
+<code>s_target_group</code> is a regex pattern, to specify the
+target group of interest in <code>sig_data</code>.</li>
 <li>
-<code>q</code> param is the threshold to remove failing genes. 0.25
-means removing markers with median expression &gt;= 25% percentile of
-non-zero expression of all genes.<br>
-</li>
+<code>markers</code> is the genes need to be filtered, should be
+gene symbols.</li>
 <li>
-<code>markers</code> param is the markers pool.</li>
+<code>snr</code> param is the the cutoff of SNR to screen markers
+which are not or lowly expressed in bg_data.</li>
 </ul>
+<p><strong><em>Note</em></strong>: Both of <code>bg_data</code> and
+<code>sig_data</code> should be log-normalized.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## load CCLE data</span></span>
 <span><span class="va">CCLE</span> <span class="op">&lt;-</span> <span class="fu">depmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/depmap/man/TPM.html" class="external-link">depmap_TPM</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">CCLE_meta</span> <span class="op">&lt;-</span> <span class="fu">depmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/depmap/man/metadata.html" class="external-link">depmap_metadata</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">## filter</span></span>
-<span><span class="va">m_ccl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filter_non_tissue.html">filter_non_tissue</a></span><span class="op">(</span>data <span class="op">=</span> <span class="st">"CCLE"</span>,</span>
-<span>                           group_col <span class="op">=</span> <span class="st">"primary_disease"</span>,</span>
-<span>                           target_group <span class="op">=</span> <span class="st">"colorectal"</span>,</span>
-<span>                           markers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span>,</span>
-<span>                           ccle_tpm <span class="op">=</span> <span class="va">CCLE</span>, <span class="co">## only provided when data = 'CCLE'</span></span>
-<span>                           ccle_meta <span class="op">=</span> <span class="va">CCLE_meta</span><span class="op">)</span></span>
+<span><span class="va">m_ccl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/remove_bg_snr.html">remove_bg_snr</a></span><span class="op">(</span>bg_data <span class="op">=</span> <span class="st">"CCLE"</span>,</span>
+<span>                       sig_data <span class="op">=</span> <span class="va">proc_data</span>,</span>
+<span>                       b_group_col <span class="op">=</span> <span class="st">"primary_disease"</span>,</span>
+<span>                       b_target_group <span class="op">=</span> <span class="st">"colorectal"</span>,</span>
+<span>                       s_group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>,</span>
+<span>                       s_target_group <span class="op">=</span> <span class="st">"NK"</span>,</span>
+<span>                       markers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span>,</span>
+<span>                       filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span>, <span class="co">## needed when bg_data is 'CCLE'</span></span>
+<span>                       gene_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SYMBOL"</span>, <span class="st">"ENSEMBL"</span><span class="op">)</span>,</span>
+<span>                       s_slot <span class="op">=</span> <span class="st">"voomE"</span>,</span>
+<span>                       ccle_tpm <span class="op">=</span> <span class="va">CCLE</span>, <span class="co">## only provided when data = 'CCLE'</span></span>
+<span>                       ccle_meta <span class="op">=</span> <span class="va">CCLE_meta</span><span class="op">)</span></span>
 <span><span class="co">## or without loading CCLE yourself</span></span>
-<span><span class="va">m_ccl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filter_non_tissue.html">filter_non_tissue</a></span><span class="op">(</span>group_col <span class="op">=</span> <span class="st">"primary_disease"</span>,</span>
-<span>                           target_group <span class="op">=</span> <span class="st">"colorectal"</span>,</span>
-<span>                           markers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">m_ccl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/remove_bg_snr.html">remove_bg_snr</a></span><span class="op">(</span>sig_data <span class="op">=</span> <span class="va">proc_data</span>,</span>
+<span>                       b_group_col <span class="op">=</span> <span class="st">"primary_disease"</span>,</span>
+<span>                       b_target_group <span class="op">=</span> <span class="st">"colorectal"</span>,</span>
+<span>                       s_group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>,</span>
+<span>                       s_target_group <span class="op">=</span> <span class="st">"NK"</span>,</span>
+<span>                       markers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span>,</span>
+<span>                       filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span>,</span>
+<span>                       gene_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SYMBOL"</span>, <span class="st">"ENSEMBL"</span><span class="op">)</span>,</span>
+<span>                       s_slot <span class="op">=</span> <span class="st">"voomE"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="use-customized-dataset-as-input">use customized dataset as input<a class="anchor" aria-label="anchor" href="#use-customized-dataset-as-input"></a>
-</h3>
+<div class="section level4">
+<h4 id="use-customized-dataset-as-input">use customized dataset as input<a class="anchor" aria-label="anchor" href="#use-customized-dataset-as-input"></a>
+</h4>
+<p>Other customized data is also accepted as <code>bg_data</code> in
+diverse formats: eSet, matrix, DGEList… But all input must be
+log-transformed expression data.</p>
 <p>In this demo, we use a small imported dataset <code>ccle_crc_5</code>
-in mastR as a customized dataset.</p>
+in mastR as a customized dataset, the expression of it is logTPM.</p>
 <ul>
 <li>
 <code>ccle_crc_5</code> is a DGEList object only contains 5 CRC cell
@@ -971,60 +1044,117 @@ line samples from CCLE. More details for
 <span><span class="co">#&gt; HT29_LARGE_INTESTINE          1 49232.06            1    CRC</span></span>
 <span></span>
 <span><span class="co">## markers against for CRC cell lines</span></span>
-<span><span class="va">m_ccl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filter_non_tissue.html">filter_non_tissue</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">ccle_crc_5</span>,</span>
-<span>                           group_col <span class="op">=</span> <span class="st">"cancer"</span>,</span>
-<span>                           target_group <span class="op">=</span> <span class="st">"CRC"</span>,</span>
-<span>                           markers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">m_ccl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/remove_bg_snr.html">remove_bg_snr</a></span><span class="op">(</span></span>
+<span>  bg_data <span class="op">=</span> <span class="va">ccle_crc_5</span>,</span>
+<span>  sig_data <span class="op">=</span> <span class="va">proc_data</span>,</span>
+<span>  b_group_col <span class="op">=</span> <span class="st">"cancer"</span>,</span>
+<span>  b_target_group <span class="op">=</span> <span class="st">"CRC"</span>,</span>
+<span>  s_group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>,</span>
+<span>  s_target_group <span class="op">=</span> <span class="st">"NK"</span>,</span>
+<span>  markers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span>,</span>
+<span>  filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, <span class="co">## as there're only 5 samples in ccle_crc_5</span></span>
+<span>  gene_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SYMBOL"</span>, <span class="st">"ENSEMBL"</span><span class="op">)</span>, <span class="co">## different gene IDs in bg_ and sig_ data</span></span>
+<span>  s_slot <span class="op">=</span> <span class="st">"voomE"</span> <span class="co">## use voomE of proc_data as input</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; 'select()' returned 1:many mapping between keys and columns</span></span>
+<span><span class="co">#&gt; Warning in remove_bg_snr(bg_data = bg_data, sig_data = sig_data[[s_slot]], : Gene CCL4 is not in the sig_data! So remove it!</span></span>
+<span><span class="co">#&gt; Gene CCL5 is not in the sig_data! So remove it!</span></span>
+<span><span class="co">#&gt; Gene KIR2DL2 is not in the sig_data! So remove it!</span></span>
+<span><span class="co">#&gt; Gene KIR2DL5A is not in the sig_data! So remove it!</span></span>
+<span><span class="co">#&gt; Gene KIR2DS2 is not in the sig_data! So remove it!</span></span>
+<span><span class="co">#&gt; Gene KIR2DS5 is not in the sig_data! So remove it!</span></span>
+<span><span class="co">#&gt; Gene KLRA1P is not in the sig_data! So remove it!</span></span>
+<span><span class="co">#&gt; Gene LOC653757 is not in the sig_data! So remove it!</span></span>
+<span><span class="co">#&gt; Gene MGC24103 is not in the sig_data! So remove it!</span></span>
+<span><span class="co">#&gt; Gene TRDC is not in the sig_data! So remove it!</span></span>
+<span><span class="co">#&gt; Gene MGC61571 is not in the sig_data! So remove it!</span></span>
+<span><span class="co">#&gt; Gene PIK3R6 is not in the sig_data! So remove it!</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">m_ccl</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "KIR2DL2"  "KIR2DL5A" "KIR2DS2"  "KIR2DS4"  "KIR2DS5"  "KLRA1P"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "IL32"   "RAB27B" "STYK1"  "RAB27A" "TXK"    "TTC38"</span></span></code></pre></div>
 </div>
 </div>
-<div class="section level2">
-<h2 id="step-4--final-cell-subset-signature-for-cancer">Step 4. Final Cell Subset Signature for Cancer<a class="anchor" aria-label="anchor" href="#step-4--final-cell-subset-signature-for-cancer"></a>
-</h2>
-<p>After Step 1-3, now we need to integrate the results together. As we
-want the final signature to be specific to the target cell subset while
-less affected by the tissue/cancer purity, intersection is preferred to
-select the final signature after both specificity screening: cell type
-(subset) and cancer (tissue) type.</p>
+<div class="section level3">
+<h3 id="final-group-signature-for-tissue">Final Group Signature for Tissue<a class="anchor" aria-label="anchor" href="#final-group-signature-for-tissue"></a>
+</h3>
+<p>After above steps, now we need to integrate the results together.</p>
+<p>As we want the final signature to be specific to the target cell
+subset while less affected by the tissue/cancer purity, intersection is
+preferred to select the final signature after both specificity
+screening: cell type (subset) and cancer (tissue) type.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sig_NK_CRC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/sets.html" class="external-link">intersect</a></span><span class="op">(</span><span class="va">m_ct</span>, <span class="va">m_ccl</span><span class="op">)</span></span>
 <span><span class="va">sig_NK_CRC</span></span>
 <span><span class="co">#&gt;  [1] "CD244"  "CD247"  "CTSW"   "GZMA"   "GZMM"   "IL2RB"  "KLRC4"  "KLRF1" </span></span>
-<span><span class="co">#&gt;  [9] "NCAM1"  "NCR1"   "PTGDR"  "SH2D1B" "ZAP70"  "KLRC1"  "CD226"</span></span></code></pre></div>
+<span><span class="co">#&gt;  [9] "NCAM1"  "NCR1"   "PTGDR"  "RAB27B" "SH2D1B" "TXK"    "ZAP70"  "KLRC1" </span></span>
+<span><span class="co">#&gt; [17] "CD226"</span></span></code></pre></div>
+<p>But here, if we directly use the <code>m_ct</code> instead of
+<code>Markers</code> as input <code>markers</code> for function
+<code><a href="../reference/remove_bg_snr.html">remove_bg_snr()</a></code>, then <code>m_ccl</code> is already the
+intersection result of original <code>m_ccl</code> and
+<code>m_ct</code>, so we can skip this.</p>
 <p>Now we get the final signature specific for both cell type and cancer
 type!</p>
 </div>
+</div>
 <div class="section level2">
-<h2 class="tabset tabset-fade tabset-pills" id="step-5--visualize-the-curation-effect">Step 5. Visualize The
-Curation Effect<a class="anchor" aria-label="anchor" href="#step-5--visualize-the-curation-effect"></a>
+<h2 class="tabset tabset-fade tabset-pills" id="step-3--visualize-the-screening-effect">Step 3. Visualize The
+Screening Effect<a class="anchor" aria-label="anchor" href="#step-3--visualize-the-screening-effect"></a>
 </h2>
 <hr>
 <p>Now that we get our specific signature, we need to assess how well
-this siganture can perform. To easily realize this, some popular
-visualization functions are implemented in mastR.</p>
+this signature can discriminate our target group from others. To easily
+realize this, some popular visualization functions are implemented in
+mastR.</p>
 <ul>
 <li>
-<code><a href="../reference/pca_matrix_plot.html">pca_matrix_plot()</a></code> for matrix of PCA plots with top n
-PCs.</li>
+<p><code><a href="../reference/pca_matrix_plot.html">pca_matrix_plot()</a></code> for matrix of PCA plots with top n
+PCs.</p>
+<p>To show if the target group can be separated from other groups and
+how well the separation is. Users can also know how much variance has
+been explained by PC1 with the signature.</p>
+</li>
 <li>
-<code><a href="../reference/sig_heatmap.html">sig_heatmap()</a></code> for signature heatmap across groups and
-its comparsion with markers pool.</li>
+<p><code><a href="../reference/sig_heatmap.html">sig_heatmap()</a></code> for signature heatmap across groups
+and its comparsion with markers pool.</p>
+<p>To validate if the signature shows clear and differential expression
+pattern between the target group and others, and if the pattern is
+clearer and cleaner after the screening when compared with un-screeed
+markers pool.</p>
+</li>
 <li>
-<code><a href="../reference/sig_rankdensity_plot.html">sig_rankdensity_plot()</a></code> for signature genes rank density
-distribution across groups.</li>
+<p><code><a href="../reference/sig_rankdensity_plot.html">sig_rankdensity_plot()</a></code> for signature genes rank
+density distribution across groups.</p>
+<p>To see if the signature genes are highly expressed within each sample
+of the target group while lowly expressed in others.</p>
+</li>
 <li>
-<code><a href="../reference/sig_boxplot.html">sig_boxplot()</a></code> for signature expression or singscore
-boxplot across groups.</li>
+<p><code><a href="../reference/sig_boxplot.html">sig_boxplot()</a></code> for signature expression or singscore
+boxplot across groups.</p>
+<p>To test the overall performance of the whole signature when applying
+it for scoring, singscore is used to compute the rank score with the
+whole signature. The boxplot across groups can be used to test if the
+whole signature is powerful enough to distinguish the target group from
+others on scoring level. Median expression of each signature gene is
+also allowed to plot.</p>
+</li>
 <li>
-<code><a href="../reference/sig_scatter_plot.html">sig_scatter_plot()</a></code> for signature expression scatter
-plot of the target group vs all other groups respectively.</li>
+<p><code><a href="../reference/sig_scatter_plot.html">sig_scatter_plot()</a></code> for signature scaled expression
+scatter plot of the target group vs all other groups respectively.</p>
+<p>To visualize the correlation of the signature between the target and
+other groups, the row-scaled gene expression is computed to make the
+scatter plot. Based on it, we can easily see the co-expression
+correlation and signature’s specificity.</p>
+</li>
 <li>
-<code><a href="../reference/sig_gseaplot.html">sig_gseaplot()</a></code> for gene-set enrichment analysis result
-display, <code><a href="https://rdrr.io/pkg/clusterProfiler/man/GSEA.html" class="external-link">clusterProfiler::GSEA()</a></code> analysis is done inside
-this function, can choose to display ‘dotplot’ or gseaplot’ by
-<code><a href="https://rdrr.io/pkg/clusterProfiler/man/GSEA.html" class="external-link">clusterProfiler::GSEA()</a></code>.</li>
+<p><code><a href="../reference/sig_gseaplot.html">sig_gseaplot()</a></code> for gene-set enrichment analysis
+result display.</p>
+<p>To further validate if the signature is significantly enriched in our
+target group compared with other groups,
+<code><a href="https://rdrr.io/pkg/clusterProfiler/man/GSEA.html" class="external-link">clusterProfiler::GSEA()</a></code> analysis is done inside this
+function. Users can choose to display ‘dotplot’ or gseaplot’ by
+<code><a href="https://rdrr.io/pkg/clusterProfiler/man/GSEA.html" class="external-link">clusterProfiler::GSEA()</a></code>.</p>
+</li>
 </ul>
 <div class="section level3">
 <h3 id="pca-matrix-plot">PCA matrix plot<a class="anchor" aria-label="anchor" href="#pca-matrix-plot"></a>
@@ -1036,7 +1166,6 @@ again here to show it.</p>
 and result shows most of signature genes are indicating NK cells.</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## as proc_data shows better discrimination, use it for visualization</span></span>
-<span><span class="va">proc_data</span><span class="op">$</span><span class="va">voomE</span> <span class="op">&lt;-</span> <span class="va">proc_data</span><span class="op">$</span><span class="va">vfit</span><span class="op">$</span><span class="va">E</span></span>
 <span><span class="fu"><a href="../reference/pca_matrix_plot.html">pca_matrix_plot</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">proc_data</span>, </span>
 <span>  features <span class="op">=</span> <span class="va">sig_NK_CRC</span>, </span>
@@ -1060,8 +1189,6 @@ and result shows most of signature genes are indicating NK cells.</p>
 <span>  n <span class="op">=</span> <span class="fl">3</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:many mapping between keys and columns</span></span>
-<span><span class="co">#&gt; Warning: ggrepel: 1 unlabeled data points (too many overlaps). Consider</span></span>
-<span><span class="co">#&gt; increasing max.overlaps</span></span>
 <span><span class="co">#&gt; Warning: ggrepel: 6 unlabeled data points (too many overlaps). Consider</span></span>
 <span><span class="co">#&gt; increasing max.overlaps</span></span></code></pre></div>
 <p><img src="mastR_Demo_files/figure-html/pca-2.png" width="768"></p>
@@ -1223,13 +1350,16 @@ others.</p>
 NK cells than other immune cell subsets. Use
 <code><a href="../reference/sig_scatter_plot.html">sig_scatter_plot()</a></code> function to make scatter plot of the NK
 signature abundance for all cell subsets in the data.</p>
+<p>If the signature shows specificity to NK, then most of signature
+genes should appear in left-top region (scaled expression &gt; 1 in NK,
+&lt; 1 in other), while the gene present in right-top region should
+represent the co-expression in the both groups.</p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sig_scatter_plot.html">sig_scatter_plot</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="va">proc_data</span>, </span>
+<span>  data <span class="op">=</span> <span class="va">proc_data</span>,</span>
 <span>  sigs <span class="op">=</span> <span class="va">sig_NK_CRC</span>,</span>
 <span>  group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>, </span>
 <span>  target_group <span class="op">=</span> <span class="st">"NK"</span>,</span>
-<span>  xint <span class="op">=</span> <span class="fl">4</span>, yint <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  gene_id <span class="op">=</span> <span class="st">"ENSEMBL"</span>,</span>
 <span>  slot <span class="op">=</span> <span class="st">"voomE"</span></span>
 <span><span class="op">)</span></span>
@@ -1244,7 +1374,6 @@ signature abundance for all cell subsets in the data.</p>
 <span><span class="co">#   sigs = sig_NK_CRC,</span></span>
 <span><span class="co">#   group_col = c("celltype:ch1", "celltype.ch1"),</span></span>
 <span><span class="co">#   target_group = "NK", </span></span>
-<span><span class="co">#   xint = 4, yint = 4,</span></span>
 <span><span class="co">#   gene_id = "ENSEMBL")</span></span></code></pre></div>
 <p>Based on scatter plot result, we can actually do further filtration
 to improve signature specificity by removing signature genes present in
@@ -1370,7 +1499,8 @@ should be kept.</p>
 <span><span class="co">## get 8 more new signature genes</span></span>
 <span><span class="va">sig_NK_CRC_refine</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/sets.html" class="external-link">intersect</a></span><span class="op">(</span><span class="va">m_ct_refine</span>, <span class="va">m_ccl</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/sets.html" class="external-link">setdiff</a></span><span class="op">(</span><span class="va">sig_NK_CRC_refine</span>, <span class="va">sig_NK_CRC</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "CD160"    "IL12RB2"  "NAALADL1" "NME8"     "XCL2"     "HAVCR2"</span></span>
+<span><span class="co">#&gt; [1] "CD160"    "ELOVL6"   "GZMB"     "IL12RB2"  "NAALADL1" "NME8"     "TTC38"   </span></span>
+<span><span class="co">#&gt; [8] "XCL2"     "HAVCR2"</span></span>
 <span></span>
 <span><span class="co">## most NK-CD8 top DEGs are not in the markers pool</span></span>
 <span><span class="va">deg_tables</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_de_table.html">get_de_table</a></span><span class="op">(</span></span>
@@ -1390,7 +1520,7 @@ should be kept.</p>
 <span><span class="co">#&gt;  [1] "NCAM1"    "KLRF1"    "SH2D1B"   "LTB"      "PTGDR"    "IL2RB"   </span></span>
 <span><span class="co">#&gt;  [7] "KLRC1"    "NCR1"     "RAB27B"   "CD247"    "NAALADL1" "HAVCR2"  </span></span>
 <span><span class="co">#&gt; [13] "CD244"</span></span></code></pre></div>
-<p>We only get 15 more new genes when keeping top 200 DEGs in ‘NK-CD8’,
+<p>We only get 17 more new genes when keeping top 200 DEGs in ‘NK-CD8’,
 that’s because majority of those genes are not in our markers pool
 <code>Markers</code> and can’t pass the screening step. So it would be
 better to create a large enough pool for screening in case we miss any
@@ -1422,7 +1552,7 @@ dropped a bit.</p>
 <span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Signature before Refinement"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:many mapping between keys and columns</span></span>
 <span></span>
-<span><span class="op">(</span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span><span class="op">)</span><span class="op">*</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5</span>,<span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span> <span class="fu">patchwork</span><span class="fu">::</span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_layout.html" class="external-link">plot_layout</a></span><span class="op">(</span>guides <span class="op">=</span> <span class="st">"collect"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">(</span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span><span class="op">)</span><span class="op">*</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5</span>, <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span> <span class="fu">patchwork</span><span class="fu">::</span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_layout.html" class="external-link">plot_layout</a></span><span class="op">(</span>guides <span class="op">=</span> <span class="st">"collect"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="mastR_Demo_files/figure-html/score%20boxplot%20refine-1.png" width="768"></p>
 <p>Abundance scatter plot also shows more specific genes to NK compared
 with CD4/8 T cells.</p>
@@ -1433,7 +1563,6 @@ with CD4/8 T cells.</p>
 <span>  sigs <span class="op">=</span> <span class="va">sig_NK_CRC_refine</span>,</span>
 <span>  group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>, </span>
 <span>  target_group <span class="op">=</span> <span class="st">"NK"</span>,</span>
-<span>  xint <span class="op">=</span> <span class="fl">4</span>, yint <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  gene_id <span class="op">=</span> <span class="st">"ENSEMBL"</span>,</span>
 <span>  slot <span class="op">=</span> <span class="st">"voomE"</span></span>
 <span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Signature after Refinement"</span><span class="op">)</span></span>
@@ -1446,7 +1575,6 @@ with CD4/8 T cells.</p>
 <span>  sigs <span class="op">=</span> <span class="va">sig_NK_CRC</span>,</span>
 <span>  group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>, </span>
 <span>  target_group <span class="op">=</span> <span class="st">"NK"</span>,</span>
-<span>  xint <span class="op">=</span> <span class="fl">4</span>, yint <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  gene_id <span class="op">=</span> <span class="st">"ENSEMBL"</span>,</span>
 <span>  slot <span class="op">=</span> <span class="st">"voomE"</span></span>
 <span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Signature before Refinement"</span><span class="op">)</span></span>
@@ -1786,7 +1914,7 @@ deconvolution.</p>
 <span><span class="co">#&gt;  [35] ellipsis_0.3.2              dplyr_1.1.0                </span></span>
 <span><span class="co">#&gt;  [37] ggpubr_0.6.0                backports_1.4.1            </span></span>
 <span><span class="co">#&gt;  [39] deldir_1.0-6                MatrixGenerics_1.10.0      </span></span>
-<span><span class="co">#&gt;  [41] vctrs_0.5.2                 SingleCellExperiment_1.20.0</span></span>
+<span><span class="co">#&gt;  [41] vctrs_0.6.0                 SingleCellExperiment_1.20.0</span></span>
 <span><span class="co">#&gt;  [43] ROCR_1.0-11                 abind_1.4-5                </span></span>
 <span><span class="co">#&gt;  [45] cachem_1.0.7                withr_2.5.0                </span></span>
 <span><span class="co">#&gt;  [47] ggforce_0.4.1               HDO.db_0.99.1              </span></span>
