@@ -17,6 +17,7 @@ sig_gseaplot(
   gene_id = "SYMBOL",
   slot = "counts",
   method = c("dotplot", "gseaplot"),
+  col = "-log10(p.adjust)",
   size = "enrichmentScore",
   pvalue_table = FALSE,
   digits = 2,
@@ -31,6 +32,7 @@ sig_gseaplot(
   gene_id = "SYMBOL",
   slot = "counts",
   method = c("dotplot", "gseaplot"),
+  col = "-log10(p.adjust)",
   size = "enrichmentScore",
   pvalue_table = FALSE,
   digits = 2,
@@ -45,6 +47,7 @@ sig_gseaplot(
   gene_id = "SYMBOL",
   slot = "counts",
   method = c("dotplot", "gseaplot"),
+  col = "-log10(p.adjust)",
   size = "enrichmentScore",
   pvalue_table = FALSE,
   digits = 2,
@@ -59,6 +62,7 @@ sig_gseaplot(
   gene_id = "SYMBOL",
   slot = "counts",
   method = c("dotplot", "gseaplot"),
+  col = "-log10(p.adjust)",
   size = "enrichmentScore",
   pvalue_table = FALSE,
   digits = 2,
@@ -73,6 +77,7 @@ sig_gseaplot(
   gene_id = "SYMBOL",
   slot = "counts",
   method = c("dotplot", "gseaplot"),
+  col = "-log10(p.adjust)",
   size = "enrichmentScore",
   pvalue_table = FALSE,
   digits = 2,
@@ -87,6 +92,7 @@ sig_gseaplot(
   gene_id = "SYMBOL",
   slot = "counts",
   method = c("dotplot", "gseaplot"),
+  col = "-log10(p.adjust)",
   size = "enrichmentScore",
   pvalue_table = FALSE,
   digits = 2,
@@ -108,6 +114,9 @@ could be one of 'ENSEMBL', 'SYMBOL', ... default 'SYMBOL'}
 \item{slot}{character, indicate which slot used as expression, optional}
 
 \item{method}{one of "gseaplot" and "dotplot", how to plot GSEA result}
+
+\item{col}{column name of \code{\link[clusterProfiler:GSEA]{clusterProfiler::GSEA()}} result, used for dot
+col when method = "dotplot"}
 
 \item{size}{column name of \code{\link[clusterProfiler:GSEA]{clusterProfiler::GSEA()}} result, used for dot
 size when method = "dotplot"}

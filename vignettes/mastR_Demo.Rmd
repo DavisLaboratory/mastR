@@ -281,9 +281,11 @@ Now we get a large markers pool for screening, next we need to screen signature 
 
 # Step 2. Screen Markers from the Markers Pool
 
-## Screen Markers Against Other Groups
+## Screen Markers for Group
 
 ------------------------------------
+
+### Screen Markers Against Other Groups
 
 For group specificity, there're 4 main steps:
 
@@ -305,7 +307,7 @@ data("im_data_6")
 im_data_6
 ```
 
-### process data {#process}
+#### process data {#process}
 
 To screen signature for cell subset specificity, some processes need to be done on the data first.
 
@@ -354,7 +356,7 @@ proc_data <- process_data(
 proc_data$voomE <- proc_data$vfit$E
 ```
 
-### visualize QC before and after
+#### visualize QC before and after
 
 After data processing, we need to check whether the data has been well filtered , normalized and fitted.
 
@@ -392,7 +394,7 @@ pca_matrix_plot(expr1, group_by = proc_data$samples$celltype.ch1, n = 3)
 pca_matrix_plot(expr2, group_by = proc_data$samples$celltype.ch1, n = 3)
 ```
 
-### select signature genes {#selection}
+#### select signature genes {#selection}
 
 Now we get processed data with DE statistic for each gene in each comparison, then the proc_data can be passed into `select_sig()` function for further genes selection based on rank product scoring. Cell type specific signature can be obtained by this.
 
@@ -428,7 +430,7 @@ GSEABase::geneIds(DEG_6$DEGs)
 DEG_6$proc_data$vfit$design ## show the design matrix
 ```
 
-### intersect with markers pool {#intersect-pool}
+#### intersect with markers pool {#intersect-pool}
 
 After getting specific signature genes for the target group, we will only keep those UP regulated genes which are also present in our markers pool `Markers`, to constrain the final signature wthin the interested gene list.
 
@@ -472,7 +474,7 @@ m_ct <- filter_subset_sig(
 )
 ```
 
-## Remove Markers with Background Noise in Tissue (optional)
+### Remove Markers with Background Noise in Tissue (optional)
 
 After screening signature for group specificity, we need to increase the tissue specificity by removing background noise for the signature now, what we need to do is:
 
@@ -497,7 +499,7 @@ Based on the `bg_data` input format, this function can be used in 2 ways:
 * use CCLE as `bg_data` input  
 * use customized data as `bg_data` input
 
-### use CCLE as bg_data
+#### use CCLE as bg_data
 
 The default setting of this `remove_bg_snr()` uses CCLE from [DepMap CCLE](https://depmap.org/portal/download/), containing RSEM quantified TPM data of 1392 cancer cell lines (until 2022.04).  
 
@@ -545,7 +547,7 @@ m_ccl <- remove_bg_snr(sig_data = proc_data,
                        s_slot = "voomE")
 ```
 
-### use customized dataset as input
+#### use customized dataset as input
 
 Other customized data is also accepted as `bg_data` in diverse formats: eSet, matrix, DGEList... But all input must be log-transformed expression data.
 
@@ -797,7 +799,7 @@ Based on scatter plot result, we can actually do further filtration to improve s
 To see if the curated signature is enriched in NK cells than other immune cell subsets. Use `sig_gseaplot()` function to make GSEAplot.
 
 ```{r gseaplot, warning=FALSE, fig.width=10, fig.height=7}
-## gseaplot
+## dotplot
 sig_gseaplot(
   data = proc_data,
   sigs = list(sig = sig_NK_CRC, markers = geneIds(Markers)),
@@ -806,7 +808,7 @@ sig_gseaplot(
   gene_id = "ENSEMBL",
   slot = "voomE"
 )
-## dotplot
+## gseaplot
 sig_gseaplot(
   data = proc_data, 
   sigs = list(sig = sig_NK_CRC, markers = geneIds(Markers)),
@@ -867,25 +869,17 @@ We only get `r sum(sig_NK_CRC_refine %in% sig_NK_CRC)` more new genes when keepi
 
 After the refinement, we have 2 signature lists now. By comparing the 2 signatures performance, we can see the difference of NK vs CD4 and CD8 T cells increased, but the difference vs monocytes and neutrophils dropped a bit.
 
-```{r score boxplot refine, warning=FALSE, fig.width=8, fig.height=5}
-p1 <- sig_boxplot(
-  data = proc_data, 
-  sigs = sig_NK_CRC_refine,
-  group_col = "celltype.ch1", 
-  target_group = "NK", 
+```{r gsea refine, warning=FALSE, fig.width=10, fig.height=7}
+## gsea dotplot
+sig_gseaplot(
+  data = proc_data,
+  sigs = list(refined = sig_NK_CRC_refine,
+              pre_ref = sig_NK_CRC),
+  group_col = "celltype.ch1",
+  target_group = "NK",
   gene_id = "ENSEMBL",
   slot = "voomE"
-) + ggtitle("Signature after Refinement")
-p2 <- sig_boxplot(
-  data = proc_data, 
-  sigs = sig_NK_CRC,
-  group_col = "celltype.ch1", 
-  target_group = "NK", 
-  gene_id = "ENSEMBL",
-  slot = "voomE"
-) + ggtitle("Signature before Refinement")
-
-(p1 + p2)*ylim(-0.5, 0.4) + patchwork::plot_layout(guides = "collect")
+)
 ```
 
 Abundance scatter plot also shows more specific genes to NK compared with CD4/8 T cells.

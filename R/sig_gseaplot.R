@@ -8,6 +8,8 @@ NULL
 #' @inheritParams sig_boxplot
 #' @param sigs a vector of signature (Symbols) or a list of signatures
 #' @param method one of "gseaplot" and "dotplot", how to plot GSEA result
+#' @param col column name of [clusterProfiler::GSEA()] result, used for dot
+#'            col when method = "dotplot"
 #' @param size column name of [clusterProfiler::GSEA()] result, used for dot
 #'             size when method = "dotplot"
 #' @param pvalue_table logical, if to add p value table if method = "gseaplot"
@@ -33,6 +35,7 @@ setGeneric("sig_gseaplot",
                     gene_id = "SYMBOL",
                     slot = "counts",
                     method = c("dotplot", "gseaplot"),
+                    col = "-log10(p.adjust)",
                     size = "enrichmentScore",
                     pvalue_table = FALSE,
                     digits = 2,
@@ -48,6 +51,7 @@ function(data,
          sigs,
          gene_id = "SYMBOL",
          method = c("dotplot", "gseaplot"),
+         col = "-log10(p.adjust)",
          size = "enrichmentScore",
          pvalue_table = FALSE,
          digits = 2,
@@ -78,7 +82,7 @@ function(data,
 
   if(method == "gseaplot") {
     p <- gsea_plot_init(gse, pvalue_table = pvalue_table)
-  } else p <- gsea_dotplot_init(gse, size = size)
+  } else p <- gsea_dotplot_init(gse, col = col, size = size)
 
   p <- patchwork::wrap_plots(p) + patchwork::plot_layout(guides = "collect")
   return(p)
@@ -93,6 +97,7 @@ function(data,
          sigs,
          gene_id = "SYMBOL",
          method = c("dotplot", "gseaplot"),
+         col = "-log10(p.adjust)",
          size = "enrichmentScore",
          pvalue_table = FALSE,
          digits = 2,
@@ -126,7 +131,7 @@ function(data,
 
   if(method == "gseaplot") {
     p <- gsea_plot_init(gse, pvalue_table = pvalue_table)
-  } else p <- gsea_dotplot_init(gse, size = size)
+  } else p <- gsea_dotplot_init(gse, col = col, size = size)
 
   p <- patchwork::wrap_plots(p) + patchwork::plot_layout(guides = "collect")
   return(p)
@@ -146,6 +151,7 @@ function(data,
          gene_id = "SYMBOL",
          slot = "counts",
          method = c("dotplot", "gseaplot"),
+         col = "-log10(p.adjust)",
          size = "enrichmentScore",
          pvalue_table = FALSE,
          digits = 2,
@@ -167,6 +173,7 @@ function(data,
   p <- sig_gseaplot(data = data$tfit, sigs = sigs,
                     gene_id = gene_id,
                     method = method,
+                    col = col,
                     size = size,
                     pvalue_table = pvalue_table,
                     digits = digits,
@@ -188,6 +195,7 @@ function(data,
          gene_id = "SYMBOL",
          slot = "counts",
          method = c("dotplot", "gseaplot"),
+         col = "-log10(p.adjust)",
          size = "enrichmentScore",
          pvalue_table = FALSE,
          digits = 2,
@@ -207,6 +215,7 @@ function(data,
   p <- sig_gseaplot(data = data$tfit, sigs = sigs,
                     gene_id = gene_id,
                     method = method,
+                    col = col,
                     size = size,
                     pvalue_table = pvalue_table,
                     digits = digits,
@@ -228,6 +237,7 @@ function(data,
          gene_id = "SYMBOL",
          slot = "counts",
          method = c("dotplot", "gseaplot"),
+         col = "-log10(p.adjust)",
          size = "enrichmentScore",
          pvalue_table = FALSE,
          digits = 2,
@@ -254,6 +264,7 @@ function(data,
                            gene_id = gene_id[i],
                            slot = slot[i],
                            method = method,
+                           col = col,
                            size = size,
                            pvalue_table = pvalue_table,
                            digits = digits,

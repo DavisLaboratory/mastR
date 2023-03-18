@@ -105,9 +105,13 @@ function(bg_data = 'CCLE',
 
   ## select target samples
   idx <- grep(b_target_group, b_group_col, ...)
+  stopifnot("No matched samples in bg_data for b_target_group!" =
+              length(idx) > 0)
   bg_data <- bg_data[,idx]
 
   idx <- grep(s_target_group, s_group_col, ...)
+  stopifnot("No matched samples in sig_data for s_target_group!" =
+              length(idx) > 0)
   sig_data <- sig_data[,idx]
 
   ## filter low expression genes for bg_data

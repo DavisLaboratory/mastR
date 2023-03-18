@@ -565,7 +565,9 @@ gsea_plot_init <- function(gse, pvalue_table = FALSE) {
   return(p)
 }
 ## dotplot
-gsea_dotplot_init <- function(gse, size = "enrichmentScore") {
+gsea_dotplot_init <- function(gse,
+                              col = "-log10(p.adjust)",
+                              size = "enrichmentScore") {
   res <- do.call(rbind, lapply(gse, \(x) {
     if(is.null(x)) {
       invisible()
@@ -577,8 +579,10 @@ gsea_dotplot_init <- function(gse, size = "enrichmentScore") {
     message(ms)
     p <- ggpubr::as_ggplot(grid::textGrob(ms))
   } else {
+    res[["-log10(p.adjust)"]] <- -log10(res$p.adjust)
     p <- ggplot(res) +
-      geom_point(aes(x = ID, y = group, col = -log10(p.adjust),
+      geom_point(aes(x = ID, y = group,
+                     col = !!sym(col),
                      size = !!sym(size))) +
       labs(x = "Comparison", y = "Signature") +
       theme_bw() +
