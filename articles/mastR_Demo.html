@@ -565,9 +565,12 @@ specificity.</p>
 <h2 id="step-2--screen-markers-from-the-markers-pool">Step 2. Screen Markers from the Markers Pool<a class="anchor" aria-label="anchor" href="#step-2--screen-markers-from-the-markers-pool"></a>
 </h2>
 <div class="section level3">
-<h3 id="screen-markers-against-other-groups">Screen Markers Against Other Groups<a class="anchor" aria-label="anchor" href="#screen-markers-against-other-groups"></a>
+<h3 id="screen-markers-for-group">Screen Markers for Group<a class="anchor" aria-label="anchor" href="#screen-markers-for-group"></a>
 </h3>
 <hr>
+<div class="section level4">
+<h4 id="screen-markers-against-other-groups">Screen Markers Against Other Groups<a class="anchor" aria-label="anchor" href="#screen-markers-against-other-groups"></a>
+</h4>
 <p>For group specificity, there’re 4 main steps:</p>
 <ul>
 <li><ol style="list-style-type: lower-alpha">
@@ -621,9 +624,9 @@ details in <code><a href="../reference/im_data_6.html">?mastR::im_data_6</a></co
 <span><span class="co">#&gt; experimentData: use 'experimentData(object)'</span></span>
 <span><span class="co">#&gt;   pubMedIds: 25314013 </span></span>
 <span><span class="co">#&gt; Annotation: GPL15456</span></span></code></pre></div>
-<div class="section level4">
-<h4 id="process">process data<a class="anchor" aria-label="anchor" href="#process"></a>
-</h4>
+<div class="section level5">
+<h5 id="process">process data<a class="anchor" aria-label="anchor" href="#process"></a>
+</h5>
 <p>To screen signature for cell subset specificity, some processes need
 to be done on the data first.</p>
 <p><code><a href="../reference/process_data.html">process_data()</a></code> provided by mastR can do the genes
@@ -701,9 +704,9 @@ when markers is not NULL, could be one of ‘ENSEMBL’, ‘SYMBOL’,
 <span><span class="co">## add voom fitted expression as a new list of proc_data for use</span></span>
 <span><span class="va">proc_data</span><span class="op">$</span><span class="va">voomE</span> <span class="op">&lt;-</span> <span class="va">proc_data</span><span class="op">$</span><span class="va">vfit</span><span class="op">$</span><span class="va">E</span></span></code></pre></div>
 </div>
-<div class="section level4">
-<h4 id="visualize-qc-before-and-after">visualize QC before and after<a class="anchor" aria-label="anchor" href="#visualize-qc-before-and-after"></a>
-</h4>
+<div class="section level5">
+<h5 id="visualize-qc-before-and-after">visualize QC before and after<a class="anchor" aria-label="anchor" href="#visualize-qc-before-and-after"></a>
+</h5>
 <p>After data processing, we need to check whether the data has been
 well filtered , normalized and fitted.</p>
 <p>mastR provides visualization functions for this, to compare the data
@@ -749,9 +752,9 @@ can select how many top n PCs to be plot by param <code>n</code>.</p>
 <span><span class="fu"><a href="../reference/pca_matrix_plot.html">pca_matrix_plot</a></span><span class="op">(</span><span class="va">expr2</span>, group_by <span class="op">=</span> <span class="va">proc_data</span><span class="op">$</span><span class="va">samples</span><span class="op">$</span><span class="va">celltype.ch1</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <p><img src="mastR_Demo_files/figure-html/plot%20PCA%20mat-2.png" width="768"></p>
 </div>
-<div class="section level4">
-<h4 id="selection">select signature genes<a class="anchor" aria-label="anchor" href="#selection"></a>
-</h4>
+<div class="section level5">
+<h5 id="selection">select signature genes<a class="anchor" aria-label="anchor" href="#selection"></a>
+</h5>
 <p>Now we get processed data with DE statistic for each gene in each
 comparison, then the proc_data can be passed into
 <code><a href="../reference/select_sig.html">select_sig()</a></code> function for further genes selection based on
@@ -802,9 +805,9 @@ GeneSetCollection (‘UP’ and ‘DOWN’) will be returned as output.</p>
 <span><span class="fu">GSEABase</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">DEG_6</span><span class="op">$</span><span class="va">DEGs</span><span class="op">)</span></span>
 <span><span class="va">DEG_6</span><span class="op">$</span><span class="va">proc_data</span><span class="op">$</span><span class="va">vfit</span><span class="op">$</span><span class="va">design</span> <span class="co">## show the design matrix</span></span></code></pre></div>
 </div>
-<div class="section level4">
-<h4 id="intersect-pool">intersect with markers pool<a class="anchor" aria-label="anchor" href="#intersect-pool"></a>
-</h4>
+<div class="section level5">
+<h5 id="intersect-pool">intersect with markers pool<a class="anchor" aria-label="anchor" href="#intersect-pool"></a>
+</h5>
 <p>After getting specific signature genes for the target group, we will
 only keep those UP regulated genes which are also present in our markers
 pool <code>Markers</code>, to constrain the final signature wthin the
@@ -865,9 +868,9 @@ datasets.</p>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
-<div class="section level3">
-<h3 id="remove-markers-with-background-noise-in-tissue-optional">Remove Markers with Background Noise in Tissue (optional)<a class="anchor" aria-label="anchor" href="#remove-markers-with-background-noise-in-tissue-optional"></a>
-</h3>
+<div class="section level4">
+<h4 id="remove-markers-with-background-noise-in-tissue-optional">Remove Markers with Background Noise in Tissue (optional)<a class="anchor" aria-label="anchor" href="#remove-markers-with-background-noise-in-tissue-optional"></a>
+</h4>
 <p>After screening signature for group specificity, we need to increase
 the tissue specificity by removing background noise for the signature
 now, what we need to do is:</p>
@@ -918,9 +921,9 @@ used in 2 ways:</p>
 </li>
 <li>use customized data as <code>bg_data</code> input</li>
 </ul>
-<div class="section level4">
-<h4 id="use-ccle-as-bg_data">use CCLE as bg_data<a class="anchor" aria-label="anchor" href="#use-ccle-as-bg_data"></a>
-</h4>
+<div class="section level5">
+<h5 id="use-ccle-as-bg_data">use CCLE as bg_data<a class="anchor" aria-label="anchor" href="#use-ccle-as-bg_data"></a>
+</h5>
 <p>The default setting of this <code><a href="../reference/remove_bg_snr.html">remove_bg_snr()</a></code> uses CCLE
 from <a href="https://depmap.org/portal/download/" class="external-link">DepMap CCLE</a>,
 containing RSEM quantified TPM data of 1392 cancer cell lines (until
@@ -993,9 +996,9 @@ which are not or lowly expressed in bg_data.</li>
 <span>                       gene_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SYMBOL"</span>, <span class="st">"ENSEMBL"</span><span class="op">)</span>,</span>
 <span>                       s_slot <span class="op">=</span> <span class="st">"voomE"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level4">
-<h4 id="use-customized-dataset-as-input">use customized dataset as input<a class="anchor" aria-label="anchor" href="#use-customized-dataset-as-input"></a>
-</h4>
+<div class="section level5">
+<h5 id="use-customized-dataset-as-input">use customized dataset as input<a class="anchor" aria-label="anchor" href="#use-customized-dataset-as-input"></a>
+</h5>
 <p>Other customized data is also accepted as <code>bg_data</code> in
 diverse formats: eSet, matrix, DGEList… But all input must be
 log-transformed expression data.</p>
@@ -1072,6 +1075,7 @@ line samples from CCLE. More details for
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">m_ccl</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "IL32"   "RAB27B" "STYK1"  "RAB27A" "TXK"    "TTC38"</span></span></code></pre></div>
+</div>
 </div>
 </div>
 <div class="section level3">
@@ -1386,7 +1390,7 @@ right bottom or left bottom region.</p>
 immune cell subsets. Use <code><a href="../reference/sig_gseaplot.html">sig_gseaplot()</a></code> function to make
 GSEAplot.</p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## gseaplot</span></span>
+<code class="sourceCode R"><span><span class="co">## dotplot</span></span>
 <span><span class="fu"><a href="../reference/sig_gseaplot.html">sig_gseaplot</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">proc_data</span>,</span>
 <span>  sigs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>sig <span class="op">=</span> <span class="va">sig_NK_CRC</span>, markers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span><span class="op">)</span>,</span>
@@ -1419,7 +1423,7 @@ GSEAplot.</p>
 <span><span class="co">#&gt; done...</span></span></code></pre></div>
 <p><img src="mastR_Demo_files/figure-html/gseaplot-1.png" width="960"></p>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## dotplot</span></span>
+<code class="sourceCode R"><span><span class="co">## gseaplot</span></span>
 <span><span class="fu"><a href="../reference/sig_gseaplot.html">sig_gseaplot</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">proc_data</span>, </span>
 <span>  sigs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>sig <span class="op">=</span> <span class="va">sig_NK_CRC</span>, markers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span><span class="op">)</span>,</span>
@@ -1533,27 +1537,38 @@ useful DEGs.</p>
 T cells increased, but the difference vs monocytes and neutrophils
 dropped a bit.</p>
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sig_boxplot.html">sig_boxplot</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="va">proc_data</span>, </span>
-<span>  sigs <span class="op">=</span> <span class="va">sig_NK_CRC_refine</span>,</span>
-<span>  group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>, </span>
-<span>  target_group <span class="op">=</span> <span class="st">"NK"</span>, </span>
+<code class="sourceCode R"><span><span class="co">## gsea dotplot</span></span>
+<span><span class="fu"><a href="../reference/sig_gseaplot.html">sig_gseaplot</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">proc_data</span>,</span>
+<span>  sigs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>refined <span class="op">=</span> <span class="va">sig_NK_CRC_refine</span>,</span>
+<span>              pre_ref <span class="op">=</span> <span class="va">sig_NK_CRC</span><span class="op">)</span>,</span>
+<span>  group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>,</span>
+<span>  target_group <span class="op">=</span> <span class="st">"NK"</span>,</span>
 <span>  gene_id <span class="op">=</span> <span class="st">"ENSEMBL"</span>,</span>
 <span>  slot <span class="op">=</span> <span class="st">"voomE"</span></span>
-<span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Signature after Refinement"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 'select()' returned 1:many mapping between keys and columns</span></span>
-<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sig_boxplot.html">sig_boxplot</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="va">proc_data</span>, </span>
-<span>  sigs <span class="op">=</span> <span class="va">sig_NK_CRC</span>,</span>
-<span>  group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>, </span>
-<span>  target_group <span class="op">=</span> <span class="st">"NK"</span>, </span>
-<span>  gene_id <span class="op">=</span> <span class="st">"ENSEMBL"</span>,</span>
-<span>  slot <span class="op">=</span> <span class="st">"voomE"</span></span>
-<span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Signature before Refinement"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 'select()' returned 1:many mapping between keys and columns</span></span>
-<span></span>
-<span><span class="op">(</span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span><span class="op">)</span><span class="op">*</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5</span>, <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span> <span class="fu">patchwork</span><span class="fu">::</span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_layout.html" class="external-link">plot_layout</a></span><span class="op">(</span>guides <span class="op">=</span> <span class="st">"collect"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="mastR_Demo_files/figure-html/score%20boxplot%20refine-1.png" width="768"></p>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; 'select()' returned many:many mapping between keys and columns</span></span>
+<span><span class="co">#&gt; preparing geneSet collections...</span></span>
+<span><span class="co">#&gt; GSEA analysis...</span></span>
+<span><span class="co">#&gt; leading edge analysis...</span></span>
+<span><span class="co">#&gt; done...</span></span>
+<span><span class="co">#&gt; preparing geneSet collections...</span></span>
+<span><span class="co">#&gt; GSEA analysis...</span></span>
+<span><span class="co">#&gt; leading edge analysis...</span></span>
+<span><span class="co">#&gt; done...</span></span>
+<span><span class="co">#&gt; preparing geneSet collections...</span></span>
+<span><span class="co">#&gt; GSEA analysis...</span></span>
+<span><span class="co">#&gt; leading edge analysis...</span></span>
+<span><span class="co">#&gt; done...</span></span>
+<span><span class="co">#&gt; preparing geneSet collections...</span></span>
+<span><span class="co">#&gt; GSEA analysis...</span></span>
+<span><span class="co">#&gt; leading edge analysis...</span></span>
+<span><span class="co">#&gt; done...</span></span>
+<span><span class="co">#&gt; preparing geneSet collections...</span></span>
+<span><span class="co">#&gt; GSEA analysis...</span></span>
+<span><span class="co">#&gt; leading edge analysis...</span></span>
+<span><span class="co">#&gt; done...</span></span></code></pre></div>
+<p><img src="mastR_Demo_files/figure-html/gsea%20refine-1.png" width="960"></p>
 <p>Abundance scatter plot also shows more specific genes to NK compared
 with CD4/8 T cells.</p>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
