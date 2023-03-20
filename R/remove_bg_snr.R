@@ -1,7 +1,7 @@
 #' @title Remove markers with background noise.
 #'
-#' @description Specify signatures against specific tissues or cell lines,
-#'   and generate CCLE_tpm_new after retrieving specific tissues.
+#' @description Specify signatures against specific tissues or cell lines by
+#'   removing genes with high expression in the background.
 #'
 #' @param bg_data 'CCLE' or expression object as background data
 #' @param sig_data expression object, can be matrix or DGEList, as signal data

@@ -242,8 +242,8 @@ when data = 'CCLE', default NULL}
 a vector of gene symbols
 }
 \description{
-Specify signatures against specific tissues or cell lines,
-and generate CCLE_tpm_new after retrieving specific tissues.
+Specify signatures against specific tissues or cell lines by
+removing genes with high expression in the background.
 }
 \examples{
 data("NK_markers", "ccle_crc_5")
