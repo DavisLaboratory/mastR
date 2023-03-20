@@ -259,9 +259,9 @@ plotPCAbiplot <- function(prcomp,
          (max(prcomp$rotation[, dims[2]]) - min(prcomp$rotation[, dims[2]])))
     )
 
-    loadings2plot <- prcomp$rotation[genes2plot, dims] |>
-      as.data.frame() |>
-      dplyr::mutate(
+    loadings2plot <- as.data.frame(prcomp$rotation[genes2plot, dims])
+    loadings2plot <- dplyr::mutate(
+        loadings2plot,
         Gene = genes2plot,
         x_end = calculate_coor_end((!!sym(paste0("PC", dims[1]))), r),
         y_end = calculate_coor_end((!!sym(paste0("PC", dims[2]))), r)
@@ -409,7 +409,8 @@ scatter_plot_init <- function(expr, sigs, target_group, by,
   group <- ifelse(grepl(target_group, by), target_group, by)
   expr <- dplyr::group_by(as.data.frame(Matrix::t(expr[sigs,])),
                           factor(group)) |>
-    dplyr::summarise_all(.funs = mean, na.rm = TRUE) |> Matrix::t()
+    dplyr::summarise_all(.funs = mean, na.rm = TRUE) |>
+    Matrix::t()
   colnames(expr) <- expr[1,]
   expr <- as.data.frame(apply(expr[-1, ], MARGIN = c(1, 2), FUN = as.numeric))
 
@@ -447,7 +448,8 @@ exp_boxplot_init <- function(expr, sigs, target_group, by,
   group <- ifelse(grepl(target_group, by), target_group, as.character(by))
   expr <- dplyr::group_by(as.data.frame(Matrix::t(expr[sigs, ])),
                           factor(group)) |>
-    dplyr::summarise_all(.funs = median, na.rm = TRUE) |> Matrix::t()
+    dplyr::summarise_all(.funs = median, na.rm = TRUE) |>
+    Matrix::t()
   colnames(expr) <- expr[1, ]
   expr <- as.data.frame(apply(expr[-1, ], MARGIN = c(1, 2), FUN = as.numeric))
   expr$Gene <- rownames(expr)
@@ -550,9 +552,8 @@ gsea_plot_init <- function(gse, pvalue_table = FALSE) {
     } else {
       p <- enrichplot::gseaplot2(gse[[n]], geneSetID = seq_len(nrow(gse[[n]])),
                                  pvalue_table = pvalue_table,
-                                 title = n) |>
-        patchwork::wrap_plots(ncol = 1) |>
-        patchwork::wrap_elements()
+                                 title = n)
+      p <- patchwork::wrap_elements(patchwork::wrap_plots(p, ncol = 1))
       # ## add pvalue_table
       # p <- p - patchwork::inset_element(gridExtra::tableGrob(
       #   gse[[n]][,c("pvalue", "p.adjust")] |> signif(digits),
@@ -661,14 +662,13 @@ agg_mean <- function(expr, by) {
 # add plot_spacer() at the end for samples less than max
 add_spacer <- function(x, ns) {
   if(length(x) < ns) {
-    x <- append(x, paste(c("list(",
-                           paste(rep("patchwork::plot_spacer()",
-                                 ns - length(x)),
-                                 collapse = ","),
-                           ")"),
-                         collapse = "") |>
-                  (\(x) parse(text = x))() |> eval(),
-                length(x))
+    spacer <- paste(c("list(",
+                      paste(rep("patchwork::plot_spacer()",
+                                ns - length(x)),
+                            collapse = ","),
+                      ")"),
+                    collapse = "")
+    x <- append(x, eval(parse(text = spacer)), length(x))
   }
   x
 }

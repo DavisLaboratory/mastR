@@ -236,18 +236,18 @@ DEGs_Group <- function(tfit, lfc = NULL, p = 0.05,
   }
   DEGs[["UP"]] <- Reduce(f = assemble, lapply(UPs, rownames))
   DEGs[["DOWN"]] <- Reduce(f = assemble, lapply(DWs, rownames))
-  DEGs[["UP"]] <- do.call(function(...) {
-                            apply(cbind(...), 1, mean, na.rm = TRUE)
-                          },
-                          lapply(UPs, function(x, g) rank(x[g, Rank]),
-                                 g = DEGs[["UP"]])) |>
-    order() |> (\(x) DEGs[["UP"]][x])()
-  DEGs[["DOWN"]] <- do.call(function(...) {
-                              apply(cbind(...), 1, mean, na.rm = TRUE)
-                            },
-                            lapply(DWs, function(x, g) rank(x[g, Rank]),
-                                   g = DEGs[["DOWN"]])) |>
-    order() |> (\(x) DEGs[["DOWN"]][x])()
+
+  o <- do.call(function(...) apply(cbind(...), 1, mean, na.rm = TRUE),
+               lapply(UPs, function(x, g) rank(x[g, Rank]),
+                      g = DEGs[["UP"]]))
+  o <- order(o)
+  DEGs[["UP"]] <- DEGs[["UP"]][o]
+
+  o <- do.call(function(...) apply(cbind(...), 1, mean, na.rm = TRUE),
+               lapply(DWs, function(x, g) rank(x[g, Rank]),
+                      g = DEGs[["DOWN"]]))
+  o <- order(o)
+  DEGs[["DOWN"]] <- DEGs[["DOWN"]][o]
 
   ## keep the top DEGs in specified comparison even if they didn't pass RP test
   if(!is.null(keep.top) && assemble == "intersect") {

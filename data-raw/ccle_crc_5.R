@@ -3,10 +3,10 @@
 ### download CCLE TPM data from depmap
 CCLE <- depmap::depmap_TPM()
 ### convert long data into wide data
-CCLE <- CCLE[,c("gene_name", "cell_line", "rna_expression")] |>
-  tidyr::pivot_wider(names_from = "cell_line",
-                     values_from = "rna_expression") |>
-  data.frame()
+CCLE <- CCLE[,c("gene_name", "cell_line", "rna_expression")]
+CCLE <- tidyr::pivot_wider(names_from = "cell_line",
+                           values_from = "rna_expression")
+CCLE <- as.data.frame(CCLE)
 rownames(CCLE) <- CCLE$gene_name
 CCLE$gene_name <- NULL
 

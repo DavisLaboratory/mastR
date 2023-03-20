@@ -382,17 +382,17 @@ function(data,
       if(is.ggplot(p[[i]])) {
         p[[i]] <- p[[i]] + ggtitle(names(data)[i])
       } else {
-        p[[i]] <- ComplexHeatmap::draw(p[[i]], column_title = names(data)[i]) |>
-          grid::grid.grabExpr() |>
-          patchwork::wrap_elements()
+        p[[i]] <- ComplexHeatmap::draw(p[[i]], column_title = names(data)[i])
+        p[[i]] <- grid::grid.grabExpr(p[[i]])
+        p[[i]] <- patchwork::wrap_elements(p[[i]])
       }
     } else {
       if(is.ggplot(p[[i]])) {
         p[[i]] <- p[[i]] + ggtitle(i)
       } else {
-        p[[i]] <- ComplexHeatmap::draw(p[[i]], column_title = i) |>
-          grid::grid.grabExpr() |>
-          patchwork::wrap_elements()
+        p[[i]] <- ComplexHeatmap::draw(p[[i]], column_title = i)
+        p[[i]] <- grid::grid.grabExpr()
+        p[[i]] <- patchwork::wrap_elements()
       }
     }
   }
