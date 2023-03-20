@@ -28,11 +28,17 @@ knitr::opts_chunk$set(
 
 # Introduction
 
------------------------------
+------------------------------------------------------------------------
 
 **Why do we need group markers**
 
-Identifying marker genes for specific groups is crucial in various biological and medical applications, as it allows us to distinguish between different cell types or disease states.
+In biological and clinical research, the identification of biomarkers specific to a disease, tissue, or cell type is a critical step in advancing our understanding and application of this knowledge.
+
+Specific biomarkers can be identified through various methods, such as transcriptomics, proteomics, or metabolomics, which can provide a global view of the molecular landscape of the system being studied.
+
+To denote these biomarkers, we use the term "group markers" in a generic sense, referring to any molecular feature that is specific to a particular group or condition of interest.
+
+Such markers can provide insight into disease diagnosis, prognosis, and treatment options, and can help to differentiate between diseased and healthy states. Thus the identification of the group markers is crucial in various biological and medical applications, as it allows us to distinguish between different cell types or disease states.
 
 For example, in cancer research, identifying marker genes that are differentially expressed between cancer cells and normal cells can help diagnose and monitor the progression of the disease, as well as identify potential therapeutic targets. Similarly, in developmental biology, identifying marker genes that are specific to certain cell types or stages can help us understand the underlying mechanisms of differentiation and development.
 
@@ -42,55 +48,57 @@ Overall, identifying marker genes for specific groups is crucial for understandi
 
 **Why do we need immune signature (cell type)**
 
+In this demo, we will be using the example of immune cell signature in the context of the tumour microenvironment as a practical case study to showcase the application of our approach.
+
 The tumor microenvironment (TME) is made up of a diverse range of cell types (fibroblasts, epithelial cells, endothelial cells, and immune cells) as well as various extracellular components (collagens, growth factors, hormones, cytokines, etc.). TIME is reported to be highly associated with prognosis and various treatment response to many kinds of cancers.
 
-Recent studies have highlighted the role of immune components in the TME in modulating tumor progression, making them attractive therapeutic targets. These components make up the tumor immune microenvironment (TIME), which is a subset of the TME. Subsequently, it’s proved that tumour infiltrating lymphocytes (TILs) play an essential role in tumour progression, metastasis and treatment response.
+Recent studies have highlighted the role of immune components in the TME in modulating tumor progression, making them attractive therapeutic targets. These components make up the tumor immune microenvironment (TIME), which is a subset of the TME. Subsequently, it's proved that tumour infiltrating lymphocytes (TILs) play an essential role in tumour progression, metastasis and treatment response.
 
-This drives TILs to be a strong prognostic indicator for better precision therapy of cancer patients. And the identification of these TILs are the subject of keen research interest due to the roles of specific subset of immune cells acting on different tissues types. 
+This drives TILs to be a strong prognostic indicator for better precision therapy of cancer patients. And the identification of these TILs are the subject of keen research interest due to the roles of specific subset of immune cells acting on different tissues types.
 
-Identification of these cell types are based on flow cytometry in the past, which is limited in the granularity. But now with the advance of single cell RNA-seq and spatial transcriptomics technologies, more detailed and novel cell types or subtypes are being identified. One of the key paradygm of scRNAseq and spatial is to further investigate cell types in the TIME and understand cellullar heterogeniety in the TME. 
+Identification of these cell types are based on flow cytometry in the past, which is limited in the granularity. But now with the advance of single cell RNA-seq and spatial transcriptomics technologies, more detailed and novel cell types or subtypes are being identified. One of the key paradygm of scRNAseq and spatial is to further investigate cell types in the TIME and understand cellullar heterogeniety in the TME.
 
 To quantify TILs infiltration (in bulk), estimate cellular composition (in bulk), annotate single cell types (in scRNA) or identify sample states/activities, many computational methods like cell deconvolution (CIBERSORTx), marker based annotation (CelliD) and sample scoring (singscore) are developed. But to distinguish between closely related cell types, estimate cell composition and states, a refined signature is required which typiclaly requires manual curation by domain expert. With the increasing large amount of data and cell types, this is gradually getting to be intenable and will require a different approach to automatically screen such signatures.
 
-mastR is such a softare package designed to automatically screen signature for researchers interest, which can save a lot of time and manual labor work.
+mastR is a software package specifically designed to automatically screen signatures of interest for particular research questions. This automated process saves significant time and effort that would otherwise be required for manual labor.
 
 **What this package does**
 
-*mastR*, MArkers Screening Tool in R, is a package to automatically derive signature for specific group of interest in specific tissue. 
+*mastR*, MArkers Screening Tool in R, is a package to automatically derive signature for specific group of interest in specific tissue.
 
 With mastR, users can simply input their expression data containing the groups of interest, along with group labels, to obtain a list of marker genes (signature) for the target group.
 
-Although there're a lot of tools developed to generate cell type specific markers, they are all designed for scRNA-seq data. And most of them utilize machine learning to select features contributing to the classification result, which is less robust and consistent across datasets when compared with statistical method, like empirical Bayesian in limma. And some of them will always return a signature even if the data doesn't have any.
+While there are many tools available for generating cell type-specific markers, they are primarily designed for scRNA-seq data and often rely on machine learning algorithms to select relevant features for classification. However, these methods may lack robustness and consistency across datasets when compared to using statistical methods like empirical Bayesian in `limma`. Furthermore, some of these tools may return a signature even when the data does not contain any, leading to potential inaccuracies.
 
-Although DE analysis can also be done on scRNA data, like `Seurat::FindMarkers()`, it's reported that DE analysis done on peudo-bulk scRNA data is more robust and reliable than directly done on scRNA data.
+Although differential expression (DE) analysis can also be done on scRNA data, like `Seurat::FindMarkers()`, it's reported that DE analysis done on peudo-bulk scRNA data is more robust and reliable than directly done on scRNA data.
 
-Thus, our mastR is designed to generate a more refined list of siganture genes from multiple group comparisons based on `edgeR` and `limma` DE analysis result. The final signature is selected by rank product score test for picking up genes with high ranks in the most of comparisons. The rank can be ordered by any gene statistic generated by limma analysis. Signature can be further refined by keeping top n DEGs in specified comparison(s), which can help to improve the discrimination between similar cell types.
+Thus, mastR is designed to generate a more refined list of signature genes from multiple group comparisons based on the results from `edgeR` and `limma` DE analysis workflow. The final signature is selected by rank product score test for picking up genes with high ranks in the most of comparisons. The rank can be ordered by any gene statistic generated by limma analysis. Signature can be further refined by keeping the top n DEGs in the specified comparison(s), which can help to improve the discrimination between fairly similar cell types.
 
-Another novel point of mastR is that all of the current markers generation tools only consider the genes contribution to the classification, but ignore the background noise of tissue-specificity. mastR offers a background noise removal function, designed to eliminate parts of the marker genes that are highly expressed in specific tissues or cancer cells, thereby avoiding potential confusion caused by background or sample purity in specific tissue applications.
+Another unique advantage of mastR is that it takes into account the background noise of tissue-specificity, which is often ignored by other marker generation tools. Unlike most tools that only consider the genes' contribution to the classification, mastR also offers a background noise removal function. This function is designed to remove parts of the marker genes that are highly expressed in specific tissues or cancer cells. These signals from the background, regarded as background noise, can cause potential ambiguity when applying the markers to specific tissues due to background or sample purity issues. This feature makes mastR apart and enhances the accuracy and specificity of the generated markers.
 
-mastR also allows people to build a markers pool before signature screening, which might contain all of potential markers or interesting genes. The final signature will be integrated with this pool (by intersection), which can help to constrain the final signature within the interested pathway-related genes or functional gene-sets. People can borrow the published knowledge to build this.
+Furthermore, mastR allows users to build a markers pool before signature screening, which might contain the potential markers of interest to the users. The final signature will be integrated with this pool (by intersection), which can help to constrain the final signature within the interested pathway-related genes or functional gene-sets. People can borrow the published knowledge to build this.
 
-The need for this package arises from the importance of identifying specific genes that are differentially expressed in different groups or tissues, as these genes can serve as biomarkers for diagnosis, prognosis, and therapeutic targeting. However, identifying marker genes can be a challenging and time-consuming task, and the presence of background noise can lead to erroneous results. Our package simplifies and streamlines this process, allowing researchers to focus on their analyses and interpretations without the burden of manual marker gene selection and background noise removal.
+The motivation of this package arises from the importance and necessity of identifying specific genes that are differentially expressed in different groups or tissues, as these genes can serve as biomarkers for diagnosis, prognosis, and therapeutic targeting. However, identifying marker genes can be a challenging and time-consuming task, and the presence of background noise can lead to erroneous results. Our package simplifies and streamlines this process, allowing researchers to focus on their analyses and interpretations without the burden of manual marker gene selection and background noise removal.
 
-This report demonstrates the main functions of mastR `r packageVersion("mastR")`.
+This report demonstrates the main functions and applications of mastR `r packageVersion("mastR")`.
 
-As a simple demo, here the report will specifically demonstrate the signature screening workflow of NK cells in colorectal cancer (CRC), then assess the final result by using some visualization functions.
+This report demonstrates the signature screening workflow of NK cells in colorectal cancer (CRC), assessing the results by using in-built visualization functions.
 
-**How does mastR screen the signature**  
+**mastR screen the signature using the following 3 key steps:**
 
-- step 1. generate markers pool  
-- step 2. screen markers from the pool  
-- step 3. visualize signature performance
-       
-**Applications**  
+  step 1. generate markers pool  
+  step 2. screen markers from the pool  
+  step 3. visualize signature performance
 
-- a) score samples  
-- b) estimate cellular proportion  
-- c) single cell annotation  
+**Applications**
+
+- score samples
+- estimate cellular proportion
+- single cell annotation
 
 # Installation
 
------------------------------
+------------------------------------------------------------------------
 
 `mastR` R package can be installed from Bioconductor or [GitHub](https://github.com/Gene233/mastR).
 
@@ -120,30 +128,32 @@ library(GSEABase)
 
 # Step 1. Build Immune Markers Pool
 
-------------------------------
+------------------------------------------------------------------------
 
 The first step is to define the original markers pool this analysis will be based on.
 
-The final signature will only be the intersected genes with the markers pool. The whole gene list of the data will be regarded as the markers pool if no preliminary result or intereted genes are provided. But *note* that `markers = NULL` won't keep any special genes if they fail the filtration by edgeR.
+The final signature will only be the intersected genes with this markers pool. The whole gene list of the data will be regarded as the markers pool if no preliminary result or interested genes are provided.
 
-Users can build the markers pool of interest from the available datasets or build from MSigDB, PanglaoDB or LM7/LM22 by our imported functions, if users have any preliminary knowledge about the target group type (cell type). All genes in the pool will be reserved for DE analysis even failed the filtration.
+***Note*** that `markers = NULL` won't keep any special genes if they fail the filtration by edgeR.
 
-The standard pool building consists of:
+If users have any preliminary knowledge about the target group type (cell type), they can build the markers pool of interest from the available datasets or build from MSigDB, PanglaoDB or LM7/LM22 using our in-built functions. All genes in the pool will be reserved for DE analysis even even if they are filtered out during the filtration of edgeR.
 
-- 1) generate from sources
-  - a) generate from LM7/22 signature matrix for CIBERSORT
-  - b) generate from MSigDB
-  - c) generate from PanglaoDB
-  - d) generate from customized gene list
-- 2) merge gene-sets from all sources together
+The standard pool building process involves the following:
 
-mastR allows specific markers to be conveniently loaded as follows:
+1)  generate from sources  
+    a)  LM7/22 signature matrix for CIBERSORT  
+    b)  MSigDB  
+    c)  PanglaoDB  
+    d)  Customized gene list  
+2)  merge gene-sets together
+
+mastR allows some markers to be conveniently loaded as follows:
+
+- `LM7` and `LM22` are immune cells signature matrices for CIBERSORT, you can get more details by `?mastR::LM7` or `?mastR::LM22`.
+
+- `msigdb_gobp_nk` is a 'GeneSetCollection' object, contains genesets with gene-set name matched to 'NATURAL_KILLER' from <GO:BP> MSigDB v7.4 database. More details for `?mastR::msigdb_gobp_nk`.
 
 - `NK_markers` dataset is a combination of CIBERSORT LM7, LM22 and human orthologs in mice from [Huntington](https://cancerimmunolres.aacrjournals.org/content/7/7/1162.long). It contains 114 genes in total.
-
-- `LM7` and `LM22` are signature matrices, you can get more details by `?mastR::LM7` or `?mastR::LM22`.
-
-- `msigdb_gobp_nk`  is a 'GeneSetCollection' object, contains genesets with gene-set name matched to 'NATURAL_KILLER' from GO:BP MSigDB v7.4 database. More details for `?mastR::msigdb_gobp_nk`.
 
 The output of markers generation functions is either 'GeneSet' or 'GeneSetCollection' object.
 
@@ -151,17 +161,15 @@ The output of markers generation functions is either 'GeneSet' or 'GeneSetCollec
 
 To screen the immune cell subset signatures, we need to generate a markers pool first. mastR allows people to generate markers pool from multiple resources as metinoned before.
 
-In this demo, we will load some example datasets to show how it works. The datasets used in this report have been built within the package or can be accessed publicly. You can use the following scripts to load them into your R environment.
+In this demo, we will load some example datasets to show how it works. The datasets used in this report have been built within the package or can be accessed publicly. You can use the following scripts to load them into the environment.
 
-### Markers from LM
+### LM
 
 Markers can also be generated from LM7/22 signature matrix to get immune cells markers using function `get_lm_sig()`.
 
-- `LM7/22` are signature matrix from CIBERSORT, contains 7/22 immune cell subsets markers lists.
+`LM7/LM22` is immune cells signature matrix from CIBERSORT, contains 7/22 immune cell subsets markers lists.
 
-Users can extract markers for cell subsets matched to the given regex pattern from imported data `LM7`/`LM22`. 
-
-By using `gsc_plot()`, an UpSetR plot across all gene-sets in the input would be printed. The input can be either 'GeneSet' or 'GeneSetCollection' objects. Using `gsc_plot()` we can see how different gene-sets intersect with each other.
+Users can extract markers for cell subsets matched to the given regex pattern from imported data `LM7`/`LM22`.
 
 ```{r LM markers}
 data("LM7", "LM22")
@@ -173,21 +181,25 @@ get_lm_sig(lm7.pattern = "^NK")
 
 ## collect both LM7 and LM22
 LM <- get_lm_sig(lm7.pattern = "^NK", lm22.pattern = "NK cells")
-
 LM
+```
+
+By using `gsc_plot()`, an UpSetR plot across all gene-sets in the input would be printed. The input can be either 'GeneSet' or 'GeneSetCollection' objects. Using `gsc_plot()` we can see how different gene-sets intersect with each other.
+
+```{r gsc plot}
 ## show upset diagram
 gsc_plot(LM)
 ```
 
-### Markers from MSigDB
+### MSigDB
 
-Gene-sets from MSigDB can also be searched and collected by function `get_gsc_sig()`.
+Gene-sets from MSigDB can also be searched and collected by using the function `get_gsc_sig()`.
 
-- The Molecular Signatures Database (MSigDB) is a resource of tens of thousands of annotated gene sets for use with GSEA software, divided into Human and Mouse collections. 
+The Molecular Signatures Database (MSigDB) is a resource of tens of thousands of annotated gene sets for use with GSEA software, divided into Human and Mouse collections.
 
-Users can use the `species`, `cat`, `subcat` and `pattern` to specify which gene-sets to be added. 
+Users can use `species`, `cat`, `subcat` and `pattern` to specify which gene-sets to be added.
 
-All gene-sets with gene-set name matched to the regex `pattern` in the whole MSigDB would be extracted if `cat` and `subcat` are not set, otherwise only the genesets under the union of `cat` and `subcat` would be searched. 
+All gene-sets with gene-set name matched to the regex `pattern` in the whole MSigDB would be extracted if `cat` and `subcat` are not set, otherwise only the genesets under the union of `cat` and `subcat` would be searched.
 
 In this demo, we'll use a small collection of MSigDB `msigdb_gobp_nk` to show how it works.
 
@@ -200,13 +212,18 @@ MSig
 gsn <- setNames(names(MSig), LETTERS[seq_along(MSig)])
 for (i in seq_along(MSig)) {
   setName(MSig[[i]]) <- LETTERS[i]
-}   
-## show upset diagram of collected gene-sets
-gsc_plot(MSig)
-gsn  ## show gene-set names
+}
 ```
 
-As we can see, there're `r length(MSig)` gene-sets in MSig, which is too many for visualization. Thus, we can use another function `merge_markers()` to merge all gene-sets into one 'GeneSet' object.
+Then we can see how these collected gene-sets overlapped by using function `gsc_plot()`. We can see which gene-sets are the top 3 in the upset plot.
+
+```{r show overlap}
+## show upset diagram of collected gene-sets
+gsc_plot(MSig)
+gsn[c("A", "M", "D")]  ## show gene-set names of top 3
+```
+
+As we can see, there're `r length(MSig)` gene-sets in MSig, which is too many for visualization. Thus, we can use another function `merge_markers()` to merge all gene-sets into one 'GeneSet' object. (You can also directly pass un-merged object to the subsequent analysis.)
 
 The input of `merge_markers()` can be a list of vectors of genes, or a list of GeneSet objects, or a GeneSetCollection object.
 
@@ -216,13 +233,13 @@ MSig <- merge_markers(MSig)
 setName(MSig) <- "MSigDB"
 ```
 
-It's also available to search on the whole MSigDB without loading it yourself by setting param `data = "msigdb"` in the function, specific species or version can also be set as optional params.
+***Note***: `data = "msigdb"` allows searching of MsigDB without loading it into the environment. `species` or `version` can also be set as optional params.
 
-### Markers from PanglaoDB
+### PanglaoDB
 
-Markers from PanlaoDB can also be obtained to build the markers pool by using function `get_panglao_sig()`.
+Markers from [PanlaoDB](https://panglaodb.se/) can be obtained to build the markers pool by using function `get_panglao_sig()`.
 
-- PanglaoDB is a database for the scientific community interested in exploration of single cell RNA sequencing experiments from mouse and human. It collects and integrates data from multiple studies and present them through a unified framework.
+PanglaoDB is a database for the scientific community interested in exploration of single cell RNA sequencing experiments from mouse and human. It collects and integrates data from multiple studies and present them through a unified framework.
 
 Users can use `list_panglao_organs()` and `list_panglao_types()` functions to list all available organs and cell types on PanglaoDB website and use `get_panglao_sig()` function to retrive them.
 
@@ -241,11 +258,11 @@ Panglao
 ## number differs from 'NK cells' under list_panglao_types(organ = "Immune system"), because we only keep 'Hs' markers.
 ```
 
-### Markers from customized gene list
+### Customized gene list
 
-Markers can also be generated from customized gene list. Here we use a list of natural killer (NK) cell markers from Curson et al 2019 from [Curson's Publication](https://aacrjournals.org/cancerimmunolres/article/7/7/1162/469488/A-Gene-Signature-Predicting-Natural-Killer-Cell) as a customized gene list.
+Markers can also be generated from a customized gene list. Here we use a list of natural killer (NK) cell markers from Curson et al 2019 from [Curson's Publication](https://aacrjournals.org/cancerimmunolres/article/7/7/1162/469488/A-Gene-Signature-Predicting-Natural-Killer-Cell) as a customized gene list.
 
-- `NK_markers` dataset is a combination of CIBERSORT LM7, LM22 and human orthologs in mice from Huntington. It contains 114 genes in total.
+`NK_markers` dataset is a combination of CIBERSORT LM7, LM22 and human orthologs in mice from Huntington. It contains 114 genes in total.
 
 ```{r NK_markers}
 ## show what NK_markers looks like:
@@ -262,7 +279,7 @@ nk_m <- GeneSet(NK_markers$HGNC_Symbol,
 
 Now we have multiple lists of markers from different sources, to use them in the subsequent analysis, we need to merge them together.
 
-All markers can be merged into one 'GeneSet' object by using function `merge_markers()` we mentioned before. Each marker's origin will be saved as a data.frame under the 'longDescription' slot of the output in json format.
+All markers can be merged into one 'GeneSet' object by using function `merge_markers()`.
 
 ```{r integrate markers}
 gsc <- GeneSetCollection(c(nk_m, LM, MSig)) ## add Panglao if you run it
@@ -272,58 +289,62 @@ Markers <- merge_markers(gsc)
 gsc_plot(gsc)
 
 Markers
+```
 
+The source of each marker will be saved as a data.frame under the 'longDescription' slot of the output in json format. Users can view it to trace back the source of each gene.
+
+```{r source table}
 ## to show the table summary of merged list
 head(jsonlite::fromJSON(GSEABase::longDescription(Markers)))
 ```
 
-Now we get a large markers pool for screening, next we need to screen signature genes from the pool for both cell subset and tissue specificity.
+Now with a large markers pool for screening, we need to screen signature genes from the pool for both cell subset and tissue specificity.
 
-# Step 2. Screen Markers from the Markers Pool
+# Step 2. Identification and Refinement of Signature
 
-## Screen Markers for Group
+## Signature Construction by Factors of Interest
 
-------------------------------------
+------------------------------------------------------------------------
 
-### Screen Markers Against Other Groups
+### Signature Identification for Target Group
 
 For group specificity, there're 4 main steps:
 
-- a) process data: filtration, normalization, sample weighting and linear model fit
-- b) differential expression (DE) analysis  
-- c) feature selection: pick differentially expressed genes with high ranks in most of comparisons
-- d) integrate selected genes with markers pool
+  a)  process data: filtration, normalization, sample weighting and linear model fit  
+  b)  differential expression (DE) analysis  
+  c)  feature selection: pick differentially expressed genes with high ranks in most of comparisons  
+  d)  integrate selected genes with markers pool
 
-Customized external data is accepted in diverse formats: DGEList, eSet, matrix... For example, a large collection of 1561 bulk RNA-seq samples generated by DICE from pure populations of human immune cells, can be used to as input data. It can be loaded by function `celldex::DatabaseImmuneCellExpressionData()`, which contains 5 main cell types and 15 fine cell types.
+Customized external data is accepted in many formats: DGEList, eSet, matrix... For example, a large collection of 1561 bulk RNA-seq samples generated by DICE from pure populations of human immune cells, can be used as input data. It can be loaded by function `celldex::DatabaseImmuneCellExpressionData()`, which contains 5 main cell types and 15 fine cell types.
 
-***Notice***: all input data must be raw counts data or log-transformed expression data.
+***Note***: all input data must be raw counts data or log-transformed expression data.
 
 In this demo, we use our imported example data `im_data_6` from [GSE60424](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE60424) as input. Only samples from healthy individuals are kept, and 'Whole Blood' or 'PBMC' cells are removed in dataset. It can also be obtained by `GEOquery::getGEO()`.
 
-- `im_data_6` is a eSet object, containing RNA-seq TMM normalized counts data of 6 sorted immune cell subsets * 4 samples. More details in `?mastR::im_data_6`.
+`im_data_6` is a eSet object, containing RNA-seq TMM normalized counts data of 6 sorted immune cell subsets \* 4 samples. More details in `?mastR::im_data_6`.
 
 ```{r im_data_6}
 data("im_data_6")
 im_data_6
 ```
 
-#### process data {#process}
+#### processing the data {#process}
 
-To screen signature for cell subset specificity, some processes need to be done on the data first.
+To screen signature for the group specificity, the data needs to be pre-processed which includes gene filtering, normalization etc..
 
-`process_data()` provided by mastR can do the genes filtration, data normalization, samples weighting, linear model fit and the computation of gene differential expression statistic for you.
+`process_data()` in mastR does the genes filtration, data normalization, samples weighting, linear model fit and the computation of gene differential expression statistic as a single function call.
 
-Users need to provide an expression data with sample group labels (containing interested target group), then it will return a `DGEList` object with filtered counts (unfiltered counts data will be saved under "original"), vfit (`limma::voom()` is done), tfit (`limma::lmFit()` and `limma::treat()` are done).
+Users need to provide an expression data with sample group labels (containing interested target group), a `DGEList` object with filtered counts (unfiltered counts data will be saved under "original"), vfit (`limma::voom()` is done), tfit (`limma::lmFit()` and `limma::treat()` are done) will be returned.
 
-What this function does is:
+Process under the hood:
 
-- Data will be filtered by the given cutoff, all gene with low expression will be removed by edgeR.
+- Data filtered by the given cutoff, all gene with low expression will be removed by edgeR.
 
-- If the given data is raw count data (`normalize = TRUE`), further normalization 'TMM' and `limma::voom()` fit will be done inside the process function, otherwise the `trend` of limma will be applied on the given data.
+- If the given data is raw count data (`normalize = TRUE`), further normalization 'TMM' and `limma::voom()` fit is conducted, otherwise `trend` of limma is applied.
 
-- Final linear model will be fitted.
+- Final linear model is fitted.
 
-- gene statistic for DE analysis are computed by `limma::treat()`. 
+- gene statistic for DE analysis are computed by `limma::treat()`.
 
 Let's see what cell types are in `im_data_6`.
 
@@ -331,15 +352,15 @@ Let's see what cell types are in `im_data_6`.
 table(im_data_6$`celltype:ch1`)
 ```
 
-With below simple params, data processing can be easily done by `process_data()`:
+The following parameters are required by `process_data()`:
 
-* `data` param can be a bulk RNA-seq expression object with cell subset labels, can be matrix, eSet, DGEList, ... (expression must be either raw counts or logcounts).
-* `group_col` param can specify the column name of groups (labels), can be a vector when `data` is a matrix.  
-* `target_group` param can specify the cell target_group name of interest. Users can choose one name in `group_col` vector.  
-* `markers` param could specify a geneset to be kept no matter if they pass the filtration. Setting it to `NULL` can skip this. Must be gene SYMBOL ID.  
-* `gene_id` specify the gene ID type of rownames of data when markers is not NULL, could be one of 'ENSEMBL', 'SYMBOL', 'ENTREZ'..., default 'SYMBOL'.
+- `data`: can be a bulk RNA-seq expression object with cell subset labels, can be matrix, eSet, DGEList, ... (expression must be either raw counts or logcounts).
+- `group_col`: can specify the column name of groups (labels), can be a vector when `data` is a matrix.
+- `target_group`: can specify the cell target_group name of interest. Users can choose one name in `group_col` vector.
+- `markers`: could specify a geneset to be kept no matter if they pass the filtration. Setting it to `NULL` can skip this. Must be gene SYMBOL ID.
+- `gene_id`: specify the gene ID type of rownames of data when markers is not NULL, could be one of 'ENSEMBL', 'SYMBOL', 'ENTREZ'..., default 'SYMBOL'.
 
-More optional param details can be found in `help(proc_data)`
+Optional param details can be found in `help(proc_data)`
 
 ```{r process data}
 proc_data <- process_data(
@@ -356,13 +377,19 @@ proc_data <- process_data(
 proc_data$voomE <- proc_data$vfit$E
 ```
 
-#### visualize QC before and after
+#### visualization of QC results before and after processing
 
-After data processing, we need to check whether the data has been well filtered , normalized and fitted.
+After data processing, wcheck whether the data has been well filtered , normalized and fitted.
 
-mastR provides visualization functions for this, to compare the data before and after `process_data()` and see how well the QC is done.
+mastR provides visualization functions to compare the data before and after `process_data()` and see how well the QC has been carried out.
 
-To see if the low quality genes are removed, `plot_diagnostics()` can be used to show the expression distribution, RLE and MDS plots.
+To assess the removal of the low quality genes, `plot_diagnostics()` can be used to show the expression distribution, RLE and MDS plots.
+
+The density plot shows we successfully removed most of low quality genes which makes the distribution more normal-like.
+
+RLE plot shows smaller deviation across samples, proving the success of normalization after processing.
+
+While MDS doesn't show quite different result as it only uses top variable genes which should not change too much before and after processing.
 
 ```{r plot diagnostics, fig.width=10, fig.height=5}
 expr1 <- edgeR::cpm(im_data_6@assayData$exprs, log = TRUE) ## or proc_data$original_counts
@@ -375,14 +402,14 @@ plot_diagnostics(
 )
 ```
 
-Mean-variance trend can be plot by `plot_mean_var()` to show the linear fit result.
+Mean-variance trend can be plotted by `plot_mean_var()` to show the linear fit result. The droping trend in voom and the horizontal line in final model indicates the good fit of the data.
 
 ```{r plot mean-variance, fig.width=10, fig.height=5}
 ## plot mean-variance trend
 plot_mean_var(proc_data)
 ```
 
-PCA can be plot by `pca_matrix_plot()` to show the normalization result and if the samples can be clustered by groups. You can select how many top n PCs to be plot by param `n`.
+PCA can be plotted by `pca_matrix_plot()` to assess the variations in the data and weather normalization was able to remove batch effects. You can select how many top n PCs to be plot by param `n`.
 
 The input for this function should be log-normalized.
 
@@ -394,11 +421,11 @@ pca_matrix_plot(expr1, group_by = proc_data$samples$celltype.ch1, n = 3)
 pca_matrix_plot(expr2, group_by = proc_data$samples$celltype.ch1, n = 3)
 ```
 
-#### select signature genes {#selection}
+#### signature genes selecton based on statistical analysis {#selection}
 
-Now we get processed data with DE statistic for each gene in each comparison, then the proc_data can be passed into `select_sig()` function for further genes selection based on rank product scoring. Cell type specific signature can be obtained by this.
+Now we get processed data with DE statistic for each gene in each comparison, then the proc_data can be passed into `select_sig()` function for further genes selection based on rank product scoring. Group specific signature is therefore determined.
 
-* `feature_selection` param to choose whether to use rank product ('rankproduct') or not ('none') to select DEGs from multiple comparisons of DE analysis. Default "auto" will perform "rankproduct" and switch to "none" if the number of final "UP" and "DOWN" genes are < 5.
+`feature_selection`: choose whether to use rank product ('rankproduct') or not ('none') to select DEGs from multiple comparisons of DE analysis results. Default "auto" will perform "rankproduct" and switch to "none" if the number of final "UP" (up-regulated genes) and "DOWN" (down-regulated genes) genes are < 5.
 
 ```{r select sig}
 ## get the same result as there's permutation test for rank product
@@ -408,11 +435,11 @@ sig_ct <- select_sig(proc_data)
 head(sig_ct)
 ```
 
-***Note***: All above steps from \@ref(process) to \@ref(selection) for screening group signature can be done by one integrated function `get_degs()`.
+***Note***: *All above steps from \@ref(process) to \@ref(selection) for screening group signature can be done by one integrated function `get_degs()`.*
 
-`get_degs()` function can filter low expression genes out from immune dataset, normalize and fit voom model to data if `normalize = TRUE`, then a processed data `proc_data` object and a differentially expressed GeneSetCollection ('UP' and 'DOWN') will be returned as output.
+*`get_degs()` function can filter low expression genes out from immune dataset, normalize and fit voom model to data if `normalize = TRUE`, then a processed data `proc_data` object and a differentially expressed GeneSetCollection ('UP' and 'DOWN') will be returned as output.*
 
-QC plots can also be shown at the same time by setting optional param `plot = TRUE`.
+*QC plots can also be shown at the same time by setting optional param `plot = TRUE`.*
 
 ```{r DEG_6, eval=FALSE, fig.width=8, fig.height=5}
 DEG_6 <- get_degs(
@@ -430,11 +457,11 @@ GSEABase::geneIds(DEG_6$DEGs)
 DEG_6$proc_data$vfit$design ## show the design matrix
 ```
 
-#### intersect with markers pool {#intersect-pool}
+#### Genrating signature from markers pool {#intersect-pool}
 
-After getting specific signature genes for the target group, we will only keep those UP regulated genes which are also present in our markers pool `Markers`, to constrain the final signature wthin the interested gene list.
+After getting specific signature genes for the target group, only keep those DEGs which are also present in our markers pool `Markers`, to constrain the final signature wthin the interested gene list.
 
-PCA can be used to show clearer separation of NK cells from other cells by using our screened UP DEGs. And the intersected genes with markers pool explain more variance in PC1 compared with non-intersected DEGs.
+As we are only interested in up-regulated genes in NK cells in this demo, only `UP` DEGs are kept now.
 
 ```{r markers for cell type, fig.width=8, fig.height=6}
 ## convert ensembl IDs into symbols to match markers pool
@@ -445,8 +472,14 @@ deg_up <- mapIds(org.Hs.eg.db::org.Hs.eg.db,
 m_ct <- intersect(geneIds(Markers), deg_up)
 names(m_ct) <- names(deg_up)[match(m_ct, deg_up)]  ## set ensembl ID as names for downstream visualization
 
-m_ct
+head(m_ct)
+```
 
+Use the visualizations like PCA to assess group separations.
+
+In this case, PCA plots are used to show clearer separation of NK cells from other cells by using our screened UP DEGs. And the intersected genes with markers pool explain more variance in PC1 compared with non-intersected DEGs.
+
+```{r PCA on sig}
 ## PCA shows clear separation of NK cells
 ## after intersection
 pca_matrix_plot(proc_data$vfit$E[names(m_ct),],
@@ -458,9 +491,9 @@ pca_matrix_plot(proc_data$vfit$E[names(deg_up),],
                 n = 3) + ggtitle("Before intersection")
 ```
 
-***Note***: There's also a wrapper function `filter_subset_sig()` which can directly do the whole Step 2 in one step. The result would be the same as running the above workflow step by step.
+***Note***: *There's also a wrapper function `filter_subset_sig()` which can directly do the whole Step 2 in one step. The result would be the same as running the above workflow step by step.*
 
-`filter_subset_sig()` can also be helpful when you have multiple datasets (more details in Section \@ref(multi-data)). It can output final signature after aggregating signature lists from all datasets.
+*`filter_subset_sig()` can also be helpful when you have multiple datasets (more details in Section \@ref(multi-data)). It can output final signature after aggregating signature lists from all datasets.*
 
 ```{r filter_subset_sig, eval=FALSE}
 # run by wrapped function in one-step
@@ -470,51 +503,48 @@ m_ct <- filter_subset_sig(
   markers = geneIds(Markers),
   group_col = "celltype:ch1",
   target_group = "NK",
+  # dir = "UP", ## specify to keep "UP" or "DOWN" regulated genes
   gene_id = "ENSEMBL"
 )
 ```
 
-### Remove Markers with Background Noise in Tissue (optional)
+### Signature Refinement by Background Correction in Tissue (optional)
 
 After screening signature for group specificity, we need to increase the tissue specificity by removing background noise for the signature now, what we need to do is:
 
-- filter out cancer cell expressed genes  
+filter out cancer cell expressed genes:
 
   In order to remove background noise from the marker genes, we utilized a signal-to-noise ratio (SNR) approach to filter out genes with low SNR values. This was done to eliminate genes that have similar expression patterns across the target group and background tissues, which may be due to non-specific expression or technical artifacts.
-      
   The SNR is calculated as the difference between the mean expression value of the group of interest and the mean expression value of the background group, divided by the standard deviation of the background group. Genes with low SNR values are considered to have low discriminative power between the group of interest and the background group, and are therefore filtered out.
-      
-  By removing genes with low SNR values, we are able to improve the specificity and accuracy of the marker genes, as well as reduce potential confounding effects caused by non-specific expression or technical artifacts. This approach is commonly used in gene expression analysis to improve the reliability of differential expression analysis and biomarker identification.  
-  
-  By doing this, we can guarantee the activity of our final signature for infiltrating immune cells won't be affected by tumor purity when it's applied on tumor samples.  
-      
-- optional  
+  By removing genes with low SNR values, we are able to improve the specificity and accuracy of the marker genes, as well as reduce potential confounding effects caused by non-specific expression or technical artifacts. This approach is commonly used in gene expression analysis to improve the reliability of differential expression analysis and biomarker identification.
+  By doing this, we can guarantee the activity of our final signature for infiltrating immune cells won't be affected by tumor purity when it's applied on tumor samples.
 
-  DE analysis to compare tumor infiltrating immune cells vs normal immune cells (e.g. PBMC or normal tissue resident immune cells), add DEGs into markers pool or combine it with the result of step 2. to increase tissue/cancer specificity.  
+mastR provides a `remove_bg_snr()` function that can eliminate genes with strong signal in cancer cells or tissues, regarded as background noise. Users can input two datasets: one as the signal data (e.g. immune cell data) and the other as the background noise data (e.g. cancer cells or tissue cells data). Then, all genes with low SNR (signal to noise ratio) will be eliminated from the given markers list. This ensures that our immune signature remains unaffected by tumor purity.
 
-mastR provides function `remove_bg_snr()` to remove genes with background noise in cancer cells or tissues. Users need to provide a data as signal data (e.g. immune cell data) and a data as background noise data (e.g. cancer cells or tissue cells), then `remove_bg_snr()` will compute SNR (signal to noise ratio) for each gene in the given markers, and remove those genes with low SNR. This can ensure our immune signature won't be affected by tumor purity.
+The sig_data shoule always be the proc_data generated by `process_data()` function.
 
-Based on the `bg_data` input format, this function can be used in 2 ways:  
+Based on the `bg_data` input format, this function can be used in 2 ways:
 
-* use CCLE as `bg_data` input  
-* use customized data as `bg_data` input
+- use CCLE as `bg_data` input
+- use customized data as `bg_data` input
 
-#### use CCLE as bg_data
+#### using CCLE as cancer cell background data
 
-The default setting of this `remove_bg_snr()` uses CCLE from [DepMap CCLE](https://depmap.org/portal/download/), containing RSEM quantified TPM data of 1392 cancer cell lines (until 2022.04).  
+The default setting of this `remove_bg_snr()` uses CCLE from [DepMap CCLE](https://depmap.org/portal/download/), containing RSEM quantified TPM data of 1392 cancer cell lines (until 2022.04).
 
 The Cancer Cell Line Encyclopedia (CCLE) is a compilation of gene expression, chromosomal copy number and massively parallel sequencing data from more than 1,000 human cancer cell lines.
 
-To specify cell subset markers for cancer type, use `remove_bg_snr()` function to remove failing genes which are also highly expressed by CRC adherent cell lines *per se*. This can ensure our immune signature won't be affected by tumor purity.
+`remove_bg_snr()` removes genes which are highly expressed in corresponding disease cell lines (in this case CRC adherent cell lines). This removes tumor purity as a factor in the identified signature markers.
 
-* `bg_data` can be either "CCLE" or expression dataset, e.g. matrix, eSet, DGEList, Seurat and so on.  
-* `sig_data` can be a matrix or DGEList, as signal data, always use processed data after `process_data()`.
-* `b_group_col` param is the group vector of `bg_data` samples, or the name of group column.  
-* `b_target_group` param is an regex pattern to specify the samples of interest, e.g. choose 'colorectal' to select all colorectal adherent cell lines from CCLE.  
-* `s_group_col` is a vector or character, to specify the group of target_group in `sig_data`, or the name of group column.
-* `s_target_group` is a regex pattern, to specify the target group of interest in `sig_data`.
-* `markers` is the genes need to be filtered, should be gene symbols.
-* `snr` param is the the cutoff of SNR to screen markers which are not or lowly expressed in bg_data.  
+Required params are as follows:
+
+- `bg_data` can be either "CCLE" or expression dataset, e.g. matrix, eSet, DGEList, Seurat and so on.
+- `sig_data` can be a matrix or DGEList, as signal data, always use processed data after `process_data()`.
+- `b_group_col` param is the group vector of `bg_data` samples, or the name of group column.
+- `b_target_group` param is an regex pattern to specify the samples of interest, e.g. choose 'colorectal' to select all colorectal adherent cell lines from CCLE.
+- `s_group_col` is a vector or character, to specify the group of target_group in `sig_data`, or the name of group column.
+- `s_target_group` is a regex pattern, to specify the target group of interest in `sig_data`.
+- `markers` is the genes need to be filtered, should be gene symbols.
 
 ***Note***: Both of `bg_data` and `sig_data` should be log-normalized.
 
@@ -547,13 +577,13 @@ m_ccl <- remove_bg_snr(sig_data = proc_data,
                        s_slot = "voomE")
 ```
 
-#### use customized dataset as input
+#### using customized dataset as background data
 
-Other customized data is also accepted as `bg_data` in diverse formats: eSet, matrix, DGEList... But all input must be log-transformed expression data.
+Other customized data is also accepted as `bg_data` in many formats: eSet, matrix, DGEList... But all input must be log-transformed expression data.
 
 In this demo, we use a small imported dataset `ccle_crc_5` in mastR as a customized dataset, the expression of it is logTPM.
 
-* `ccle_crc_5` is a DGEList object only contains 5 CRC cell line samples from CCLE. More details for `help(ccle_crc_5)`.
+`ccle_crc_5` is a DGEList object only contains 5 CRC cell line samples from CCLE. More details for `help(ccle_crc_5)`.
 
 ```{r remove markers for cancer cell line}
 data("ccle_crc_5")
@@ -576,7 +606,7 @@ m_ccl <- remove_bg_snr(
 head(m_ccl)
 ```
 
-## Final Group Signature for Tissue
+## Integrated Signature Genes
 
 After above steps, now we need to integrate the results together.
 
@@ -584,80 +614,45 @@ As we want the final signature to be specific to the target cell subset while le
 
 ```{r final signatures}
 sig_NK_CRC <- intersect(m_ct, m_ccl)
-sig_NK_CRC
+head(sig_NK_CRC)
 ```
 
 But here, if we directly use the `m_ct` instead of `Markers` as input `markers` for function `remove_bg_snr()`, then `m_ccl` is already the intersection result of original `m_ccl` and `m_ct`, so we can skip this.
 
 Now we get the final signature specific for both cell type and cancer type!
 
-# Step 3. Visualize The Screening Effect {.tabset .tabset-fade .tabset-pills}
+# Step 3. Visualization of Screening Results
 
-----------------------------------
+------------------------------------------------------------------------
 
-Now that we get our specific signature, we need to assess how well this signature can discriminate our target group from others. To easily realize this, some popular visualization functions are implemented in mastR.
+Now we assess how well the refined signature can discriminate our target group from others. mastR provides the following visualization functions for different purposes:
 
 - `pca_matrix_plot()` for matrix of PCA plots with top n PCs.
+    To show if the target group can be separated from other groups and how well the separation is. Users can also know how much variance has been explained by PC1 with the signature.
 
-  To show if the target group can be separated from other groups and how well the separation is. Users can also know how much variance has been explained by PC1 with the signature.
-  
 - `sig_heatmap()` for signature heatmap across groups and its comparsion with markers pool.
+    To validate if the signature shows clear and differential expression pattern between the target group and others, and if the pattern is clearer and cleaner after the screening when compared with un-screeed markers pool.
 
-  To validate if the signature shows clear and differential expression pattern between the target group and others, and if the pattern is clearer and cleaner after the screening when compared with un-screeed markers pool.
-  
 - `sig_rankdensity_plot()` for signature genes rank density distribution across groups.
+    To see if the signature genes are highly expressed within each sample of the target group while lowly expressed in others.
 
-  To see if the signature genes are highly expressed within each sample of the target group while lowly expressed in others.
-  
 - `sig_boxplot()` for signature expression or singscore boxplot across groups.
+    To test the overall performance of the whole signature when applying it for scoring, singscore is used to compute the rank score with the whole signature. The boxplot across groups can be used to test if the whole signature is powerful enough to distinguish the target group from others on scoring level. Median expression of each signature gene is also allowed to plot.
 
-  To test the overall performance of the whole signature when applying it for scoring, singscore is used to compute the rank score with the whole signature. The boxplot across groups can be used to test if the whole signature is powerful enough to distinguish the target group from others on scoring level. Median expression of each signature gene is also allowed to plot.
-  
 - `sig_scatter_plot()` for signature scaled expression scatter plot of the target group vs all other groups respectively.
+    To visualize the correlation of the signature between the target and other groups, the row-scaled gene expression is computed to make the scatter plot. Based on it, we can easily see the co-expression correlation and signature's specificity.
 
-  To visualize the correlation of the signature between the target and other groups, the row-scaled gene expression is computed to make the scatter plot. Based on it, we can easily see the co-expression correlation and signature's specificity. 
-  
 - `sig_gseaplot()` for gene-set enrichment analysis result display.
-
-  To further validate if the signature is significantly enriched in our target group compared with other groups, `clusterProfiler::GSEA()` analysis is done inside this function. Users can choose to display 'dotplot' or gseaplot' by `clusterProfiler::GSEA()`.
-
-## PCA matrix plot
-
-To see if our curated NK cells signature has more distinguishable expression pattern from other immune cell subsets, we can use PCA plot again here to show it.
-
-Loadings can be drawn to show which genes are relevant to NK cells, and result shows most of signature genes are indicating NK cells.
-
-```{r pca, fig.width=8, fig.height=6}
-## as proc_data shows better discrimination, use it for visualization
-pca_matrix_plot(
-  data = proc_data, 
-  features = sig_NK_CRC, 
-  group_by = "celltype.ch1",
-  gene_id = "ENSEMBL",
-  slot = "voomE",
-  n = 3
-)
-
-## loadings can be shown by setting loading = TRUE
-pca_matrix_plot(
-  data = proc_data, 
-  features = sig_NK_CRC, 
-  loading = TRUE,
-  group_by = "celltype.ch1",
-  gene_id = "ENSEMBL",
-  slot = "voomE",
-  n = 3
-)
-```
+    To further validate if the signature is significantly enriched in our target group compared with other groups, `clusterProfiler::GSEA()` analysis is done inside this function. Users can choose to display 'dotplot' or gseaplot' by `clusterProfiler::GSEA()`.
 
 
 ## Heatmap
 
 `sig_heatmap()` function can plot the original NK cells markers and curated signatures expression pattern heatmaps in immune datasets.
 
-* `sigs` param is the final curated signature symbols, while `markers` param is the original markers pool.  
-* `scale` could specify the `column` or `row` to be scaled or no scaling by `none`.  
-* `rank_plot`` is used to decide if to gene rank instead of expression for heatmap.
+- `sigs`: the final curated signature symbols (or list of multiple signatures).
+- `markers`: is the original markers pool (optional).
+- `scale`: specify the `column` or `row` to be scaled or no scaling by `none`.
 
 ```{r heatmap, warning=FALSE, fig.width=10, fig.height=7}
 sig_heatmap(
@@ -687,43 +682,12 @@ sig_heatmap(
 
 We can see the expression pattern of the signature is more distinguishable in NK cells.
 
-## Rank Density Plot
-
-Use `sig_rankdensity_plot()` function to make rank density plot for all cell subsets in the data.
-
-By setting `aggregate = TRUE`, only one plot for each cell type with mean expression would be shown.
-
-We might want to see the rank density plot in more than 1 datasets for comparison, this can be done by simply passing a list of datasets to function.
-
-```{r rankdensity plot, fig.width=8, fig.height=5, warning=FALSE, results='hide'}
-# ## visualization on both original and processed data
-# sig_rankdensity_plot(
-#   data = list(im_data_6 = im_data_6,
-#               process_Data = proc_data), 
-#   sigs = sig_NK_CRC,
-#   group_col = c("celltype:ch1", "celltype.ch1"), 
-#   gene_id = "ENSEMBL",
-#   slot = "voomE"
-# )
-
-## visualization on aggregated data
-sig_rankdensity_plot(
-  data = proc_data, 
-  sigs = sig_NK_CRC,
-  group_col = "celltype.ch1", 
-  aggregate =  TRUE,
-  gene_id = "ENSEMBL",
-  slot = "voomE"
-)
-```
-
-We can find, processed data shows more digstinguishable rankdensity distribution of screened NK signature genes.
 
 ## Signature Score Boxplot
 
-To see if the curated NK cells signatures have evident higher abundance in NK cells than other immune cell subsets, use `sig_boxplot()` function to make boxplot of the NK scores for all cell subsets in the data.
+To see if the curated signature have evident higher abundance in NK cells than other immune cell subsets, use `sig_boxplot()` function to make a boxplot of NK scores for all cell subsets in the data. NK score is calculated by `singscore` package.
 
-NK score is calculated by `singscore` package.
+***Note***: Boxplot of median expression of each gene can be plotted by setting param `type = "expression"`.
 
 ```{r score boxplot, warning=FALSE}
 sig_boxplot(
@@ -746,29 +710,12 @@ sig_boxplot(
 # ) * guides(col = "none")
 ```
 
-Obviously, our signature always shows significantly higher score in NK cells.
+Obviously, our signature shows significantly higher score in NK cells.
 
-## Signature Abundance Boxplot
-
-`sig_boxplot()` function can also generate boxplot of the NK signature abundance for all cell subsets in the data by setting `type = "expression"`.
-
-```{r abundance boxplot, warning=FALSE}
-sig_boxplot(
-  data = proc_data, 
-  sigs = sig_NK_CRC,
-  group_col = "celltype.ch1", 
-  target_group = "NK",
-  type = "expression",
-  gene_id = "ENSEMBL",
-  slot = "voomE"
-)
-```
-
-It's clear the score can increase the difference between NK cells and others.
 
 ## Signature Abundance Scatter Plot
 
-To see if the curated NK cells signature shows higher specificity to NK cells than other immune cell subsets. Use `sig_scatter_plot()` function to make scatter plot of the NK signature abundance for all cell subsets in the data.
+To see if the curated signature shows higher specificity to NK cells than other immune cell subsets. Use `sig_scatter_plot()` function to make scatter plot of the signature scaled abundance for all cell subsets in the data.
 
 If the signature shows specificity to NK, then most of signature genes should appear in left-top region (scaled expression > 1 in NK, < 1 in other), while the gene present in right-top region should represent the co-expression in the both groups.
 
@@ -796,18 +743,9 @@ Based on scatter plot result, we can actually do further filtration to improve s
 
 ## Signature GSEA plot
 
-To see if the curated signature is enriched in NK cells than other immune cell subsets. Use `sig_gseaplot()` function to make GSEAplot.
+To see if the curated signature is enriched in NK cells than other immune cell subsets. Use `sig_gseaplot()` function to make GSEA plot. Dotplot can be plotted by setting `method = "dotplot"`.
 
 ```{r gseaplot, warning=FALSE, fig.width=10, fig.height=7}
-## dotplot
-sig_gseaplot(
-  data = proc_data,
-  sigs = list(sig = sig_NK_CRC, markers = geneIds(Markers)),
-  group_col = "celltype.ch1",
-  target_group = "NK",
-  gene_id = "ENSEMBL",
-  slot = "voomE"
-)
 ## gseaplot
 sig_gseaplot(
   data = proc_data, 
@@ -820,106 +758,32 @@ sig_gseaplot(
 )
 ```
 
-It's clear that our screened signature is enriched in all comparisons.
+It's clear that our refined signature is enriched in all comparisons, and our refinement successfully removed the long tail from the markers pool.
 
-# Refine Signature Specificity
+***Note:***
 
-----------------------------------
+  mastR also implementes an additional feature to further increase the discriminative power of the signature between the fairly similar groups.
 
-According to the visualization result, we can see our NK signature shows good performance in separating NK cells with all other cells. But CD8+ T cells still show similar abundance to NK cells in some signature genes expression, which might impair the ability of signature to distinguish NK cells from CD8+ T cells.
-
-But we know those genes with similar abundance across NK and CD8+ T are importance and distinguishable for separating NK cells from other non-CD8+ T cells. So we don't recommend to simply delete those genes based on our abundance scatter plot. 
-
-Instead, here we implemented a better way to increase the difference between the ambiguous cell types.
-
-By setting `keep.top` and `keep.group`, we can easily keep the top n DEGs of specified DE comparisons, DEGs are ranked based on `Rank` param. For instance, here we want keep more distinguishable genes between NK and CD8+ T cells, we can set `keep.group = "CD8"` or `keep.group = "NK-CD8"`. `keep.top` can specify how many top genes in that comparison should be kept.
-
-```{r signature refine}
-## keep top 200 DEGs in 'NK-CD8'
-set.seed(123)
-m_ct_refine <- filter_subset_sig(
-  data = im_data_6, 
-  markers = geneIds(Markers),
-  group_col = "celltype:ch1",
-  target_group = "NK",
-  gene_id = "ENSEMBL",
-  keep.top = 200,
-  keep.group = "CD8"
-)
-
-## get 8 more new signature genes
-sig_NK_CRC_refine <- intersect(m_ct_refine, m_ccl)
-setdiff(sig_NK_CRC_refine, sig_NK_CRC)
-
-## most NK-CD8 top DEGs are not in the markers pool
-deg_tables <- get_de_table(
-  data = im_data_6, 
-  group_col = "celltype:ch1",
-  target_group = "NK"
-)
-intersect(mapIds(org.Hs.eg.db::org.Hs.eg.db,
-                 rownames(deg_tables$`NK-CD8`)[1:200],
-                 "SYMBOL", "ENSEMBL"),
-          geneIds(Markers))  ## only 19 out of top 200 DEGs are in the pool
-```
-
-We only get `r sum(sig_NK_CRC_refine %in% sig_NK_CRC)` more new genes when keeping top 200 DEGs in 'NK-CD8', that's because majority of those genes are not in our markers pool `Markers` and can't pass the screening step. So it would be better to create a large enough pool for screening in case we miss any useful DEGs.
-
-## Visualization after refinement
-
-After the refinement, we have 2 signature lists now. By comparing the 2 signatures performance, we can see the difference of NK vs CD4 and CD8 T cells increased, but the difference vs monocytes and neutrophils dropped a bit.
-
-```{r gsea refine, warning=FALSE, fig.width=10, fig.height=7}
-## gsea dotplot
-sig_gseaplot(
-  data = proc_data,
-  sigs = list(refined = sig_NK_CRC_refine,
-              pre_ref = sig_NK_CRC),
-  group_col = "celltype.ch1",
-  target_group = "NK",
-  gene_id = "ENSEMBL",
-  slot = "voomE"
-)
-```
-
-Abundance scatter plot also shows more specific genes to NK compared with CD4/8 T cells.
-
-```{r abundance scatter plot refine, warning=FALSE, fig.width=8, fig.height=6}
-## after refine
-sig_scatter_plot(
-  data = proc_data, 
-  sigs = sig_NK_CRC_refine,
-  group_col = "celltype.ch1", 
-  target_group = "NK",
-  gene_id = "ENSEMBL",
-  slot = "voomE"
-) + ggtitle("Signature after Refinement")
-## before refine
-sig_scatter_plot(
-  data = proc_data, 
-  sigs = sig_NK_CRC,
-  group_col = "celltype.ch1", 
-  target_group = "NK",
-  gene_id = "ENSEMBL",
-  slot = "voomE"
-) + ggtitle("Signature before Refinement")
-```
+  By setting `keep.top` and `keep.group`, the top n DEGs of specified DE comparisons of similar groups can be kept, DEGs are ranked based on `Rank` param. For instance, if we want keep more distinguishable genes between NK and CD8+ T cells, we can set `keep.group = "CD8"` or `keep.group = "NK-CD8"` and use `keep.top = n` to specify how many top genes in that comparison should be kept.
 
 
-# Screen on Multiple Datasets
+# Working with Extension Data Input
 
-----------------------------------
+## Multiple Datasets {#multi-data}
+
+------------------------------------------------------------------------
 
 Till now, the whole workflow of mastR usage is complete.
 
-But this demo is just a show case on single dataset, mastR can also be applied on multiple datasets. 
+But this demo is just a show case on single dataset, mastR can also be applied on multiple datasets.
 
-After the Step 2d (Section \@ref(intersect-pool)), for:  
+After the Step 2d (Section \@ref(intersect-pool)), for:
 
-- 1) single dataset  
-      Return the intersection result as the signature.  
-- 2) multiple datasets  
-      After Step 2d, choose one combination method (`union` default) to aggregate signature lists generated from different datasets. Robust Rank Aggregation ("RRA") is another method to select in mastR, which detects genes that are ranked consistently better than expected under null hypothesis of uncorrelated inputs and assigns a significance score for each gene. 
+1) single dataset  
+    Return the intersection result as the signature.
+
+2) multiple datasets  
+    After Step 2d, choose one combination method (`union` default) to aggregate signature lists generated from different datasets. Robust Rank Aggregation ("RRA") is another method to select in mastR, which detects genes that are ranked consistently better than expected under null hypothesis of uncorrelated inputs and assigns a significance score for each gene.
 
 Instead of integrating datasets into one larger dataset to fit into one linear model, we screen signature in each dataset respectively and users can choose to aggregate the ranked lists via `RobustRankAggreg` method by setting `comb = "RRA"` (as our output of signature by screening function is ordered based on the given `Rank`).
 
@@ -963,10 +827,9 @@ m_ct_m <- filter_subset_sig(
 m_ct_m
 ```
 
+## Single Cell RNA-sequencing Data
 
-# Screen on scRNA data {#multi-data}
-
-----------------------------------
+------------------------------------------------------------------------
 
 Although mastR is developed for bulk RNA data, to make use of abundant scRNA resource, mastR also provides `pseudo_samples()` function to help convert scRNA data into pseudo-bulk data, which can then be used in the above workflow.
 
@@ -993,8 +856,7 @@ filter_subset_sig(pb, group_col = "group", target_group = "A")
 # pseudo_samples(scRNA, by = c("subset","level"))
 ```
 
-
-# Application on Simulated data {.tabset .tabset-fade .tabset-pills}
+# Applications {.tabset .tabset-fade .tabset-pills}
 
 After getting the signature, we can apply it in multple ways. In this short demo, we will just show 3 simple applications of it.
 
@@ -1150,7 +1012,6 @@ sig_matrix <- DWLS::buildSignatureMatrixMAST(
 res <- DWLS::solveDampenedWLS(sig_matrix, pb_r[rownames(sig_matrix),])
 ```
 
-
 ## Annotation
 
 ```{r annotation, eval=FALSE}
@@ -1172,10 +1033,9 @@ data_sim$Pred <- paste0("Group", apply(scores$Scores, 2, which.max))
 table(data_sim$Pred == data_sim$Group)
 ```
 
-
 # Session Info
 
----------------------
+------------------------------------------------------------------------
 
 ```{r session info}
 sessionInfo()
@@ -1183,7 +1043,6 @@ sessionInfo()
 
 # References
 
----------------------
+------------------------------------------------------------------------
 
->Cursons J, Souza-Fonseca-Guimaraes F, Foroutan M, Anderson A, Hollande F, Hediyeh-Zadeh S, Behren A, Huntington ND, Davis MJ. A Gene Signature Predicting Natural Killer Cell Infiltration and Improved Survival in Melanoma Patients. Cancer Immunol Res. 2019 Jul;7(7):1162-1174. doi: 10.1158/2326-6066.CIR-18-0500. Epub 2019 May 14. PMID: 31088844.
-
+> Cursons J, Souza-Fonseca-Guimaraes F, Foroutan M, Anderson A, Hollande F, Hediyeh-Zadeh S, Behren A, Huntington ND, Davis MJ. A Gene Signature Predicting Natural Killer Cell Infiltration and Improved Survival in Melanoma Patients. Cancer Immunol Res. 2019 Jul;7(7):1162-1174. doi: 10.1158/2326-6066.CIR-18-0500. Epub 2019 May 14. PMID: 31088844.
