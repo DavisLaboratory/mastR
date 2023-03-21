@@ -21,18 +21,23 @@ test_that("sig_heatmap works", {
   expect_true(is(p, "Heatmap"))
 
   ## test DGEList object
-  dge <- edgeR::DGEList(counts = im_data_6@assayData$exprs,
-                        group = im_data_6$`celltype:ch1`)
+  dge <- edgeR::DGEList(
+    counts = im_data_6@assayData$exprs,
+    group = im_data_6$`celltype:ch1`
+  )
   p <- sig_heatmap(
-    dge, sigs = NK_markers$HGNC_Symbol[1:20],
+    dge,
+    sigs = NK_markers$HGNC_Symbol[1:20],
     group_col = "group",
     gene_id = "ENSEMBL"
   )
   expect_true(is(p, "Heatmap"))
 
   ## test seurat object
-  data_seurat <- Seurat::CreateSeuratObject(counts = im_data_6@assayData$exprs,
-                                            meta.data = dge$samples)
+  data_seurat <- Seurat::CreateSeuratObject(
+    counts = im_data_6@assayData$exprs,
+    meta.data = dge$samples
+  )
   p <- sig_heatmap(
     data_seurat,
     sigs = NK_markers$HGNC_Symbol[1:20],
@@ -54,8 +59,10 @@ test_that("sig_heatmap works", {
   ## test list sigs
   p <- sig_heatmap(
     im_data_6,
-    sigs = list(A = NK_markers$HGNC_Symbol[1:10],
-                B = NK_markers$HGNC_Symbol[21:40]),
+    sigs = list(
+      A = NK_markers$HGNC_Symbol[1:10],
+      B = NK_markers$HGNC_Symbol[21:40]
+    ),
     group_col = "celltype:ch1",
     gene_id = "ENSEMBL",
     scale = "row"

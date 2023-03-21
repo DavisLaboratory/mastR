@@ -28,248 +28,282 @@ NULL
 #'
 #' @examples
 #' data("im_data_6")
-#' DEGs <- get_degs(im_data_6, group_col = "celltype:ch1",
-#'                  target_group = "NK", gene_id = "ENSEMBL")
+#' DEGs <- get_degs(im_data_6,
+#'   group_col = "celltype:ch1",
+#'   target_group = "NK", gene_id = "ENSEMBL"
+#' )
 #'
-#'@export
-setGeneric("get_degs",
-           function(data,
-                    group_col,
-                    target_group,
-                    normalize = TRUE,
-                    feature_selection = c("auto", "rankproduct", "none"),
-                    slot = "counts",
-                    batch = NULL,
-                    ...)
-           standardGeneric("get_degs"))
+#' @export
+setGeneric(
+  "get_degs",
+  function(data,
+           group_col,
+           target_group,
+           normalize = TRUE,
+           feature_selection = c("auto", "rankproduct", "none"),
+           slot = "counts",
+           batch = NULL,
+           ...) {
+    standardGeneric("get_degs")
+  }
+)
 
 #' @rdname get_degs
-setMethod("get_degs", signature(
-  data = 'DGEList',
-  group_col = 'character',
-  target_group = 'character'
-),
-function(data,
-         group_col,
-         target_group,
-         normalize = TRUE,
-         feature_selection = c('auto', "rankproduct", "none"),
-         slot = "counts",
-         batch = NULL,
-         ...) {
+setMethod(
+  "get_degs", signature(
+    data = "DGEList",
+    group_col = "character",
+    target_group = "character"
+  ),
+  function(data,
+           group_col,
+           target_group,
+           normalize = TRUE,
+           feature_selection = c("auto", "rankproduct", "none"),
+           slot = "counts",
+           batch = NULL,
+           ...) {
+    feature_selection <- match.arg(feature_selection)
+    stopifnot(
+      "Please provide column names as batch!" =
+        is.null(batch) | is.vector(batch),
+      "slot must be character!" = is.character(slot)
+    )
 
-  feature_selection <- match.arg(feature_selection)
-  stopifnot("Please provide column names as batch!" =
-              is.null(batch) | is.vector(batch),
-            "slot must be character!" = is.character(slot))
+    ## process data, filtration, normalization, fit
+    proc_data <- process_data(
+      data = data,
+      group_col = group_col,
+      target_group = target_group,
+      normalize = normalize,
+      slot = slot,
+      batch = batch,
+      ...
+    )
 
-  ## process data, filtration, normalization, fit
-  proc_data <- process_data(
-    data = data,
-    group_col = group_col,
-    target_group = target_group,
-    normalize = normalize,
-    slot = slot,
-    batch = batch,
-    ...
-  )
+    ## plot diagnostics before and after process_data()
+    if (!is.null(list(...)$plot) && list(...)$plot == TRUE) {
+      ## generate expr1 adn expr2 to compare before and after process
+      if (slot == "counts") {
+        expr1 <- proc_data$original_counts
+      } else {
+        expr1 <- proc_data[[slot]]
+      }
+      if (normalize == TRUE) {
+        expr1 <- edgeR::cpm(expr1, log = TRUE)
+        expr2 <- proc_data$vfit$E
+      } else {
+        expr2 <- proc_data$counts
+      }
 
-  ## plot diagnostics before and after process_data()
-  if(!is.null(list(...)$plot) && list(...)$plot == TRUE) {
-    ## generate expr1 adn expr2 to compare before and after process
-    if(slot == "counts") {
-      expr1 <- proc_data$original_counts
-    }else {
-      expr1 <- proc_data[[slot]]
+      plot_diagnostics(expr1, expr2,
+        group_col = proc_data$samples[[group_col]]
+      )
+      if (normalize == TRUE) {
+        plot_mean_var(proc_data)
+      } else {
+        limma::plotSA(proc_data$tfit,
+          main = "Final model: Mean-variance trend"
+        )
+      }
     }
-    if(normalize == TRUE) {
-      expr1 <- edgeR::cpm(expr1, log = TRUE)
-      expr2 <- proc_data$vfit$E
-    }else expr2 <- proc_data$counts
 
-    plot_diagnostics(expr1, expr2,
-                     group_col = proc_data$samples[[group_col]])
-    if(normalize == TRUE) {
-      plot_mean_var(proc_data)
-    }else limma::plotSA(proc_data$tfit,
-                        main = "Final model: Mean-variance trend")
+    ## select DEGs from multiple comparsions
+    DEGs <- select_sig(
+      tfit = proc_data$tfit,
+      feature_selection = feature_selection,
+      ...
+    )
 
+    DEGs <- list(DEGs = DEGs, proc_data = proc_data)
+
+    return(DEGs)
   }
-
-  ## select DEGs from multiple comparsions
-  DEGs <- select_sig(
-    tfit = proc_data$tfit,
-    feature_selection = feature_selection,
-    ...
-  )
-
-  DEGs <- list(DEGs = DEGs, proc_data = proc_data)
-
-  return(DEGs)
-})
+)
 
 #' @rdname get_degs
-setMethod("get_degs", signature(
-  data = 'matrix',
-  group_col = 'vector',
-  target_group = 'character'
-),
-function(data,
-         group_col,
-         target_group,
-         normalize = TRUE,
-         feature_selection = c('auto', "rankproduct", "none"),
-         batch = NULL,
-         ...) {
+setMethod(
+  "get_degs", signature(
+    data = "matrix",
+    group_col = "vector",
+    target_group = "character"
+  ),
+  function(data,
+           group_col,
+           target_group,
+           normalize = TRUE,
+           feature_selection = c("auto", "rankproduct", "none"),
+           batch = NULL,
+           ...) {
+    DGE <- edgeR::DGEList(counts = data, group = group_col)
+    if (!is.null(batch)) {
+      DGE$samples <- data.frame(DGE$samples, batch)
+      batch <- colnames(DGE$samples)[-(1:3)]
+    }
+    group_col <- "group"
+    rm(data)
 
-  DGE <- edgeR::DGEList(counts = data, group = group_col)
-  if(!is.null(batch)) {
-    DGE$samples <- data.frame(DGE$samples, batch)
-    batch <- colnames(DGE$samples)[-(1:3)]
+    DEGs <- get_degs(
+      data = DGE, group_col = group_col,
+      target_group = target_group,
+      normalize = normalize,
+      feature_selection = feature_selection,
+      batch = batch, slot = "counts",
+      ...
+    )
+    return(DEGs)
   }
-  group_col <- "group"
-  rm(data)
-
-  DEGs <- get_degs(data = DGE, group_col = group_col,
-                   target_group = target_group,
-                   normalize = normalize,
-                   feature_selection = feature_selection,
-                   batch = batch, slot = "counts",
-                   ...)
-  return(DEGs)
-})
+)
 
 #' @rdname get_degs
-setMethod("get_degs", signature(
-  data = 'Matrix',
-  group_col = 'vector',
-  target_group = 'character'
-),
-function(data,
-         group_col,
-         target_group,
-         normalize = TRUE,
-         feature_selection = c('auto', "rankproduct", "none"),
-         batch = NULL,
-         ...) {
+setMethod(
+  "get_degs", signature(
+    data = "Matrix",
+    group_col = "vector",
+    target_group = "character"
+  ),
+  function(data,
+           group_col,
+           target_group,
+           normalize = TRUE,
+           feature_selection = c("auto", "rankproduct", "none"),
+           batch = NULL,
+           ...) {
+    DGE <- edgeR::DGEList(counts = data, group = group_col)
+    if (!is.null(batch)) {
+      DGE$samples <- data.frame(DGE$samples, batch)
+      batch <- colnames(DGE$samples)[-(1:3)]
+    }
+    group_col <- "group"
+    rm(data)
 
-  DGE <- edgeR::DGEList(counts = data, group = group_col)
-  if(!is.null(batch)) {
-    DGE$samples <- data.frame(DGE$samples, batch)
-    batch <- colnames(DGE$samples)[-(1:3)]
+    DEGs <- get_degs(
+      data = DGE, group_col = group_col,
+      target_group = target_group,
+      normalize = normalize,
+      feature_selection = feature_selection,
+      batch = batch, slot = "counts",
+      ...
+    )
+    return(DEGs)
   }
-  group_col <- "group"
-  rm(data)
-
-  DEGs <- get_degs(data = DGE, group_col = group_col,
-                   target_group = target_group,
-                   normalize = normalize,
-                   feature_selection = feature_selection,
-                   batch = batch, slot = "counts",
-                   ...)
-  return(DEGs)
-})
+)
 
 #' @rdname get_degs
-setMethod("get_degs", signature(
-  data = 'ExpressionSet',
-  group_col = 'character',
-  target_group = 'character'
-),
-function(data,
-         group_col,
-         target_group,
-         normalize = TRUE,
-         feature_selection = c('auto', "rankproduct", "none"),
-         batch = NULL,
-         ...) {
+setMethod(
+  "get_degs", signature(
+    data = "ExpressionSet",
+    group_col = "character",
+    target_group = "character"
+  ),
+  function(data,
+           group_col,
+           target_group,
+           normalize = TRUE,
+           feature_selection = c("auto", "rankproduct", "none"),
+           batch = NULL,
+           ...) {
+    expr <- Biobase::exprs(data)
+    coldata <- Biobase::pData(data)
 
-  expr <- Biobase::exprs(data)
-  coldata <- Biobase::pData(data)
+    DGE <- edgeR::DGEList(
+      counts = expr,
+      samples = coldata,
+      group = coldata[[group_col]]
+    )
+    if (!is.null(batch)) batch <- make.names(batch)
+    group_col <- make.names(group_col)
+    rm(data, expr, coldata)
 
-  DGE <- edgeR::DGEList(counts = expr,
-                        samples = coldata,
-                        group = coldata[[group_col]])
-  if(!is.null(batch)) batch <- make.names(batch)
-  group_col <- make.names(group_col)
-  rm(data, expr, coldata)
-
-  DEGs <- get_degs(data = DGE, group_col = group_col,
-                   target_group = target_group,
-                   normalize = normalize,
-                   feature_selection = feature_selection,
-                   batch = batch, slot = "counts",
-                   ...)
-  return(DEGs)
-})
-
-#' @rdname get_degs
-setMethod("get_degs", signature(
-  data = 'SummarizedExperiment',
-  group_col = 'character',
-  target_group = 'character'
-),
-function(data,
-         group_col,
-         target_group,
-         normalize = TRUE,
-         feature_selection = c('auto', "rankproduct", "none"),
-         slot = "counts",
-         batch = NULL,
-         ...) {
-
-  expr <- SummarizedExperiment::assay(data, slot)
-  coldata <- SummarizedExperiment::colData(data)
-
-  DGE <- edgeR::DGEList(counts = expr,
-                        samples = coldata,
-                        group = coldata[[group_col]])
-  if(!is.null(batch)) batch <- make.names(batch)
-  group_col <- make.names(group_col)
-  rm(data, expr, coldata)
-
-  DEGs <- get_degs(data = DGE, group_col = group_col,
-                   target_group = target_group,
-                   normalize = normalize,
-                   feature_selection = feature_selection,
-                   batch = batch, slot = "counts",
-                   ...)
-  return(DEGs)
-})
+    DEGs <- get_degs(
+      data = DGE, group_col = group_col,
+      target_group = target_group,
+      normalize = normalize,
+      feature_selection = feature_selection,
+      batch = batch, slot = "counts",
+      ...
+    )
+    return(DEGs)
+  }
+)
 
 #' @rdname get_degs
-setMethod("get_degs", signature(
-  data = 'Seurat',
-  group_col = 'character',
-  target_group = 'character'
-),
-function(data,
-         group_col,
-         target_group,
-         normalize = TRUE,
-         feature_selection = c('auto', "rankproduct", "none"),
-         slot = "counts",
-         batch = NULL,
-         ...) {
+setMethod(
+  "get_degs", signature(
+    data = "SummarizedExperiment",
+    group_col = "character",
+    target_group = "character"
+  ),
+  function(data,
+           group_col,
+           target_group,
+           normalize = TRUE,
+           feature_selection = c("auto", "rankproduct", "none"),
+           slot = "counts",
+           batch = NULL,
+           ...) {
+    expr <- SummarizedExperiment::assay(data, slot)
+    coldata <- SummarizedExperiment::colData(data)
 
-  expr <- Seurat::GetAssayData(data, slot = slot)
-  coldata <- data@meta.data
+    DGE <- edgeR::DGEList(
+      counts = expr,
+      samples = coldata,
+      group = coldata[[group_col]]
+    )
+    if (!is.null(batch)) batch <- make.names(batch)
+    group_col <- make.names(group_col)
+    rm(data, expr, coldata)
 
-  DGE <- edgeR::DGEList(counts = expr,
-                        samples = coldata,
-                        group = coldata[[group_col]])
-  if(!is.null(batch)) batch <- make.names(batch)
-  group_col <- make.names(group_col)
-  rm(data, expr, coldata)
+    DEGs <- get_degs(
+      data = DGE, group_col = group_col,
+      target_group = target_group,
+      normalize = normalize,
+      feature_selection = feature_selection,
+      batch = batch, slot = "counts",
+      ...
+    )
+    return(DEGs)
+  }
+)
 
-  DEGs <- get_degs(data = DGE, group_col = group_col,
-                   target_group = target_group,
-                   normalize = normalize,
-                   feature_selection = feature_selection,
-                   batch = batch, slot = "counts",
-                   ...)
-  return(DEGs)
-})
+#' @rdname get_degs
+setMethod(
+  "get_degs", signature(
+    data = "Seurat",
+    group_col = "character",
+    target_group = "character"
+  ),
+  function(data,
+           group_col,
+           target_group,
+           normalize = TRUE,
+           feature_selection = c("auto", "rankproduct", "none"),
+           slot = "counts",
+           batch = NULL,
+           ...) {
+    expr <- Seurat::GetAssayData(data, slot = slot)
+    coldata <- data@meta.data
+
+    DGE <- edgeR::DGEList(
+      counts = expr,
+      samples = coldata,
+      group = coldata[[group_col]]
+    )
+    if (!is.null(batch)) batch <- make.names(batch)
+    group_col <- make.names(group_col)
+    rm(data, expr, coldata)
+
+    DEGs <- get_degs(
+      data = DGE, group_col = group_col,
+      target_group = target_group,
+      normalize = normalize,
+      feature_selection = feature_selection,
+      batch = batch, slot = "counts",
+      ...
+    )
+    return(DEGs)
+  }
+)
 
 
 #' @title DE analysis pipeline
@@ -305,8 +339,10 @@ function(data,
 #' @return MArrayLM object generated by [limma::treat()]
 #'
 #' @examples
-#' dge <- edgeR::DGEList(counts = Biobase::exprs(mastR::im_data_6),
-#'                       samples = Biobase::pData(mastR::im_data_6))
+#' dge <- edgeR::DGEList(
+#'   counts = Biobase::exprs(mastR::im_data_6),
+#'   samples = Biobase::pData(mastR::im_data_6)
+#' )
 #' de_analysis(dge, group_col = "celltype.ch1", target_group = "NK")
 #'
 #' @export
@@ -325,15 +361,18 @@ de_analysis <- function(dge,
                         batch = NULL,
                         summary = TRUE,
                         ...) {
+  stopifnot(
+    is.logical(normalize),
+    is.logical(group), is.numeric(filter),
+    is.logical(plot), is.numeric(lfc),
+    is.numeric(p), is.character(gene_id)
+  )
 
-  stopifnot(is.logical(normalize),
-            is.logical(group), is.numeric(filter),
-            is.logical(plot), is.numeric(lfc),
-            is.numeric(p), is.character(gene_id))
-
-  stopifnot("Please provide column names as batch!" =
-              is.null(batch) | is.vector(batch),
-            "slot must be character!" = is.character(slot))
+  stopifnot(
+    "Please provide column names as batch!" =
+      is.null(batch) | is.vector(batch),
+    "slot must be character!" = is.character(slot)
+  )
 
   ## process data, filtration, normalization, fit
   proc_data <- process_data(
@@ -354,25 +393,30 @@ de_analysis <- function(dge,
   )
 
   ## plot diagnostics before and after process_data()
-  if(plot == TRUE) {
+  if (plot == TRUE) {
     ## generate expr1 adn expr2 to compare before and after process
-    if(slot == "counts") {
+    if (slot == "counts") {
       expr1 <- proc_data$original_counts
-    }else {
+    } else {
       expr1 <- proc_data[[slot]]
     }
-    if(normalize == TRUE) {
+    if (normalize == TRUE) {
       expr1 <- edgeR::cpm(expr1, log = TRUE)
       expr2 <- proc_data$vfit$E
-    }else expr2 <- proc_data$counts
+    } else {
+      expr2 <- proc_data$counts
+    }
 
     plot_diagnostics(expr1, expr2,
-                     group_col = proc_data$samples[[group_col]])
-    if(normalize == TRUE) {
+      group_col = proc_data$samples[[group_col]]
+    )
+    if (normalize == TRUE) {
       plot_mean_var(proc_data)
-    }else limma::plotSA(proc_data$tfit,
-                        main = "Final model: Mean-variance trend")
-
+    } else {
+      limma::plotSA(proc_data$tfit,
+        main = "Final model: Mean-variance trend"
+      )
+    }
   }
 
   return(proc_data)

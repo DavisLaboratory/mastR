@@ -112,7 +112,7 @@ The most updated version of `mastR` is hosted on GitHub and can be installed usi
 #   devtools::install_github("Gene233/mastR")
 # }
 
-if (!requireNamespace("BiocManager", quietly=TRUE)) {
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
   install.packages("BiocManager")
 }
 if (!requireNamespace("mastR", quietly = TRUE)) {
@@ -205,8 +205,10 @@ In this demo, we'll use a small collection of MSigDB `msigdb_gobp_nk` to show ho
 
 ```{r MSigDB genesets, warning=FALSE}
 data("msigdb_gobp_nk")
-MSig <- get_gsc_sig(gsc = msigdb_gobp_nk,
-                    pattern = "NATURAL_KILLER_CELL_MEDIATED")
+MSig <- get_gsc_sig(
+  gsc = msigdb_gobp_nk,
+  pattern = "NATURAL_KILLER_CELL_MEDIATED"
+)
 MSig
 ## cut geneset name within 11 characters
 gsn <- setNames(names(MSig), LETTERS[seq_along(MSig)])
@@ -220,7 +222,7 @@ Then we can see how these collected gene-sets overlapped by using function `gsc_
 ```{r show overlap}
 ## show upset diagram of collected gene-sets
 gsc_plot(MSig)
-gsn[c("A", "M", "D")]  ## show gene-set names of top 3
+gsn[c("A", "M", "D")] ## show gene-set names of top 3
 ```
 
 As we can see, there're `r length(MSig)` gene-sets in MSig, which is too many for visualization. Thus, we can use another function `merge_markers()` to merge all gene-sets into one 'GeneSet' object. (You can also directly pass un-merged object to the subsequent analysis.)
@@ -271,8 +273,9 @@ NK_markers
 
 ## convert NK markers into 'GeneSet' object
 nk_m <- GeneSet(NK_markers$HGNC_Symbol,
-                geneIdType = SymbolIdentifier(),
-                setName = "NK_markers")
+  geneIdType = SymbolIdentifier(),
+  setName = "NK_markers"
+)
 ```
 
 ## Integrate Markers Pool
@@ -364,9 +367,9 @@ Optional param details can be found in `help(proc_data)`
 
 ```{r process data}
 proc_data <- process_data(
-  data = im_data_6,  
+  data = im_data_6,
   group_col = "celltype:ch1",
-  target_group = "NK", 
+  target_group = "NK",
   markers = geneIds(Markers),
   gene_id = "ENSEMBL" ## rownames of im_data_6 is ENSEMBL ID
   # summary = TRUE ## if to show the summary of tfit result
@@ -443,11 +446,11 @@ head(sig_ct)
 
 ```{r DEG_6, eval=FALSE, fig.width=8, fig.height=5}
 DEG_6 <- get_degs(
-  data = im_data_6,  
+  data = im_data_6,
   group_col = "celltype:ch1",
-  target_group = "NK", 
+  target_group = "NK",
   markers = geneIds(Markers),
-  gene_id = "ENSEMBL"  ## convert ensembl IDs of rownames into symbols if gene_id != "SYMBOL"
+  gene_id = "ENSEMBL" ## convert ensembl IDs of rownames into symbols if gene_id != "SYMBOL"
 )
 ## `proc_data` object would be saved
 proc_data <- DEG_6$proc_data
@@ -465,12 +468,14 @@ As we are only interested in up-regulated genes in NK cells in this demo, only `
 
 ```{r markers for cell type, fig.width=8, fig.height=6}
 ## convert ensembl IDs into symbols to match markers pool
-deg_up <- mapIds(org.Hs.eg.db::org.Hs.eg.db,
-                 geneIds(sig_ct[["UP"]]),
-                 "SYMBOL", "ENSEMBL")
+deg_up <- mapIds(
+  org.Hs.eg.db::org.Hs.eg.db,
+  geneIds(sig_ct[["UP"]]),
+  "SYMBOL", "ENSEMBL"
+)
 ## markers specific for NK cells
 m_ct <- intersect(geneIds(Markers), deg_up)
-names(m_ct) <- names(deg_up)[match(m_ct, deg_up)]  ## set ensembl ID as names for downstream visualization
+names(m_ct) <- names(deg_up)[match(m_ct, deg_up)] ## set ensembl ID as names for downstream visualization
 
 head(m_ct)
 ```
@@ -482,13 +487,15 @@ In this case, PCA plots are used to show clearer separation of NK cells from oth
 ```{r PCA on sig}
 ## PCA shows clear separation of NK cells
 ## after intersection
-pca_matrix_plot(proc_data$vfit$E[names(m_ct),],
-                group_by = proc_data$samples$celltype.ch1,
-                n = 3) + ggtitle("After intersection")
+pca_matrix_plot(proc_data$vfit$E[names(m_ct), ],
+  group_by = proc_data$samples$celltype.ch1,
+  n = 3
+) + ggtitle("After intersection")
 ## before intersection
-pca_matrix_plot(proc_data$vfit$E[names(deg_up),],
-                group_by = proc_data$samples$celltype.ch1,
-                n = 3) + ggtitle("Before intersection")
+pca_matrix_plot(proc_data$vfit$E[names(deg_up), ],
+  group_by = proc_data$samples$celltype.ch1,
+  n = 3
+) + ggtitle("Before intersection")
 ```
 
 ***Note***: *There's also a wrapper function `filter_subset_sig()` which can directly do the whole Step 2 in one step. The result would be the same as running the above workflow step by step.*
@@ -553,28 +560,32 @@ Required params are as follows:
 CCLE <- depmap::depmap_TPM()
 CCLE_meta <- depmap::depmap_metadata()
 ## filter
-m_ccl <- remove_bg_snr(bg_data = "CCLE",
-                       sig_data = proc_data,
-                       b_group_col = "primary_disease",
-                       b_target_group = "colorectal",
-                       s_group_col = "celltype.ch1",
-                       s_target_group = "NK",
-                       markers = geneIds(Markers),
-                       filter = c(1, 10), ## needed when bg_data is 'CCLE'
-                       gene_id = c("SYMBOL", "ENSEMBL"),
-                       s_slot = "voomE",
-                       ccle_tpm = CCLE, ## only provided when data = 'CCLE'
-                       ccle_meta = CCLE_meta)
+m_ccl <- remove_bg_snr(
+  bg_data = "CCLE",
+  sig_data = proc_data,
+  b_group_col = "primary_disease",
+  b_target_group = "colorectal",
+  s_group_col = "celltype.ch1",
+  s_target_group = "NK",
+  markers = geneIds(Markers),
+  filter = c(1, 10), ## needed when bg_data is 'CCLE'
+  gene_id = c("SYMBOL", "ENSEMBL"),
+  s_slot = "voomE",
+  ccle_tpm = CCLE, ## only provided when data = 'CCLE'
+  ccle_meta = CCLE_meta
+)
 ## or without loading CCLE yourself
-m_ccl <- remove_bg_snr(sig_data = proc_data,
-                       b_group_col = "primary_disease",
-                       b_target_group = "colorectal",
-                       s_group_col = "celltype.ch1",
-                       s_target_group = "NK",
-                       markers = geneIds(Markers),
-                       filter = c(1, 10),
-                       gene_id = c("SYMBOL", "ENSEMBL"),
-                       s_slot = "voomE")
+m_ccl <- remove_bg_snr(
+  sig_data = proc_data,
+  b_group_col = "primary_disease",
+  b_target_group = "colorectal",
+  s_group_col = "celltype.ch1",
+  s_target_group = "NK",
+  markers = geneIds(Markers),
+  filter = c(1, 10),
+  gene_id = c("SYMBOL", "ENSEMBL"),
+  s_slot = "voomE"
+)
 ```
 
 #### using customized dataset as background data
@@ -587,7 +598,7 @@ In this demo, we use a small imported dataset `ccle_crc_5` in mastR as a customi
 
 ```{r remove markers for cancer cell line}
 data("ccle_crc_5")
-ccle_crc_5[1:10,]
+ccle_crc_5[1:10, ]
 
 ## markers against for CRC cell lines
 m_ccl <- remove_bg_snr(
@@ -656,9 +667,9 @@ Now we assess how well the refined signature can discriminate our target group f
 
 ```{r heatmap, warning=FALSE, fig.width=10, fig.height=7}
 sig_heatmap(
-  data = proc_data, 
+  data = proc_data,
   sigs = sig_NK_CRC,
-  group_col = "celltype.ch1", 
+  group_col = "celltype.ch1",
   markers = geneIds(Markers),
   gene_id = "ENSEMBL",
   slot = "voomE",
@@ -672,9 +683,9 @@ sig_heatmap(
 ## for multiple datasets
 # sig_heatmap(
 #   data = list(data_6 = im_data_6,
-#               proc_data = proc_data), 
+#               proc_data = proc_data),
 #   sigs = sig_NK_CRC,
-#   group_col = c("celltype:ch1", "celltype.ch1"), 
+#   group_col = c("celltype:ch1", "celltype.ch1"),
 #   markers = geneIds(Markers),
 #   gene_id = "ENSEMBL"
 # ) + patchwork::plot_layout(guides = "collect", ncol = 1)
@@ -691,10 +702,10 @@ To see if the curated signature have evident higher abundance in NK cells than o
 
 ```{r score boxplot, warning=FALSE}
 sig_boxplot(
-  data = proc_data, 
+  data = proc_data,
   sigs = sig_NK_CRC,
-  group_col = "celltype.ch1", 
-  target_group = "NK", 
+  group_col = "celltype.ch1",
+  target_group = "NK",
   gene_id = "ENSEMBL",
   slot = "voomE"
 )
@@ -702,7 +713,7 @@ sig_boxplot(
 ## To make boxplots for more than 1 immune datasets at once:
 # sig_boxplot(
 #   data = list(data_6 = im_data_6,
-#               proc_data = proc_data), 
+#               proc_data = proc_data),
 #   sigs = sig_NK_CRC,
 #   group_col = c("celltype:ch1", "celltype.ch1"),
 #   target_group = "NK",
@@ -724,7 +735,7 @@ If the signature shows specificity to NK, then most of signature genes should ap
 sig_scatter_plot(
   data = proc_data,
   sigs = geneIds(Markers),
-  group_col = "celltype.ch1", 
+  group_col = "celltype.ch1",
   target_group = "NK",
   gene_id = "ENSEMBL",
   slot = "voomE"
@@ -734,7 +745,7 @@ sig_scatter_plot(
 sig_scatter_plot(
   data = proc_data,
   sigs = sig_NK_CRC,
-  group_col = "celltype.ch1", 
+  group_col = "celltype.ch1",
   target_group = "NK",
   gene_id = "ENSEMBL",
   slot = "voomE"
@@ -743,10 +754,10 @@ sig_scatter_plot(
 ## To make scatter plot for more than 1 immune datasets at once:
 # sig_scatter_plot(
 #   data = list(data_6 = im_data_6,
-#               proc_data = proc_data), 
+#               proc_data = proc_data),
 #   sigs = sig_NK_CRC,
 #   group_col = c("celltype:ch1", "celltype.ch1"),
-#   target_group = "NK", 
+#   target_group = "NK",
 #   gene_id = "ENSEMBL")
 ```
 
@@ -759,9 +770,9 @@ To see if the curated signature is enriched in NK cells than other immune cell s
 ```{r gseaplot, warning=FALSE, fig.width=10, fig.height=7}
 ## gseaplot
 sig_gseaplot(
-  data = proc_data, 
+  data = proc_data,
   sigs = list(sig = sig_NK_CRC, markers = geneIds(Markers)),
-  group_col = "celltype.ch1", 
+  group_col = "celltype.ch1",
   target_group = "NK",
   gene_id = "ENSEMBL",
   slot = "voomE",
@@ -810,7 +821,7 @@ Here, we will repeatedly use im_data_6 to show how it works on multiple datasets
 ## In the demo, we just repeatedly use im_data_6 as a show case
 set.seed(123)
 m_ct_m <- filter_subset_sig(
-  data = list(A = im_data_6, B = im_data_6), 
+  data = list(A = im_data_6, B = im_data_6),
   markers = geneIds(Markers),
   group_col = "celltype:ch1",
   target_group = "NK",
@@ -825,13 +836,13 @@ setequal(m_ct_m, m_ct)
 ## if we choose 'RRA', s_thres is to determine the threshold for ranking score
 set.seed(123)
 m_ct_m <- filter_subset_sig(
-  data = list(A = im_data_6, B = im_data_6), 
+  data = list(A = im_data_6, B = im_data_6),
   markers = geneIds(Markers),
   group_col = "celltype:ch1",
   target_group = "NK",
   gene_id = "ENSEMBL",
-  comb = "RRA",  ## change this to use different strategy, default is "union"
-  s_thres = 0.5  ## only work when comb = "RRA", set a threshold for ranking score
+  comb = "RRA", ## change this to use different strategy, default is "union"
+  s_thres = 0.5 ## only work when comb = "RRA", set a threshold for ranking score
 )
 
 ## we can get only 8 signature genes this time
@@ -890,18 +901,23 @@ sim_params <- newSplatParams(
 
 data_sim <- splatSimulate(sim_params, method = "groups")
 
-markers_list <- lapply(rowData(data_sim)[,paste0("DEFacGroup", 1:4)],
-                       \(x) rownames(data_sim[x > 1]))
+markers_list <- lapply(
+  rowData(data_sim)[, paste0("DEFacGroup", 1:4)],
+  \(x) rownames(data_sim[x > 1])
+)
 
 ## aggregate into pseudo-bulk samples
 pb <- pseudo_samples(data_sim,
-                     by = c("Batch", "Group"),
-                     min.cells = 50, max.cells = 100)
+  by = c("Batch", "Group"),
+  min.cells = 50, max.cells = 100
+)
 dge <- DGEList(
   counts = pb,
-  samples = data.frame(group = gsub(".*\\.(.*)_.*", "\\1",colnames(pb)),
-                       Batch = gsub("(.*)\\..*", "\\1",colnames(pb)),
-                       sampleID = gsub("(.*)_.*", "\\1",colnames(pb)))
+  samples = data.frame(
+    group = gsub(".*\\.(.*)_.*", "\\1", colnames(pb)),
+    Batch = gsub("(.*)\\..*", "\\1", colnames(pb)),
+    sampleID = gsub("(.*)_.*", "\\1", colnames(pb))
+  )
 )
 ```
 
@@ -919,10 +935,14 @@ sig_ls <- lapply(paste0("Group", 1:4), \(x) {
 names(sig_ls) <- paste0("Group", 1:4)
 
 ## venn plot
-p <- lapply(1:4, \(i) ggvenn::ggvenn(list(sig = sig_ls[[i]],
-                                          marker = markers_list[[i]]),
-                                     show_percentage = FALSE) +
-              ggtitle(names(sig_ls)[i]))
+p <- lapply(1:4, \(i) ggvenn::ggvenn(
+  list(
+    sig = sig_ls[[i]],
+    marker = markers_list[[i]]
+  ),
+  show_percentage = FALSE
+) +
+  ggtitle(names(sig_ls)[i]))
 patchwork::wrap_plots(p)
 
 ## heatmap
@@ -948,9 +968,11 @@ data_sim$rand_idx <- sample.int(30, ncol(data_sim), replace = TRUE)
 pb_r <- pseudo_samples(data_sim, by = c("Batch", "rand_idx"))
 dge_r <- DGEList(
   counts = pb_r,
-  samples = data.frame(group = gsub(".*\\.(.*)_.*", "\\1",colnames(pb_r)),
-                       Batch = gsub("(.*)\\..*", "\\1",colnames(pb_r)),
-                       sampleID = gsub("(.*)_.*", "\\1",colnames(pb_r)))
+  samples = data.frame(
+    group = gsub(".*\\.(.*)_.*", "\\1", colnames(pb_r)),
+    Batch = gsub("(.*)\\..*", "\\1", colnames(pb_r)),
+    sampleID = gsub("(.*)_.*", "\\1", colnames(pb_r))
+  )
 )
 
 ## append cellular composition
@@ -959,12 +981,12 @@ tmp <- as.data.frame(data_sim@colData) |>
   summarise(count = n()) |>
   pivot_wider(names_from = Group, values_from = count) |>
   mutate(rand_idx = factor(rand_idx))
-tmp[,-1] <- signif(tmp[,-1] / rowSums(tmp[,-1]), 2)
+tmp[, -1] <- signif(tmp[, -1] / rowSums(tmp[, -1]), 2)
 dge_r$samples <- left_join(dge_r$samples, tmp, by = c("group" = "rand_idx"))
 
 ## data process
 keep <- filterByExpr(dge_r)
-dge_r <- dge_r[keep,, keep.lib.sizes = FALSE]
+dge_r <- dge_r[keep, , keep.lib.sizes = FALSE]
 dge_r <- calcNormFactors(dge_r, method = "TMM")
 ```
 
@@ -978,12 +1000,14 @@ rank_data <- rankGenes(edgeR::cpm(dge_r, log = TRUE))
 ## score based on sig_ls
 scores <- multiScore(rank_data, upSetColc = gls2gsc(sig_ls))
 
-tmp <- pivot_longer(cbind(Sample = colnames(dge_r), dge_r$samples[,6:9]),
-                    -Sample, names_to = "Group", values_to = "Prop")
+tmp <- pivot_longer(cbind(Sample = colnames(dge_r), dge_r$samples[, 6:9]),
+  -Sample,
+  names_to = "Group", values_to = "Prop"
+)
 
-tmp <- t(scores$Scores) |> 
-  data.frame(Sample = colnames(scores$Scores)) |> 
-  pivot_longer(-Sample, names_to = "Group", values_to = "Score") |> 
+tmp <- t(scores$Scores) |>
+  data.frame(Sample = colnames(scores$Scores)) |>
+  pivot_longer(-Sample, names_to = "Group", values_to = "Score") |>
   left_join(tmp)
 
 ggplot(tmp, aes(x = Prop, y = Score, col = Group)) +
@@ -995,13 +1019,15 @@ ggplot(tmp, aes(x = Prop, y = Score, col = Group)) +
 ## score based on markers_list
 scores <- multiScore(rank_data, upSetColc = gls2gsc(markers_list))
 
-tmp <- pivot_longer(cbind(Sample = colnames(dge_r), dge_r$samples[,6:9]),
-                    -Sample, names_to = "Group", values_to = "Prop")
+tmp <- pivot_longer(cbind(Sample = colnames(dge_r), dge_r$samples[, 6:9]),
+  -Sample,
+  names_to = "Group", values_to = "Prop"
+)
 tmp$Group <- paste0("DEFac", tmp$Group)
 
-tmp <- t(scores$Scores) |> 
-  data.frame(Sample = colnames(scores$Scores)) |> 
-  pivot_longer(-Sample, names_to = "Group", values_to = "Score") |> 
+tmp <- t(scores$Scores) |>
+  data.frame(Sample = colnames(scores$Scores)) |>
+  pivot_longer(-Sample, names_to = "Group", values_to = "Score") |>
   left_join(tmp)
 
 ggplot(tmp, aes(x = Prop, y = Score, col = Group)) +
@@ -1015,12 +1041,12 @@ ggplot(tmp, aes(x = Prop, y = Score, col = Group)) +
 
 ```{r deconv, eval=FALSE}
 sig_matrix <- DWLS::buildSignatureMatrixMAST(
-  scdata = data_sim@assays@data$counts[unique(unlist(sig_ls)),],
+  scdata = data_sim@assays@data$counts[unique(unlist(sig_ls)), ],
   id = data_sim$Group,
   path = tempdir()
 )
 
-res <- DWLS::solveDampenedWLS(sig_matrix, pb_r[rownames(sig_matrix),])
+res <- DWLS::solveDampenedWLS(sig_matrix, pb_r[rownames(sig_matrix), ])
 ```
 
 ## Annotation

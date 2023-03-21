@@ -11,7 +11,6 @@
 #' @examples
 #' list_panglao_types(organ = "Immune system")
 list_panglao_types <- function(organ) {
-
   organ <- match.arg(organ, choices = list_panglao_organs())
 
   av_organs <- list_panglao_organs()

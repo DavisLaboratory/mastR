@@ -14,16 +14,16 @@
 #' Markers <- merge_markers(mastR::msigdb_gobp_nk[1:3])
 #' jsonlite::fromJSON(GSEABase::longDescription(Markers))
 merge_markers <- function(...) {
-
   ## input must be GeneSet or GeneSetCollection
-  if(!all(sapply(list(...), class) %in% c("GeneSet", "GeneSetCollection")))
+  if (!all(sapply(list(...), class) %in% c("GeneSet", "GeneSetCollection"))) {
     stop("Only accept GeneSet or GeneSetCollection as input")
+  }
 
   ## convert into 'GeneSetCollection'
   gsc <- GSEABase::GeneSetCollection(c(...))
 
   ## merge and get union of all genesets
-  markers <- Reduce('|', gsc)
+  markers <- Reduce("|", gsc)
   GSEABase::setName(markers) <- "merged_markers_pool"
 
   markers_list <- GSEABase::geneIds(gsc)
@@ -33,9 +33,11 @@ merge_markers <- function(...) {
     d <- cbind(markers_list[[x]], TRUE)
     colnames(d) <- c("Gene", x)
     d
-    })
-  markers_list <- as.data.frame(Reduce(function(x, y) merge(x, y, all = TRUE),
-                                       markers_list))
+  })
+  markers_list <- as.data.frame(Reduce(
+    function(x, y) merge(x, y, all = TRUE),
+    markers_list
+  ))
 
   markers_list$y <- NULL
   markers_list[is.na(markers_list)] <- "-"

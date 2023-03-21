@@ -20,8 +20,10 @@ test_that("filter_subset_sig works", {
   expect_true(all(sig %in% NK_markers$HGNC_Symbol))
 
   ## test DGEList object
-  dge <- edgeR::DGEList(counts = im_data_6@assayData$exprs,
-                        group = im_data_6$`celltype:ch1`)
+  dge <- edgeR::DGEList(
+    counts = im_data_6@assayData$exprs,
+    group = im_data_6$`celltype:ch1`
+  )
   sig <- filter_subset_sig(
     dge,
     group_col = "group", target_group = "NK",
@@ -31,8 +33,10 @@ test_that("filter_subset_sig works", {
   expect_true(all(sig %in% NK_markers$HGNC_Symbol))
 
   ## test seurat object
-  data_seurat <- Seurat::CreateSeuratObject(counts = im_data_6@assayData$exprs,
-                                            meta.data = dge$samples)
+  data_seurat <- Seurat::CreateSeuratObject(
+    counts = im_data_6@assayData$exprs,
+    meta.data = dge$samples
+  )
   sig <- filter_subset_sig(
     data_seurat,
     group_col = "group", target_group = "NK",

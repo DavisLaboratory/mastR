@@ -40,18 +40,23 @@ test_that("sig_rankdensity_plot works", {
   expect_true(is.ggplot(p))
 
   ## test DGEList object
-  dge <- edgeR::DGEList(counts = im_data_6@assayData$exprs,
-                        group = im_data_6$`celltype:ch1`)
+  dge <- edgeR::DGEList(
+    counts = im_data_6@assayData$exprs,
+    group = im_data_6$`celltype:ch1`
+  )
   p <- sig_rankdensity_plot(
-    dge, sigs = NK_markers$HGNC_Symbol[1:20],
+    dge,
+    sigs = NK_markers$HGNC_Symbol[1:20],
     group_col = "group",
     gene_id = "ENSEMBL"
   )
   expect_true(is.ggplot(p))
 
   ## test seurat object
-  data_seurat <- Seurat::CreateSeuratObject(counts = im_data_6@assayData$exprs,
-                                            meta.data = dge$samples)
+  data_seurat <- Seurat::CreateSeuratObject(
+    counts = im_data_6@assayData$exprs,
+    meta.data = dge$samples
+  )
   p <- sig_rankdensity_plot(
     data_seurat,
     sigs = NK_markers$HGNC_Symbol[1:20],

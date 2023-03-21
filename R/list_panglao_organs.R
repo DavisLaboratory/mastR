@@ -9,7 +9,6 @@
 #' @examples
 #' list_panglao_organs()
 list_panglao_organs <- function() {
-
   web <- rvest::read_html("https://panglaodb.se/markers.html?cell_type=%27choose%27")
 
   av_organs <- rvest::html_attr(rvest::html_elements(web, "optgroup"), "label")

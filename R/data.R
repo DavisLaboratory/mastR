@@ -94,4 +94,3 @@
 #' @format A GeneSetCollection of `r length(msigdb_gobp_nk)` genesets.
 #' @source [msigdb::getMsigdb()]
 "msigdb_gobp_nk"
-

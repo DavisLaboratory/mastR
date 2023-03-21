@@ -34,6 +34,7 @@ Suggests:
     RobustRankAggreg,
     rvest,
     singscore,
+    spelling,
     testthat (>= 3.0.0),
     UpSetR
 Config/testthat/edition: 3
@@ -87,3 +88,4 @@ Collate:
 URL: https://davislaboratory.github.io/mastR
 BugReports: https://github.com/DavisLaboratory/mastR/issues
 VignetteBuilder: knitr
+Language: en-US

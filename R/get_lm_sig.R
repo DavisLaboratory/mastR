@@ -18,36 +18,41 @@
 #' data("LM7", "LM22")
 #' get_lm_sig(lm7.pattern = "NK", lm22.pattern = "NK cells")
 get_lm_sig <- function(lm7.pattern, lm22.pattern, ...) {
-
-
-  if(missing(lm7.pattern) && missing(lm22.pattern))
+  if (missing(lm7.pattern) && missing(lm22.pattern)) {
     stop("Must provide at least one of lm7.pattern and lm22.pattern param!")
+  }
 
   ## retrieve markers from LM7 signature matrix if lm7.pattern is given
-  if(!missing(lm7.pattern)) {
+  if (!missing(lm7.pattern)) {
     stopifnot(is.character(lm7.pattern))
 
     LM7 <- mastR::LM7
     idx <- grep(lm7.pattern, LM7$Subset, ...)
     gs_7 <- LM7$Gene[idx]
-    gs_7 <- GSEABase::GeneSet(gs_7, setName = "LM7",
-                              geneIdType = GSEABase::SymbolIdentifier())
+    gs_7 <- GSEABase::GeneSet(gs_7,
+      setName = "LM7",
+      geneIdType = GSEABase::SymbolIdentifier()
+    )
     gs <- gs_7
   }
 
   ## retrieve markers from LM22 signature matrix if lm22.pattern is given
-  if(!missing(lm22.pattern)) {
+  if (!missing(lm22.pattern)) {
     stopifnot(is.character(lm22.pattern))
 
     LM22 <- mastR::LM22
     idx <- grep(lm22.pattern, colnames(LM22)[-1], ...)
-    idx <- as.logical(Reduce(function(x, y) {x == 1 | y == 1}, LM22[,-1][,idx]))
+    idx <- as.logical(Reduce(function(x, y) {
+      x == 1 | y == 1
+    }, LM22[, -1][, idx]))
     gs_22 <- LM22$Gene[idx]
-    gs_22 <- GSEABase::GeneSet(gs_22, setName = "LM22",
-                              geneIdType = GSEABase::SymbolIdentifier())
+    gs_22 <- GSEABase::GeneSet(gs_22,
+      setName = "LM22",
+      geneIdType = GSEABase::SymbolIdentifier()
+    )
     gs <- gs_22
   }
-  if(!missing(lm7.pattern) && !missing(lm22.pattern)) {
+  if (!missing(lm7.pattern) && !missing(lm22.pattern)) {
     gs <- GSEABase::GeneSetCollection(gs_7, gs_22)
   }
   return(gs)

@@ -54,8 +54,10 @@ test_that("remove_bg_snr works", {
   expect_true(is.vector(m))
 
   ## test seurat
-  data_seurat <- Seurat::CreateSeuratObject(counts = ccle_crc_5$counts,
-                                            meta.data = ccle_crc_5$samples)
+  data_seurat <- Seurat::CreateSeuratObject(
+    counts = ccle_crc_5$counts,
+    meta.data = ccle_crc_5$samples
+  )
   m <- remove_bg_snr(
     data_seurat,
     Biobase::exprs(im_data_6),

@@ -19,139 +19,168 @@
 #' @return An expression matrix after aggregating cells on specified factors
 #'
 #' @examples
-#' counts <- matrix(abs(rnorm(10000, 10,10)), 100)
+#' counts <- matrix(abs(rnorm(10000, 10, 10)), 100)
 #' rownames(counts) <- 1:100
 #' colnames(counts) <- 1:100
-#' meta <- data.frame(subset = rep(c("A","B"),50),
-#'                    level = rep(1:4, each = 25))
+#' meta <- data.frame(
+#'   subset = rep(c("A", "B"), 50),
+#'   level = rep(1:4, each = 25)
+#' )
 #' rownames(meta) <- 1:100
 #' scRNA <- Seurat::CreateSeuratObject(counts = counts, meta.data = meta)
-#' pseudo_samples(scRNA, by = c("subset","level"),
-#'                min.cells = 10, max.cells = 20)
+#' pseudo_samples(scRNA,
+#'   by = c("subset", "level"),
+#'   min.cells = 10, max.cells = 20
+#' )
 #'
 #' @export
-setGeneric("pseudo_samples",
-           function(data,
-                    by,
-                    fun = c("sum", "mean"),
-                    scale = NULL,
-                    min.cells = 0,
-                    max.cells = Inf,
-                    slot = "counts")
-             standardGeneric("pseudo_samples"))
-
-#' @rdname pseudo_samples
-setMethod("pseudo_samples", signature(
-  data = 'matrix',
-  by = 'data.frame'
-),
-function(data,
-         by,
-         fun = c("sum", "mean"),
-         scale = NULL,
-         min.cells = 0,
-         max.cells = Inf,
-         slot = "counts") {
-
-  fun <- match.arg(fun)
-  stopifnot(is.character(fun), is.numeric(min.cells),
-            is.numeric(max.cells), is.character(slot))
-
-  l <- pseudo_sample_list(data = data, by = by,
-                          min.cells = min.cells,
-                          max.cells = max.cells)
-  p_samples <- unlist(lapply(names(l), function(x) {
-    paste(x, names(l[[x]]), sep = "_")
-  }))
-  p_samples <- p_samples[!grepl("_$", p_samples)]
-  pb <- lapply(l, function(i) sapply(i, function(j) {
-    if(fun == "mean") {
-      Matrix::rowMeans(data[,j], na.rm = TRUE)
-    } else if(fun == "sum") Matrix::rowSums(data[,j], na.rm = TRUE)
-  }))
-  pb <- do.call(cbind, pb)
-  pb <- pb[,which(!is.na(colnames(pb)))]
-  colnames(pb) <- p_samples
-  pb <- apply(pb, c(1, 2), as.numeric)
-  if(fun == "mean" && !is.null(scale)) {
-    pb <- pb * scale
+setGeneric(
+  "pseudo_samples",
+  function(data,
+           by,
+           fun = c("sum", "mean"),
+           scale = NULL,
+           min.cells = 0,
+           max.cells = Inf,
+           slot = "counts") {
+    standardGeneric("pseudo_samples")
   }
-  return(pb)
-})
+)
 
 #' @rdname pseudo_samples
-setMethod("pseudo_samples", signature(
-  data = 'matrix',
-  by = 'vector'
-),
-function(data,
-         by,
-         fun = c("sum", "mean"),
-         scale = NULL,
-         min.cells = 0,
-         max.cells = Inf,
-         slot = "counts") {
+setMethod(
+  "pseudo_samples", signature(
+    data = "matrix",
+    by = "data.frame"
+  ),
+  function(data,
+           by,
+           fun = c("sum", "mean"),
+           scale = NULL,
+           min.cells = 0,
+           max.cells = Inf,
+           slot = "counts") {
+    fun <- match.arg(fun)
+    stopifnot(
+      is.character(fun), is.numeric(min.cells),
+      is.numeric(max.cells), is.character(slot)
+    )
 
-  stopifnot(is.character(fun), is.numeric(min.cells),
-            is.numeric(max.cells), is.character(slot))
-
-  pb <- pseudo_samples(data = data, by = as.data.frame(by), fun = fun,
-                       scale = scale, min.cells = min.cells,
-                       max.cells = max.cells, slot = slot)
-  return(pb)
-})
-
-#' @rdname pseudo_samples
-setMethod("pseudo_samples", signature(
-  data = 'Seurat',
-  by = 'character'
-),
-function(data,
-         by,
-         fun = c("sum", "mean"),
-         scale = NULL,
-         min.cells = 0,
-         max.cells = Inf,
-         slot = "counts") {
-
-  stopifnot(is.character(fun), is.numeric(min.cells),
-            is.numeric(max.cells), is.character(slot))
-
-  expr <- as.matrix(Seurat::GetAssayData(data, slot = slot))
-  coldata <- data@meta.data[,by]
-  rm(data)
-
-  pb <- pseudo_samples(data = expr, by = coldata, fun = fun,
-                       scale = scale, min.cells = min.cells,
-                       max.cells = max.cells, slot = slot)
-  return(pb)
-})
+    l <- pseudo_sample_list(
+      data = data, by = by,
+      min.cells = min.cells,
+      max.cells = max.cells
+    )
+    p_samples <- unlist(lapply(names(l), function(x) {
+      paste(x, names(l[[x]]), sep = "_")
+    }))
+    p_samples <- p_samples[!grepl("_$", p_samples)]
+    pb <- lapply(l, function(i) {
+      sapply(i, function(j) {
+        if (fun == "mean") {
+          Matrix::rowMeans(data[, j], na.rm = TRUE)
+        } else if (fun == "sum") Matrix::rowSums(data[, j], na.rm = TRUE)
+      })
+    })
+    pb <- do.call(cbind, pb)
+    pb <- pb[, which(!is.na(colnames(pb)))]
+    colnames(pb) <- p_samples
+    pb <- apply(pb, c(1, 2), as.numeric)
+    if (fun == "mean" && !is.null(scale)) {
+      pb <- pb * scale
+    }
+    return(pb)
+  }
+)
 
 #' @rdname pseudo_samples
-setMethod("pseudo_samples", signature(
-  data = 'SummarizedExperiment',
-  by = 'character'
-),
-function(data,
-         by,
-         fun = c("sum", "mean"),
-         scale = NULL,
-         min.cells = 0,
-         max.cells = Inf,
-         slot = "counts") {
+setMethod(
+  "pseudo_samples", signature(
+    data = "matrix",
+    by = "vector"
+  ),
+  function(data,
+           by,
+           fun = c("sum", "mean"),
+           scale = NULL,
+           min.cells = 0,
+           max.cells = Inf,
+           slot = "counts") {
+    stopifnot(
+      is.character(fun), is.numeric(min.cells),
+      is.numeric(max.cells), is.character(slot)
+    )
 
-  stopifnot(is.character(fun), is.numeric(min.cells),
-            is.numeric(max.cells), is.character(slot))
+    pb <- pseudo_samples(
+      data = data, by = as.data.frame(by), fun = fun,
+      scale = scale, min.cells = min.cells,
+      max.cells = max.cells, slot = slot
+    )
+    return(pb)
+  }
+)
 
-  expr <- as.matrix(SummarizedExperiment::assay(data, slot))
-  coldata <- as.data.frame(SummarizedExperiment::colData(data)[,by])
-  rm(data)
+#' @rdname pseudo_samples
+setMethod(
+  "pseudo_samples", signature(
+    data = "Seurat",
+    by = "character"
+  ),
+  function(data,
+           by,
+           fun = c("sum", "mean"),
+           scale = NULL,
+           min.cells = 0,
+           max.cells = Inf,
+           slot = "counts") {
+    stopifnot(
+      is.character(fun), is.numeric(min.cells),
+      is.numeric(max.cells), is.character(slot)
+    )
 
-  pb <- pseudo_samples(data = expr, by = coldata, fun = fun,
-                       scale = scale, min.cells = min.cells,
-                       max.cells = max.cells, slot = slot)
-  return(pb)
-})
+    expr <- as.matrix(Seurat::GetAssayData(data, slot = slot))
+    coldata <- data@meta.data[, by]
+    rm(data)
+
+    pb <- pseudo_samples(
+      data = expr, by = coldata, fun = fun,
+      scale = scale, min.cells = min.cells,
+      max.cells = max.cells, slot = slot
+    )
+    return(pb)
+  }
+)
+
+#' @rdname pseudo_samples
+setMethod(
+  "pseudo_samples", signature(
+    data = "SummarizedExperiment",
+    by = "character"
+  ),
+  function(data,
+           by,
+           fun = c("sum", "mean"),
+           scale = NULL,
+           min.cells = 0,
+           max.cells = Inf,
+           slot = "counts") {
+    stopifnot(
+      is.character(fun), is.numeric(min.cells),
+      is.numeric(max.cells), is.character(slot)
+    )
+
+    expr <- as.matrix(SummarizedExperiment::assay(data, slot))
+    coldata <- as.data.frame(SummarizedExperiment::colData(data)[, by])
+    rm(data)
+
+    pb <- pseudo_samples(
+      data = expr, by = coldata, fun = fun,
+      scale = scale, min.cells = min.cells,
+      max.cells = max.cells, slot = slot
+    )
+    return(pb)
+  }
+)
 
 #' Split cells according to specific factors
 #'
@@ -170,15 +199,19 @@ function(data,
 #' @export
 #'
 #' @examples
-#' counts <- matrix(abs(rnorm(10000, 10,10)), 100)
+#' counts <- matrix(abs(rnorm(10000, 10, 10)), 100)
 #' rownames(counts) <- 1:100
 #' colnames(counts) <- 1:100
-#' meta <- data.frame(subset = rep(c("A","B"),50),
-#'                    level = rep(1:4, each = 25))
+#' meta <- data.frame(
+#'   subset = rep(c("A", "B"), 50),
+#'   level = rep(1:4, each = 25)
+#' )
 #' rownames(meta) <- 1:100
 #' scRNA <- Seurat::CreateSeuratObject(counts = counts, meta.data = meta)
-#' pseudo_sample_list(scRNA, by = c("subset","level"),
-#'                    min.cells = 10, max.cells = 20)
+#' pseudo_sample_list(scRNA,
+#'   by = c("subset", "level"),
+#'   min.cells = 10, max.cells = 20
+#' )
 pseudo_sample_list <- function(data,
                                by,
                                min.cells = 0,

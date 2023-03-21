@@ -11,13 +11,17 @@
 #' gsc_plot(mastR::msigdb_gobp_nk[1:3])
 gsc_plot <- function(...) {
   ## input must be GeneSet or GeneSetCollection
-  if(!all(sapply(list(...), class) %in% c("GeneSet", "GeneSetCollection")))
+  if (!all(sapply(list(...), class) %in% c("GeneSet", "GeneSetCollection"))) {
     stop("Only accept GeneSet or GeneSetCollection as input")
+  }
 
   gsc <- GSEABase::GeneSetCollection(c(...))
 
-  if(length(gsc) > 1) {
+  if (length(gsc) > 1) {
     UpSetR::upset(UpSetR::fromList(GSEABase::geneIds(gsc)),
-                  nsets = length(gsc))
-  }else stop("Only one gene-set is provided!")
+      nsets = length(gsc)
+    )
+  } else {
+    stop("Only one gene-set is provided!")
+  }
 }

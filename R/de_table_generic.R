@@ -17,185 +17,211 @@ NULL
 #' data("im_data_6")
 #' DE_tables <- get_de_table(im_data_6, group_col = "celltype:ch1", target_group = "NK")
 #'
-#'@export
-setGeneric("get_de_table",
-           function(data,
-                    group_col,
-                    target_group,
-                    slot = "counts",
-                    ...)
-           standardGeneric("get_de_table"))
-
-#' @rdname get_de_table
-setMethod("get_de_table", signature(
-  data = 'DGEList',
-  group_col = 'character',
-  target_group = 'character'
-),
-function(data,
-         group_col,
-         target_group,
-         slot = "counts",
-         ...) {
-
-  stopifnot("slot must be character!" = is.character(slot))
-
-  DGE <- data
-  DGE$samples$group <- DGE$samples[[group_col]]
-  DGE$original <- DGE$counts
-  DGE$counts <- DGE[[slot]]
-  rm(data)
-
-  # ## standard DE analysis with edgeR and limma::voom pipeline
-  # voom_res <- de_analysis(
-  #   dge = DGE,
-  #   group_col = group_col,
-  #   target_group = target_group,
-  #   ...
-  # )
-  proc_data <- process_data(
-    data = DGE,
-    group_col = group_col,
-    target_group = target_group,
-    ...
-  )
-
-  ## save DE result tables into list
-  DE_table <- list()
-  for (i in seq_len(ncol(proc_data$tfit))) {
-    ## use limma::topTreat() to get statistics of DEA
-    DE_table[[i]] <- na.omit(limma::topTreat(proc_data$tfit,
-                                             coef = i,
-                                             number = Inf))
+#' @export
+setGeneric(
+  "get_de_table",
+  function(data,
+           group_col,
+           target_group,
+           slot = "counts",
+           ...) {
+    standardGeneric("get_de_table")
   }
-  names(DE_table) <- colnames(proc_data$tfit)
-
-  return(DE_table)
-})
+)
 
 #' @rdname get_de_table
-setMethod("get_de_table", signature(
-  data = 'matrix',
-  group_col = 'vector',
-  target_group = 'character'
-),
-function(data,
-         group_col,
-         target_group,
-         ...) {
+setMethod(
+  "get_de_table", signature(
+    data = "DGEList",
+    group_col = "character",
+    target_group = "character"
+  ),
+  function(data,
+           group_col,
+           target_group,
+           slot = "counts",
+           ...) {
+    stopifnot("slot must be character!" = is.character(slot))
 
-  DGE <- edgeR::DGEList(counts = data, group = group_col)
-  group_col <- "group"
-  rm(data)
+    DGE <- data
+    DGE$samples$group <- DGE$samples[[group_col]]
+    DGE$original <- DGE$counts
+    DGE$counts <- DGE[[slot]]
+    rm(data)
 
-  DE_table <- get_de_table(data = DGE, group_col = group_col,
-                           target_group = target_group,
-                           slot = "counts", ...)
+    # ## standard DE analysis with edgeR and limma::voom pipeline
+    # voom_res <- de_analysis(
+    #   dge = DGE,
+    #   group_col = group_col,
+    #   target_group = target_group,
+    #   ...
+    # )
+    proc_data <- process_data(
+      data = DGE,
+      group_col = group_col,
+      target_group = target_group,
+      ...
+    )
 
-  return(DE_table)
-})
+    ## save DE result tables into list
+    DE_table <- list()
+    for (i in seq_len(ncol(proc_data$tfit))) {
+      ## use limma::topTreat() to get statistics of DEA
+      DE_table[[i]] <- na.omit(limma::topTreat(proc_data$tfit,
+        coef = i,
+        number = Inf
+      ))
+    }
+    names(DE_table) <- colnames(proc_data$tfit)
 
-#' @rdname get_de_table
-setMethod("get_de_table", signature(
-  data = 'Matrix',
-  group_col = 'vector',
-  target_group = 'character'
-),
-function(data,
-         group_col,
-         target_group,
-         ...) {
-
-  DGE <- edgeR::DGEList(counts = data, group = group_col)
-  group_col <- "group"
-  rm(data)
-
-  DE_table <- get_de_table(data = DGE, group_col = group_col,
-                           target_group = target_group,
-                           slot = "counts", ...)
-
-  return(DE_table)
-})
-
-#' @rdname get_de_table
-setMethod("get_de_table", signature(
-  data = 'ExpressionSet',
-  group_col = 'character',
-  target_group = 'character'
-),
-function(data,
-         group_col,
-         target_group,
-         ...) {
-
-  expr <- Biobase::exprs(data)
-  coldata <- Biobase::pData(data)
-
-  DGE <- edgeR::DGEList(counts = expr,
-                        samples = coldata,
-                        group = coldata[[group_col]])
-  group_col <- make.names(group_col)
-  rm(data, expr, coldata)
-
-  DE_table <- get_de_table(data = DGE, group_col = group_col,
-                           target_group = target_group,
-                           slot = "counts", ...)
-
-  return(DE_table)
-})
+    return(DE_table)
+  }
+)
 
 #' @rdname get_de_table
-setMethod("get_de_table", signature(
-  data = 'SummarizedExperiment',
-  group_col = 'character',
-  target_group = 'character'
-),
-function(data,
-         group_col,
-         target_group,
-         slot = "counts",
-         ...) {
+setMethod(
+  "get_de_table", signature(
+    data = "matrix",
+    group_col = "vector",
+    target_group = "character"
+  ),
+  function(data,
+           group_col,
+           target_group,
+           ...) {
+    DGE <- edgeR::DGEList(counts = data, group = group_col)
+    group_col <- "group"
+    rm(data)
 
-  expr <- SummarizedExperiment::assay(data, slot)
-  coldata <- SummarizedExperiment::colData(data)
+    DE_table <- get_de_table(
+      data = DGE, group_col = group_col,
+      target_group = target_group,
+      slot = "counts", ...
+    )
 
-  DGE <- edgeR::DGEList(counts = expr,
-                        samples = coldata,
-                        group = coldata[[group_col]])
-  group_col <- make.names(group_col)
-  rm(data, expr, coldata)
-
-  DE_table <- get_de_table(data = DGE, group_col = group_col,
-                           target_group = target_group,
-                           slot = "counts", ...)
-
-  return(DE_table)
-})
+    return(DE_table)
+  }
+)
 
 #' @rdname get_de_table
-setMethod("get_de_table", signature(
-  data = 'Seurat',
-  group_col = 'character',
-  target_group = 'character'
-),
-function(data,
-         group_col,
-         target_group,
-         slot = "counts",
-         ...) {
+setMethod(
+  "get_de_table", signature(
+    data = "Matrix",
+    group_col = "vector",
+    target_group = "character"
+  ),
+  function(data,
+           group_col,
+           target_group,
+           ...) {
+    DGE <- edgeR::DGEList(counts = data, group = group_col)
+    group_col <- "group"
+    rm(data)
 
-  expr <- Seurat::GetAssayData(data, slot = slot)
-  coldata <- data@meta.data
+    DE_table <- get_de_table(
+      data = DGE, group_col = group_col,
+      target_group = target_group,
+      slot = "counts", ...
+    )
 
-  DGE <- edgeR::DGEList(counts = expr,
-                        samples = coldata,
-                        group = coldata[[group_col]])
-  group_col <- make.names(group_col)
-  rm(data, expr, coldata)
+    return(DE_table)
+  }
+)
 
-  DE_table <- get_de_table(data = DGE, group_col = group_col,
-                           target_group = target_group,
-                           slot = "counts", ...)
+#' @rdname get_de_table
+setMethod(
+  "get_de_table", signature(
+    data = "ExpressionSet",
+    group_col = "character",
+    target_group = "character"
+  ),
+  function(data,
+           group_col,
+           target_group,
+           ...) {
+    expr <- Biobase::exprs(data)
+    coldata <- Biobase::pData(data)
 
-  return(DE_table)
-})
+    DGE <- edgeR::DGEList(
+      counts = expr,
+      samples = coldata,
+      group = coldata[[group_col]]
+    )
+    group_col <- make.names(group_col)
+    rm(data, expr, coldata)
+
+    DE_table <- get_de_table(
+      data = DGE, group_col = group_col,
+      target_group = target_group,
+      slot = "counts", ...
+    )
+
+    return(DE_table)
+  }
+)
+
+#' @rdname get_de_table
+setMethod(
+  "get_de_table", signature(
+    data = "SummarizedExperiment",
+    group_col = "character",
+    target_group = "character"
+  ),
+  function(data,
+           group_col,
+           target_group,
+           slot = "counts",
+           ...) {
+    expr <- SummarizedExperiment::assay(data, slot)
+    coldata <- SummarizedExperiment::colData(data)
+
+    DGE <- edgeR::DGEList(
+      counts = expr,
+      samples = coldata,
+      group = coldata[[group_col]]
+    )
+    group_col <- make.names(group_col)
+    rm(data, expr, coldata)
+
+    DE_table <- get_de_table(
+      data = DGE, group_col = group_col,
+      target_group = target_group,
+      slot = "counts", ...
+    )
+
+    return(DE_table)
+  }
+)
+
+#' @rdname get_de_table
+setMethod(
+  "get_de_table", signature(
+    data = "Seurat",
+    group_col = "character",
+    target_group = "character"
+  ),
+  function(data,
+           group_col,
+           target_group,
+           slot = "counts",
+           ...) {
+    expr <- Seurat::GetAssayData(data, slot = slot)
+    coldata <- data@meta.data
+
+    DGE <- edgeR::DGEList(
+      counts = expr,
+      samples = coldata,
+      group = coldata[[group_col]]
+    )
+    group_col <- make.names(group_col)
+    rm(data, expr, coldata)
+
+    DE_table <- get_de_table(
+      data = DGE, group_col = group_col,
+      target_group = target_group,
+      slot = "counts", ...
+    )
+
+    return(DE_table)
+  }
+)
