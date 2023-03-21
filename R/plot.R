@@ -417,13 +417,19 @@ scatter_plot_init <- function(expr, sigs, target_group, by,
   ## biplot of specified target_group vs all other types
   p <- tidyr::pivot_longer(expr, -target_group,
                            names_to = "celltype",
-                           values_to = "Median Expression") |>
-    ggplot2::ggplot(ggplot2::aes(x = !!sym("Median Expression"),
-                                 y = !!sym(target_group))) +
+                           values_to = "Median_Expression") |>
+    dplyr::mutate(
+      flag = ifelse(!!sym(target_group) > yint & Median_Expression < xint,
+                    "High", "Low")
+    ) |>
+    ggplot2::ggplot(ggplot2::aes(x = !!sym("Median_Expression"),
+                                 y = !!sym(target_group),
+                                 col = flag)) +
     ggplot2::geom_point(alpha = 0.4, shape = 1) +
     ggplot2::geom_vline(xintercept = xint, lty = 2) +
     ggplot2::geom_hline(yintercept = yint, lty = 2) +
     ggplot2::facet_wrap(~celltype) +
+    ggplot2::labs(x = "Median of z-scored Expression", col = "Specificity") +
     ggplot2::theme_classic()
   return(p)
 }

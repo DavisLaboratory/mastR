@@ -720,6 +720,17 @@ To see if the curated signature shows higher specificity to NK cells than other 
 If the signature shows specificity to NK, then most of signature genes should appear in left-top region (scaled expression > 1 in NK, < 1 in other), while the gene present in right-top region should represent the co-expression in the both groups.
 
 ```{r abundance scatter plot, warning=FALSE, fig.width=8, fig.height=5}
+## before refinement
+sig_scatter_plot(
+  data = proc_data,
+  sigs = geneIds(Markers),
+  group_col = "celltype.ch1", 
+  target_group = "NK",
+  gene_id = "ENSEMBL",
+  slot = "voomE"
+)
+
+## after refinement
 sig_scatter_plot(
   data = proc_data,
   sigs = sig_NK_CRC,
