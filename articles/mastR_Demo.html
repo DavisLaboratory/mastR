@@ -255,7 +255,7 @@ function provided by <a href="https://cran.r-project.org/package=devtools" class
 <span><span class="co">#   devtools::install_github("Gene233/mastR")</span></span>
 <span><span class="co"># }</span></span>
 <span></span>
-<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"mastR"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
@@ -384,8 +384,10 @@ would be searched.</p>
 <code>msigdb_gobp_nk</code> to show how it works.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"msigdb_gobp_nk"</span><span class="op">)</span></span>
-<span><span class="va">MSig</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_gsc_sig.html">get_gsc_sig</a></span><span class="op">(</span>gsc <span class="op">=</span> <span class="va">msigdb_gobp_nk</span>,</span>
-<span>                    pattern <span class="op">=</span> <span class="st">"NATURAL_KILLER_CELL_MEDIATED"</span><span class="op">)</span></span>
+<span><span class="va">MSig</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_gsc_sig.html">get_gsc_sig</a></span><span class="op">(</span></span>
+<span>  gsc <span class="op">=</span> <span class="va">msigdb_gobp_nk</span>,</span>
+<span>  pattern <span class="op">=</span> <span class="st">"NATURAL_KILLER_CELL_MEDIATED"</span></span>
+<span><span class="op">)</span></span>
 <span><span class="va">MSig</span></span>
 <span><span class="co">#&gt; GeneSetCollection</span></span>
 <span><span class="co">#&gt;   names: GOBP_NATURAL_KILLER_CELL_MEDIATED_IMMUNITY, GOBP_NATURAL_KILLER_CELL_MEDIATED_CYTOTOXICITY_DIRECTED_AGAINST_TUMOR_CELL_TARGET, ..., GOBP_POSITIVE_REGULATION_OF_NATURAL_KILLER_CELL_MEDIATED_CYTOTOXICITY (18 total)</span></span>
@@ -406,7 +408,7 @@ function <code><a href="../reference/gsc_plot.html">gsc_plot()</a></code>. We ca
 <span><span class="fu"><a href="../reference/gsc_plot.html">gsc_plot</a></span><span class="op">(</span><span class="va">MSig</span><span class="op">)</span></span></code></pre></div>
 <p><img src="mastR_Demo_files/figure-html/show%20overlap-1.png" width="768"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">gsn</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"M"</span>, <span class="st">"D"</span><span class="op">)</span><span class="op">]</span>  <span class="co">## show gene-set names of top 3</span></span>
+<code class="sourceCode R"><span><span class="va">gsn</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"M"</span>, <span class="st">"D"</span><span class="op">)</span><span class="op">]</span> <span class="co">## show gene-set names of top 3</span></span>
 <span><span class="co">#&gt;                                                          A </span></span>
 <span><span class="co">#&gt;               "GOBP_NATURAL_KILLER_CELL_MEDIATED_IMMUNITY" </span></span>
 <span><span class="co">#&gt;                                                          M </span></span>
@@ -488,8 +490,9 @@ in total.</p>
 <span></span>
 <span><span class="co">## convert NK markers into 'GeneSet' object</span></span>
 <span><span class="va">nk_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-methods.html" class="external-link">GeneSet</a></span><span class="op">(</span><span class="va">NK_markers</span><span class="op">$</span><span class="va">HGNC_Symbol</span>,</span>
-<span>                geneIdType <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneIdentifierType-constructors.html" class="external-link">SymbolIdentifier</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>                setName <span class="op">=</span> <span class="st">"NK_markers"</span><span class="op">)</span></span></code></pre></div>
+<span>  geneIdType <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneIdentifierType-constructors.html" class="external-link">SymbolIdentifier</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  setName <span class="op">=</span> <span class="st">"NK_markers"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -645,9 +648,9 @@ when markers is not NULL, could be one of ‘ENSEMBL’, ‘SYMBOL’,
 <code>help(proc_data)</code></p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">proc_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/process_data.html">process_data</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="va">im_data_6</span>,  </span>
+<span>  data <span class="op">=</span> <span class="va">im_data_6</span>,</span>
 <span>  group_col <span class="op">=</span> <span class="st">"celltype:ch1"</span>,</span>
-<span>  target_group <span class="op">=</span> <span class="st">"NK"</span>, </span>
+<span>  target_group <span class="op">=</span> <span class="st">"NK"</span>,</span>
 <span>  markers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span>,</span>
 <span>  gene_id <span class="op">=</span> <span class="st">"ENSEMBL"</span> <span class="co">## rownames of im_data_6 is ENSEMBL ID</span></span>
 <span>  <span class="co"># summary = TRUE ## if to show the summary of tfit result</span></span>
@@ -756,11 +759,11 @@ GeneSetCollection (‘UP’ and ‘DOWN’) will be returned as output.</em></p>
 param <code>plot = TRUE</code>.</em></p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">DEG_6</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_degs.html">get_degs</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="va">im_data_6</span>,  </span>
+<span>  data <span class="op">=</span> <span class="va">im_data_6</span>,</span>
 <span>  group_col <span class="op">=</span> <span class="st">"celltype:ch1"</span>,</span>
-<span>  target_group <span class="op">=</span> <span class="st">"NK"</span>, </span>
+<span>  target_group <span class="op">=</span> <span class="st">"NK"</span>,</span>
 <span>  markers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span>,</span>
-<span>  gene_id <span class="op">=</span> <span class="st">"ENSEMBL"</span>  <span class="co">## convert ensembl IDs of rownames into symbols if gene_id != "SYMBOL"</span></span>
+<span>  gene_id <span class="op">=</span> <span class="st">"ENSEMBL"</span> <span class="co">## convert ensembl IDs of rownames into symbols if gene_id != "SYMBOL"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">## `proc_data` object would be saved</span></span>
 <span><span class="va">proc_data</span> <span class="op">&lt;-</span> <span class="va">DEG_6</span><span class="op">$</span><span class="va">proc_data</span></span>
@@ -780,13 +783,15 @@ interested gene list.</p>
 demo, only <code>UP</code> DEGs are kept now.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## convert ensembl IDs into symbols to match markers pool</span></span>
-<span><span class="va">deg_up</span> <span class="op">&lt;-</span> <span class="fu">mapIds</span><span class="op">(</span><span class="fu">org.Hs.eg.db</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/org.Hs.eg.db/man/org.Hs.egBASE.html" class="external-link">org.Hs.eg.db</a></span>,</span>
-<span>                 <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">sig_ct</span><span class="op">[[</span><span class="st">"UP"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>,</span>
-<span>                 <span class="st">"SYMBOL"</span>, <span class="st">"ENSEMBL"</span><span class="op">)</span></span>
+<span><span class="va">deg_up</span> <span class="op">&lt;-</span> <span class="fu">mapIds</span><span class="op">(</span></span>
+<span>  <span class="fu">org.Hs.eg.db</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/org.Hs.eg.db/man/org.Hs.egBASE.html" class="external-link">org.Hs.eg.db</a></span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">sig_ct</span><span class="op">[[</span><span class="st">"UP"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>  <span class="st">"SYMBOL"</span>, <span class="st">"ENSEMBL"</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
 <span><span class="co">## markers specific for NK cells</span></span>
 <span><span class="va">m_ct</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/sets.html" class="external-link">intersect</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span>, <span class="va">deg_up</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">m_ct</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">deg_up</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/match.html" class="external-link">match</a></span><span class="op">(</span><span class="va">m_ct</span>, <span class="va">deg_up</span><span class="op">)</span><span class="op">]</span>  <span class="co">## set ensembl ID as names for downstream visualization</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">m_ct</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">deg_up</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/match.html" class="external-link">match</a></span><span class="op">(</span><span class="va">m_ct</span>, <span class="va">deg_up</span><span class="op">)</span><span class="op">]</span> <span class="co">## set ensembl ID as names for downstream visualization</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">m_ct</span><span class="op">)</span></span>
 <span><span class="co">#&gt; ENSG00000122223 ENSG00000198821 ENSG00000172543 ENSG00000145649 ENSG00000197540 </span></span>
@@ -801,15 +806,17 @@ compared with non-intersected DEGs.</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## PCA shows clear separation of NK cells</span></span>
 <span><span class="co">## after intersection</span></span>
-<span><span class="fu"><a href="../reference/pca_matrix_plot.html">pca_matrix_plot</a></span><span class="op">(</span><span class="va">proc_data</span><span class="op">$</span><span class="va">vfit</span><span class="op">$</span><span class="va">E</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">m_ct</span><span class="op">)</span>,<span class="op">]</span>,</span>
-<span>                group_by <span class="op">=</span> <span class="va">proc_data</span><span class="op">$</span><span class="va">samples</span><span class="op">$</span><span class="va">celltype.ch1</span>,</span>
-<span>                n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"After intersection"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/pca_matrix_plot.html">pca_matrix_plot</a></span><span class="op">(</span><span class="va">proc_data</span><span class="op">$</span><span class="va">vfit</span><span class="op">$</span><span class="va">E</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">m_ct</span><span class="op">)</span>, <span class="op">]</span>,</span>
+<span>  group_by <span class="op">=</span> <span class="va">proc_data</span><span class="op">$</span><span class="va">samples</span><span class="op">$</span><span class="va">celltype.ch1</span>,</span>
+<span>  n <span class="op">=</span> <span class="fl">3</span></span>
+<span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"After intersection"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="mastR_Demo_files/figure-html/PCA%20on%20sig-1.png" width="768"></p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## before intersection</span></span>
-<span><span class="fu"><a href="../reference/pca_matrix_plot.html">pca_matrix_plot</a></span><span class="op">(</span><span class="va">proc_data</span><span class="op">$</span><span class="va">vfit</span><span class="op">$</span><span class="va">E</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">deg_up</span><span class="op">)</span>,<span class="op">]</span>,</span>
-<span>                group_by <span class="op">=</span> <span class="va">proc_data</span><span class="op">$</span><span class="va">samples</span><span class="op">$</span><span class="va">celltype.ch1</span>,</span>
-<span>                n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Before intersection"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/pca_matrix_plot.html">pca_matrix_plot</a></span><span class="op">(</span><span class="va">proc_data</span><span class="op">$</span><span class="va">vfit</span><span class="op">$</span><span class="va">E</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">deg_up</span><span class="op">)</span>, <span class="op">]</span>,</span>
+<span>  group_by <span class="op">=</span> <span class="va">proc_data</span><span class="op">$</span><span class="va">samples</span><span class="op">$</span><span class="va">celltype.ch1</span>,</span>
+<span>  n <span class="op">=</span> <span class="fl">3</span></span>
+<span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Before intersection"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="mastR_Demo_files/figure-html/PCA%20on%20sig-2.png" width="768"></p>
 <p><strong><em>Note</em></strong>: <em>There’s also a wrapper function
 <code><a href="../reference/filter_subset_sig.html">filter_subset_sig()</a></code> which can directly do the whole Step 2
@@ -922,28 +929,32 @@ gene symbols.</li>
 <span><span class="va">CCLE</span> <span class="op">&lt;-</span> <span class="fu">depmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/depmap/man/TPM.html" class="external-link">depmap_TPM</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">CCLE_meta</span> <span class="op">&lt;-</span> <span class="fu">depmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/depmap/man/metadata.html" class="external-link">depmap_metadata</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">## filter</span></span>
-<span><span class="va">m_ccl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/remove_bg_snr.html">remove_bg_snr</a></span><span class="op">(</span>bg_data <span class="op">=</span> <span class="st">"CCLE"</span>,</span>
-<span>                       sig_data <span class="op">=</span> <span class="va">proc_data</span>,</span>
-<span>                       b_group_col <span class="op">=</span> <span class="st">"primary_disease"</span>,</span>
-<span>                       b_target_group <span class="op">=</span> <span class="st">"colorectal"</span>,</span>
-<span>                       s_group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>,</span>
-<span>                       s_target_group <span class="op">=</span> <span class="st">"NK"</span>,</span>
-<span>                       markers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span>,</span>
-<span>                       filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span>, <span class="co">## needed when bg_data is 'CCLE'</span></span>
-<span>                       gene_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SYMBOL"</span>, <span class="st">"ENSEMBL"</span><span class="op">)</span>,</span>
-<span>                       s_slot <span class="op">=</span> <span class="st">"voomE"</span>,</span>
-<span>                       ccle_tpm <span class="op">=</span> <span class="va">CCLE</span>, <span class="co">## only provided when data = 'CCLE'</span></span>
-<span>                       ccle_meta <span class="op">=</span> <span class="va">CCLE_meta</span><span class="op">)</span></span>
+<span><span class="va">m_ccl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/remove_bg_snr.html">remove_bg_snr</a></span><span class="op">(</span></span>
+<span>  bg_data <span class="op">=</span> <span class="st">"CCLE"</span>,</span>
+<span>  sig_data <span class="op">=</span> <span class="va">proc_data</span>,</span>
+<span>  b_group_col <span class="op">=</span> <span class="st">"primary_disease"</span>,</span>
+<span>  b_target_group <span class="op">=</span> <span class="st">"colorectal"</span>,</span>
+<span>  s_group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>,</span>
+<span>  s_target_group <span class="op">=</span> <span class="st">"NK"</span>,</span>
+<span>  markers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span>,</span>
+<span>  filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span>, <span class="co">## needed when bg_data is 'CCLE'</span></span>
+<span>  gene_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SYMBOL"</span>, <span class="st">"ENSEMBL"</span><span class="op">)</span>,</span>
+<span>  s_slot <span class="op">=</span> <span class="st">"voomE"</span>,</span>
+<span>  ccle_tpm <span class="op">=</span> <span class="va">CCLE</span>, <span class="co">## only provided when data = 'CCLE'</span></span>
+<span>  ccle_meta <span class="op">=</span> <span class="va">CCLE_meta</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co">## or without loading CCLE yourself</span></span>
-<span><span class="va">m_ccl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/remove_bg_snr.html">remove_bg_snr</a></span><span class="op">(</span>sig_data <span class="op">=</span> <span class="va">proc_data</span>,</span>
-<span>                       b_group_col <span class="op">=</span> <span class="st">"primary_disease"</span>,</span>
-<span>                       b_target_group <span class="op">=</span> <span class="st">"colorectal"</span>,</span>
-<span>                       s_group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>,</span>
-<span>                       s_target_group <span class="op">=</span> <span class="st">"NK"</span>,</span>
-<span>                       markers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span>,</span>
-<span>                       filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span>,</span>
-<span>                       gene_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SYMBOL"</span>, <span class="st">"ENSEMBL"</span><span class="op">)</span>,</span>
-<span>                       s_slot <span class="op">=</span> <span class="st">"voomE"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">m_ccl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/remove_bg_snr.html">remove_bg_snr</a></span><span class="op">(</span></span>
+<span>  sig_data <span class="op">=</span> <span class="va">proc_data</span>,</span>
+<span>  b_group_col <span class="op">=</span> <span class="st">"primary_disease"</span>,</span>
+<span>  b_target_group <span class="op">=</span> <span class="st">"colorectal"</span>,</span>
+<span>  s_group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>,</span>
+<span>  s_target_group <span class="op">=</span> <span class="st">"NK"</span>,</span>
+<span>  markers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span>,</span>
+<span>  filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span>,</span>
+<span>  gene_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SYMBOL"</span>, <span class="st">"ENSEMBL"</span><span class="op">)</span>,</span>
+<span>  s_slot <span class="op">=</span> <span class="st">"voomE"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level5">
 <h5 id="using-customized-dataset-as-background-data">using customized dataset as background data<a class="anchor" aria-label="anchor" href="#using-customized-dataset-as-background-data"></a>
@@ -958,7 +969,7 @@ line samples from CCLE. More details for
 <code><a href="../reference/ccle_crc_5.html">help(ccle_crc_5)</a></code>.</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"ccle_crc_5"</span><span class="op">)</span></span>
-<span><span class="va">ccle_crc_5</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span></span>
+<span><span class="va">ccle_crc_5</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="op">]</span></span>
 <span><span class="co">#&gt; An object of class "DGEList"</span></span>
 <span><span class="co">#&gt; $counts</span></span>
 <span><span class="co">#&gt;          SNU283_LARGE_INTESTINE TGBC18TKB_LARGE_INTESTINE SW837_LARGE_INTESTINE</span></span>
@@ -1104,9 +1115,9 @@ multiple signatures).</li>
 </ul>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sig_heatmap.html">sig_heatmap</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="va">proc_data</span>, </span>
+<span>  data <span class="op">=</span> <span class="va">proc_data</span>,</span>
 <span>  sigs <span class="op">=</span> <span class="va">sig_NK_CRC</span>,</span>
-<span>  group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>, </span>
+<span>  group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>,</span>
 <span>  markers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span>,</span>
 <span>  gene_id <span class="op">=</span> <span class="st">"ENSEMBL"</span>,</span>
 <span>  slot <span class="op">=</span> <span class="st">"voomE"</span>,</span>
@@ -1136,9 +1147,9 @@ multiple signatures).</li>
 <span><span class="co">## for multiple datasets</span></span>
 <span><span class="co"># sig_heatmap(</span></span>
 <span><span class="co">#   data = list(data_6 = im_data_6,</span></span>
-<span><span class="co">#               proc_data = proc_data), </span></span>
+<span><span class="co">#               proc_data = proc_data),</span></span>
 <span><span class="co">#   sigs = sig_NK_CRC,</span></span>
-<span><span class="co">#   group_col = c("celltype:ch1", "celltype.ch1"), </span></span>
+<span><span class="co">#   group_col = c("celltype:ch1", "celltype.ch1"),</span></span>
 <span><span class="co">#   markers = geneIds(Markers),</span></span>
 <span><span class="co">#   gene_id = "ENSEMBL"</span></span>
 <span><span class="co"># ) + patchwork::plot_layout(guides = "collect", ncol = 1)</span></span></code></pre></div>
@@ -1157,10 +1168,10 @@ gene can be plotted by setting param
 <code>type = "expression"</code>.</p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sig_boxplot.html">sig_boxplot</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="va">proc_data</span>, </span>
+<span>  data <span class="op">=</span> <span class="va">proc_data</span>,</span>
 <span>  sigs <span class="op">=</span> <span class="va">sig_NK_CRC</span>,</span>
-<span>  group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>, </span>
-<span>  target_group <span class="op">=</span> <span class="st">"NK"</span>, </span>
+<span>  group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>,</span>
+<span>  target_group <span class="op">=</span> <span class="st">"NK"</span>,</span>
 <span>  gene_id <span class="op">=</span> <span class="st">"ENSEMBL"</span>,</span>
 <span>  slot <span class="op">=</span> <span class="st">"voomE"</span></span>
 <span><span class="op">)</span></span>
@@ -1171,7 +1182,7 @@ gene can be plotted by setting param
 <span><span class="co">## To make boxplots for more than 1 immune datasets at once:</span></span>
 <span><span class="co"># sig_boxplot(</span></span>
 <span><span class="co">#   data = list(data_6 = im_data_6,</span></span>
-<span><span class="co">#               proc_data = proc_data), </span></span>
+<span><span class="co">#               proc_data = proc_data),</span></span>
 <span><span class="co">#   sigs = sig_NK_CRC,</span></span>
 <span><span class="co">#   group_col = c("celltype:ch1", "celltype.ch1"),</span></span>
 <span><span class="co">#   target_group = "NK",</span></span>
@@ -1196,7 +1207,7 @@ represent the co-expression in the both groups.</p>
 <span><span class="fu"><a href="../reference/sig_scatter_plot.html">sig_scatter_plot</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">proc_data</span>,</span>
 <span>  sigs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span>,</span>
-<span>  group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>, </span>
+<span>  group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>,</span>
 <span>  target_group <span class="op">=</span> <span class="st">"NK"</span>,</span>
 <span>  gene_id <span class="op">=</span> <span class="st">"ENSEMBL"</span>,</span>
 <span>  slot <span class="op">=</span> <span class="st">"voomE"</span></span>
@@ -1209,7 +1220,7 @@ represent the co-expression in the both groups.</p>
 <span><span class="fu"><a href="../reference/sig_scatter_plot.html">sig_scatter_plot</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">proc_data</span>,</span>
 <span>  sigs <span class="op">=</span> <span class="va">sig_NK_CRC</span>,</span>
-<span>  group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>, </span>
+<span>  group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>,</span>
 <span>  target_group <span class="op">=</span> <span class="st">"NK"</span>,</span>
 <span>  gene_id <span class="op">=</span> <span class="st">"ENSEMBL"</span>,</span>
 <span>  slot <span class="op">=</span> <span class="st">"voomE"</span></span>
@@ -1221,10 +1232,10 @@ represent the co-expression in the both groups.</p>
 <span><span class="co">## To make scatter plot for more than 1 immune datasets at once:</span></span>
 <span><span class="co"># sig_scatter_plot(</span></span>
 <span><span class="co">#   data = list(data_6 = im_data_6,</span></span>
-<span><span class="co">#               proc_data = proc_data), </span></span>
+<span><span class="co">#               proc_data = proc_data),</span></span>
 <span><span class="co">#   sigs = sig_NK_CRC,</span></span>
 <span><span class="co">#   group_col = c("celltype:ch1", "celltype.ch1"),</span></span>
-<span><span class="co">#   target_group = "NK", </span></span>
+<span><span class="co">#   target_group = "NK",</span></span>
 <span><span class="co">#   gene_id = "ENSEMBL")</span></span></code></pre></div>
 <p>Based on scatter plot result, we can actually do further filtration
 to improve signature specificity by removing signature genes present in
@@ -1240,9 +1251,9 @@ GSEA plot. Dotplot can be plotted by setting
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## gseaplot</span></span>
 <span><span class="fu"><a href="../reference/sig_gseaplot.html">sig_gseaplot</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="va">proc_data</span>, </span>
+<span>  data <span class="op">=</span> <span class="va">proc_data</span>,</span>
 <span>  sigs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>sig <span class="op">=</span> <span class="va">sig_NK_CRC</span>, markers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>, </span>
+<span>  group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>,</span>
 <span>  target_group <span class="op">=</span> <span class="st">"NK"</span>,</span>
 <span>  gene_id <span class="op">=</span> <span class="st">"ENSEMBL"</span>,</span>
 <span>  slot <span class="op">=</span> <span class="st">"voomE"</span>,</span>
@@ -1332,7 +1343,7 @@ multiple datasets.</p>
 <code class="sourceCode R"><span><span class="co">## In the demo, we just repeatedly use im_data_6 as a show case</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
 <span><span class="va">m_ct_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filter_subset_sig.html">filter_subset_sig</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>A <span class="op">=</span> <span class="va">im_data_6</span>, B <span class="op">=</span> <span class="va">im_data_6</span><span class="op">)</span>, </span>
+<span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>A <span class="op">=</span> <span class="va">im_data_6</span>, B <span class="op">=</span> <span class="va">im_data_6</span><span class="op">)</span>,</span>
 <span>  markers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span>,</span>
 <span>  group_col <span class="op">=</span> <span class="st">"celltype:ch1"</span>,</span>
 <span>  target_group <span class="op">=</span> <span class="st">"NK"</span>,</span>
@@ -1347,13 +1358,13 @@ multiple datasets.</p>
 <span><span class="co">## if we choose 'RRA', s_thres is to determine the threshold for ranking score</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
 <span><span class="va">m_ct_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filter_subset_sig.html">filter_subset_sig</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>A <span class="op">=</span> <span class="va">im_data_6</span>, B <span class="op">=</span> <span class="va">im_data_6</span><span class="op">)</span>, </span>
+<span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>A <span class="op">=</span> <span class="va">im_data_6</span>, B <span class="op">=</span> <span class="va">im_data_6</span><span class="op">)</span>,</span>
 <span>  markers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span>,</span>
 <span>  group_col <span class="op">=</span> <span class="st">"celltype:ch1"</span>,</span>
 <span>  target_group <span class="op">=</span> <span class="st">"NK"</span>,</span>
 <span>  gene_id <span class="op">=</span> <span class="st">"ENSEMBL"</span>,</span>
-<span>  comb <span class="op">=</span> <span class="st">"RRA"</span>,  <span class="co">## change this to use different strategy, default is "union"</span></span>
-<span>  s_thres <span class="op">=</span> <span class="fl">0.5</span>  <span class="co">## only work when comb = "RRA", set a threshold for ranking score</span></span>
+<span>  comb <span class="op">=</span> <span class="st">"RRA"</span>, <span class="co">## change this to use different strategy, default is "union"</span></span>
+<span>  s_thres <span class="op">=</span> <span class="fl">0.5</span> <span class="co">## only work when comb = "RRA", set a threshold for ranking score</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## we can get only 8 signature genes this time</span></span>
@@ -1415,18 +1426,23 @@ deconvolution.</p>
 <span></span>
 <span><span class="va">data_sim</span> <span class="op">&lt;-</span> <span class="fu">splatSimulate</span><span class="op">(</span><span class="va">sim_params</span>, method <span class="op">=</span> <span class="st">"groups"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">markers_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu">rowData</span><span class="op">(</span><span class="va">data_sim</span><span class="op">)</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"DEFacGroup"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span><span class="op">]</span>,</span>
-<span>                       \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">data_sim</span><span class="op">[</span><span class="va">x</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">markers_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/lapply.html" class="external-link">lapply</a></span><span class="op">(</span></span>
+<span>  <span class="fu">rowData</span><span class="op">(</span><span class="va">data_sim</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"DEFacGroup"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span><span class="op">]</span>,</span>
+<span>  \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">data_sim</span><span class="op">[</span><span class="va">x</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## aggregate into pseudo-bulk samples</span></span>
 <span><span class="va">pb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pseudo_samples.html">pseudo_samples</a></span><span class="op">(</span><span class="va">data_sim</span>,</span>
-<span>                     by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Batch"</span>, <span class="st">"Group"</span><span class="op">)</span>,</span>
-<span>                     min.cells <span class="op">=</span> <span class="fl">50</span>, max.cells <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span>  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Batch"</span>, <span class="st">"Group"</span><span class="op">)</span>,</span>
+<span>  min.cells <span class="op">=</span> <span class="fl">50</span>, max.cells <span class="op">=</span> <span class="fl">100</span></span>
+<span><span class="op">)</span></span>
 <span><span class="va">dge</span> <span class="op">&lt;-</span> <span class="fu">DGEList</span><span class="op">(</span></span>
 <span>  counts <span class="op">=</span> <span class="va">pb</span>,</span>
-<span>  samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">".*\\.(.*)_.*"</span>, <span class="st">"\\1"</span>,<span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>                       Batch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"(.*)\\..*"</span>, <span class="st">"\\1"</span>,<span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>                       sampleID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"(.*)_.*"</span>, <span class="st">"\\1"</span>,<span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>  samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>    group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">".*\\.(.*)_.*"</span>, <span class="st">"\\1"</span>, <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    Batch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"(.*)\\..*"</span>, <span class="st">"\\1"</span>, <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    sampleID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"(.*)_.*"</span>, <span class="st">"\\1"</span>, <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
@@ -1442,10 +1458,14 @@ deconvolution.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">sig_ls</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Group"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## venn plot</span></span>
-<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, \<span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="fu">ggvenn</span><span class="fu">::</span><span class="fu">ggvenn</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>sig <span class="op">=</span> <span class="va">sig_ls</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>,</span>
-<span>                                          marker <span class="op">=</span> <span class="va">markers_list</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>,</span>
-<span>                                     show_percentage <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
-<span>              <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">sig_ls</span><span class="op">)</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, \<span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="fu">ggvenn</span><span class="fu">::</span><span class="fu">ggvenn</span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    sig <span class="op">=</span> <span class="va">sig_ls</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>    marker <span class="op">=</span> <span class="va">markers_list</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  show_percentage <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">sig_ls</span><span class="op">)</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu">patchwork</span><span class="fu">::</span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## heatmap</span></span>
@@ -1469,9 +1489,11 @@ deconvolution.</p>
 <span><span class="va">pb_r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pseudo_samples.html">pseudo_samples</a></span><span class="op">(</span><span class="va">data_sim</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Batch"</span>, <span class="st">"rand_idx"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">dge_r</span> <span class="op">&lt;-</span> <span class="fu">DGEList</span><span class="op">(</span></span>
 <span>  counts <span class="op">=</span> <span class="va">pb_r</span>,</span>
-<span>  samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">".*\\.(.*)_.*"</span>, <span class="st">"\\1"</span>,<span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">pb_r</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>                       Batch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"(.*)\\..*"</span>, <span class="st">"\\1"</span>,<span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">pb_r</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>                       sampleID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"(.*)_.*"</span>, <span class="st">"\\1"</span>,<span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">pb_r</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>  samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>    group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">".*\\.(.*)_.*"</span>, <span class="st">"\\1"</span>, <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">pb_r</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    Batch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"(.*)\\..*"</span>, <span class="st">"\\1"</span>, <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">pb_r</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    sampleID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"(.*)_.*"</span>, <span class="st">"\\1"</span>, <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">pb_r</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## append cellular composition</span></span>
@@ -1480,12 +1502,12 @@ deconvolution.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>count <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">pivot_wider</span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">Group</span>, values_from <span class="op">=</span> <span class="va">count</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>rand_idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">rand_idx</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">tmp</span><span class="op">[</span>,<span class="op">-</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">signif</a></span><span class="op">(</span><span class="va">tmp</span><span class="op">[</span>,<span class="op">-</span><span class="fl">1</span><span class="op">]</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">tmp</span><span class="op">[</span>,<span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">tmp</span><span class="op">[</span>, <span class="op">-</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">signif</a></span><span class="op">(</span><span class="va">tmp</span><span class="op">[</span>, <span class="op">-</span><span class="fl">1</span><span class="op">]</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">tmp</span><span class="op">[</span>, <span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">dge_r</span><span class="op">$</span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">dge_r</span><span class="op">$</span><span class="va">samples</span>, <span class="va">tmp</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"group"</span> <span class="op">=</span> <span class="st">"rand_idx"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## data process</span></span>
 <span><span class="va">keep</span> <span class="op">&lt;-</span> <span class="fu">filterByExpr</span><span class="op">(</span><span class="va">dge_r</span><span class="op">)</span></span>
-<span><span class="va">dge_r</span> <span class="op">&lt;-</span> <span class="va">dge_r</span><span class="op">[</span><span class="va">keep</span>,, keep.lib.sizes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span></span>
+<span><span class="va">dge_r</span> <span class="op">&lt;-</span> <span class="va">dge_r</span><span class="op">[</span><span class="va">keep</span>, , keep.lib.sizes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span></span>
 <span><span class="va">dge_r</span> <span class="op">&lt;-</span> <span class="fu">calcNormFactors</span><span class="op">(</span><span class="va">dge_r</span>, method <span class="op">=</span> <span class="st">"TMM"</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="score">Score<a class="anchor" aria-label="anchor" href="#score"></a>
@@ -1498,12 +1520,14 @@ deconvolution.</p>
 <span><span class="co">## score based on sig_ls</span></span>
 <span><span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://DavisLaboratory.github.io/singscore/reference/multiScore.html" class="external-link">multiScore</a></span><span class="op">(</span><span class="va">rank_data</span>, upSetColc <span class="op">=</span> <span class="fu"><a href="../reference/gls2gsc.html">gls2gsc</a></span><span class="op">(</span><span class="va">sig_ls</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu">pivot_longer</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/cbind.html" class="external-link">cbind</a></span><span class="op">(</span>Sample <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">dge_r</span><span class="op">)</span>, <span class="va">dge_r</span><span class="op">$</span><span class="va">samples</span><span class="op">[</span>,<span class="fl">6</span><span class="op">:</span><span class="fl">9</span><span class="op">]</span><span class="op">)</span>,</span>
-<span>                    <span class="op">-</span><span class="va">Sample</span>, names_to <span class="op">=</span> <span class="st">"Group"</span>, values_to <span class="op">=</span> <span class="st">"Prop"</span><span class="op">)</span></span>
+<span><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu">pivot_longer</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/cbind.html" class="external-link">cbind</a></span><span class="op">(</span>Sample <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">dge_r</span><span class="op">)</span>, <span class="va">dge_r</span><span class="op">$</span><span class="va">samples</span><span class="op">[</span>, <span class="fl">6</span><span class="op">:</span><span class="fl">9</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>  <span class="op">-</span><span class="va">Sample</span>,</span>
+<span>  names_to <span class="op">=</span> <span class="st">"Group"</span>, values_to <span class="op">=</span> <span class="st">"Prop"</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">scores</span><span class="op">$</span><span class="va">Scores</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Sample <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">scores</span><span class="op">$</span><span class="va">Scores</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">pivot_longer</span><span class="op">(</span><span class="op">-</span><span class="va">Sample</span>, names_to <span class="op">=</span> <span class="st">"Group"</span>, values_to <span class="op">=</span> <span class="st">"Score"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">scores</span><span class="op">$</span><span class="va">Scores</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Sample <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">scores</span><span class="op">$</span><span class="va">Scores</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">pivot_longer</span><span class="op">(</span><span class="op">-</span><span class="va">Sample</span>, names_to <span class="op">=</span> <span class="st">"Group"</span>, values_to <span class="op">=</span> <span class="st">"Score"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">tmp</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">tmp</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Prop</span>, y <span class="op">=</span> <span class="va">Score</span>, col <span class="op">=</span> <span class="va">Group</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -1515,13 +1539,15 @@ deconvolution.</p>
 <span><span class="co">## score based on markers_list</span></span>
 <span><span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://DavisLaboratory.github.io/singscore/reference/multiScore.html" class="external-link">multiScore</a></span><span class="op">(</span><span class="va">rank_data</span>, upSetColc <span class="op">=</span> <span class="fu"><a href="../reference/gls2gsc.html">gls2gsc</a></span><span class="op">(</span><span class="va">markers_list</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu">pivot_longer</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/cbind.html" class="external-link">cbind</a></span><span class="op">(</span>Sample <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">dge_r</span><span class="op">)</span>, <span class="va">dge_r</span><span class="op">$</span><span class="va">samples</span><span class="op">[</span>,<span class="fl">6</span><span class="op">:</span><span class="fl">9</span><span class="op">]</span><span class="op">)</span>,</span>
-<span>                    <span class="op">-</span><span class="va">Sample</span>, names_to <span class="op">=</span> <span class="st">"Group"</span>, values_to <span class="op">=</span> <span class="st">"Prop"</span><span class="op">)</span></span>
+<span><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu">pivot_longer</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/cbind.html" class="external-link">cbind</a></span><span class="op">(</span>Sample <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">dge_r</span><span class="op">)</span>, <span class="va">dge_r</span><span class="op">$</span><span class="va">samples</span><span class="op">[</span>, <span class="fl">6</span><span class="op">:</span><span class="fl">9</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>  <span class="op">-</span><span class="va">Sample</span>,</span>
+<span>  names_to <span class="op">=</span> <span class="st">"Group"</span>, values_to <span class="op">=</span> <span class="st">"Prop"</span></span>
+<span><span class="op">)</span></span>
 <span><span class="va">tmp</span><span class="op">$</span><span class="va">Group</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"DEFac"</span>, <span class="va">tmp</span><span class="op">$</span><span class="va">Group</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">scores</span><span class="op">$</span><span class="va">Scores</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Sample <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">scores</span><span class="op">$</span><span class="va">Scores</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">pivot_longer</span><span class="op">(</span><span class="op">-</span><span class="va">Sample</span>, names_to <span class="op">=</span> <span class="st">"Group"</span>, values_to <span class="op">=</span> <span class="st">"Score"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">scores</span><span class="op">$</span><span class="va">Scores</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Sample <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">scores</span><span class="op">$</span><span class="va">Scores</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">pivot_longer</span><span class="op">(</span><span class="op">-</span><span class="va">Sample</span>, names_to <span class="op">=</span> <span class="st">"Group"</span>, values_to <span class="op">=</span> <span class="st">"Score"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">tmp</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">tmp</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Prop</span>, y <span class="op">=</span> <span class="va">Score</span>, col <span class="op">=</span> <span class="va">Group</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -1535,12 +1561,12 @@ deconvolution.</p>
 </h3>
 <div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sig_matrix</span> <span class="op">&lt;-</span> <span class="fu">DWLS</span><span class="fu">::</span><span class="fu">buildSignatureMatrixMAST</span><span class="op">(</span></span>
-<span>  scdata <span class="op">=</span> <span class="va">data_sim</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">counts</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">sig_ls</span><span class="op">)</span><span class="op">)</span>,<span class="op">]</span>,</span>
+<span>  scdata <span class="op">=</span> <span class="va">data_sim</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">counts</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">sig_ls</span><span class="op">)</span><span class="op">)</span>, <span class="op">]</span>,</span>
 <span>  id <span class="op">=</span> <span class="va">data_sim</span><span class="op">$</span><span class="va">Group</span>,</span>
 <span>  path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">DWLS</span><span class="fu">::</span><span class="fu">solveDampenedWLS</span><span class="op">(</span><span class="va">sig_matrix</span>, <span class="va">pb_r</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">sig_matrix</span><span class="op">)</span>,<span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">DWLS</span><span class="fu">::</span><span class="fu">solveDampenedWLS</span><span class="op">(</span><span class="va">sig_matrix</span>, <span class="va">pb_r</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">sig_matrix</span><span class="op">)</span>, <span class="op">]</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="annotation">Annotation<a class="anchor" aria-label="anchor" href="#annotation"></a>
