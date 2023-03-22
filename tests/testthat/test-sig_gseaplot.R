@@ -3,7 +3,7 @@ test_that("sig_gseaplot works", {
   ## test matrix object
   suppressWarnings(
     p <- sig_gseaplot(
-      im_data_6@assayData$exprs,
+      Biobase::exprs(im_data_6),
       sigs = NK_markers$HGNC_Symbol[1:20],
       group_col = im_data_6$`celltype:ch1`,
       target_group = "NK",
@@ -26,7 +26,7 @@ test_that("sig_gseaplot works", {
 
   ## test DGEList object
   dge <- edgeR::DGEList(
-    counts = im_data_6@assayData$exprs,
+    counts = Biobase::exprs(im_data_6),
     group = im_data_6$`celltype:ch1`
   )
   suppressWarnings(
@@ -41,7 +41,7 @@ test_that("sig_gseaplot works", {
 
   ## test seurat object
   data_seurat <- Seurat::CreateSeuratObject(
-    counts = im_data_6@assayData$exprs,
+    counts = Biobase::exprs(im_data_6),
     meta.data = dge$samples
   )
   suppressWarnings(

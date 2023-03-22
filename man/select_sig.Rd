@@ -26,7 +26,8 @@ select DEGs from multiple comparisons
 }
 \examples{
 proc_data <- process_data(im_data_6,
-                          group_col = "celltype:ch1",
-                          target_group = "NK")
+  group_col = "celltype:ch1",
+  target_group = "NK"
+)
 select_sig(proc_data$tfit)
 }

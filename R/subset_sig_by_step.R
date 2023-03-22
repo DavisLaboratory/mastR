@@ -294,8 +294,8 @@ setMethod(
            ...) {
     data <- edgeR::DGEList(
       counts = Seurat::GetAssayData(data, slot = slot),
-      samples = data@meta.data,
-      group = data@meta.data[[group_col]]
+      samples = slot(data, "meta.data"),
+      group = slot(data, "meta.data")[[group_col]]
     )
 
     if (!is.null(batch)) batch <- make.names(batch)

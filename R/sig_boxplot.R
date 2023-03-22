@@ -245,7 +245,7 @@ setMethod(
     p <- sig_boxplot(
       data = Seurat::GetAssayData(data, slot = slot),
       sigs = sigs,
-      group_col = data@meta.data[[group_col]],
+      group_col = slot(data, "meta.data")[[group_col]],
       target_group = target_group,
       type = type,
       method = method,
@@ -274,7 +274,7 @@ setMethod(
     p <- sig_boxplot(
       data = SummarizedExperiment::assay(data, slot),
       sigs = sigs,
-      group_col = data@colData[[group_col]],
+      group_col = SummarizedExperiment::colData(data)[[group_col]],
       target_group = target_group,
       type = type,
       method = method,

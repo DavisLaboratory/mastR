@@ -163,7 +163,7 @@ setMethod(
 
     p <- sig_rankdensity_plot(
       data = Seurat::GetAssayData(data, slot = slot),
-      sigs = sigs, group_col = data@meta.data[[group_col]],
+      sigs = sigs, group_col = slot(data, "meta.data")[[group_col]],
       aggregate = aggregate,
       gene_id = gene_id
     )
@@ -189,7 +189,7 @@ setMethod(
 
     p <- sig_rankdensity_plot(
       data = SummarizedExperiment::assay(data, slot),
-      sigs = sigs, group_col = data@colData[[group_col]],
+      sigs = sigs, group_col = SummarizedExperiment::colData(data)[[group_col]],
       aggregate = aggregate, gene_id = gene_id
     )
 

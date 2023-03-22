@@ -14,14 +14,14 @@ test_that("get_degs works", {
   expect_identical(names(DEGs), c("DEGs", "proc_data"))
 
   ## test matrix object
-  DEGs <- get_degs(im_data_6@assayData$exprs,
+  DEGs <- get_degs(Biobase::exprs(im_data_6),
     group_col = im_data_6$`celltype:ch1`,
     target_group = "NK"
   )
   expect_identical(names(DEGs), c("DEGs", "proc_data"))
 
   ## test Matrix object
-  DEGs <- get_degs(Matrix::Matrix(im_data_6@assayData$exprs),
+  DEGs <- get_degs(Matrix::Matrix(Biobase::exprs(im_data_6)),
     group_col = im_data_6$`celltype:ch1`,
     target_group = "NK"
   )
@@ -29,7 +29,7 @@ test_that("get_degs works", {
 
   ## test seurat object
   data_seurat <- Seurat::CreateSeuratObject(
-    counts = im_data_6@assayData$exprs,
+    counts = Biobase::exprs(im_data_6),
     meta.data = data$samples
   )
   DEGs <- get_degs(data_seurat,

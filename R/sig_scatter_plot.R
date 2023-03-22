@@ -163,7 +163,7 @@ setMethod(
     p <- sig_scatter_plot(
       data = Seurat::GetAssayData(data, slot = slot),
       sigs = sigs,
-      group_col = data@meta.data[[group_col]],
+      group_col = slot(data, "meta.data")[[group_col]],
       target_group = target_group,
       xint = xint, yint = yint,
       gene_id = gene_id
@@ -191,7 +191,7 @@ setMethod(
     p <- sig_scatter_plot(
       data = SummarizedExperiment::assay(data, slot),
       sigs = sigs,
-      group_col = data@colData[[group_col]],
+      group_col = SummarizedExperiment::colData(data)[[group_col]],
       target_group = target_group,
       xint = xint, yint = yint,
       gene_id = gene_id

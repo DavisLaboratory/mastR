@@ -2,7 +2,7 @@ test_that("filter_subset_sig works", {
   data("im_data_6", "NK_markers")
   ## test matrix object
   sig <- filter_subset_sig(
-    im_data_6@assayData$exprs,
+    Biobase::exprs(im_data_6),
     group_col = im_data_6$`celltype:ch1`,
     target_group = "NK",
     markers = NK_markers$HGNC_Symbol,
@@ -21,7 +21,7 @@ test_that("filter_subset_sig works", {
 
   ## test DGEList object
   dge <- edgeR::DGEList(
-    counts = im_data_6@assayData$exprs,
+    counts = Biobase::exprs(im_data_6),
     group = im_data_6$`celltype:ch1`
   )
   sig <- filter_subset_sig(
@@ -34,7 +34,7 @@ test_that("filter_subset_sig works", {
 
   ## test seurat object
   data_seurat <- Seurat::CreateSeuratObject(
-    counts = im_data_6@assayData$exprs,
+    counts = Biobase::exprs(im_data_6),
     meta.data = dge$samples
   )
   sig <- filter_subset_sig(

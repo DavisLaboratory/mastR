@@ -78,7 +78,7 @@ Collate:
     'merge_markers.R'
     'pca_matrix_plot.R'
     'pseudo_samples.R'
-    'remove_bg_snr.R'
+    'remove_bg_exp.R'
     'sig_boxplot.R'
     'sig_gseaplot.R'
     'sig_heatmap.R'

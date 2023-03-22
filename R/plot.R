@@ -606,10 +606,10 @@ gsea_analysis <- function(tDEG, gsets, gene_id = "SYMBOL", digits = 2) {
       invisible()
     } else {
       ## only keep 2 digits for pvalue table
-      gse@result$p.adjust <- signif(gse@result$p.adjust, digits = digits)
-      gse@result$pvalue <- signif(gse@result$pvalue, digits = digits)
+      slot(gse, "result")$p.adjust <- signif(slot(gse, "result")$p.adjust, digits = digits)
+      slot(gse, "result")$pvalue <- signif(slot(gse, "result")$pvalue, digits = digits)
       ## save comparison info
-      gse@result$group <- n
+      slot(gse, "result")$group <- n
       return(gse)
     }
   })
@@ -649,7 +649,7 @@ gsea_dotplot_init <- function(gse,
     if (is.null(x)) {
       invisible()
     } else {
-      return(x@result)
+      return(slot(x, "result"))
     }
   }))
 
@@ -874,5 +874,5 @@ utils::globalVariables(c(
   "max_den", "y_s", "y_e", "x_end", "y_end",
   "group", "ID", "NES", "logFC_dim_1",
   "logFC_dim_2", "logcounts", "x", "y", "middle",
-  "ymin", "ymax", "upper", "lower"
+  "ymin", "ymax", "upper", "lower", "flag"
 ))

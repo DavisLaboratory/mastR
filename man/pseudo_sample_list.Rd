@@ -26,13 +26,17 @@ assign the cells from the pool to pseudo-sample with the randomized cell
 size. (min.cells <= size <= max.cells)
 }
 \examples{
-counts <- matrix(abs(rnorm(10000, 10,10)), 100)
+counts <- matrix(abs(rnorm(10000, 10, 10)), 100)
 rownames(counts) <- 1:100
 colnames(counts) <- 1:100
-meta <- data.frame(subset = rep(c("A","B"),50),
-                   level = rep(1:4, each = 25))
+meta <- data.frame(
+  subset = rep(c("A", "B"), 50),
+  level = rep(1:4, each = 25)
+)
 rownames(meta) <- 1:100
 scRNA <- Seurat::CreateSeuratObject(counts = counts, meta.data = meta)
-pseudo_sample_list(scRNA, by = c("subset","level"),
-                   min.cells = 10, max.cells = 20)
+pseudo_sample_list(scRNA,
+  by = c("subset", "level"),
+  min.cells = 10, max.cells = 20
+)
 }

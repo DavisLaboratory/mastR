@@ -6,7 +6,7 @@ test_that("merge_markers works", {
 
   expect_s4_class(markers, "GeneSet")
   expect_setequal(
-    markers@geneIds,
+    GSEABase::geneIds(markers),
     Reduce(f = union, GSEABase::geneIds(msigdb_gobp_nk))
   )
 
@@ -18,7 +18,7 @@ test_that("merge_markers works", {
 
   expect_s4_class(markers, "GeneSet")
   expect_setequal(
-    markers@geneIds,
+    GSEABase::geneIds(markers),
     Reduce(f = union, GSEABase::geneIds(msigdb_gobp_nk[1:2]))
   )
 
@@ -26,10 +26,10 @@ test_that("merge_markers works", {
   markers <- merge_markers(msigdb_gobp_nk[[1]], msigdb_gobp_nk[2:3])
   expect_s4_class(markers, "GeneSet")
   expect_setequal(
-    markers@geneIds,
+    GSEABase::geneIds(markers),
     Reduce(f = union, GSEABase::geneIds(msigdb_gobp_nk[1:3]))
   )
 
   ## test non- GeneSet or GeneSetCollection
-  expect_error(merge_markers(msigdb_gobp_nk[[1]]@geneIds))
+  expect_error(merge_markers(GSEABase::geneIds(msigdb_gobp_nk[[1]])))
 })

@@ -2,7 +2,7 @@ test_that("sig_heatmap works", {
   data("im_data_6", "NK_markers")
   ## test matrix object
   p <- sig_heatmap(
-    im_data_6@assayData$exprs,
+    Biobase::exprs(im_data_6),
     sigs = NK_markers$HGNC_Symbol[1:20],
     group_col = im_data_6$`celltype:ch1`,
     markers = NK_markers$HGNC_Symbol,
@@ -22,7 +22,7 @@ test_that("sig_heatmap works", {
 
   ## test DGEList object
   dge <- edgeR::DGEList(
-    counts = im_data_6@assayData$exprs,
+    counts = Biobase::exprs(im_data_6),
     group = im_data_6$`celltype:ch1`
   )
   p <- sig_heatmap(
@@ -35,7 +35,7 @@ test_that("sig_heatmap works", {
 
   ## test seurat object
   data_seurat <- Seurat::CreateSeuratObject(
-    counts = im_data_6@assayData$exprs,
+    counts = Biobase::exprs(im_data_6),
     meta.data = dge$samples
   )
   p <- sig_heatmap(

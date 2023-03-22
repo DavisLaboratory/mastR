@@ -122,7 +122,7 @@ setMethod(
       column_title = "Expression of Screened Signature",
       ...
     )
-    p2@top_annotation <- p1@top_annotation
+    slot(p2, "top_annotation") <- slot(p1, "top_annotation")
     ## convert to ggplot
     p1 <- patchwork::wrap_elements(grid::grid.grabExpr(ComplexHeatmap::draw(p1)))
     p2 <- patchwork::wrap_elements(grid::grid.grabExpr(ComplexHeatmap::draw(p2)))
@@ -325,14 +325,14 @@ setMethod(
     if (missing(markers)) {
       p <- sig_heatmap(
         data = Seurat::GetAssayData(data, slot = slot),
-        sigs = sigs, group_col = data@meta.data[[group_col]],
+        sigs = sigs, group_col = slot(data, "meta.data")[[group_col]],
         scale = scale, gene_id = gene_id,
         ranks_plot = ranks_plot, ...
       )
     } else {
       p <- sig_heatmap(
         data = Seurat::GetAssayData(data, slot = slot),
-        sigs = sigs, group_col = data@meta.data[[group_col]],
+        sigs = sigs, group_col = slot(data, "meta.data")[[group_col]],
         markers = markers,
         scale = scale, gene_id = gene_id,
         ranks_plot = ranks_plot, ...
@@ -361,14 +361,14 @@ setMethod(
     if (missing(markers)) {
       p <- sig_heatmap(
         data = SummarizedExperiment::assay(data, slot),
-        sigs = sigs, group_col = data@colData[[group_col]],
+        sigs = sigs, group_col = SummarizedExperiment::colData(data)[[group_col]],
         scale = scale, gene_id = gene_id,
         ranks_plot = ranks_plot, ...
       )
     } else {
       p <- sig_heatmap(
         data = SummarizedExperiment::assay(data, slot),
-        sigs = sigs, group_col = data@colData[[group_col]],
+        sigs = sigs, group_col = SummarizedExperiment::colData(data)[[group_col]],
         markers = markers,
         scale = scale, gene_id = gene_id,
         ranks_plot = ranks_plot, ...

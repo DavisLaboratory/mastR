@@ -1,2 +1,4 @@
 # mastR
-An R package for automatically screening cell type signature in specific cancer or tissue based on limma.
+An R package for automatically screening group specific signature for specific tissues.
+
+mastR is an R package designed for automated screening of signatures of interest for specific research questions. The package is developed for generating refined lists of signature genes from multiple group comparisons based on the results from edgeR and limma differential expression (DE) analysis workflow. It also takes into account the background noise of tissue-specificity, which is often ignored by other marker generation tools. The package allows users to input their expression data containing the groups of interest, along with group labels, to obtain a list of marker genes (signature) for the target group. This package is particularly useful for the identification of group markers in various biological and medical applications, including cancer research and developmental biology.

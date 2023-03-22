@@ -127,7 +127,9 @@ store processed data.
 }
 \examples{
 data("im_data_6")
-DEGs <- get_degs(im_data_6, group_col = "celltype:ch1",
-                 target_group = "NK", gene_id = "ENSEMBL")
+DEGs <- get_degs(im_data_6,
+  group_col = "celltype:ch1",
+  target_group = "NK", gene_id = "ENSEMBL"
+)
 
 }

@@ -154,6 +154,7 @@ filter low expression genes, normalize data by 'TMM' and apply
 }
 \examples{
 proc_data <- process_data(mastR::im_data_6,
-                          group_col = "celltype:ch1",
-                          target_group = "NK")
+  group_col = "celltype:ch1",
+  target_group = "NK"
+)
 }

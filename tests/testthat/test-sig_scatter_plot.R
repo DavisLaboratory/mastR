@@ -12,7 +12,7 @@ test_that("multiplication works", {
 
   ## test DGEList object
   dge <- edgeR::DGEList(
-    counts = im_data_6@assayData$exprs,
+    counts = Biobase::exprs(im_data_6),
     group = im_data_6$`celltype:ch1`
   )
   p <- sig_scatter_plot(
@@ -25,7 +25,7 @@ test_that("multiplication works", {
 
   ## test seurat object
   data_seurat <- Seurat::CreateSeuratObject(
-    counts = im_data_6@assayData$exprs,
+    counts = Biobase::exprs(im_data_6),
     meta.data = dge$samples
   )
   p <- sig_scatter_plot(

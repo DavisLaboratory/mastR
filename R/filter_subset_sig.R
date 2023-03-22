@@ -133,7 +133,7 @@ setMethod(
         filter = filter[[i]],
         gene_id = gene_id[[i]], ...
       )
-      DEGs <- DEGs$DEGs[[dir]]@geneIds
+      DEGs <- GSEABase::geneIds(DEGs$DEGs[[dir]])
 
       if (is.null(markers)) {
         NK_against_subsets[[i]] <- DEGs
@@ -208,7 +208,7 @@ setMethod(
       filter = filter,
       gene_id = gene_id, ...
     )
-    DEGs <- DEGs$DEGs[[dir]]@geneIds
+    DEGs <- GSEABase::geneIds(DEGs$DEGs[[dir]])
 
     if (is.null(markers)) {
       NK_against_subsets <- DEGs
@@ -275,7 +275,7 @@ setMethod(
       filter = filter,
       gene_id = gene_id, ...
     )
-    DEGs <- DEGs$DEGs[[dir]]@geneIds
+    DEGs <- GSEABase::geneIds(DEGs$DEGs[[dir]])
 
     if (is.null(markers)) {
       NK_against_subsets <- DEGs

@@ -139,7 +139,7 @@ setMethod(
     )
 
     expr <- as.matrix(Seurat::GetAssayData(data, slot = slot))
-    coldata <- data@meta.data[, by]
+    coldata <- slot(data, "meta.data")[, by]
     rm(data)
 
     pb <- pseudo_samples(

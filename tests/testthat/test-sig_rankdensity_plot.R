@@ -3,7 +3,7 @@ test_that("sig_rankdensity_plot works", {
   ## test matrix object
   ### test aggregate = FALSE
   p <- sig_rankdensity_plot(
-    im_data_6@assayData$exprs,
+    Biobase::exprs(im_data_6),
     sigs = NK_markers$HGNC_Symbol[1:20],
     group_col = im_data_6$`celltype:ch1`,
     gene_id = "ENSEMBL"
@@ -12,7 +12,7 @@ test_that("sig_rankdensity_plot works", {
 
   ### test aggregate = TRUE
   p <- sig_rankdensity_plot(
-    im_data_6@assayData$exprs,
+    Biobase::exprs(im_data_6),
     sigs = NK_markers$HGNC_Symbol[1:20],
     group_col = im_data_6$`celltype:ch1`,
     gene_id = "ENSEMBL",
@@ -41,7 +41,7 @@ test_that("sig_rankdensity_plot works", {
 
   ## test DGEList object
   dge <- edgeR::DGEList(
-    counts = im_data_6@assayData$exprs,
+    counts = Biobase::exprs(im_data_6),
     group = im_data_6$`celltype:ch1`
   )
   p <- sig_rankdensity_plot(
@@ -54,7 +54,7 @@ test_that("sig_rankdensity_plot works", {
 
   ## test seurat object
   data_seurat <- Seurat::CreateSeuratObject(
-    counts = im_data_6@assayData$exprs,
+    counts = Biobase::exprs(im_data_6),
     meta.data = dge$samples
   )
   p <- sig_rankdensity_plot(

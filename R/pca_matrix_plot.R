@@ -171,7 +171,7 @@ setMethod(
            n_loadings = 10,
            gene_id = "SYMBOL") {
     if (is.character(group_by)) {
-      group_by <- data@colData[[group_by]]
+      group_by <- SummarizedExperiment::colData(data)[[group_by]]
     }
     data <- SummarizedExperiment::assay(data, slot)
 
@@ -200,7 +200,7 @@ setMethod(
            n_loadings = 10,
            gene_id = "SYMBOL") {
     if (is.character(group_by)) {
-      group_by <- data@meta.data[[group_by]]
+      group_by <- slot(data, "meta.data")[[group_by]]
     }
     data <- Seurat::GetAssayData(data, slot = slot)
 
