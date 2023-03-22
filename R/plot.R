@@ -473,7 +473,7 @@ scatter_plot_init <- function(expr, sigs, target_group, by,
       )
     ) |>
     ggplot2::ggplot(ggplot2::aes(
-      x = !!sym("Median_Expression"),
+      x = Median_Expression,
       y = !!sym(target_group),
       col = flag
     )) +
