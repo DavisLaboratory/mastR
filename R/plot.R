@@ -874,5 +874,5 @@ utils::globalVariables(c(
   "max_den", "y_s", "y_e", "x_end", "y_end",
   "group", "ID", "NES", "logFC_dim_1",
   "logFC_dim_2", "logcounts", "x", "y", "middle",
-  "ymin", "ymax", "upper", "lower", "flag"
+  "ymin", "ymax", "upper", "lower", "flag", "Median_Expression"
 ))

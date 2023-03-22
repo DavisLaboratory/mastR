@@ -8,7 +8,7 @@ test_that("gls2gsc works", {
   )
   ## test vector
   gsc2 <- gls2gsc(
-    GSEABase::geneIds(msigdb_gobp_nk[[1]])
+    GSEABase::geneIds(msigdb_gobp_nk[[1]]),
     GSEABase::geneIds(msigdb_gobp_nk[[2]]),
     GSEABase::geneIds(msigdb_gobp_nk[[3]])
   )
