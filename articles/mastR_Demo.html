@@ -85,8 +85,22 @@ Medical Research, Parkville, VIC 3052, AustraliaDepartment of Medical
 Biology, University of Melbourne, Parkville, VIC 3010,
 Australia<br><a class="author_email" href="mailto:#"></a><a href="mailto:chen.j@wehi.edu.au" class="email">chen.j@wehi.edu.au</a>
       </address>
+                              <h4 data-toc-skip class="author">Ahmed
+Mohamed</h4>
+            <address class="author_afil">
+      Bioinformatics Division, Walter and Eliza Hall Institute of
+Medical Research, Parkville, VIC 3052,
+Australia<br><a class="author_email" href="mailto:#"></a><a href="mailto:mohamed.a@wehi.edu.au" class="email">mohamed.a@wehi.edu.au</a>
+      </address>
+                              <h4 data-toc-skip class="author">Chin Wee
+Tan</h4>
+            <address class="author_afil">
+      Bioinformatics Division, Walter and Eliza Hall Institute of
+Medical Research, Parkville, VIC 3052,
+Australia<br><a class="author_email" href="mailto:#"></a><a href="mailto:cwtan@wehi.edu.au" class="email">cwtan@wehi.edu.au</a>
+      </address>
                   
-            <h4 data-toc-skip class="date">21 Mar 2023</h4>
+            <h4 data-toc-skip class="date">22 Mar 2023</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DavisLaboratory/mastR/blob/HEAD/vignettes/mastR_Demo.Rmd" class="external-link"><code>vignettes/mastR_Demo.Rmd</code></a></small>
       <div class="hidden name"><code>mastR_Demo.Rmd</code></div>
@@ -130,9 +144,9 @@ understanding biological processes, diagnosing diseases, and developing
 targeted therapies.</p>
 <p><strong>Why do we need immune signature (cell type)</strong></p>
 <p>In this demo, we will be using the example of immune cell signature
-in the context of the tumour microenvironment as a practical case study
+in the context of the tumor micro-environment as a practical case study
 to showcase the application of our approach.</p>
-<p>The tumor microenvironment (TME) is made up of a diverse range of
+<p>The tumor micro-environment (TME) is made up of a diverse range of
 cell types (fibroblasts, epithelial cells, endothelial cells, and immune
 cells) as well as various extracellular components (collagens, growth
 factors, hormones, cytokines, etc.). TIME is reported to be highly
@@ -140,9 +154,9 @@ associated with prognosis and various treatment response to many kinds
 of cancers.</p>
 <p>Recent studies have highlighted the role of immune components in the
 TME in modulating tumor progression, making them attractive therapeutic
-targets. These components make up the tumor immune microenvironment
+targets. These components make up the tumor immune micro-environment
 (TIME), which is a subset of the TME. Subsequently, it’s proved that
-tumour infiltrating lymphocytes (TILs) play an essential role in tumour
+tumor infiltrating lymphocytes (TILs) play an essential role in tumor
 progression, metastasis and treatment response.</p>
 <p>This drives TILs to be a strong prognostic indicator for better
 precision therapy of cancer patients. And the identification of these
@@ -152,15 +166,15 @@ specific subset of immune cells acting on different tissues types.</p>
 past, which is limited in the granularity. But now with the advance of
 single cell RNA-seq and spatial transcriptomics technologies, more
 detailed and novel cell types or subtypes are being identified. One of
-the key paradygm of scRNAseq and spatial is to further investigate cell
-types in the TIME and understand cellullar heterogeniety in the TME.</p>
+the key paradigm of scRNAseq and spatial is to further investigate cell
+types in the TIME and understand cellular heterogeneity in the TME.</p>
 <p>To quantify TILs infiltration (in bulk), estimate cellular
 composition (in bulk), annotate single cell types (in scRNA) or identify
 sample states/activities, many computational methods like cell
 deconvolution (CIBERSORTx), marker based annotation (CelliD) and sample
 scoring (singscore) are developed. But to distinguish between closely
 related cell types, estimate cell composition and states, a refined
-signature is required which typiclaly requires manual curation by domain
+signature is required which typically requires manual curation by domain
 expert. With the increasing large amount of data and cell types, this is
 gradually getting to be intenable and will require a different approach
 to automatically screen such signatures.</p>
@@ -197,16 +211,16 @@ be further refined by keeping the top n DEGs in the specified
 comparison(s), which can help to improve the discrimination between
 fairly similar cell types.</p>
 <p>Another unique advantage of mastR is that it takes into account the
-background noise of tissue-specificity, which is often ignored by other
-marker generation tools. Unlike most tools that only consider the genes’
-contribution to the classification, mastR also offers a background noise
-removal function. This function is designed to remove parts of the
-marker genes that are highly expressed in specific tissues or cancer
-cells. These signals from the background, regarded as background noise,
-can cause potential ambiguity when applying the markers to specific
-tissues due to background or sample purity issues. This feature makes
-mastR apart and enhances the accuracy and specificity of the generated
-markers.</p>
+background expression of tissue-specificity, which is often ignored by
+other marker generation tools. Unlike most tools that only consider the
+genes’ contribution to the classification, mastR also offers a
+background expression removal function. This function is designed to
+remove parts of the marker genes that are highly expressed in specific
+tissues or cancer cells. These signals from the background, regarded as
+background expression, can cause potential ambiguity when applying the
+markers to specific tissues due to background or sample purity issues.
+This feature makes mastR apart and enhances the accuracy and specificity
+of the generated markers.</p>
 <p>Furthermore, mastR allows users to build a markers pool before
 signature screening, which might contain the potential markers of
 interest to the users. The final signature will be integrated with this
@@ -218,10 +232,11 @@ necessity of identifying specific genes that are differentially
 expressed in different groups or tissues, as these genes can serve as
 biomarkers for diagnosis, prognosis, and therapeutic targeting. However,
 identifying marker genes can be a challenging and time-consuming task,
-and the presence of background noise can lead to erroneous results. Our
-package simplifies and streamlines this process, allowing researchers to
-focus on their analyses and interpretations without the burden of manual
-marker gene selection and background noise removal.</p>
+and the presence of background expression can lead to erroneous results.
+Our package simplifies and streamlines this process, allowing
+researchers to focus on their analyses and interpretations without the
+burden of manual marker gene selection and background expression
+removal.</p>
 <p>This report demonstrates the main functions and applications of mastR
 0.9.0.</p>
 <p>This report demonstrates the signature screening workflow of NK cells
@@ -229,9 +244,10 @@ in colorectal cancer (CRC), assessing the results by using in-built
 visualization functions.</p>
 <p><strong>mastR screen the signature using the following 3 key
 steps:</strong></p>
-<p>step 1. generate markers pool<br>
-step 2. screen markers from the pool<br>
-step 3. visualize signature performance</p>
+<p>step 1. build markers pool<br>
+step 2. identify signature from the pool<br>
+step 3. refine signature by background expression<br>
+step 4. visualize signature performance</p>
 <p><strong>Applications</strong></p>
 <ul>
 <li>score samples</li>
@@ -255,7 +271,7 @@ function provided by <a href="https://cran.r-project.org/package=devtools" class
 <span><span class="co">#   devtools::install_github("Gene233/mastR")</span></span>
 <span><span class="co"># }</span></span>
 <span></span>
-<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"mastR"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
@@ -267,7 +283,7 @@ function provided by <a href="https://cran.r-project.org/package=devtools" class
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">GSEABase</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="step-1--build-immune-markers-pool">Step 1. Build Immune Markers Pool<a class="anchor" aria-label="anchor" href="#step-1--build-immune-markers-pool"></a>
+<h2 id="step-1--build-markers-pool">Step 1. Build Markers Pool<a class="anchor" aria-label="anchor" href="#step-1--build-markers-pool"></a>
 </h2>
 <hr>
 <p>The first step is to define the original markers pool this analysis
@@ -276,7 +292,7 @@ will be based on.</p>
 markers pool. The whole gene list of the data will be regarded as the
 markers pool if no preliminary result or interested genes are
 provided.</p>
-<p><strong><em>Note</em></strong> that <code>markers = NULL</code> won’t
+<p><strong><em>Note:</em></strong> <code>markers = NULL</code> won’t
 keep any special genes if they fail the filtration by edgeR.</p>
 <p>If users have any preliminary knowledge about the target group type
 (cell type), they can build the markers pool of interest from the
@@ -287,7 +303,7 @@ edgeR.</p>
 <p>The standard pool building process involves the following:</p>
 <ol style="list-style-type: decimal">
 <li>generate from sources
-<ol style="list-style-type: lower-alpha">
+<ol style="list-style-type: lower-roman">
 <li>LM7/22 signature matrix for CIBERSORT<br>
 </li>
 <li>MSigDB<br>
@@ -300,51 +316,38 @@ edgeR.</p>
 </li>
 <li>merge gene-sets together</li>
 </ol>
-<p>mastR allows some markers to be conveniently loaded as follows:</p>
+<p>mastR allows the following markers to be conveniently loaded:</p>
 <ul>
-<li><p><code>LM7</code> and <code>LM22</code> are immune cells signature
-matrices for CIBERSORT, you can get more details by
+<li><p><code>LM7</code> and <code>LM22</code>: CIBERSORT (LM22) and
+Tosolini et al. (LM7) gene sets for leukocytes, get more details using
 <code><a href="../reference/LM7.html">?mastR::LM7</a></code> or <code><a href="../reference/LM22.html">?mastR::LM22</a></code>.</p></li>
-<li><p><code>msigdb_gobp_nk</code> is a ‘GeneSetCollection’ object,
-contains genesets with gene-set name matched to ‘NATURAL_KILLER’ from <a href="GO:BP" class="uri">GO:BP</a> MSigDB v7.4 database. More details
-for <code><a href="../reference/msigdb_gobp_nk.html">?mastR::msigdb_gobp_nk</a></code>.</p></li>
-<li><p><code>NK_markers</code> dataset is a combination of CIBERSORT
-LM7, LM22 and human orthologs in mice from <a href="https://cancerimmunolres.aacrjournals.org/content/7/7/1162.long" class="external-link">Huntington</a>.
-It contains 114 genes in total.</p></li>
+<li><p><code>msigdb_gobp_nk</code>: a ‘GeneSetCollection’ object,
+containing gene sets with gene-set name matched to ‘NATURAL_KILLER’ in
+<a href="GO:BP" class="uri">GO:BP</a> MSigDB v7.4 database. More details
+<code><a href="../reference/msigdb_gobp_nk.html">?mastR::msigdb_gobp_nk</a></code>.</p></li>
+<li><p><code>NK_markers</code>: a combination of CIBERSORT LM7, LM22 and
+Huntington gene list with 114 genes. (<a href="https://cancerimmunolres.aacrjournals.org/content/7/7/1162.long" class="external-link">Cursons
+et al. 2019</a>).</p></li>
 </ul>
-<p>The output of markers generation functions is either ‘GeneSet’ or
+<p>All markers generation functions will return ‘GeneSet’ or
 ‘GeneSetCollection’ object.</p>
 <div class="section level3">
-<h3 id="generate-from-sources">Generate from sources<a class="anchor" aria-label="anchor" href="#generate-from-sources"></a>
+<h3 id="generate-markers-from-sources">Generate Markers from Sources<a class="anchor" aria-label="anchor" href="#generate-markers-from-sources"></a>
 </h3>
-<p>To screen the immune cell subset signatures, we need to generate a
-markers pool first. mastR allows people to generate markers pool from
-multiple resources as metinoned before.</p>
-<p>In this demo, we will load some example datasets to show how it
-works. The datasets used in this report have been built within the
-package or can be accessed publicly. You can use the following scripts
-to load them into the environment.</p>
+<p>To generate the immune cell signatures, firstly users need to define
+a pool of markers of interest. mastR allows users to build markers pool
+from multiple resources.</p>
+<p>In this demo, we will load some some publicly available example
+datasets.</p>
 <div class="section level4">
-<h4 id="lm">LM<a class="anchor" aria-label="anchor" href="#lm"></a>
+<h4 id="i-leukocyte-gene-signature-matrix-lm">i) Leukocyte gene signature Matrix (LM)<a class="anchor" aria-label="anchor" href="#i-leukocyte-gene-signature-matrix-lm"></a>
 </h4>
-<p>Markers can also be generated from LM7/22 signature matrix to get
-immune cells markers using function <code><a href="../reference/get_lm_sig.html">get_lm_sig()</a></code>.</p>
-<p><code>LM7/LM22</code> is immune cells signature matrix from
-CIBERSORT, contains 7/22 immune cell subsets markers lists.</p>
-<p>Users can extract markers for cell subsets matched to the given regex
-pattern from imported data <code>LM7</code>/<code>LM22</code>.</p>
+<p><code>LM7/LM22</code> are immune cells signature matrices from
+CIBERSORT, contains 7 or 22 immune cell types.</p>
+<p>Users can use function <code><a href="../reference/get_lm_sig.html">get_lm_sig()</a></code> to generate immune
+cells markers from LM7 and/or LM22.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"LM7"</span>, <span class="st">"LM22"</span><span class="op">)</span></span>
-<span><span class="co">## only retrieve LM7</span></span>
-<span><span class="fu"><a href="../reference/get_lm_sig.html">get_lm_sig</a></span><span class="op">(</span>lm7.pattern <span class="op">=</span> <span class="st">"^NK"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; setName: LM7 </span></span>
-<span><span class="co">#&gt; geneIds: CD244, FASLG, ..., XCL2 (total: 21)</span></span>
-<span><span class="co">#&gt; geneIdType: Symbol</span></span>
-<span><span class="co">#&gt; collectionType: Null </span></span>
-<span><span class="co">#&gt; details: use 'details(object)'</span></span>
-<span></span>
-<span><span class="co">## only retrieve LM22</span></span>
-<span><span class="co"># get_lm_sig(lm22.pattern = "NK cells")</span></span>
 <span></span>
 <span><span class="co">## collect both LM7 and LM22</span></span>
 <span><span class="va">LM</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_lm_sig.html">get_lm_sig</a></span><span class="op">(</span>lm7.pattern <span class="op">=</span> <span class="st">"^NK"</span>, lm22.pattern <span class="op">=</span> <span class="st">"NK cells"</span><span class="op">)</span></span>
@@ -355,120 +358,100 @@ pattern from imported data <code>LM7</code>/<code>LM22</code>.</p>
 <span><span class="co">#&gt;   types in collection:</span></span>
 <span><span class="co">#&gt;     geneIdType: SymbolIdentifier (1 total)</span></span>
 <span><span class="co">#&gt;     collectionType: NullCollection (1 total)</span></span></code></pre></div>
-<p>By using <code><a href="../reference/gsc_plot.html">gsc_plot()</a></code>, an UpSetR plot across all gene-sets
-in the input would be printed. The input can be either ‘GeneSet’ or
-‘GeneSetCollection’ objects. Using <code><a href="../reference/gsc_plot.html">gsc_plot()</a></code> we can see
-how different gene-sets intersect with each other.</p>
+<p>Function <code><a href="../reference/gsc_plot.html">gsc_plot()</a></code> allows visualization of an UpSetR
+plot across all gene-sets.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## show upset diagram</span></span>
 <span><span class="fu"><a href="../reference/gsc_plot.html">gsc_plot</a></span><span class="op">(</span><span class="va">LM</span><span class="op">)</span></span></code></pre></div>
 <p><img src="mastR_Demo_files/figure-html/gsc%20plot-1.png" width="768"></p>
 </div>
 <div class="section level4">
-<h4 id="msigdb">MSigDB<a class="anchor" aria-label="anchor" href="#msigdb"></a>
+<h4 id="ii-msigdb">ii) MSigDB<a class="anchor" aria-label="anchor" href="#ii-msigdb"></a>
 </h4>
-<p>Gene-sets from MSigDB can also be searched and collected by using the
-function <code><a href="../reference/get_gsc_sig.html">get_gsc_sig()</a></code>.</p>
-<p>The Molecular Signatures Database (MSigDB) is a resource of tens of
-thousands of annotated gene sets for use with GSEA software, divided
-into Human and Mouse collections.</p>
-<p>Users can use <code>species</code>, <code>cat</code>,
-<code>subcat</code> and <code>pattern</code> to specify which gene-sets
-to be added.</p>
-<p>All gene-sets with gene-set name matched to the regex
-<code>pattern</code> in the whole MSigDB would be extracted if
-<code>cat</code> and <code>subcat</code> are not set, otherwise only the
-genesets under the union of <code>cat</code> and <code>subcat</code>
-would be searched.</p>
-<p>In this demo, we’ll use a small collection of MSigDB
-<code>msigdb_gobp_nk</code> to show how it works.</p>
+<p>The Molecular Signatures Database (<a href="https://www.gsea-msigdb.org/gsea/msigdb/" class="external-link"><strong>MSigDB</strong></a>)
+is a database of annotated gene sets, typically used for pathway
+analysis.</p>
+<p>Users can use <code><a href="../reference/get_gsc_sig.html">get_gsc_sig()</a></code> to generate a collection of
+gene sets for the biological subjects of interest.</p>
+<p>In this case, NK cell relevant gene-sets from
+<code>msigdb_gobp_nk</code> are collected.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"msigdb_gobp_nk"</span><span class="op">)</span></span>
-<span><span class="va">MSig</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_gsc_sig.html">get_gsc_sig</a></span><span class="op">(</span></span>
-<span>  gsc <span class="op">=</span> <span class="va">msigdb_gobp_nk</span>,</span>
-<span>  pattern <span class="op">=</span> <span class="st">"NATURAL_KILLER_CELL_MEDIATED"</span></span>
-<span><span class="op">)</span></span>
+<span><span class="va">MSig</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_gsc_sig.html">get_gsc_sig</a></span><span class="op">(</span>gsc <span class="op">=</span> <span class="va">msigdb_gobp_nk</span>,</span>
+<span>                    pattern <span class="op">=</span> <span class="st">"NATURAL_KILLER_CELL_MEDIATED"</span><span class="op">)</span></span>
 <span><span class="va">MSig</span></span>
 <span><span class="co">#&gt; GeneSetCollection</span></span>
 <span><span class="co">#&gt;   names: GOBP_NATURAL_KILLER_CELL_MEDIATED_IMMUNITY, GOBP_NATURAL_KILLER_CELL_MEDIATED_CYTOTOXICITY_DIRECTED_AGAINST_TUMOR_CELL_TARGET, ..., GOBP_POSITIVE_REGULATION_OF_NATURAL_KILLER_CELL_MEDIATED_CYTOTOXICITY (18 total)</span></span>
 <span><span class="co">#&gt;   unique identifiers: AP1G1, ARRB2, ..., KLRC4-KLRK1 (67 total)</span></span>
 <span><span class="co">#&gt;   types in collection:</span></span>
 <span><span class="co">#&gt;     geneIdType: SymbolIdentifier (1 total)</span></span>
-<span><span class="co">#&gt;     collectionType: BroadCollection (1 total)</span></span>
-<span><span class="co">## cut geneset name within 11 characters</span></span>
+<span><span class="co">#&gt;     collectionType: BroadCollection (1 total)</span></span></code></pre></div>
+<p><strong><em>Note</em></strong>: <code>data = "msigdb"</code> allows
+searching of MsigDB without loading into the environment.
+<code>species</code> or <code>version</code> are optional
+parameters.</p>
+<p>Similarly, using <code><a href="../reference/gsc_plot.html">gsc_plot()</a></code> users can visualize the
+overlapping gene sets.</p>
+<p>As the gene-set names are too long, for better visualization the
+gene-set names are replaced with letters and shown later.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## cut gene set name within 11 characters</span></span>
 <span><span class="va">gsn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">MSig</span><span class="op">)</span>, <span class="va">LETTERS</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">MSig</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">MSig</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">setName</a></span><span class="op">(</span><span class="va">MSig</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">LETTERS</span><span class="op">[</span><span class="va">i</span><span class="op">]</span></span>
-<span><span class="op">}</span></span></code></pre></div>
-<p>Then we can see how these collected gene-sets overlapped by using
-function <code><a href="../reference/gsc_plot.html">gsc_plot()</a></code>. We can see which gene-sets are the top
-3 in the upset plot.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## show upset diagram of collected gene-sets</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co">## show upset diagram of collected gene-sets</span></span>
 <span><span class="fu"><a href="../reference/gsc_plot.html">gsc_plot</a></span><span class="op">(</span><span class="va">MSig</span><span class="op">)</span></span></code></pre></div>
 <p><img src="mastR_Demo_files/figure-html/show%20overlap-1.png" width="768"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">gsn</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"M"</span>, <span class="st">"D"</span><span class="op">)</span><span class="op">]</span> <span class="co">## show gene-set names of top 3</span></span>
+<code class="sourceCode R"><span><span class="va">gsn</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"M"</span>, <span class="st">"D"</span><span class="op">)</span><span class="op">]</span>  <span class="co">## show gene-set names of top 3</span></span>
 <span><span class="co">#&gt;                                                          A </span></span>
 <span><span class="co">#&gt;               "GOBP_NATURAL_KILLER_CELL_MEDIATED_IMMUNITY" </span></span>
 <span><span class="co">#&gt;                                                          M </span></span>
 <span><span class="co">#&gt;           "GOBP_NATURAL_KILLER_CELL_MEDIATED_CYTOTOXICITY" </span></span>
 <span><span class="co">#&gt;                                                          D </span></span>
 <span><span class="co">#&gt; "GOBP_REGULATION_OF_NATURAL_KILLER_CELL_MEDIATED_IMMUNITY"</span></span></code></pre></div>
-<p>As we can see, there’re 18 gene-sets in MSig, which is too many for
-visualization. Thus, we can use another function
-<code><a href="../reference/merge_markers.html">merge_markers()</a></code> to merge all gene-sets into one ‘GeneSet’
-object. (You can also directly pass un-merged object to the subsequent
-analysis.)</p>
-<p>The input of <code><a href="../reference/merge_markers.html">merge_markers()</a></code> can be a list of vectors of
-genes, or a list of GeneSet objects, or a GeneSetCollection object.</p>
+<p>There are 18 gene-sets in MSig, which is too many for visualization.
+Thus, we use function <code><a href="../reference/merge_markers.html">merge_markers()</a></code> to merge all
+gene-sets into one ‘GeneSet’ object. (<em>Note</em>: Users can directly
+use the un-merged object for subsequent analyses.)</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## merge all genesets into one</span></span>
+<code class="sourceCode R"><span><span class="co">## merge all gene sets into one</span></span>
 <span><span class="va">MSig</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/merge_markers.html">merge_markers</a></span><span class="op">(</span><span class="va">MSig</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">setName</a></span><span class="op">(</span><span class="va">MSig</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"MSigDB"</span></span></code></pre></div>
-<p><strong><em>Note</em></strong>: <code>data = "msigdb"</code> allows
-searching of MsigDB without loading it into the environment.
-<code>species</code> or <code>version</code> can also be set as optional
-params.</p>
 </div>
 <div class="section level4">
-<h4 id="panglaodb">PanglaoDB<a class="anchor" aria-label="anchor" href="#panglaodb"></a>
+<h4 id="iii-panglaodb">iii) PanglaoDB<a class="anchor" aria-label="anchor" href="#iii-panglaodb"></a>
 </h4>
-<p>Markers from <a href="https://panglaodb.se/" class="external-link">PanlaoDB</a> can be
-obtained to build the markers pool by using function
-<code><a href="../reference/get_panglao_sig.html">get_panglao_sig()</a></code>.</p>
-<p>PanglaoDB is a database for the scientific community interested in
-exploration of single cell RNA sequencing experiments from mouse and
-human. It collects and integrates data from multiple studies and present
-them through a unified framework.</p>
-<p>Users can use <code><a href="../reference/list_panglao_organs.html">list_panglao_organs()</a></code> and
-<code><a href="../reference/list_panglao_types.html">list_panglao_types()</a></code> functions to list all available organs
-and cell types on PanglaoDB website and use
-<code><a href="../reference/get_panglao_sig.html">get_panglao_sig()</a></code> function to retrive them.</p>
+<p><a href="https://panglaodb.se/" class="external-link">PanglaoDB</a> is a database of single
+cell RNA sequencing experiments with cell type markers.</p>
+<p>Users can use <code><a href="../reference/get_panglao_sig.html">get_panglao_sig()</a></code> to generate markers
+based on the required organs and cell types.</p>
+<p>Functions <code><a href="../reference/list_panglao_organs.html">list_panglao_organs()</a></code> and
+<code><a href="../reference/list_panglao_types.html">list_panglao_types()</a></code> show all available organs and cell
+types in PanglaoDB.</p>
+<p><strong><em>Note:</em></strong> This requires real-time connection to
+PanglaoDB, thus not run in this demo.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## show availbable organs on PanglaoDB</span></span>
+<code class="sourceCode R"><span><span class="co">## show available organs on PanglaoDB</span></span>
 <span><span class="fu"><a href="../reference/list_panglao_organs.html">list_panglao_organs</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## show available cell types of interest organ on PanglaoDB</span></span>
-<span><span class="co">## Number in the bracket represents the number of markers for each cell type (in both Homo and Mus).</span></span>
 <span><span class="fu"><a href="../reference/list_panglao_types.html">list_panglao_types</a></span><span class="op">(</span>organ <span class="op">=</span> <span class="st">"Immune system"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## collect all "NK cells" markers from PanglaoDB website</span></span>
 <span><span class="va">Panglao</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_panglao_sig.html">get_panglao_sig</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"NK cells"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">Panglao</span></span>
-<span><span class="co">## number differs from 'NK cells' under list_panglao_types(organ = "Immune system"), because we only keep 'Hs' markers.</span></span></code></pre></div>
+<span><span class="va">Panglao</span></span></code></pre></div>
 </div>
 <div class="section level4">
-<h4 id="customized-gene-list">Customized gene list<a class="anchor" aria-label="anchor" href="#customized-gene-list"></a>
+<h4 id="iv-customized-gene-list">iv) Customized gene list<a class="anchor" aria-label="anchor" href="#iv-customized-gene-list"></a>
 </h4>
-<p>Markers can also be generated from a customized gene list. Here we
-use a list of natural killer (NK) cell markers from Curson et al 2019
-from <a href="https://aacrjournals.org/cancerimmunolres/article/7/7/1162/469488/A-Gene-Signature-Predicting-Natural-Killer-Cell" class="external-link">Curson’s
-Publication</a> as a customized gene list.</p>
-<p><code>NK_markers</code> dataset is a combination of CIBERSORT LM7,
-LM22 and human orthologs in mice from Huntington. It contains 114 genes
-in total.</p>
+<p>Customized markers can be imported as a ‘GeneSet’ object.</p>
+<p>Here we demonstrate this by loading the in-built
+<code>NK_markers</code> markers dataset and convert it into ‘GeneSet’
+object.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## show what NK_markers looks like:</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"NK_markers"</span><span class="op">)</span></span>
@@ -490,18 +473,16 @@ in total.</p>
 <span></span>
 <span><span class="co">## convert NK markers into 'GeneSet' object</span></span>
 <span><span class="va">nk_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-methods.html" class="external-link">GeneSet</a></span><span class="op">(</span><span class="va">NK_markers</span><span class="op">$</span><span class="va">HGNC_Symbol</span>,</span>
-<span>  geneIdType <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneIdentifierType-constructors.html" class="external-link">SymbolIdentifier</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  setName <span class="op">=</span> <span class="st">"NK_markers"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span>                geneIdType <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneIdentifierType-constructors.html" class="external-link">SymbolIdentifier</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>                setName <span class="op">=</span> <span class="st">"NK_markers"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
-<h3 id="integrate-markers-pool">Integrate Markers Pool<a class="anchor" aria-label="anchor" href="#integrate-markers-pool"></a>
+<h3 id="pool-markers-from-sources">Pool Markers from Sources<a class="anchor" aria-label="anchor" href="#pool-markers-from-sources"></a>
 </h3>
-<p>Now we have multiple lists of markers from different sources, to use
-them in the subsequent analysis, we need to merge them together.</p>
-<p>All markers can be merged into one ‘GeneSet’ object by using function
-<code><a href="../reference/merge_markers.html">merge_markers()</a></code>.</p>
+<p>With multiple lists of markers from different sources, use
+<code><a href="../reference/merge_markers.html">merge_markers()</a></code> to merge them into one ‘GeneSet’
+object.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gsc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSetCollection-methods.html" class="external-link">GeneSetCollection</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">nk_m</span>, <span class="va">LM</span>, <span class="va">MSig</span><span class="op">)</span><span class="op">)</span> <span class="co">## add Panglao if you run it</span></span>
 <span><span class="va">Markers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/merge_markers.html">merge_markers</a></span><span class="op">(</span><span class="va">gsc</span><span class="op">)</span></span>
@@ -517,9 +498,8 @@ them in the subsequent analysis, we need to merge them together.</p>
 <span><span class="co">#&gt; geneIdType: Symbol</span></span>
 <span><span class="co">#&gt; collectionType: Computed </span></span>
 <span><span class="co">#&gt; details: use 'details(object)'</span></span></code></pre></div>
-<p>The source of each marker will be saved as a data.frame under the
-‘longDescription’ slot of the output in json format. Users can view it
-to trace back the source of each gene.</p>
+<p>The summary of the merged list is saved as ‘longDescription’ in the
+output.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## to show the table summary of merged list</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">jsonlite</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html" class="external-link">fromJSON</a></span><span class="op">(</span><span class="fu">GSEABase</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">longDescription</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
@@ -530,46 +510,31 @@ to trace back the source of each gene.</p>
 <span><span class="co">#&gt; 4    ARRB2          -   -    -   TRUE</span></span>
 <span><span class="co">#&gt; 5     AZU1       TRUE   - TRUE      -</span></span>
 <span><span class="co">#&gt; 6      BPI       TRUE   - TRUE      -</span></span></code></pre></div>
-<p>Now with a large markers pool for screening, we need to screen
-signature genes from the pool for both cell subset and tissue
-specificity.</p>
+<p>Now with a merged markers pool, we refine the signature genes for
+group specificity and tissue background removal.</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="step-2--identification-and-refinement-of-signature">Step 2. Identification and Refinement of Signature<a class="anchor" aria-label="anchor" href="#step-2--identification-and-refinement-of-signature"></a>
+<h2 id="step-2--signature-identification-for-target-group">Step 2. Signature Identification for Target Group<a class="anchor" aria-label="anchor" href="#step-2--signature-identification-for-target-group"></a>
 </h2>
-<div class="section level3">
-<h3 id="signature-construction-by-factors-of-interest">Signature Construction by Factors of Interest<a class="anchor" aria-label="anchor" href="#signature-construction-by-factors-of-interest"></a>
-</h3>
 <hr>
-<div class="section level4">
-<h4 id="signature-identification-for-target-group">Signature Identification for Target Group<a class="anchor" aria-label="anchor" href="#signature-identification-for-target-group"></a>
-</h4>
-<p>For group specificity, there’re 4 main steps:</p>
+<p>For group specificity, there are 3 main steps:</p>
 <ol style="list-style-type: lower-alpha">
-<li>process data: filtration, normalization, sample weighting and linear
-model fit<br>
+<li>differential expression (DE) analysis: filtration, normalization,
+sample weighting and linear model fit;<br>
 </li>
-<li>differential expression (DE) analysis<br>
+<li>feature selection: select differentially expressed genes based on
+rank product score;<br>
 </li>
-<li>feature selection: pick differentially expressed genes with high
-ranks in most of comparisons<br>
-</li>
-<li>integrate selected genes with markers pool</li>
+<li>constrain selected genes within the markers pool.</li>
 </ol>
-<p>Customized external data is accepted in many formats: DGEList, eSet,
-matrix… For example, a large collection of 1561 bulk RNA-seq samples
-generated by DICE from pure populations of human immune cells, can be
-used as input data. It can be loaded by function
-<code>celldex::DatabaseImmuneCellExpressionData()</code>, which contains
-5 main cell types and 15 fine cell types.</p>
-<p><strong><em>Note</em></strong>: all input data must be raw counts
+<p><strong><em>Note</em></strong>: External data is accepted in many
+formats (e.g. DGEList, eSet, matrix). All input data must be raw counts
 data or log-transformed expression data.</p>
-<p>In this demo, we use our imported example data <code>im_data_6</code>
-from <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE60424" class="external-link">GSE60424</a>
-as input. Only samples from healthy individuals are kept, and ‘Whole
-Blood’ or ‘PBMC’ cells are removed in dataset. It can also be obtained
-by <code>GEOquery::getGEO()</code>.</p>
+<p>In this demo, we use the imported example data <code>im_data_6</code>
+from <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE60424" class="external-link">GSE60424</a>,
+consisting of healthy individuals and immune cells. Downloaded using
+<code>GEOquery::getGEO()</code>.</p>
 <p><code>im_data_6</code> is a eSet object, containing RNA-seq TMM
 normalized counts data of 6 sorted immune cell subsets * 4 samples. More
 details in <code><a href="../reference/im_data_6.html">?mastR::im_data_6</a></code>.</p>
@@ -589,20 +554,14 @@ details in <code><a href="../reference/im_data_6.html">?mastR::im_data_6</a></co
 <span><span class="co">#&gt; experimentData: use 'experimentData(object)'</span></span>
 <span><span class="co">#&gt;   pubMedIds: 25314013 </span></span>
 <span><span class="co">#&gt; Annotation: GPL15456</span></span></code></pre></div>
-<div class="section level5">
-<h5 id="process">processing the data<a class="anchor" aria-label="anchor" href="#process"></a>
-</h5>
+<div class="section level3">
+<h3 id="process">a) processing the data<a class="anchor" aria-label="anchor" href="#process"></a>
+</h3>
 <p>To screen signature for the group specificity, the data needs to be
-pre-processed which includes gene filtering, normalization etc..</p>
-<p><code><a href="../reference/process_data.html">process_data()</a></code> in mastR does the genes filtration, data
-normalization, samples weighting, linear model fit and the computation
-of gene differential expression statistic as a single function call.</p>
-<p>Users need to provide an expression data with sample group labels
-(containing interested target group), a <code>DGEList</code> object with
-filtered counts (unfiltered counts data will be saved under “original”),
-vfit (<code><a href="https://rdrr.io/pkg/limma/man/voom.html" class="external-link">limma::voom()</a></code> is done), tfit
-(<code><a href="https://rdrr.io/pkg/limma/man/lmFit.html" class="external-link">limma::lmFit()</a></code> and <code><a href="https://rdrr.io/pkg/limma/man/ebayes.html" class="external-link">limma::treat()</a></code> are done)
-will be returned.</p>
+pre-processed.</p>
+<p><code><a href="../reference/process_data.html">process_data()</a></code> in mastR does the End-to-End differential
+expression analysis using <code>edgeR</code> and <code>limma</code>
+pipeline as a single function call.</p>
 <p>Process under the hood:</p>
 <ul>
 <li><p>Data filtered by the given cutoff, all gene with low expression
@@ -612,8 +571,8 @@ will be removed by edgeR.</p></li>
 <code><a href="https://rdrr.io/pkg/limma/man/voom.html" class="external-link">limma::voom()</a></code> fit is conducted, otherwise
 <code>trend</code> of limma is applied.</p></li>
 <li><p>Final linear model is fitted.</p></li>
-<li><p>gene statistic for DE analysis are computed by
-<code><a href="https://rdrr.io/pkg/limma/man/ebayes.html" class="external-link">limma::treat()</a></code>.</p></li>
+<li><p>gene statistic for differential expression analysis are computed
+by <code><a href="https://rdrr.io/pkg/limma/man/ebayes.html" class="external-link">limma::treat()</a></code>.</p></li>
 </ul>
 <p>Let’s see what cell types are in <code>im_data_6</code>.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
@@ -621,124 +580,58 @@ will be removed by edgeR.</p></li>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     B-cells         CD4         CD8   Monocytes Neutrophils          NK </span></span>
 <span><span class="co">#&gt;           4           4           4           4           4           4</span></span></code></pre></div>
-<p>The following parameters are required by
-<code><a href="../reference/process_data.html">process_data()</a></code>:</p>
-<ul>
-<li>
-<code>data</code>: can be a bulk RNA-seq expression object with cell
-subset labels, can be matrix, eSet, DGEList, … (expression must be
-either raw counts or logcounts).</li>
-<li>
-<code>group_col</code>: can specify the column name of groups
-(labels), can be a vector when <code>data</code> is a matrix.</li>
-<li>
-<code>target_group</code>: can specify the cell target_group name of
-interest. Users can choose one name in <code>group_col</code>
-vector.</li>
-<li>
-<code>markers</code>: could specify a geneset to be kept no matter
-if they pass the filtration. Setting it to <code>NULL</code> can skip
-this. Must be gene SYMBOL ID.</li>
-<li>
-<code>gene_id</code>: specify the gene ID type of rownames of data
-when markers is not NULL, could be one of ‘ENSEMBL’, ‘SYMBOL’,
-‘ENTREZ’…, default ‘SYMBOL’.</li>
-</ul>
+<p>An expression data with sample group labels (containing interested
+target group) is needed for <code><a href="../reference/process_data.html">process_data()</a></code>.</p>
+<p>Then it will return a <code>DGEList</code> object with filtered
+counts (unfiltered counts data will be saved under “original”), vfit
+(<code><a href="https://rdrr.io/pkg/limma/man/voom.html" class="external-link">limma::voom()</a></code> is done), tfit (<code><a href="https://rdrr.io/pkg/limma/man/lmFit.html" class="external-link">limma::lmFit()</a></code>
+and <code><a href="https://rdrr.io/pkg/limma/man/ebayes.html" class="external-link">limma::treat()</a></code> are done).</p>
+<p>mastR provides the gene ID conversion feature using param
+<code>gene_id</code> when the gene ID of input data is not SYMBOL.</p>
 <p>Optional param details can be found in
-<code>help(proc_data)</code></p>
+<code>help(proc_data)</code>.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">proc_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/process_data.html">process_data</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="va">im_data_6</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">im_data_6</span>,  </span>
 <span>  group_col <span class="op">=</span> <span class="st">"celltype:ch1"</span>,</span>
-<span>  target_group <span class="op">=</span> <span class="st">"NK"</span>,</span>
+<span>  target_group <span class="op">=</span> <span class="st">"NK"</span>, </span>
 <span>  markers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span>,</span>
 <span>  gene_id <span class="op">=</span> <span class="st">"ENSEMBL"</span> <span class="co">## rownames of im_data_6 is ENSEMBL ID</span></span>
-<span>  <span class="co"># summary = TRUE ## if to show the summary of tfit result</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:many mapping between keys and columns</span></span>
 <span><span class="co">#&gt;        NK-Neutrophils NK-Monocytes NK-B.cells NK-CD4 NK-CD8</span></span>
 <span><span class="co">#&gt; Down             4012         3949       3146   2698   2155</span></span>
 <span><span class="co">#&gt; NotSig           1492         2694       4429   5001   6201</span></span>
-<span><span class="co">#&gt; Up               4945         3806       2874   2750   2093</span></span>
-<span><span class="co"># summary(limma::decideTests(proc_data$tfit))</span></span>
-<span></span>
-<span><span class="co">## add voom fitted expression as a new list of proc_data for use</span></span>
+<span><span class="co">#&gt; Up               4945         3806       2874   2750   2093</span></span></code></pre></div>
+<p>Now we save the expression data after limma::voom pipeline under the
+<code>proc_data</code> for subsequent analysis.</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## add voom fitted expression as a new list of proc_data for use</span></span>
 <span><span class="va">proc_data</span><span class="op">$</span><span class="va">voomE</span> <span class="op">&lt;-</span> <span class="va">proc_data</span><span class="op">$</span><span class="va">vfit</span><span class="op">$</span><span class="va">E</span></span></code></pre></div>
-</div>
-<div class="section level5">
-<h5 id="visualization-of-qc-results-before-and-after-processing">visualization of QC results before and after processing<a class="anchor" aria-label="anchor" href="#visualization-of-qc-results-before-and-after-processing"></a>
-</h5>
-<p>After data processing, wcheck whether the data has been well filtered
-, normalized and fitted.</p>
+<p><strong><em>Note:</em></strong></p>
 <p>mastR provides visualization functions to compare the data before and
 after <code><a href="../reference/process_data.html">process_data()</a></code> and see how well the QC has been
-carried out.</p>
+carried out by using <code><a href="../reference/plot_diagnostics.html">plot_diagnostics()</a></code> and
+<code><a href="../reference/plot_mean_var.html">plot_mean_var()</a></code>.</p>
 <p>To assess the removal of the low quality genes,
 <code><a href="../reference/plot_diagnostics.html">plot_diagnostics()</a></code> can be used to show the expression
 distribution, RLE and MDS plots.</p>
-<p>The density plot shows we successfully removed most of low quality
-genes which makes the distribution more normal-like.</p>
-<p>RLE plot shows smaller deviation across samples, proving the success
-of normalization after processing.</p>
-<p>While MDS doesn’t show quite different result as it only uses top
-variable genes which should not change too much before and after
-processing.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">expr1</span> <span class="op">&lt;-</span> <span class="fu">edgeR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/edgeR/man/cpm.html" class="external-link">cpm</a></span><span class="op">(</span><span class="va">im_data_6</span><span class="op">@</span><span class="va">assayData</span><span class="op">$</span><span class="va">exprs</span>, log <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co">## or proc_data$original_counts</span></span>
-<span><span class="va">expr2</span> <span class="op">&lt;-</span> <span class="va">proc_data</span><span class="op">$</span><span class="va">voomE</span></span>
-<span><span class="co">## plot expression distribution, RLE and MDS</span></span>
-<span><span class="fu"><a href="../reference/plot_diagnostics.html">plot_diagnostics</a></span><span class="op">(</span></span>
-<span>  <span class="va">expr1</span>,</span>
-<span>  <span class="va">expr2</span>,</span>
-<span>  group_col <span class="op">=</span> <span class="va">proc_data</span><span class="op">$</span><span class="va">samples</span><span class="op">$</span><span class="va">celltype.ch1</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; $density</span></span></code></pre></div>
-<p><img src="mastR_Demo_files/figure-html/plot%20diagnostics-1.png" width="960"></p>
-<pre><code><span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $RLE</span></span></code></pre>
-<p><img src="mastR_Demo_files/figure-html/plot%20diagnostics-2.png" width="960"></p>
-<pre><code><span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $MDS</span></span></code></pre>
-<p><img src="mastR_Demo_files/figure-html/plot%20diagnostics-3.png" width="960"></p>
-<p>Mean-variance trend can be plotted by <code><a href="../reference/plot_mean_var.html">plot_mean_var()</a></code> to
-show the linear fit result. The droping trend in voom and the horizontal
-line in final model indicates the good fit of the data.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## plot mean-variance trend</span></span>
-<span><span class="fu"><a href="../reference/plot_mean_var.html">plot_mean_var</a></span><span class="op">(</span><span class="va">proc_data</span><span class="op">)</span></span></code></pre></div>
-<p><img src="mastR_Demo_files/figure-html/plot%20mean-variance-1.png" width="960"></p>
-<p>PCA can be plotted by <code><a href="../reference/pca_matrix_plot.html">pca_matrix_plot()</a></code> to assess the
-variations in the data and weather normalization was able to remove
-batch effects. You can select how many top n PCs to be plot by param
-<code>n</code>.</p>
-<p>The input for this function should be log-normalized.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## plot PCA</span></span>
-<span><span class="co">## before process</span></span>
-<span><span class="fu"><a href="../reference/pca_matrix_plot.html">pca_matrix_plot</a></span><span class="op">(</span><span class="va">expr1</span>, group_by <span class="op">=</span> <span class="va">proc_data</span><span class="op">$</span><span class="va">samples</span><span class="op">$</span><span class="va">celltype.ch1</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<p><img src="mastR_Demo_files/figure-html/plot%20PCA%20mat-1.png" width="768"></p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## after process</span></span>
-<span><span class="fu"><a href="../reference/pca_matrix_plot.html">pca_matrix_plot</a></span><span class="op">(</span><span class="va">expr2</span>, group_by <span class="op">=</span> <span class="va">proc_data</span><span class="op">$</span><span class="va">samples</span><span class="op">$</span><span class="va">celltype.ch1</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<p><img src="mastR_Demo_files/figure-html/plot%20PCA%20mat-2.png" width="768"></p>
 </div>
-<div class="section level5">
-<h5 id="selection">signature genes selecton based on statistical analysis<a class="anchor" aria-label="anchor" href="#selection"></a>
-</h5>
-<p>Now we get processed data with DE statistic for each gene in each
-comparison, then the proc_data can be passed into
-<code><a href="../reference/select_sig.html">select_sig()</a></code> function for further genes selection based on
-rank product scoring. Group specific signature is therefore
-determined.</p>
-<p><code>feature_selection</code>: choose whether to use rank product
-(‘rankproduct’) or not (‘none’) to select DEGs from multiple comparisons
-of DE analysis results. Default “auto” will perform “rankproduct” and
-switch to “none” if the number of final “UP” (up-regulated genes) and
-“DOWN” (down-regulated genes) genes are &lt; 5.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="section level3">
+<h3 id="selection">b) signature selection based on differential expression<a class="anchor" aria-label="anchor" href="#selection"></a>
+</h3>
+<p>Now with the processed data <code>proc_data</code>, use
+<code><a href="../reference/select_sig.html">select_sig()</a></code> function to further select genes based on the
+DE results using rank product score. Group specific signature is
+therefore determined.</p>
+<p><code>feature_selection</code>: Default “auto” will perform
+“rankproduct” and switch to “none” if the number of final “UP”
+(up-regulated genes) and “DOWN” (down-regulated genes) genes are &lt;
+5.</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## get the same result as there's permutation test for rank product</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
-<span><span class="va">sig_ct</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/select_sig.html">select_sig</a></span><span class="op">(</span><span class="va">proc_data</span><span class="op">)</span></span>
+<span><span class="va">sig_ct</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/select_sig.html">select_sig</a></span><span class="op">(</span><span class="va">proc_data</span>, feature_selection <span class="op">=</span> <span class="st">"auto"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sig_ct</span><span class="op">)</span></span>
 <span><span class="co">#&gt; GeneSetCollection</span></span>
@@ -747,352 +640,345 @@ switch to “none” if the number of final “UP” (up-regulated genes) and
 <span><span class="co">#&gt;   types in collection:</span></span>
 <span><span class="co">#&gt;     geneIdType: NullIdentifier (1 total)</span></span>
 <span><span class="co">#&gt;     collectionType: NullCollection (1 total)</span></span></code></pre></div>
-<p><strong><em>Note</em></strong>: <em>All above steps from
-@ref(process) to @ref(selection) for screening group signature can be
-done by one integrated function <code><a href="../reference/get_degs.html">get_degs()</a></code>.</em></p>
-<p><em><code><a href="../reference/get_degs.html">get_degs()</a></code> function can filter low expression genes
-out from immune dataset, normalize and fit voom model to data if
-<code>normalize = TRUE</code>, then a processed data
-<code>proc_data</code> object and a differentially expressed
-GeneSetCollection (‘UP’ and ‘DOWN’) will be returned as output.</em></p>
-<p><em>QC plots can also be shown at the same time by setting optional
-param <code>plot = TRUE</code>.</em></p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">DEG_6</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_degs.html">get_degs</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="va">im_data_6</span>,</span>
-<span>  group_col <span class="op">=</span> <span class="st">"celltype:ch1"</span>,</span>
-<span>  target_group <span class="op">=</span> <span class="st">"NK"</span>,</span>
-<span>  markers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span>,</span>
-<span>  gene_id <span class="op">=</span> <span class="st">"ENSEMBL"</span> <span class="co">## convert ensembl IDs of rownames into symbols if gene_id != "SYMBOL"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">## `proc_data` object would be saved</span></span>
-<span><span class="va">proc_data</span> <span class="op">&lt;-</span> <span class="va">DEG_6</span><span class="op">$</span><span class="va">proc_data</span></span>
-<span></span>
-<span><span class="va">DEG_6</span><span class="op">$</span><span class="va">DEGs</span></span>
-<span><span class="fu">GSEABase</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">DEG_6</span><span class="op">$</span><span class="va">DEGs</span><span class="op">)</span></span>
-<span><span class="va">DEG_6</span><span class="op">$</span><span class="va">proc_data</span><span class="op">$</span><span class="va">vfit</span><span class="op">$</span><span class="va">design</span> <span class="co">## show the design matrix</span></span></code></pre></div>
+<p><strong><em>Note:</em></strong></p>
+<p>mastR also implements an additional feature to further increase the
+discriminative power of the signature between the fairly similar
+groups.</p>
+<p>By setting <code>keep.top</code> and <code>keep.group</code>, the top
+n DEGs of specified DE comparisons can be kept (DEGs are ranked based on
+gene statistic set by <code>Rank</code> param). In this case, if we want
+keep more distinguishable genes between NK and CD8+ T cells, we can set
+<code>keep.group = "CD8"</code> or <code>keep.group = "NK-CD8"</code>
+and use <code>keep.top = n</code> to specify how many top genes in that
+comparison should be kept.</p>
+<p><strong><em>Tips:</em></strong></p>
+<p>All above steps from @ref(process) to @ref(selection) for refining
+group signature can be done by one integrated function
+<code><a href="../reference/get_degs.html">get_degs()</a></code>.</p>
+<p>It will return a list of a processed data <code>proc_data</code> and
+a ‘GeneSetCollection’ <code>DEGs</code> with ‘UP’ and ‘DOWN’ regulated
+genes.</p>
+<p>QC plots can also be shown at the same time by setting optional param
+<code>plot = TRUE</code>.</p>
 </div>
-<div class="section level5">
-<h5 id="intersect-pool">Genrating signature from markers pool<a class="anchor" aria-label="anchor" href="#intersect-pool"></a>
-</h5>
-<p>After getting specific signature genes for the target group, only
-keep those DEGs which are also present in our markers pool
-<code>Markers</code>, to constrain the final signature wthin the
-interested gene list.</p>
-<p>As we are only interested in up-regulated genes in NK cells in this
-demo, only <code>UP</code> DEGs are kept now.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="section level3">
+<h3 id="intersect-pool">c) constrain signature within markers pool<a class="anchor" aria-label="anchor" href="#intersect-pool"></a>
+</h3>
+<p>Then intersect the signature genes <code>sig_ct</code> with the
+markers pool <code>Markers</code>, to constrain the final signature
+within the interested gene list. In this demo, only keep ‘UP’ regulated
+genes.</p>
+<p>Because the row names of <code>im_data_6</code> are ENSEMBL IDs while
+the markers are all gene SYMBOLs, we need to convert the IDs to the same
+type so that we can get the intersection.</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## convert ensembl IDs into symbols to match markers pool</span></span>
-<span><span class="va">deg_up</span> <span class="op">&lt;-</span> <span class="fu">mapIds</span><span class="op">(</span></span>
-<span>  <span class="fu">org.Hs.eg.db</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/org.Hs.eg.db/man/org.Hs.egBASE.html" class="external-link">org.Hs.eg.db</a></span>,</span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">sig_ct</span><span class="op">[[</span><span class="st">"UP"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>,</span>
-<span>  <span class="st">"SYMBOL"</span>, <span class="st">"ENSEMBL"</span></span>
-<span><span class="op">)</span></span>
+<span><span class="va">deg_up</span> <span class="op">&lt;-</span> <span class="fu">mapIds</span><span class="op">(</span><span class="fu">org.Hs.eg.db</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/org.Hs.eg.db/man/org.Hs.egBASE.html" class="external-link">org.Hs.eg.db</a></span>,</span>
+<span>                 <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">sig_ct</span><span class="op">[[</span><span class="st">"UP"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>                 <span class="st">"SYMBOL"</span>, <span class="st">"ENSEMBL"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:1 mapping between keys and columns</span></span>
+<span><span class="va">deg_up</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="va">deg_up</span><span class="op">)</span></span>
 <span><span class="co">## markers specific for NK cells</span></span>
 <span><span class="va">m_ct</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/sets.html" class="external-link">intersect</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span>, <span class="va">deg_up</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">m_ct</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">deg_up</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/match.html" class="external-link">match</a></span><span class="op">(</span><span class="va">m_ct</span>, <span class="va">deg_up</span><span class="op">)</span><span class="op">]</span> <span class="co">## set ensembl ID as names for downstream visualization</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">m_ct</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">deg_up</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/match.html" class="external-link">match</a></span><span class="op">(</span><span class="va">m_ct</span>, <span class="va">deg_up</span><span class="op">)</span><span class="op">]</span>  <span class="co">## set ensembl ID as names for downstream visualization</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">m_ct</span><span class="op">)</span></span>
 <span><span class="co">#&gt; ENSG00000122223 ENSG00000198821 ENSG00000172543 ENSG00000145649 ENSG00000197540 </span></span>
 <span><span class="co">#&gt;         "CD244"         "CD247"          "CTSW"          "GZMA"          "GZMM" </span></span>
 <span><span class="co">#&gt; ENSG00000100385 </span></span>
 <span><span class="co">#&gt;         "IL2RB"</span></span></code></pre></div>
-<p>Use the visualizations like PCA to assess group separations.</p>
-<p>In this case, PCA plots are used to show clearer separation of NK
-cells from other cells by using our screened UP DEGs. And the
-intersected genes with markers pool explain more variance in PC1
-compared with non-intersected DEGs.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<p>Users can use <code><a href="../reference/pca_matrix_plot.html">pca_matrix_plot()</a></code> to assess the group
+separation.</p>
+<p>It’s clear the intersected genes explain more variance in PC1
+compared with all ‘UP’ DEGs.</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## PCA shows clear separation of NK cells</span></span>
 <span><span class="co">## after intersection</span></span>
-<span><span class="fu"><a href="../reference/pca_matrix_plot.html">pca_matrix_plot</a></span><span class="op">(</span><span class="va">proc_data</span><span class="op">$</span><span class="va">vfit</span><span class="op">$</span><span class="va">E</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">m_ct</span><span class="op">)</span>, <span class="op">]</span>,</span>
-<span>  group_by <span class="op">=</span> <span class="va">proc_data</span><span class="op">$</span><span class="va">samples</span><span class="op">$</span><span class="va">celltype.ch1</span>,</span>
-<span>  n <span class="op">=</span> <span class="fl">3</span></span>
-<span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"After intersection"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/pca_matrix_plot.html">pca_matrix_plot</a></span><span class="op">(</span><span class="va">proc_data</span>,</span>
+<span>                features <span class="op">=</span> <span class="va">m_ct</span>,</span>
+<span>                group_by <span class="op">=</span> <span class="st">"celltype.ch1"</span>,</span>
+<span>                slot <span class="op">=</span> <span class="st">"voomE"</span>,</span>
+<span>                n <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>                gene_id <span class="op">=</span> <span class="st">"ENSEMBL"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">patchwork</span><span class="fu">::</span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_annotation.html" class="external-link">plot_annotation</a></span><span class="op">(</span><span class="st">"Intersected UP DEGs"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; 'select()' returned 1:many mapping between keys and columns</span></span></code></pre></div>
 <p><img src="mastR_Demo_files/figure-html/PCA%20on%20sig-1.png" width="768"></p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## before intersection</span></span>
-<span><span class="fu"><a href="../reference/pca_matrix_plot.html">pca_matrix_plot</a></span><span class="op">(</span><span class="va">proc_data</span><span class="op">$</span><span class="va">vfit</span><span class="op">$</span><span class="va">E</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">deg_up</span><span class="op">)</span>, <span class="op">]</span>,</span>
-<span>  group_by <span class="op">=</span> <span class="va">proc_data</span><span class="op">$</span><span class="va">samples</span><span class="op">$</span><span class="va">celltype.ch1</span>,</span>
-<span>  n <span class="op">=</span> <span class="fl">3</span></span>
-<span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Before intersection"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/pca_matrix_plot.html">pca_matrix_plot</a></span><span class="op">(</span><span class="va">proc_data</span>,</span>
+<span>                features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/as.vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="va">deg_up</span><span class="op">)</span>,</span>
+<span>                group_by <span class="op">=</span> <span class="st">"celltype.ch1"</span>,</span>
+<span>                slot <span class="op">=</span> <span class="st">"voomE"</span>,</span>
+<span>                n <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>                gene_id <span class="op">=</span> <span class="st">"ENSEMBL"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">patchwork</span><span class="fu">::</span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_annotation.html" class="external-link">plot_annotation</a></span><span class="op">(</span><span class="st">"All UP DEGs"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; 'select()' returned 1:many mapping between keys and columns</span></span></code></pre></div>
 <p><img src="mastR_Demo_files/figure-html/PCA%20on%20sig-2.png" width="768"></p>
-<p><strong><em>Note</em></strong>: <em>There’s also a wrapper function
-<code><a href="../reference/filter_subset_sig.html">filter_subset_sig()</a></code> which can directly do the whole Step 2
-in one step. The result would be the same as running the above workflow
-step by step.</em></p>
-<p><em><code><a href="../reference/filter_subset_sig.html">filter_subset_sig()</a></code> can also be helpful when you
-have multiple datasets (more details in Section @ref(multi-data)). It
-can output final signature after aggregating signature lists from all
-datasets.</em></p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># run by wrapped function in one-step</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
-<span><span class="va">m_ct</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filter_subset_sig.html">filter_subset_sig</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="va">im_data_6</span>,</span>
-<span>  markers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span>,</span>
-<span>  group_col <span class="op">=</span> <span class="st">"celltype:ch1"</span>,</span>
-<span>  target_group <span class="op">=</span> <span class="st">"NK"</span>,</span>
-<span>  <span class="co"># dir = "UP", ## specify to keep "UP" or "DOWN" regulated genes</span></span>
-<span>  gene_id <span class="op">=</span> <span class="st">"ENSEMBL"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<p><strong><em>Note</em></strong>:</p>
+<p>There’s a wrapper function <code><a href="../reference/filter_subset_sig.html">filter_subset_sig()</a></code> which can
+directly do the whole Step 2 in one step. The result would be the same
+as running the above workflow step by step.</p>
+<p><code><a href="../reference/filter_subset_sig.html">filter_subset_sig()</a></code> is helpful when you have multiple
+datasets (more details in Section @ref(multi-data)). It can output final
+signature after aggregating signature lists from all datasets.</p>
 </div>
 </div>
-<div class="section level4">
-<h4 id="signature-refinement-by-background-correction-in-tissue-optional">Signature Refinement by Background Correction in Tissue
-(optional)<a class="anchor" aria-label="anchor" href="#signature-refinement-by-background-correction-in-tissue-optional"></a>
-</h4>
-<p>After screening signature for group specificity, we need to increase
-the tissue specificity by removing background noise for the signature
-now, what we need to do is:</p>
-<p>filter out cancer cell expressed genes:</p>
-<p>In order to remove background noise from the marker genes, we
-utilized a signal-to-noise ratio (SNR) approach to filter out genes with
-low SNR values. This was done to eliminate genes that have similar
-expression patterns across the target group and background tissues,
-which may be due to non-specific expression or technical artifacts. The
-SNR is calculated as the difference between the mean expression value of
-the group of interest and the mean expression value of the background
-group, divided by the standard deviation of the background group. Genes
-with low SNR values are considered to have low discriminative power
-between the group of interest and the background group, and are
-therefore filtered out. By removing genes with low SNR values, we are
-able to improve the specificity and accuracy of the marker genes, as
-well as reduce potential confounding effects caused by non-specific
-expression or technical artifacts. This approach is commonly used in
-gene expression analysis to improve the reliability of differential
-expression analysis and biomarker identification. By doing this, we can
-guarantee the activity of our final signature for infiltrating immune
-cells won’t be affected by tumor purity when it’s applied on tumor
-samples.</p>
-<p>mastR provides a <code><a href="../reference/remove_bg_snr.html">remove_bg_snr()</a></code> function that can
-eliminate genes with strong signal in cancer cells or tissues, regarded
-as background noise. Users can input two datasets: one as the signal
-data (e.g. immune cell data) and the other as the background noise data
-(e.g. cancer cells or tissue cells data). Then, all genes with low SNR
-(signal to noise ratio) will be eliminated from the given markers list.
-This ensures that our immune signature remains unaffected by tumor
-purity.</p>
-<p>The sig_data shoule always be the proc_data generated by
+<div class="section level2">
+<h2 id="step-3--signature-refinement-by-background-expression-in-tissue-optional">Step 3. Signature Refinement by Background Expression in Tissue
+(optional)<a class="anchor" aria-label="anchor" href="#step-3--signature-refinement-by-background-expression-in-tissue-optional"></a>
+</h2>
+<hr>
+<p>Now the signature is specific to the target group, further refinement
+can be achieved by eliminating genes with strong signal in cancer cells
+or tissues, regarded as background expression.</p>
+<p>mastR utilized a signal-to-noise ratio (SNR) approach to filter out
+genes with low SNR values which are considered to have low
+discriminative power between the group of interest and the background.
+This removes tumor purity as a factor in the identified signature
+markers.</p>
+<p>Here the signal is the expression of signature in signal data and the
+noise is the expression of the signature in background data.</p>
+<p>Two input datasets are needed:</p>
+<ul>
+<li>signal data (data for signature identification after process,
+<code>proc_data</code>)</li>
+<li>background data (data of tissues or cancers of interest)</li>
+</ul>
+<p><strong><em>Note</em></strong>: Both of signal data and background
+data should be log-normalized.</p>
+<p>The signal data should be the result generated by
 <code><a href="../reference/process_data.html">process_data()</a></code> function.</p>
-<p>Based on the <code>bg_data</code> input format, this function can be
-used in 2 ways:</p>
-<ul>
-<li>use CCLE as <code>bg_data</code> input</li>
-<li>use customized data as <code>bg_data</code> input</li>
-</ul>
-<div class="section level5">
-<h5 id="using-ccle-as-cancer-cell-background-data">using CCLE as cancer cell background data<a class="anchor" aria-label="anchor" href="#using-ccle-as-cancer-cell-background-data"></a>
-</h5>
-<p>The default setting of this <code><a href="../reference/remove_bg_snr.html">remove_bg_snr()</a></code> uses CCLE
-from <a href="https://depmap.org/portal/download/" class="external-link">DepMap CCLE</a>,
-containing RSEM quantified TPM data of 1392 cancer cell lines (until
-2022.04).</p>
-<p>The Cancer Cell Line Encyclopedia (CCLE) is a compilation of gene
-expression, chromosomal copy number and massively parallel sequencing
-data from more than 1,000 human cancer cell lines.</p>
-<p><code><a href="../reference/remove_bg_snr.html">remove_bg_snr()</a></code> removes genes which are highly expressed
-in corresponding disease cell lines (in this case CRC adherent cell
-lines). This removes tumor purity as a factor in the identified
-signature markers.</p>
-<p>Required params are as follows:</p>
-<ul>
-<li>
-<code>bg_data</code> can be either “CCLE” or expression dataset,
-e.g. matrix, eSet, DGEList, Seurat and so on.</li>
-<li>
-<code>sig_data</code> can be a matrix or DGEList, as signal data,
-always use processed data after <code><a href="../reference/process_data.html">process_data()</a></code>.</li>
-<li>
-<code>b_group_col</code> param is the group vector of
-<code>bg_data</code> samples, or the name of group column.</li>
-<li>
-<code>b_target_group</code> param is an regex pattern to specify the
-samples of interest, e.g. choose ‘colorectal’ to select all colorectal
-adherent cell lines from CCLE.</li>
-<li>
-<code>s_group_col</code> is a vector or character, to specify the
-group of target_group in <code>sig_data</code>, or the name of group
-column.</li>
-<li>
-<code>s_target_group</code> is a regex pattern, to specify the
-target group of interest in <code>sig_data</code>.</li>
-<li>
-<code>markers</code> is the genes need to be filtered, should be
-gene symbols.</li>
-</ul>
-<p><strong><em>Note</em></strong>: Both of <code>bg_data</code> and
-<code>sig_data</code> should be log-normalized.</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## load CCLE data</span></span>
-<span><span class="va">CCLE</span> <span class="op">&lt;-</span> <span class="fu">depmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/depmap/man/TPM.html" class="external-link">depmap_TPM</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">CCLE_meta</span> <span class="op">&lt;-</span> <span class="fu">depmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/depmap/man/metadata.html" class="external-link">depmap_metadata</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">## filter</span></span>
-<span><span class="va">m_ccl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/remove_bg_snr.html">remove_bg_snr</a></span><span class="op">(</span></span>
-<span>  bg_data <span class="op">=</span> <span class="st">"CCLE"</span>,</span>
-<span>  sig_data <span class="op">=</span> <span class="va">proc_data</span>,</span>
-<span>  b_group_col <span class="op">=</span> <span class="st">"primary_disease"</span>,</span>
-<span>  b_target_group <span class="op">=</span> <span class="st">"colorectal"</span>,</span>
-<span>  s_group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>,</span>
-<span>  s_target_group <span class="op">=</span> <span class="st">"NK"</span>,</span>
-<span>  markers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span>,</span>
-<span>  filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span>, <span class="co">## needed when bg_data is 'CCLE'</span></span>
-<span>  gene_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SYMBOL"</span>, <span class="st">"ENSEMBL"</span><span class="op">)</span>,</span>
-<span>  s_slot <span class="op">=</span> <span class="st">"voomE"</span>,</span>
-<span>  ccle_tpm <span class="op">=</span> <span class="va">CCLE</span>, <span class="co">## only provided when data = 'CCLE'</span></span>
-<span>  ccle_meta <span class="op">=</span> <span class="va">CCLE_meta</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">## or without loading CCLE yourself</span></span>
-<span><span class="va">m_ccl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/remove_bg_snr.html">remove_bg_snr</a></span><span class="op">(</span></span>
-<span>  sig_data <span class="op">=</span> <span class="va">proc_data</span>,</span>
-<span>  b_group_col <span class="op">=</span> <span class="st">"primary_disease"</span>,</span>
-<span>  b_target_group <span class="op">=</span> <span class="st">"colorectal"</span>,</span>
-<span>  s_group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>,</span>
-<span>  s_target_group <span class="op">=</span> <span class="st">"NK"</span>,</span>
-<span>  markers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span>,</span>
-<span>  filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span>,</span>
-<span>  gene_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SYMBOL"</span>, <span class="st">"ENSEMBL"</span><span class="op">)</span>,</span>
-<span>  s_slot <span class="op">=</span> <span class="st">"voomE"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level5">
-<h5 id="using-customized-dataset-as-background-data">using customized dataset as background data<a class="anchor" aria-label="anchor" href="#using-customized-dataset-as-background-data"></a>
-</h5>
-<p>Other customized data is also accepted as <code>bg_data</code> in
-many formats: eSet, matrix, DGEList… But all input must be
-log-transformed expression data.</p>
-<p>In this demo, we use a small imported dataset <code>ccle_crc_5</code>
-in mastR as a customized dataset, the expression of it is logTPM.</p>
+<p>The refinement consists of:</p>
+<ol style="list-style-type: upper-roman">
+<li>data subset</li>
+<li>data filtration</li>
+<li>markers removal</li>
+</ol>
+<div class="section level3">
+<h3 id="i-data-subset">I) data subset<a class="anchor" aria-label="anchor" href="#i-data-subset"></a>
+</h3>
+<p>Customized data can be loaded as matrix, here use
+<code>ccle_crc_5</code> built in mastR as background data, use ‘voomE’
+in <code>proc_data</code> as signal data.</p>
 <p><code>ccle_crc_5</code> is a DGEList object only contains 5 CRC cell
-line samples from CCLE. More details for
+line samples from <a href="https://depmap.org/portal/download/" class="external-link">CCLE</a>. More details for
 <code><a href="../reference/ccle_crc_5.html">help(ccle_crc_5)</a></code>.</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<p><a href="https://depmap.org/portal/download/" class="external-link">DepMap CCLE</a> is a
+large database containing RSEM quantified TPM data of more than 1,000
+cancer cell lines.</p>
+<p>The first step is to subset the samples of interest.</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"ccle_crc_5"</span><span class="op">)</span></span>
-<span><span class="va">ccle_crc_5</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="op">]</span></span>
-<span><span class="co">#&gt; An object of class "DGEList"</span></span>
-<span><span class="co">#&gt; $counts</span></span>
-<span><span class="co">#&gt;          SNU283_LARGE_INTESTINE TGBC18TKB_LARGE_INTESTINE SW837_LARGE_INTESTINE</span></span>
-<span><span class="co">#&gt; TSPAN6               4.91408610                  6.045923             5.2570106</span></span>
-<span><span class="co">#&gt; TNMD                 0.17632277                  0.000000             0.3334237</span></span>
-<span><span class="co">#&gt; DPM1                 6.94684781                  6.724105             6.9242187</span></span>
-<span><span class="co">#&gt; SCYL3                2.57773093                  2.260026             2.9653225</span></span>
-<span><span class="co">#&gt; C1orf112             3.85399565                  3.835924             4.7618171</span></span>
-<span><span class="co">#&gt; FGR                  0.00000000                  0.000000             0.1890338</span></span>
-<span><span class="co">#&gt; CFH                  0.08406426                  4.115200             0.2509616</span></span>
-<span><span class="co">#&gt; FUCA2                4.85549144                  6.263034             6.9090530</span></span>
-<span><span class="co">#&gt; GCLC                 4.93404465                  4.398487             5.8750428</span></span>
-<span><span class="co">#&gt; NFYA                 3.68144927                  3.727920             4.0703893</span></span>
-<span><span class="co">#&gt;          SNU1040_LARGE_INTESTINE HT29_LARGE_INTESTINE</span></span>
-<span><span class="co">#&gt; TSPAN6                5.16188768           4.39985467</span></span>
-<span><span class="co">#&gt; TNMD                  0.46466827           0.00000000</span></span>
-<span><span class="co">#&gt; DPM1                  6.67849451           6.71836163</span></span>
-<span><span class="co">#&gt; SCYL3                 2.48284828           2.78450398</span></span>
-<span><span class="co">#&gt; C1orf112              3.32624970           3.46858332</span></span>
-<span><span class="co">#&gt; FGR                   1.48542683           0.01435529</span></span>
-<span><span class="co">#&gt; CFH                   0.05658353           4.08151007</span></span>
-<span><span class="co">#&gt; FUCA2                 5.96809075           5.35508676</span></span>
-<span><span class="co">#&gt; GCLC                  5.15583017           5.10097765</span></span>
-<span><span class="co">#&gt; NFYA                  4.81249823           4.32481060</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $samples</span></span>
-<span><span class="co">#&gt;                           group lib.size norm.factors cancer</span></span>
-<span><span class="co">#&gt; SNU283_LARGE_INTESTINE        1 49889.02            1    CRC</span></span>
-<span><span class="co">#&gt; TGBC18TKB_LARGE_INTESTINE     1 49489.64            1    CRC</span></span>
-<span><span class="co">#&gt; SW837_LARGE_INTESTINE         1 56426.42            1    CRC</span></span>
-<span><span class="co">#&gt; SNU1040_LARGE_INTESTINE       1 54366.12            1    CRC</span></span>
-<span><span class="co">#&gt; HT29_LARGE_INTESTINE          1 49232.06            1    CRC</span></span>
 <span></span>
-<span><span class="co">## markers against for CRC cell lines</span></span>
-<span><span class="va">m_ccl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/remove_bg_snr.html">remove_bg_snr</a></span><span class="op">(</span></span>
-<span>  bg_data <span class="op">=</span> <span class="va">ccle_crc_5</span>,</span>
-<span>  sig_data <span class="op">=</span> <span class="va">proc_data</span>,</span>
-<span>  b_group_col <span class="op">=</span> <span class="st">"cancer"</span>,</span>
-<span>  b_target_group <span class="op">=</span> <span class="st">"CRC"</span>,</span>
-<span>  s_group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>,</span>
-<span>  s_target_group <span class="op">=</span> <span class="st">"NK"</span>,</span>
+<span><span class="co">## subset all NK cells of sig data</span></span>
+<span><span class="va">sig_mat</span> <span class="op">&lt;-</span> <span class="va">proc_data</span><span class="op">$</span><span class="va">voomE</span><span class="op">[</span>,<span class="va">proc_data</span><span class="op">$</span><span class="va">samples</span><span class="op">$</span><span class="va">celltype.ch1</span> <span class="op">==</span> <span class="st">"NK"</span><span class="op">]</span></span>
+<span><span class="co">## subset CRC cell lines of bg data</span></span>
+<span><span class="va">bg_mat</span> <span class="op">&lt;-</span> <span class="va">ccle_crc_5</span><span class="op">$</span><span class="va">counts</span><span class="op">[</span>, <span class="va">ccle_crc_5</span><span class="op">$</span><span class="va">samples</span><span class="op">$</span><span class="va">cancer</span> <span class="op">==</span> <span class="st">"CRC"</span><span class="op">]</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="ii-data-filtration">II) data filtration<a class="anchor" aria-label="anchor" href="#ii-data-filtration"></a>
+</h3>
+<p>With the subset of matrices, low expression genes need to be removed
+first as SNR is computed using scaled expression across genes.</p>
+<p>In this case, <code>sig_mat</code> from <code>proc_data</code> has
+been already filtered, only filter background data.</p>
+<p>As <code>bg_mat</code> only has 5 samples, keep the genes with logTPM
+&gt; 1 within more than 2 samples.</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## set cutoff for filtration</span></span>
+<span><span class="va">filter</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">keep</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">bg_mat</span> <span class="op">&gt;</span> <span class="va">filter</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">&gt;</span> <span class="va">filter</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span></span>
+<span><span class="va">bg_mat</span> <span class="op">&lt;-</span> <span class="va">bg_mat</span><span class="op">[</span><span class="va">keep</span>,<span class="op">]</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="iii-markers-pool-filtration">III) markers pool filtration<a class="anchor" aria-label="anchor" href="#iii-markers-pool-filtration"></a>
+</h3>
+<p>Now users can use <code><a href="../reference/remove_bg_exp_mat.html">remove_bg_exp_mat()</a></code> to refine the
+markers pool.</p>
+<p>Genes highly expressed in corresponding background data (in this case
+CRC adherent cell lines) will be removed.</p>
+<p>As markers and row names of <code>bg_mat</code> are gene SYMBOLs
+while <code>sig_mat</code> has ENSEMBL IDs as row names, mastR provides
+the gene ID conversion feature in most of the in-built functions by
+param <code>gene_id</code> to meet the mis-matched ID types of markers
+and input data.</p>
+<p><code><a href="../reference/remove_bg_exp_mat.html">remove_bg_exp_mat()</a></code> allows to specify the gene ID types
+using parameter <code>gene_id</code>, the 1st element will be used as
+the ID type of signal data, and the 2nd one will be used for background
+data.</p>
+<p><strong><em>Note</em></strong>: Both of <code>bg_mat</code> and
+<code>sig_mat</code> should be log-normalized.</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">m_ccl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/remove_bg_exp_mat.html">remove_bg_exp_mat</a></span><span class="op">(</span></span>
+<span>  sig_mat <span class="op">=</span> <span class="va">sig_mat</span>,</span>
+<span>  bg_mat <span class="op">=</span> <span class="va">bg_mat</span>,</span>
 <span>  markers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span>,</span>
-<span>  filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, <span class="co">## as there're only 5 samples in ccle_crc_5</span></span>
-<span>  gene_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SYMBOL"</span>, <span class="st">"ENSEMBL"</span><span class="op">)</span>, <span class="co">## different gene IDs in bg_ and sig_ data</span></span>
-<span>  s_slot <span class="op">=</span> <span class="st">"voomE"</span> <span class="co">## use voomE of proc_data as input</span></span>
+<span>  gene_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ENSEMBL"</span>, <span class="st">"SYMBOL"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:many mapping between keys and columns</span></span>
-<span><span class="co">#&gt; Warning in remove_bg_snr(bg_data = bg_data, sig_data = sig_data[[s_slot]], : Gene CCL4 is not in the sig_data! So remove it!</span></span>
-<span><span class="co">#&gt; Gene CCL5 is not in the sig_data! So remove it!</span></span>
-<span><span class="co">#&gt; Gene KIR2DL2 is not in the sig_data! So remove it!</span></span>
-<span><span class="co">#&gt; Gene KIR2DL5A is not in the sig_data! So remove it!</span></span>
-<span><span class="co">#&gt; Gene KIR2DS2 is not in the sig_data! So remove it!</span></span>
-<span><span class="co">#&gt; Gene KIR2DS5 is not in the sig_data! So remove it!</span></span>
-<span><span class="co">#&gt; Gene KLRA1P is not in the sig_data! So remove it!</span></span>
-<span><span class="co">#&gt; Gene LOC653757 is not in the sig_data! So remove it!</span></span>
-<span><span class="co">#&gt; Gene MGC24103 is not in the sig_data! So remove it!</span></span>
-<span><span class="co">#&gt; Gene TRDC is not in the sig_data! So remove it!</span></span>
-<span><span class="co">#&gt; Gene MGC61571 is not in the sig_data! So remove it!</span></span>
-<span><span class="co">#&gt; Gene PIK3R6 is not in the sig_data! So remove it!</span></span>
+<span><span class="co">#&gt; Warning in remove_bg_exp_mat(sig_mat = sig_mat, bg_mat = bg_mat, markers = geneIds(Markers), : Gene CCL4 is not in the sig_mat! So remove it!</span></span>
+<span><span class="co">#&gt; Gene CCL5 is not in the sig_mat! So remove it!</span></span>
+<span><span class="co">#&gt; Gene KIR2DL2 is not in the sig_mat! So remove it!</span></span>
+<span><span class="co">#&gt; Gene KIR2DL5A is not in the sig_mat! So remove it!</span></span>
+<span><span class="co">#&gt; Gene KIR2DS2 is not in the sig_mat! So remove it!</span></span>
+<span><span class="co">#&gt; Gene KIR2DS5 is not in the sig_mat! So remove it!</span></span>
+<span><span class="co">#&gt; Gene KLRA1P is not in the sig_mat! So remove it!</span></span>
+<span><span class="co">#&gt; Gene LOC653757 is not in the sig_mat! So remove it!</span></span>
+<span><span class="co">#&gt; Gene MGC24103 is not in the sig_mat! So remove it!</span></span>
+<span><span class="co">#&gt; Gene TRDC is not in the sig_mat! So remove it!</span></span>
+<span><span class="co">#&gt; Gene MGC61571 is not in the sig_mat! So remove it!</span></span>
+<span><span class="co">#&gt; Gene PIK3R6 is not in the sig_mat! So remove it!</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">m_ccl</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "IL32"   "RAB27B" "STYK1"  "RAB27A" "TXK"    "TTC38"</span></span></code></pre></div>
 </div>
-</div>
+<div class="section level3">
+<h3 id="use-ccle-as-background-data">use CCLE as background data<a class="anchor" aria-label="anchor" href="#use-ccle-as-background-data"></a>
+</h3>
+<p><a href="https://depmap.org/portal/download/" class="external-link">CCLE</a> downloaded by
+<code><a href="https://rdrr.io/pkg/depmap/man/TPM.html" class="external-link">depmap::depmap_TPM()</a></code> is also available for the
+refinement.</p>
+<p>As the whole CCLE is quite large, use <code>ccle_crc_5</code> to
+construct a small pseudo CCLE data with similar format.</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ccle</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">ccle_crc_5</span><span class="op">$</span><span class="va">counts</span>,</span>
+<span>                   gene_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">ccle_crc_5</span><span class="op">)</span>,</span>
+<span>                   primary_disease <span class="op">=</span> <span class="st">"CRC"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">gene_name</span>, <span class="va">primary_disease</span><span class="op">)</span>,</span>
+<span>                      names_to <span class="op">=</span> <span class="st">"depmap_id"</span>,</span>
+<span>                      values_to <span class="op">=</span> <span class="st">"rna_expression"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ccle</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 95,885 × 4</span></span></span>
+<span><span class="co">#&gt;    gene_name primary_disease depmap_id                 rna_expression</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> TSPAN6    CRC             SNU283_LARGE_INTESTINE             4.91 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> TSPAN6    CRC             TGBC18TKB_LARGE_INTESTINE          6.05 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> TSPAN6    CRC             SW837_LARGE_INTESTINE              5.26 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> TSPAN6    CRC             SNU1040_LARGE_INTESTINE            5.16 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> TSPAN6    CRC             HT29_LARGE_INTESTINE               4.40 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> TNMD      CRC             SNU283_LARGE_INTESTINE             0.176</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> TNMD      CRC             TGBC18TKB_LARGE_INTESTINE          0    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> TNMD      CRC             SW837_LARGE_INTESTINE              0.333</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> TNMD      CRC             SNU1040_LARGE_INTESTINE            0.465</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> TNMD      CRC             HT29_LARGE_INTESTINE               0    </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># … with 95,875 more rows</span></span></span></code></pre></div>
+<p>Because <code>ccle</code> is a long data, subsetting needs to be done
+before converting data into matrix.</p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## subset CRC cell lines of bg data</span></span>
+<span><span class="va">ccle</span> <span class="op">&lt;-</span> <span class="va">ccle</span><span class="op">[</span><span class="va">ccle</span><span class="op">$</span><span class="va">primary_disease</span> <span class="op">==</span> <span class="st">"CRC"</span>,<span class="op">]</span></span></code></pre></div>
+<p>As <code><a href="../reference/remove_bg_exp_mat.html">remove_bg_exp_mat()</a></code> can only accept matrix in wide
+format, users can use <code><a href="../reference/ccle_2_wide.html">ccle_2_wide()</a></code> to convert
+<code>ccle</code> into wide matrix.</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ccle</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ccle_2_wide.html">ccle_2_wide</a></span><span class="op">(</span>ccle <span class="op">=</span> <span class="va">ccle</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ccle</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span></span>
+<span><span class="co">#&gt;        SNU283_LARGE_INTESTINE TGBC18TKB_LARGE_INTESTINE SW837_LARGE_INTESTINE</span></span>
+<span><span class="co">#&gt; TSPAN6              4.9140861                  6.045923             5.2570106</span></span>
+<span><span class="co">#&gt; TNMD                0.1763228                  0.000000             0.3334237</span></span>
+<span><span class="co">#&gt; DPM1                6.9468478                  6.724105             6.9242187</span></span></code></pre></div>
+<p>Then the same cutoff of filtration is used for <code>ccle</code>.</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">keep</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">ccle</span> <span class="op">&gt;</span> <span class="va">filter</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">&gt;</span> <span class="va">filter</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span></span>
+<span><span class="va">ccle</span> <span class="op">&lt;-</span> <span class="va">ccle</span><span class="op">[</span><span class="va">keep</span>,<span class="op">]</span></span></code></pre></div>
+<p>The refined markers pool is returned now. As we use
+<code>ccle_crc_5</code> to construct pseudo <code>ccle</code>, the
+result should be the same as above.</p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">m_ccl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/remove_bg_exp_mat.html">remove_bg_exp_mat</a></span><span class="op">(</span></span>
+<span>  sig_mat <span class="op">=</span> <span class="va">sig_mat</span>,</span>
+<span>  bg_mat <span class="op">=</span> <span class="va">ccle</span>,</span>
+<span>  markers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span>,</span>
+<span>  gene_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ENSEMBL"</span>, <span class="st">"SYMBOL"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; 'select()' returned 1:many mapping between keys and columns</span></span>
+<span><span class="co">#&gt; Warning in remove_bg_exp_mat(sig_mat = sig_mat, bg_mat = ccle, markers = geneIds(Markers), : Gene CCL4 is not in the sig_mat! So remove it!</span></span>
+<span><span class="co">#&gt; Gene CCL5 is not in the sig_mat! So remove it!</span></span>
+<span><span class="co">#&gt; Gene KIR2DL2 is not in the sig_mat! So remove it!</span></span>
+<span><span class="co">#&gt; Gene KIR2DL5A is not in the sig_mat! So remove it!</span></span>
+<span><span class="co">#&gt; Gene KIR2DS2 is not in the sig_mat! So remove it!</span></span>
+<span><span class="co">#&gt; Gene KIR2DS5 is not in the sig_mat! So remove it!</span></span>
+<span><span class="co">#&gt; Gene KLRA1P is not in the sig_mat! So remove it!</span></span>
+<span><span class="co">#&gt; Gene LOC653757 is not in the sig_mat! So remove it!</span></span>
+<span><span class="co">#&gt; Gene MGC24103 is not in the sig_mat! So remove it!</span></span>
+<span><span class="co">#&gt; Gene TRDC is not in the sig_mat! So remove it!</span></span>
+<span><span class="co">#&gt; Gene MGC61571 is not in the sig_mat! So remove it!</span></span>
+<span><span class="co">#&gt; Gene PIK3R6 is not in the sig_mat! So remove it!</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">m_ccl</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "IL32"   "RAB27B" "STYK1"  "RAB27A" "TXK"    "TTC38"</span></span></code></pre></div>
+<p><strong><em>Note:</em></strong></p>
+<p>mastR provides a wrapper function <code><a href="../reference/remove_bg_exp.html">remove_bg_exp()</a></code> to do
+Step 3. I) II) III) all in one single function call.</p>
+<p>CCLE long data is also accepted by setting param
+<code>bg_data = 'CCLE'</code> and pass CCLE data to param
+<code>ccle_tpm</code> and <code>ccle_meta</code>. Without the latter 2
+parameters, users can use the whole CCLE from DepMap without loading it.
+More details in <code><a href="../reference/remove_bg_exp.html">help(remove_bg_exp)</a></code>.</p>
 </div>
 <div class="section level3">
-<h3 id="integrated-signature-genes">Integrated Signature Genes<a class="anchor" aria-label="anchor" href="#integrated-signature-genes"></a>
+<h3 id="combine-with-signature">Combine with Signature<a class="anchor" aria-label="anchor" href="#combine-with-signature"></a>
 </h3>
-<p>After above steps, now we need to integrate the results together.</p>
-<p>As we want the final signature to be specific to the target cell
-subset while less affected by the tissue/cancer purity, intersection is
-preferred to select the final signature after both specificity
-screening: cell type (subset) and cancer (tissue) type.</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<p>Then we combine the result with the signature <code>m_ct</code> we
+get from Step 2.</p>
+<p>Use intersection to get the final signature, which is specific to the
+target group as well as less affected by the background expression
+(tissue purity).</p>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sig_NK_CRC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/sets.html" class="external-link">intersect</a></span><span class="op">(</span><span class="va">m_ct</span>, <span class="va">m_ccl</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sig_NK_CRC</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "CD244" "CD247" "CTSW"  "GZMA"  "GZMM"  "IL2RB"</span></span></code></pre></div>
-<p>But here, if we directly use the <code>m_ct</code> instead of
-<code>Markers</code> as input <code>markers</code> for function
-<code><a href="../reference/remove_bg_snr.html">remove_bg_snr()</a></code>, then <code>m_ccl</code> is already the
-intersection result of original <code>m_ccl</code> and
-<code>m_ct</code>, so we can skip this.</p>
+<p>Here, if we directly use <code>m_ct</code> instead of
+<code>Markers</code> as input <code>markers</code> for
+<code><a href="../reference/remove_bg_exp_mat.html">remove_bg_exp_mat()</a></code> or <code><a href="../reference/remove_bg_exp.html">remove_bg_exp()</a></code>, then
+<code>m_ccl</code> is already the intersection result of original
+<code>m_ccl</code> and <code>m_ct</code>, so we can skip this.</p>
 <p>Now we get the final signature specific for both cell type and cancer
 type!</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="step-3--visualization-of-screening-results">Step 3. Visualization of Screening Results<a class="anchor" aria-label="anchor" href="#step-3--visualization-of-screening-results"></a>
+<h2 id="step-4--visualization-of-final-results">Step 4. Visualization of Final Results<a class="anchor" aria-label="anchor" href="#step-4--visualization-of-final-results"></a>
 </h2>
 <hr>
-<p>Now we assess how well the refined signature can discriminate our
-target group from others. mastR provides the following visualization
-functions for different purposes:</p>
+<p>To assess how well the refined signature can discriminate our target
+group from others, mastR provides the following visualization functions
+for different purposes:</p>
 <ul>
 <li><p><code><a href="../reference/pca_matrix_plot.html">pca_matrix_plot()</a></code> for matrix of PCA plots with top n
 PCs. To show if the target group can be separated from other groups and
 how well the separation is. Users can also know how much variance has
 been explained by PC1 with the signature.</p></li>
 <li><p><code><a href="../reference/sig_heatmap.html">sig_heatmap()</a></code> for signature heatmap across groups
-and its comparsion with markers pool. To validate if the signature shows
-clear and differential expression pattern between the target group and
-others, and if the pattern is clearer and cleaner after the screening
-when compared with un-screeed markers pool.</p></li>
+and its comparison with markers pool.<br>
+To validate if the signature shows clear and differential expression
+pattern between the target group and others, and if the pattern is
+clearer and cleaner after the refinement when compared with un-refined
+markers pool.</p></li>
 <li><p><code><a href="../reference/sig_rankdensity_plot.html">sig_rankdensity_plot()</a></code> for signature genes rank
-density distribution across groups. To see if the signature genes are
-highly expressed within each sample of the target group while lowly
-expressed in others.</p></li>
+density distribution across groups.<br>
+To see if the signature genes are highly expressed within each sample of
+the target group while lowly expressed in others.</p></li>
 <li><p><code><a href="../reference/sig_boxplot.html">sig_boxplot()</a></code> for signature expression or singscore
-boxplot across groups. To test the overall performance of the whole
-signature when applying it for scoring, singscore is used to compute the
-rank score with the whole signature. The boxplot across groups can be
-used to test if the whole signature is powerful enough to distinguish
-the target group from others on scoring level. Median expression of each
-signature gene is also allowed to plot.</p></li>
+boxplot across groups.<br>
+To test the overall performance of the whole signature when applying it
+for scoring, singscore is used to compute the rank score with the whole
+signature. The boxplot across groups can be used to test if the whole
+signature is powerful enough to distinguish the target group from others
+on scoring level. Median expression of each signature gene is also
+allowed to plot.</p></li>
 <li><p><code><a href="../reference/sig_scatter_plot.html">sig_scatter_plot()</a></code> for signature scaled expression
-scatter plot of the target group vs all other groups respectively. To
-visualize the correlation of the signature between the target and other
-groups, the row-scaled gene expression is computed to make the scatter
-plot. Based on it, we can easily see the co-expression correlation and
-signature’s specificity.</p></li>
+scatter plot of the target group vs all other groups respectively.<br>
+To visualize the correlation of the signature between the target and
+other groups, the row-scaled gene expression is computed to make the
+scatter plot. Based on it, we can easily see the co-expression
+correlation and signature’s specificity.</p></li>
 <li><p><code><a href="../reference/sig_gseaplot.html">sig_gseaplot()</a></code> for gene-set enrichment analysis
-result display. To further validate if the signature is significantly
-enriched in our target group compared with other groups,
+result display.<br>
+To further validate if the signature is significantly enriched in our
+target group compared with other groups,
 <code><a href="https://rdrr.io/pkg/clusterProfiler/man/GSEA.html" class="external-link">clusterProfiler::GSEA()</a></code> analysis is done inside this
 function. Users can choose to display ‘dotplot’ or gseaplot’ by
 <code><a href="https://rdrr.io/pkg/clusterProfiler/man/GSEA.html" class="external-link">clusterProfiler::GSEA()</a></code>.</p></li>
@@ -1113,11 +999,11 @@ multiple signatures).</li>
 <code>scale</code>: specify the <code>column</code> or
 <code>row</code> to be scaled or no scaling by <code>none</code>.</li>
 </ul>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sig_heatmap.html">sig_heatmap</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="va">proc_data</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">proc_data</span>, </span>
 <span>  sigs <span class="op">=</span> <span class="va">sig_NK_CRC</span>,</span>
-<span>  group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>,</span>
+<span>  group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>, </span>
 <span>  markers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span>,</span>
 <span>  gene_id <span class="op">=</span> <span class="st">"ENSEMBL"</span>,</span>
 <span>  slot <span class="op">=</span> <span class="st">"voomE"</span>,</span>
@@ -1142,19 +1028,8 @@ multiple signatures).</li>
 <span><span class="co">#&gt; Gene PIK3R6 is not in data</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:many mapping between keys and columns</span></span></code></pre></div>
 <p><img src="mastR_Demo_files/figure-html/heatmap-1.png" width="960"></p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="co">## for multiple datasets</span></span>
-<span><span class="co"># sig_heatmap(</span></span>
-<span><span class="co">#   data = list(data_6 = im_data_6,</span></span>
-<span><span class="co">#               proc_data = proc_data),</span></span>
-<span><span class="co">#   sigs = sig_NK_CRC,</span></span>
-<span><span class="co">#   group_col = c("celltype:ch1", "celltype.ch1"),</span></span>
-<span><span class="co">#   markers = geneIds(Markers),</span></span>
-<span><span class="co">#   gene_id = "ENSEMBL"</span></span>
-<span><span class="co"># ) + patchwork::plot_layout(guides = "collect", ncol = 1)</span></span></code></pre></div>
-<p>We can see the expression pattern of the signature is more
-distinguishable in NK cells.</p>
+<p>The expression pattern of the signature is more distinguishable in NK
+cells.</p>
 </div>
 <div class="section level3">
 <h3 id="signature-score-boxplot">Signature Score Boxplot<a class="anchor" aria-label="anchor" href="#signature-score-boxplot"></a>
@@ -1166,29 +1041,18 @@ data. NK score is calculated by <code>singscore</code> package.</p>
 <p><strong><em>Note</em></strong>: Boxplot of median expression of each
 gene can be plotted by setting param
 <code>type = "expression"</code>.</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sig_boxplot.html">sig_boxplot</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="va">proc_data</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">proc_data</span>, </span>
 <span>  sigs <span class="op">=</span> <span class="va">sig_NK_CRC</span>,</span>
-<span>  group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>,</span>
-<span>  target_group <span class="op">=</span> <span class="st">"NK"</span>,</span>
+<span>  group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>, </span>
+<span>  target_group <span class="op">=</span> <span class="st">"NK"</span>, </span>
 <span>  gene_id <span class="op">=</span> <span class="st">"ENSEMBL"</span>,</span>
 <span>  slot <span class="op">=</span> <span class="st">"voomE"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:many mapping between keys and columns</span></span></code></pre></div>
 <p><img src="mastR_Demo_files/figure-html/score%20boxplot-1.png" width="768"></p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="co">## To make boxplots for more than 1 immune datasets at once:</span></span>
-<span><span class="co"># sig_boxplot(</span></span>
-<span><span class="co">#   data = list(data_6 = im_data_6,</span></span>
-<span><span class="co">#               proc_data = proc_data),</span></span>
-<span><span class="co">#   sigs = sig_NK_CRC,</span></span>
-<span><span class="co">#   group_col = c("celltype:ch1", "celltype.ch1"),</span></span>
-<span><span class="co">#   target_group = "NK",</span></span>
-<span><span class="co">#   gene_id = "ENSEMBL"</span></span>
-<span><span class="co"># ) * guides(col = "none")</span></span></code></pre></div>
-<p>Obviously, our signature shows significantly higher score in NK
+<p>Obviously, the signature shows significantly higher score in NK
 cells.</p>
 </div>
 <div class="section level3">
@@ -1202,43 +1066,33 @@ cell subsets in the data.</p>
 genes should appear in left-top region (scaled expression &gt; 1 in NK,
 &lt; 1 in other), while the gene present in right-top region should
 represent the co-expression in the both groups.</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## before refinement</span></span>
 <span><span class="fu"><a href="../reference/sig_scatter_plot.html">sig_scatter_plot</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">proc_data</span>,</span>
 <span>  sigs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span>,</span>
-<span>  group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>,</span>
+<span>  group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>, </span>
 <span>  target_group <span class="op">=</span> <span class="st">"NK"</span>,</span>
 <span>  gene_id <span class="op">=</span> <span class="st">"ENSEMBL"</span>,</span>
 <span>  slot <span class="op">=</span> <span class="st">"voomE"</span></span>
-<span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Before Refinement"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:many mapping between keys and columns</span></span></code></pre></div>
 <p><img src="mastR_Demo_files/figure-html/abundance%20scatter%20plot-1.png" width="768"></p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co">## after refinement</span></span>
 <span><span class="fu"><a href="../reference/sig_scatter_plot.html">sig_scatter_plot</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">proc_data</span>,</span>
 <span>  sigs <span class="op">=</span> <span class="va">sig_NK_CRC</span>,</span>
-<span>  group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>,</span>
+<span>  group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>, </span>
 <span>  target_group <span class="op">=</span> <span class="st">"NK"</span>,</span>
 <span>  gene_id <span class="op">=</span> <span class="st">"ENSEMBL"</span>,</span>
 <span>  slot <span class="op">=</span> <span class="st">"voomE"</span></span>
-<span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"After Refinement"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 'select()' returned 1:many mapping between keys and columns</span></span></code></pre></div>
 <p><img src="mastR_Demo_files/figure-html/abundance%20scatter%20plot-2.png" width="768"></p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="co">## To make scatter plot for more than 1 immune datasets at once:</span></span>
-<span><span class="co"># sig_scatter_plot(</span></span>
-<span><span class="co">#   data = list(data_6 = im_data_6,</span></span>
-<span><span class="co">#               proc_data = proc_data),</span></span>
-<span><span class="co">#   sigs = sig_NK_CRC,</span></span>
-<span><span class="co">#   group_col = c("celltype:ch1", "celltype.ch1"),</span></span>
-<span><span class="co">#   target_group = "NK",</span></span>
-<span><span class="co">#   gene_id = "ENSEMBL")</span></span></code></pre></div>
-<p>Based on scatter plot result, we can actually do further filtration
-to improve signature specificity by removing signature genes present in
+<p>Based on the scatter plot result, further filtration can be done to
+improve signature specificity by removing signature genes present in
 right bottom or left bottom region.</p>
 </div>
 <div class="section level3">
@@ -1248,54 +1102,20 @@ right bottom or left bottom region.</p>
 immune cell subsets. Use <code><a href="../reference/sig_gseaplot.html">sig_gseaplot()</a></code> function to make
 GSEA plot. Dotplot can be plotted by setting
 <code>method = "dotplot"</code>.</p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## gseaplot</span></span>
 <span><span class="fu"><a href="../reference/sig_gseaplot.html">sig_gseaplot</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="va">proc_data</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">proc_data</span>, </span>
 <span>  sigs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>sig <span class="op">=</span> <span class="va">sig_NK_CRC</span>, markers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>,</span>
+<span>  group_col <span class="op">=</span> <span class="st">"celltype.ch1"</span>, </span>
 <span>  target_group <span class="op">=</span> <span class="st">"NK"</span>,</span>
 <span>  gene_id <span class="op">=</span> <span class="st">"ENSEMBL"</span>,</span>
 <span>  slot <span class="op">=</span> <span class="st">"voomE"</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"gseaplot"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; 'select()' returned many:many mapping between keys and columns</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; preparing geneSet collections...</span></span>
-<span><span class="co">#&gt; GSEA analysis...</span></span>
-<span><span class="co">#&gt; leading edge analysis...</span></span>
-<span><span class="co">#&gt; done...</span></span>
-<span><span class="co">#&gt; preparing geneSet collections...</span></span>
-<span><span class="co">#&gt; GSEA analysis...</span></span>
-<span><span class="co">#&gt; leading edge analysis...</span></span>
-<span><span class="co">#&gt; done...</span></span>
-<span><span class="co">#&gt; preparing geneSet collections...</span></span>
-<span><span class="co">#&gt; GSEA analysis...</span></span>
-<span><span class="co">#&gt; leading edge analysis...</span></span>
-<span><span class="co">#&gt; done...</span></span>
-<span><span class="co">#&gt; preparing geneSet collections...</span></span>
-<span><span class="co">#&gt; GSEA analysis...</span></span>
-<span><span class="co">#&gt; leading edge analysis...</span></span>
-<span><span class="co">#&gt; done...</span></span>
-<span><span class="co">#&gt; preparing geneSet collections...</span></span>
-<span><span class="co">#&gt; GSEA analysis...</span></span>
-<span><span class="co">#&gt; leading edge analysis...</span></span>
-<span><span class="co">#&gt; done...</span></span></code></pre></div>
+<span><span class="op">)</span></span></code></pre></div>
 <p><img src="mastR_Demo_files/figure-html/gseaplot-1.png" width="960"></p>
-<p>It’s clear that our refined signature is enriched in all comparisons,
-and our refinement successfully removed the long tail from the markers
-pool.</p>
-<p><strong><em>Note:</em></strong></p>
-<p>mastR also implementes an additional feature to further increase the
-discriminative power of the signature between the fairly similar
-groups.</p>
-<p>By setting <code>keep.top</code> and <code>keep.group</code>, the top
-n DEGs of specified DE comparisons of similar groups can be kept, DEGs
-are ranked based on <code>Rank</code> param. For instance, if we want
-keep more distinguishable genes between NK and CD8+ T cells, we can set
-<code>keep.group = "CD8"</code> or <code>keep.group = "NK-CD8"</code>
-and use <code>keep.top = n</code> to specify how many top genes in that
-comparison should be kept.</p>
+<p>It’s clear that the refined signature is enriched in all comparisons,
+and mastR successfully removed the long tail from the markers pool.</p>
 </div>
 </div>
 <div class="section level2">
@@ -1326,20 +1146,22 @@ users can choose to aggregate the ranked lists via
 <code>RobustRankAggreg</code> method by setting
 <code>comb = "RRA"</code> (as our output of signature by screening
 function is ordered based on the given <code>Rank</code>).</p>
-<p>The advantage is that we can avoid over-normalizing or mis-correcting
-when carrying out data integration. And we can get more robust and
-conserved signature across datasets. It’s better than
-“RemoveBatchEffect” sometimes.</p>
+<p>The advantage is that users can avoid over-normalizing or
+mis-correcting when carrying out data integration. And users can get
+more robust and conserved signature across datasets. It’s better than
+“Remove Batch Effect” sometimes.</p>
 <p>Of course, easy way such as “union” and “intersect” is also supported
-besides “RRA” (Robust Rank Aggreg), by setting <code>comb = union</code>
-or <code>comb = intersect</code>.</p>
+besides “RRA” (Robust Rank Aggregation), by setting
+<code>comb = union</code> or <code>comb = intersect</code>.</p>
 <p>It’s better to use union when you get only a few genes screened for
 each dataset, while “RRA” is better to pick up significant genes from
 large DEG lists, “intersect” is proper for highly overlapping gene
 lists.</p>
-<p>Here, we will repeatedly use im_data_6 to show how it works on
-multiple datasets.</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<p><strong><em>Note:</em></strong> All signature visualization functions
+in mastR support multiple datasets. More details in <code>help</code>
+function.</p>
+<p>Repeatedly use <code>im_data_6</code> as an example here.</p>
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## In the demo, we just repeatedly use im_data_6 as a show case</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
 <span><span class="va">m_ct_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filter_subset_sig.html">filter_subset_sig</a></span><span class="op">(</span></span>
@@ -1347,7 +1169,10 @@ multiple datasets.</p>
 <span>  markers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span>,</span>
 <span>  group_col <span class="op">=</span> <span class="st">"celltype:ch1"</span>,</span>
 <span>  target_group <span class="op">=</span> <span class="st">"NK"</span>,</span>
-<span>  gene_id <span class="op">=</span> <span class="st">"ENSEMBL"</span></span>
+<span>  feature_selection <span class="op">=</span> <span class="st">"auto"</span>,</span>
+<span>  dir <span class="op">=</span> <span class="st">"UP"</span>, <span class="co">## specify to keep "UP" or "DOWN" regulated genes</span></span>
+<span>  gene_id <span class="op">=</span> <span class="st">"ENSEMBL"</span>,</span>
+<span>  comb <span class="op">=</span> <span class="va">union</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## we will get exactly the same list</span></span>
@@ -1358,13 +1183,15 @@ multiple datasets.</p>
 <span><span class="co">## if we choose 'RRA', s_thres is to determine the threshold for ranking score</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
 <span><span class="va">m_ct_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filter_subset_sig.html">filter_subset_sig</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>A <span class="op">=</span> <span class="va">im_data_6</span>, B <span class="op">=</span> <span class="va">im_data_6</span><span class="op">)</span>,</span>
+<span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>A <span class="op">=</span> <span class="va">im_data_6</span>, B <span class="op">=</span> <span class="va">im_data_6</span><span class="op">)</span>, </span>
 <span>  markers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">geneIds</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span>,</span>
 <span>  group_col <span class="op">=</span> <span class="st">"celltype:ch1"</span>,</span>
 <span>  target_group <span class="op">=</span> <span class="st">"NK"</span>,</span>
+<span>  feature_selection <span class="op">=</span> <span class="st">"auto"</span>,</span>
+<span>  dir <span class="op">=</span> <span class="st">"UP"</span>, <span class="co">## specify to keep "UP" or "DOWN" regulated genes</span></span>
 <span>  gene_id <span class="op">=</span> <span class="st">"ENSEMBL"</span>,</span>
-<span>  comb <span class="op">=</span> <span class="st">"RRA"</span>, <span class="co">## change this to use different strategy, default is "union"</span></span>
-<span>  s_thres <span class="op">=</span> <span class="fl">0.5</span> <span class="co">## only work when comb = "RRA", set a threshold for ranking score</span></span>
+<span>  comb <span class="op">=</span> <span class="st">"RRA"</span>,  <span class="co">## change this to use different strategy, default is "union"</span></span>
+<span>  s_thres <span class="op">=</span> <span class="fl">0.5</span>  <span class="co">## only work when comb = "RRA", set a threshold for ranking score</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## we can get only 8 signature genes this time</span></span>
@@ -1380,7 +1207,7 @@ abundant scRNA resource, mastR also provides
 pseudo-bulk data, which can then be used in the above workflow.</p>
 <p><code><a href="../reference/pseudo_samples.html">pseudo_samples()</a></code> can help aggregate cells into
 pseudo-sample according to the given factor(s).</p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## create a test scRNA object of 100 genes x 100 cells</span></span>
 <span><span class="va">counts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">10000</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span>, <span class="fl">100</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">100</span></span>
@@ -1404,71 +1231,70 @@ pseudo-sample according to the given factor(s).</p>
 <div class="section level2">
 <h2 class="tabset tabset-fade tabset-pills" id="applications">Applications<a class="anchor" aria-label="anchor" href="#applications"></a>
 </h2>
-<p>After getting the signature, we can apply it in multple ways. In this
-short demo, we will just show 3 simple applications of it.</p>
-<p>Here we will simulate a scRNA data using <code>splatter</code>. Then
-randomly pseudo-bulking it to generate pseudo bulk data for scoring and
-deconvolution.</p>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<p>After getting the signature, users can apply it in multiple ways. In
+this short demo, we will just show 3 simple applications of it, but not
+run here.</p>
+<p>First simulate a scRNA data using <code>splatter</code> package.</p>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">splatter</span><span class="op">)</span></span>
 <span><span class="co">## set seed for reproduce as there's permutation inside</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">sim_params</span> <span class="op">&lt;-</span> <span class="fu">newSplatParams</span><span class="op">(</span></span>
-<span>  nGenes <span class="op">=</span> <span class="fl">1000</span>,</span>
+<span>  nGenes <span class="op">=</span> <span class="fl">1e4</span>,</span>
 <span>  batchCells <span class="op">=</span> <span class="fl">3000</span>,</span>
 <span>  group.prob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.4</span>, length.out <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>,</span>
-<span>  de.prob <span class="op">=</span> <span class="fl">0.02</span>,</span>
+<span>  de.prob <span class="op">=</span> <span class="fl">0.01</span>,</span>
 <span>  <span class="co"># de.downProb = 0,  ## only set up-regulated genes for each group</span></span>
 <span>  de.facLoc <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  de.facScale <span class="op">=</span> <span class="fl">0.4</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">data_sim</span> <span class="op">&lt;-</span> <span class="fu">splatSimulate</span><span class="op">(</span><span class="va">sim_params</span>, method <span class="op">=</span> <span class="st">"groups"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">markers_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/lapply.html" class="external-link">lapply</a></span><span class="op">(</span></span>
-<span>  <span class="fu">rowData</span><span class="op">(</span><span class="va">data_sim</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"DEFacGroup"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span><span class="op">]</span>,</span>
-<span>  \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">data_sim</span><span class="op">[</span><span class="va">x</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">## aggregate into pseudo-bulk samples</span></span>
+<span><span class="va">data_sim</span> <span class="op">&lt;-</span> <span class="fu">splatSimulate</span><span class="op">(</span><span class="va">sim_params</span>, method <span class="op">=</span> <span class="st">"groups"</span><span class="op">)</span></span></code></pre></div>
+<p>Markers list for each group can be obtained from the simulated scRNA
+data.</p>
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">markers_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu">rowData</span><span class="op">(</span><span class="va">data_sim</span><span class="op">)</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"DEFacGroup"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span><span class="op">]</span>,</span>
+<span>                       \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">data_sim</span><span class="op">[</span><span class="va">x</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Then use <code><a href="../reference/pseudo_samples.html">pseudo_samples()</a></code> to get pseudo-bulk data and
+create a DGEList.</p>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## aggregate into pseudo-bulk samples</span></span>
 <span><span class="va">pb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pseudo_samples.html">pseudo_samples</a></span><span class="op">(</span><span class="va">data_sim</span>,</span>
-<span>  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Batch"</span>, <span class="st">"Group"</span><span class="op">)</span>,</span>
-<span>  min.cells <span class="op">=</span> <span class="fl">50</span>, max.cells <span class="op">=</span> <span class="fl">100</span></span>
-<span><span class="op">)</span></span>
+<span>                     by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Batch"</span>, <span class="st">"Group"</span><span class="op">)</span>,</span>
+<span>                     min.cells <span class="op">=</span> <span class="fl">50</span>, max.cells <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span><span class="va">dge</span> <span class="op">&lt;-</span> <span class="fu">DGEList</span><span class="op">(</span></span>
 <span>  counts <span class="op">=</span> <span class="va">pb</span>,</span>
-<span>  samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>    group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">".*\\.(.*)_.*"</span>, <span class="st">"\\1"</span>, <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    Batch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"(.*)\\..*"</span>, <span class="st">"\\1"</span>, <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    sampleID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"(.*)_.*"</span>, <span class="st">"\\1"</span>, <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="op">)</span></span>
+<span>  samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">".*\\.(.*)_.*"</span>, <span class="st">"\\1"</span>,<span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                       Batch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"(.*)\\..*"</span>, <span class="st">"\\1"</span>,<span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                       sampleID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"(.*)_.*"</span>, <span class="st">"\\1"</span>,<span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<p>Use mastR wrapper function to get signature lists for each group. No
+markers pool of interest and no background here.</p>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
 <span><span class="va">sig_ls</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Group"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span>, \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="../reference/filter_subset_sig.html">filter_subset_sig</a></span><span class="op">(</span></span>
 <span>    data <span class="op">=</span> <span class="va">dge</span>,</span>
 <span>    markers <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>    group_col <span class="op">=</span> <span class="st">"group"</span>,</span>
-<span>    target_group <span class="op">=</span> <span class="va">x</span>,</span>
-<span>    lfc <span class="op">=</span> <span class="fl">0</span></span>
+<span>    target_group <span class="op">=</span> <span class="va">x</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">sig_ls</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Group"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">## venn plot</span></span>
-<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, \<span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="fu">ggvenn</span><span class="fu">::</span><span class="fu">ggvenn</span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    sig <span class="op">=</span> <span class="va">sig_ls</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>,</span>
-<span>    marker <span class="op">=</span> <span class="va">markers_list</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  show_percentage <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">sig_ls</span><span class="op">)</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu">patchwork</span><span class="fu">::</span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">## heatmap</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">sig_ls</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Group"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span></span></code></pre></div>
+<p>Show the overlapping of the signature lists generated by mastR and
+the markers lists from simulation.</p>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## venn plot</span></span>
+<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, \<span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="fu">ggvenn</span><span class="fu">::</span><span class="fu">ggvenn</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>sig <span class="op">=</span> <span class="va">sig_ls</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>                                          marker <span class="op">=</span> <span class="va">markers_list</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>                                     show_percentage <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>              <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">sig_ls</span><span class="op">)</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">patchwork</span><span class="fu">::</span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></code></pre></div>
+<p>Use <code><a href="../reference/sig_heatmap.html">sig_heatmap()</a></code> to compare the expression of
+signatures and markers.</p>
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## heatmap</span></span>
 <span><span class="fu"><a href="../reference/sig_heatmap.html">sig_heatmap</a></span><span class="op">(</span></span>
 <span>  <span class="fu">cpm</span><span class="op">(</span><span class="va">dge</span>, log <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>  sigs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">sig_ls</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"TP53"</span><span class="op">)</span><span class="op">)</span>, <span class="co">## add a real gene to pass gene check</span></span>
@@ -1479,6 +1305,8 @@ deconvolution.</p>
 <span>  cluster_column_slices <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  cluster_row_slices <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+<p>Then randomly aggregate scRNA data to generate pseudo bulk data for
+scoring and deconvolution.</p>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="co">## randomly generate aggregating idx</span></span>
@@ -1489,30 +1317,34 @@ deconvolution.</p>
 <span><span class="va">pb_r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pseudo_samples.html">pseudo_samples</a></span><span class="op">(</span><span class="va">data_sim</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Batch"</span>, <span class="st">"rand_idx"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">dge_r</span> <span class="op">&lt;-</span> <span class="fu">DGEList</span><span class="op">(</span></span>
 <span>  counts <span class="op">=</span> <span class="va">pb_r</span>,</span>
-<span>  samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>    group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">".*\\.(.*)_.*"</span>, <span class="st">"\\1"</span>, <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">pb_r</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    Batch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"(.*)\\..*"</span>, <span class="st">"\\1"</span>, <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">pb_r</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    sampleID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"(.*)_.*"</span>, <span class="st">"\\1"</span>, <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">pb_r</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">## append cellular composition</span></span>
-<span><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">data_sim</span><span class="op">@</span><span class="va">colData</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">".*\\.(.*)_.*"</span>, <span class="st">"\\1"</span>,<span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">pb_r</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                       Batch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"(.*)\\..*"</span>, <span class="st">"\\1"</span>,<span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">pb_r</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                       sampleID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"(.*)_.*"</span>, <span class="st">"\\1"</span>,<span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">pb_r</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>Cellular proportion can be added into the random pseudo bulk
+data.</p>
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## append cellular composition</span></span>
+<span><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu">colData</span><span class="op">(</span><span class="va">data_sim</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">rand_idx</span>, <span class="va">Group</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>count <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">pivot_wider</span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">Group</span>, values_from <span class="op">=</span> <span class="va">count</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>rand_idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">rand_idx</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">tmp</span><span class="op">[</span>, <span class="op">-</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">signif</a></span><span class="op">(</span><span class="va">tmp</span><span class="op">[</span>, <span class="op">-</span><span class="fl">1</span><span class="op">]</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">tmp</span><span class="op">[</span>, <span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">tmp</span><span class="op">[</span>,<span class="op">-</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">signif</a></span><span class="op">(</span><span class="va">tmp</span><span class="op">[</span>,<span class="op">-</span><span class="fl">1</span><span class="op">]</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">tmp</span><span class="op">[</span>,<span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">dge_r</span><span class="op">$</span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">dge_r</span><span class="op">$</span><span class="va">samples</span>, <span class="va">tmp</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"group"</span> <span class="op">=</span> <span class="st">"rand_idx"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## data process</span></span>
 <span><span class="va">keep</span> <span class="op">&lt;-</span> <span class="fu">filterByExpr</span><span class="op">(</span><span class="va">dge_r</span><span class="op">)</span></span>
-<span><span class="va">dge_r</span> <span class="op">&lt;-</span> <span class="va">dge_r</span><span class="op">[</span><span class="va">keep</span>, , keep.lib.sizes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span></span>
+<span><span class="va">dge_r</span> <span class="op">&lt;-</span> <span class="va">dge_r</span><span class="op">[</span><span class="va">keep</span>,, keep.lib.sizes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span></span>
 <span><span class="va">dge_r</span> <span class="op">&lt;-</span> <span class="fu">calcNormFactors</span><span class="op">(</span><span class="va">dge_r</span>, method <span class="op">=</span> <span class="st">"TMM"</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="score">Score<a class="anchor" aria-label="anchor" href="#score"></a>
 </h3>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<p>Multiple scores are calculated by <code>singscore</code> package
+using signatures and markers. Use scatter plot to show the correlation
+between the score and the actual cellular proportion.</p>
+<p>For signatures generated by mastR:</p>
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://davislaboratory.github.io/singscore" class="external-link">singscore</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">rank_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://DavisLaboratory.github.io/singscore/reference/rankGenes.html" class="external-link">rankGenes</a></span><span class="op">(</span><span class="fu">edgeR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/edgeR/man/cpm.html" class="external-link">cpm</a></span><span class="op">(</span><span class="va">dge_r</span>, log <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
@@ -1520,34 +1352,31 @@ deconvolution.</p>
 <span><span class="co">## score based on sig_ls</span></span>
 <span><span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://DavisLaboratory.github.io/singscore/reference/multiScore.html" class="external-link">multiScore</a></span><span class="op">(</span><span class="va">rank_data</span>, upSetColc <span class="op">=</span> <span class="fu"><a href="../reference/gls2gsc.html">gls2gsc</a></span><span class="op">(</span><span class="va">sig_ls</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu">pivot_longer</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/cbind.html" class="external-link">cbind</a></span><span class="op">(</span>Sample <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">dge_r</span><span class="op">)</span>, <span class="va">dge_r</span><span class="op">$</span><span class="va">samples</span><span class="op">[</span>, <span class="fl">6</span><span class="op">:</span><span class="fl">9</span><span class="op">]</span><span class="op">)</span>,</span>
-<span>  <span class="op">-</span><span class="va">Sample</span>,</span>
-<span>  names_to <span class="op">=</span> <span class="st">"Group"</span>, values_to <span class="op">=</span> <span class="st">"Prop"</span></span>
-<span><span class="op">)</span></span>
+<span><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu">pivot_longer</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/cbind.html" class="external-link">cbind</a></span><span class="op">(</span>Sample <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">dge_r</span><span class="op">)</span>, <span class="va">dge_r</span><span class="op">$</span><span class="va">samples</span><span class="op">[</span>,<span class="fl">6</span><span class="op">:</span><span class="fl">9</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>                    <span class="op">-</span><span class="va">Sample</span>, names_to <span class="op">=</span> <span class="st">"Group"</span>, values_to <span class="op">=</span> <span class="st">"Prop"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">scores</span><span class="op">$</span><span class="va">Scores</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Sample <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">scores</span><span class="op">$</span><span class="va">Scores</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">pivot_longer</span><span class="op">(</span><span class="op">-</span><span class="va">Sample</span>, names_to <span class="op">=</span> <span class="st">"Group"</span>, values_to <span class="op">=</span> <span class="st">"Score"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">scores</span><span class="op">$</span><span class="va">Scores</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Sample <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">scores</span><span class="op">$</span><span class="va">Scores</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">pivot_longer</span><span class="op">(</span><span class="op">-</span><span class="va">Sample</span>, names_to <span class="op">=</span> <span class="st">"Group"</span>, values_to <span class="op">=</span> <span class="st">"Score"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">tmp</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">tmp</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Prop</span>, y <span class="op">=</span> <span class="va">Score</span>, col <span class="op">=</span> <span class="va">Group</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">Group</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/stat_cor.html" class="external-link">stat_cor</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">## score based on markers_list</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>For markers list from simulation:</p>
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## score based on markers_list</span></span>
 <span><span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://DavisLaboratory.github.io/singscore/reference/multiScore.html" class="external-link">multiScore</a></span><span class="op">(</span><span class="va">rank_data</span>, upSetColc <span class="op">=</span> <span class="fu"><a href="../reference/gls2gsc.html">gls2gsc</a></span><span class="op">(</span><span class="va">markers_list</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu">pivot_longer</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/cbind.html" class="external-link">cbind</a></span><span class="op">(</span>Sample <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">dge_r</span><span class="op">)</span>, <span class="va">dge_r</span><span class="op">$</span><span class="va">samples</span><span class="op">[</span>, <span class="fl">6</span><span class="op">:</span><span class="fl">9</span><span class="op">]</span><span class="op">)</span>,</span>
-<span>  <span class="op">-</span><span class="va">Sample</span>,</span>
-<span>  names_to <span class="op">=</span> <span class="st">"Group"</span>, values_to <span class="op">=</span> <span class="st">"Prop"</span></span>
-<span><span class="op">)</span></span>
+<span><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu">pivot_longer</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/cbind.html" class="external-link">cbind</a></span><span class="op">(</span>Sample <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">dge_r</span><span class="op">)</span>, <span class="va">dge_r</span><span class="op">$</span><span class="va">samples</span><span class="op">[</span>,<span class="fl">6</span><span class="op">:</span><span class="fl">9</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>                    <span class="op">-</span><span class="va">Sample</span>, names_to <span class="op">=</span> <span class="st">"Group"</span>, values_to <span class="op">=</span> <span class="st">"Prop"</span><span class="op">)</span></span>
 <span><span class="va">tmp</span><span class="op">$</span><span class="va">Group</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"DEFac"</span>, <span class="va">tmp</span><span class="op">$</span><span class="va">Group</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">scores</span><span class="op">$</span><span class="va">Scores</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Sample <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">scores</span><span class="op">$</span><span class="va">Scores</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">pivot_longer</span><span class="op">(</span><span class="op">-</span><span class="va">Sample</span>, names_to <span class="op">=</span> <span class="st">"Group"</span>, values_to <span class="op">=</span> <span class="st">"Score"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">scores</span><span class="op">$</span><span class="va">Scores</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Sample <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">scores</span><span class="op">$</span><span class="va">Scores</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">pivot_longer</span><span class="op">(</span><span class="op">-</span><span class="va">Sample</span>, names_to <span class="op">=</span> <span class="st">"Group"</span>, values_to <span class="op">=</span> <span class="st">"Score"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">tmp</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">tmp</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Prop</span>, y <span class="op">=</span> <span class="va">Score</span>, col <span class="op">=</span> <span class="va">Group</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -1559,32 +1388,41 @@ deconvolution.</p>
 <div class="section level3">
 <h3 id="deconvolution">Deconvolution<a class="anchor" aria-label="anchor" href="#deconvolution"></a>
 </h3>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<p>Use <code>DWLS</code> package for cellular deconvolution.</p>
+<p>Use signatures to subset scRNA reference data and build the signature
+profile on it. Cellular proportion can be obtained based on it.</p>
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sig_matrix</span> <span class="op">&lt;-</span> <span class="fu">DWLS</span><span class="fu">::</span><span class="fu">buildSignatureMatrixMAST</span><span class="op">(</span></span>
-<span>  scdata <span class="op">=</span> <span class="va">data_sim</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">counts</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">sig_ls</span><span class="op">)</span><span class="op">)</span>, <span class="op">]</span>,</span>
+<span>  scdata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/dge.html" class="external-link">counts</a></span><span class="op">(</span><span class="va">data_sim</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">sig_ls</span><span class="op">)</span><span class="op">)</span>,<span class="op">]</span>,</span>
 <span>  id <span class="op">=</span> <span class="va">data_sim</span><span class="op">$</span><span class="va">Group</span>,</span>
 <span>  path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">DWLS</span><span class="fu">::</span><span class="fu">solveDampenedWLS</span><span class="op">(</span><span class="va">sig_matrix</span>, <span class="va">pb_r</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">sig_matrix</span><span class="op">)</span>, <span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">DWLS</span><span class="fu">::</span><span class="fu">solveDampenedWLS</span><span class="op">(</span><span class="va">sig_matrix</span>, <span class="va">pb_r</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">sig_matrix</span><span class="op">)</span>,<span class="op">]</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="annotation">Annotation<a class="anchor" aria-label="anchor" href="#annotation"></a>
 </h3>
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<p>Use <code>singscore</code> as a marker-based annotation method,
+calculate the scores based on signatures and markers list, then assign
+each cell to the cell type with the highest score. Compare the result of
+signatures and markers list.</p>
+<p>Using signatures:</p>
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://davislaboratory.github.io/singscore" class="external-link">singscore</a></span><span class="op">)</span></span>
 <span><span class="co">## normalization</span></span>
 <span><span class="va">data_sim</span> <span class="op">&lt;-</span> <span class="fu">scuttle</span><span class="fu">::</span><span class="fu">computePooledFactors</span><span class="op">(</span><span class="va">data_sim</span>, clusters <span class="op">=</span> <span class="va">data_sim</span><span class="op">$</span><span class="va">Group</span><span class="op">)</span></span>
 <span><span class="va">data_sim</span> <span class="op">&lt;-</span> <span class="fu">scuttle</span><span class="fu">::</span><span class="fu">logNormCounts</span><span class="op">(</span><span class="va">data_sim</span><span class="op">)</span></span>
 <span><span class="co">## use singscore for annotation</span></span>
-<span><span class="va">rank_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://DavisLaboratory.github.io/singscore/reference/rankGenes.html" class="external-link">rankGenes</a></span><span class="op">(</span><span class="va">data_sim</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">logcounts</span><span class="op">)</span></span>
+<span><span class="va">rank_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://DavisLaboratory.github.io/singscore/reference/rankGenes.html" class="external-link">rankGenes</a></span><span class="op">(</span><span class="fu">logcounts</span><span class="op">(</span><span class="va">data_sim</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## score using sig_ls</span></span>
 <span><span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://DavisLaboratory.github.io/singscore/reference/multiScore.html" class="external-link">multiScore</a></span><span class="op">(</span><span class="va">rank_data</span>, upSetColc <span class="op">=</span> <span class="fu"><a href="../reference/gls2gsc.html">gls2gsc</a></span><span class="op">(</span><span class="va">sig_ls</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">data_sim</span><span class="op">$</span><span class="va">Pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Group"</span>, <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">scores</span><span class="op">$</span><span class="va">Scores</span>, <span class="fl">2</span>, <span class="va">which.max</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">data_sim</span><span class="op">$</span><span class="va">Pred</span> <span class="op">==</span> <span class="va">data_sim</span><span class="op">$</span><span class="va">Group</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">## score using markers_list</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">data_sim</span><span class="op">$</span><span class="va">Pred</span> <span class="op">==</span> <span class="va">data_sim</span><span class="op">$</span><span class="va">Group</span><span class="op">)</span></span></code></pre></div>
+<p>Using markers list:</p>
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## score using markers_list</span></span>
 <span><span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://DavisLaboratory.github.io/singscore/reference/multiScore.html" class="external-link">multiScore</a></span><span class="op">(</span><span class="va">rank_data</span>, upSetColc <span class="op">=</span> <span class="fu"><a href="../reference/gls2gsc.html">gls2gsc</a></span><span class="op">(</span><span class="va">markers_list</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">data_sim</span><span class="op">$</span><span class="va">Pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Group"</span>, <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">scores</span><span class="op">$</span><span class="va">Scores</span>, <span class="fl">2</span>, <span class="va">which.max</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">data_sim</span><span class="op">$</span><span class="va">Pred</span> <span class="op">==</span> <span class="va">data_sim</span><span class="op">$</span><span class="va">Group</span><span class="op">)</span></span></code></pre></div>
@@ -1594,7 +1432,7 @@ deconvolution.</p>
 <h2 id="session-info">Session Info<a class="anchor" aria-label="anchor" href="#session-info"></a>
 </h2>
 <hr>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; R version 4.2.2 (2022-10-31)</span></span>
 <span><span class="co">#&gt; Platform: x86_64-pc-linux-gnu (64-bit)</span></span>
@@ -1713,26 +1551,13 @@ deconvolution.</p>
 <span><span class="co">#&gt; [175] codetools_0.2-19            fgsea_1.24.0               </span></span>
 <span><span class="co">#&gt; [177] utf8_1.2.3                  lattice_0.20-45            </span></span>
 <span><span class="co">#&gt; [179] bslib_0.4.2                 spatstat.sparse_3.0-1      </span></span>
-<span><span class="co">#&gt; [181] tibble_3.2.0                leiden_0.4.3               </span></span>
+<span><span class="co">#&gt; [181] tibble_3.2.1                leiden_0.4.3               </span></span>
 <span><span class="co">#&gt; [183] GO.db_3.16.0                survival_3.5-5             </span></span>
 <span><span class="co">#&gt; [185] limma_3.54.2                rmarkdown_2.20             </span></span>
 <span><span class="co">#&gt; [187] desc_1.4.2                  munsell_0.5.0              </span></span>
 <span><span class="co">#&gt; [189] GetoptLong_1.0.5            GenomeInfoDbData_1.2.9     </span></span>
 <span><span class="co">#&gt; [191] iterators_1.0.14            reshape2_1.4.4             </span></span>
 <span><span class="co">#&gt; [193] gtable_0.3.2                Seurat_4.3.0</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
-</h2>
-<hr>
-<blockquote>
-<p>Cursons J, Souza-Fonseca-Guimaraes F, Foroutan M, Anderson A,
-Hollande F, Hediyeh-Zadeh S, Behren A, Huntington ND, Davis MJ. A Gene
-Signature Predicting Natural Killer Cell Infiltration and Improved
-Survival in Melanoma Patients. Cancer Immunol Res. 2019
-Jul;7(7):1162-1174. doi: 10.1158/2326-6066.CIR-18-0500. Epub 2019 May
-14. PMID: 31088844.</p>
-</blockquote>
 </div>
   </div>
 

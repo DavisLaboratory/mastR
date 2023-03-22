@@ -37,6 +37,9 @@
     <loc>/reference/NK_markers.html</loc>
   </url>
   <url>
+    <loc>/reference/ccle_2_wide.html</loc>
+  </url>
+  <url>
     <loc>/reference/ccle_crc_5.html</loc>
   </url>
   <url>
@@ -112,7 +115,10 @@
     <loc>/reference/pseudo_samples.html</loc>
   </url>
   <url>
-    <loc>/reference/remove_bg_snr.html</loc>
+    <loc>/reference/remove_bg_exp.html</loc>
+  </url>
+  <url>
+    <loc>/reference/remove_bg_exp_mat.html</loc>
   </url>
   <url>
     <loc>/reference/select_sig.html</loc>
