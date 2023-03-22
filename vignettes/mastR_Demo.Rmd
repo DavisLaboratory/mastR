@@ -94,9 +94,10 @@ This report demonstrates the signature screening workflow of NK cells in colorec
 
 **mastR screen the signature using the following 3 key steps:**
 
-  step 1. generate markers pool  
-  step 2. screen markers from the pool  
-  step 3. visualize signature performance
+  step 1. build markers pool  
+  step 2. identify signature from the pool  
+  step 3. refine signature by background expression  
+  step 4. visualize signature performance
 
 **Applications**
 
@@ -142,7 +143,7 @@ The first step is to define the original markers pool this analysis will be base
 
 The final signature will only be the intersected genes with this markers pool. The whole gene list of the data will be regarded as the markers pool if no preliminary result or interested genes are provided.
 
-***Note*** that `markers = NULL` won't keep any special genes if they fail the filtration by edgeR.
+***Note:*** `markers = NULL` won't keep any special genes if they fail the filtration by edgeR.
 
 If users have any preliminary knowledge about the target group type (cell type), they can build the markers pool of interest from the available datasets or build from MSigDB, PanglaoDB or LM7/LM22 using our in-built functions. All genes in the pool will be reserved for DE analysis even even if they are filtered out during the filtration of edgeR.
 
@@ -213,7 +214,7 @@ Similarly, using `gsc_plot()` users can visualize the overlapping gene sets.
 
 As the gene-set names are too long, for better visualization the gene-set names are replaced with letters and shown later.
 
-```{r show overlap}
+```{r show overlap, warning=FALSE}
 ## cut gene set name within 11 characters
 gsn <- setNames(names(MSig), LETTERS[seq_along(MSig)])
 for (i in seq_along(MSig)) {
@@ -413,6 +414,7 @@ Because the row names of `im_data_6` are ENSEMBL IDs while the markers are all g
 deg_up <- mapIds(org.Hs.eg.db::org.Hs.eg.db,
                  geneIds(sig_ct[["UP"]]),
                  "SYMBOL", "ENSEMBL")
+deg_up <- na.omit(deg_up)
 ## markers specific for NK cells
 m_ct <- intersect(geneIds(Markers), deg_up)
 names(m_ct) <- names(deg_up)[match(m_ct, deg_up)]  ## set ensembl ID as names for downstream visualization
@@ -427,15 +429,21 @@ It's clear the intersected genes explain more variance in PC1 compared with all 
 ```{r PCA on sig}
 ## PCA shows clear separation of NK cells
 ## after intersection
-pca_matrix_plot(proc_data[names(m_ct),],
+pca_matrix_plot(proc_data,
+                features = m_ct,
                 group_by = "celltype.ch1",
                 slot = "voomE",
-                n = 3) + ggtitle("Intersected UP DEGs")
+                n = 3,
+                gene_id = "ENSEMBL") +
+  patchwork::plot_annotation("Intersected UP DEGs")
 ## before intersection
-pca_matrix_plot(proc_data[names(deg_up),],
+pca_matrix_plot(proc_data,
+                features = as.vector(deg_up),
                 group_by = "celltype.ch1",
                 slot = "voomE",
-                n = 3) + ggtitle("All UP DEGs")
+                n = 3,
+                gene_id = "ENSEMBL") +
+  patchwork::plot_annotation("All UP DEGs")
 ```
 
 ***Note***:
@@ -510,9 +518,7 @@ Now users can use `remove_bg_exp_mat()` to refine the markers pool.
 
 Genes highly expressed in corresponding background data (in this case CRC adherent cell lines) will be removed. 
 
-As markers and row names of `bg_mat` are gene SYMBOLs while `sig_mat` has ENSEMBL IDs as row names, 
-
-mastR provides the gene ID conversion feature in most of the in-built functions by param `gene_id` to meet the mis-matched ID types of markers and input data.
+As markers and row names of `bg_mat` are gene SYMBOLs while `sig_mat` has ENSEMBL IDs as row names, mastR provides the gene ID conversion feature in most of the in-built functions by param `gene_id` to meet the mis-matched ID types of markers and input data.
 
 `remove_bg_exp_mat()` allows to specify the gene ID types using parameter `gene_id`, the 1st element will be used as the ID type of signal data, and the 2nd one will be used for background data.
 
@@ -604,7 +610,7 @@ Here, if we directly use `m_ct` instead of `Markers` as input `markers` for `rem
 Now we get the final signature specific for both cell type and cancer type!
 
 
-# Step 4. Visualization of Screening Results
+# Step 4. Visualization of Final Results
 
 ------------------------------------------------------------------------
 
@@ -691,7 +697,7 @@ sig_scatter_plot(
   target_group = "NK",
   gene_id = "ENSEMBL",
   slot = "voomE"
-)
+) + ggtitle("Before Refinement")
 
 ## after refinement
 sig_scatter_plot(
@@ -701,7 +707,7 @@ sig_scatter_plot(
   target_group = "NK",
   gene_id = "ENSEMBL",
   slot = "voomE"
-)
+) + ggtitle("After Refinement")
 ```
 
 Based on the scatter plot result, further filtration can be done to improve signature specificity by removing signature genes present in right bottom or left bottom region.
