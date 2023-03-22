@@ -1,6 +1,6 @@
 test_that("gls2gsc works", {
   data("msigdb_gobp_nk")
-  ## test geneset list
+  ## test gene set list
   gsc1 <- gls2gsc(GSEABase::geneIds(msigdb_gobp_nk[1:3]))
   expect_setequal(
     GSEABase::geneIds(gsc1),

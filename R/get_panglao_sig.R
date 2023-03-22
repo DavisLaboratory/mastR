@@ -1,7 +1,7 @@
 #' Extract immune subset markers from PanglaoDB website.
 #'
 #' Extract specific immune subset markers for 'Hs' or 'Mm', the markers are
-#' retrived from up-to-date PanglaoDB website.
+#' retrieved from up-to-date PanglaoDB website.
 #'
 #' @param type character vector, cell type name(s) of interest,
 #'             available subsets could be listed by [list_panglao_types()]

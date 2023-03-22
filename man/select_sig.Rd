@@ -19,7 +19,7 @@ genes < 5 for both UP and DOWN}
 \item{...}{params for \code{\link[=DEGs_RP]{DEGs_RP()}} or \code{\link[=DEGs_Group]{DEGs_Group()}}}
 }
 \value{
-GeneSetCollection contains UP and DOWN genesets
+GeneSetCollection contains UP and DOWN gene sets
 }
 \description{
 select DEGs from multiple comparisons

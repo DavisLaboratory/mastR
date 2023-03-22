@@ -1,6 +1,6 @@
 #' Collect genes from MSigDB or provided GeneSetCollection.
 #'
-#' Collect genesets from MSigDB or given GeneSetCollection, of which the gene-set
+#' Collect gene sets from MSigDB or given GeneSetCollection, of which the gene-set
 #' names are matched to the given regex pattern by using [grep()] function.
 #' By setting cat and subcat, matching can be constrained in the union of given
 #' categories and subcategories if gsc = 'msigdb'.
@@ -17,7 +17,7 @@
 #'               [msigdb::subsetCollection()]
 #' @param species character, species of interest, can be 'hs' or 'mm'
 #' @param id a character, representing the ID type to use ("SYM" for gene
-#'           symbols and "EZID" for Entrez IDs)
+#'           SYMBOLs and "EZID" for ENTREZ IDs)
 #' @param version a character, stating the version of MSigDB to be retrieved
 #'                (should be >= 7.2). See [msigdb::getMsigdbVersions()].
 #' @param ... params for [grep()], used to match pattern to gene-set names

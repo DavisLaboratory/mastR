@@ -86,11 +86,11 @@
 #' @source [depmap::depmap_TPM()]
 "ccle_crc_5"
 
-#' Sub-collection of MSigDB genesets.
+#' Sub-collection of MSigDB gene sets.
 #'
-#' A small GeneSetCollection object, contains genesets with geneset-name matched
+#' A small GeneSetCollection object, contains gene sets with gene set name matched
 #' to 'NATURAL_KILLER' from GO:BP MSigDB v7.4 database.
 #'
-#' @format A GeneSetCollection of `r length(mastR::msigdb_gobp_nk)` genesets.
+#' @format A GeneSetCollection of `r length(mastR::msigdb_gobp_nk)` gene sets.
 #' @source [msigdb::getMsigdb()]
 "msigdb_gobp_nk"

@@ -22,7 +22,7 @@ merge_markers <- function(...) {
   ## convert into 'GeneSetCollection'
   gsc <- GSEABase::GeneSetCollection(c(...))
 
-  ## merge and get union of all genesets
+  ## merge and get union of all gene sets
   markers <- Reduce("|", gsc)
   GSEABase::setName(markers) <- "merged_markers_pool"
 

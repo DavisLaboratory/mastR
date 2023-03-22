@@ -23,7 +23,7 @@ NULL
 #'
 #' `mastR` This package enables screening immune cells signatures
 #'   for specific cancer or tissue type. Imported NK cell markers are based on
-#'   LM22 and LM7 and human orthologs in mice. MSigDB genesets of relevant terms
+#'   LM22 and LM7 and human orthologs in mice. MSigDB gene sets of relevant terms
 #'   and Panglao DB markers can also be retrieved by this package. Users can
 #'   choose to use sorted immune cell bulk RNA-seq data and CCLE adherent cell
 #'   line RNA-seq data (CCLE) to screen signatures or use customized data.

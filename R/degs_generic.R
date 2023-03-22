@@ -5,7 +5,7 @@ NULL
 #'
 #' @description This function uses edgeR and limma to get 'UP' and 'DOWN' DEG
 #'   lists, for multiple comparisons, DEGs can be obtained from intersection of
-#'   all comparsion DEGs or by using product of p value ranks for multiple
+#'   all DEGs or by using product of p value ranks for multiple
 #'   comparisons. Filter out low expressed genes and extract DE genes by using
 #'   limma::voom and limma::treat, and also create an object `proc_data` to
 #'   store processed data.
@@ -21,7 +21,7 @@ NULL
 #'              factor(s), default NULL
 #' @param ... params for [process_data()] and [select_sig()]
 #'
-#' @return A list of 'UP', 'DOWN' geneset of all differentially expressed
+#' @return A list of 'UP', 'DOWN' gene set of all differentially expressed
 #'         genes, and a DGEList 'proc_data' containing data after process
 #'         (filtration, normalization and voom fit). Both 'UP' and 'DOWN' are
 #'         ordered by rank product or 'Rank' variable if keep.top is NULL
@@ -108,7 +108,7 @@ setMethod(
       }
     }
 
-    ## select DEGs from multiple comparsions
+    ## select DEGs from multiple comparisons
     DEGs <- select_sig(
       tfit = proc_data$tfit,
       feature_selection = feature_selection,

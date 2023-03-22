@@ -15,7 +15,7 @@ NULL
 #'                   draw heatmap
 #' @param ... params for [ComplexHeatmap::Heatmap()]
 #'
-#' @return patchwork object of pheatmaps
+#' @return patchwork object of heatmap
 #'
 #' @examples
 #' data("im_data_6", "NK_markers")

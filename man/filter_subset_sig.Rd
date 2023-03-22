@@ -98,7 +98,7 @@ genes < 5 for both UP and DOWN}
 
 \item{comb}{'RRA' or Fun for combining sigs from multiple datasets, keep all
 passing genes or only intersected genes, could be \code{union} or
-\code{intersect} or \code{setdiff} or customed Fun, or could be 'RRA' to
+\code{intersect} or \code{setdiff} or customized Fun, or could be 'RRA' to
 use Robust Rank Aggregation method for integrating multi-lists
 of sigs, default 'union'}
 

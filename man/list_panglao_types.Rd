@@ -14,7 +14,7 @@ a vector of available cell types of the organ in PanglaoDB
 }
 \description{
 Show the name and number of each cell type in PanglaoDB. Help users
-know which subset(s) marker list(s) could be retrived by PanglaoDB.
+know which subset(s) marker list(s) could be retrieved by PanglaoDB.
 }
 \examples{
 list_panglao_types(organ = "Immune system")

@@ -11,7 +11,7 @@ a vector of available organ types or cell types in PanglaoDB
 }
 \description{
 Show the name of organs available in PanglaoDB. Help users know which organs
-could be retrived by PanglaoDB.
+could be retrieved by PanglaoDB.
 }
 \examples{
 list_panglao_organs()

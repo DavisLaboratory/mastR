@@ -15,7 +15,7 @@
 #'                     target_groups, or column name of [depmap::depmap_metadata()],
 #'                     e.g. 'primary_disease', default NULL
 #' @param b_target_group pattern, specify the target_group of interest in bg_data,
-#'                       e.g. 'colorectal', defeault NULL
+#'                       e.g. 'colorectal', default NULL
 #' @param snr num, the cutoff of SNR to screen markers which are not or lowly
 #'            expressed in bg_data
 #' @param ... params for [grep()] to find matched cell lines in bg_data

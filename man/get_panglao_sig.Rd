@@ -18,7 +18,7 @@ a 'GeneSet' class object containing genes of given type(s)
 }
 \description{
 Extract specific immune subset markers for 'Hs' or 'Mm', the markers are
-retrived from up-to-date PanglaoDB website.
+retrieved from up-to-date PanglaoDB website.
 }
 \examples{
 get_panglao_sig(type = "NK cells")

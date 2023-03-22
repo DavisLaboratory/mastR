@@ -1,7 +1,7 @@
 #' Show the summary info of available cell types in PanglaoDB.
 #'
 #' Show the name and number of each cell type in PanglaoDB. Help users
-#' know which subset(s) marker list(s) could be retrived by PanglaoDB.
+#' know which subset(s) marker list(s) could be retrieved by PanglaoDB.
 #'
 #' @param organ character, specify the tissue or organ label to list cell types
 #'

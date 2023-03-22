@@ -56,17 +56,17 @@ Overall, identifying marker genes for specific groups is crucial for understandi
 
 **Why do we need immune signature (cell type)**
 
-In this demo, we will be using the example of immune cell signature in the context of the tumour microenvironment as a practical case study to showcase the application of our approach.
+In this demo, we will be using the example of immune cell signature in the context of the tumor micro-environment as a practical case study to showcase the application of our approach.
 
-The tumor microenvironment (TME) is made up of a diverse range of cell types (fibroblasts, epithelial cells, endothelial cells, and immune cells) as well as various extracellular components (collagens, growth factors, hormones, cytokines, etc.). TIME is reported to be highly associated with prognosis and various treatment response to many kinds of cancers.
+The tumor micro-environment (TME) is made up of a diverse range of cell types (fibroblasts, epithelial cells, endothelial cells, and immune cells) as well as various extracellular components (collagens, growth factors, hormones, cytokines, etc.). TIME is reported to be highly associated with prognosis and various treatment response to many kinds of cancers.
 
-Recent studies have highlighted the role of immune components in the TME in modulating tumor progression, making them attractive therapeutic targets. These components make up the tumor immune microenvironment (TIME), which is a subset of the TME. Subsequently, it's proved that tumour infiltrating lymphocytes (TILs) play an essential role in tumour progression, metastasis and treatment response.
+Recent studies have highlighted the role of immune components in the TME in modulating tumor progression, making them attractive therapeutic targets. These components make up the tumor immune micro-environment (TIME), which is a subset of the TME. Subsequently, it's proved that tumor infiltrating lymphocytes (TILs) play an essential role in tumor progression, metastasis and treatment response.
 
 This drives TILs to be a strong prognostic indicator for better precision therapy of cancer patients. And the identification of these TILs are the subject of keen research interest due to the roles of specific subset of immune cells acting on different tissues types.
 
-Identification of these cell types are based on flow cytometry in the past, which is limited in the granularity. But now with the advance of single cell RNA-seq and spatial transcriptomics technologies, more detailed and novel cell types or subtypes are being identified. One of the key paradygm of scRNAseq and spatial is to further investigate cell types in the TIME and understand cellullar heterogeniety in the TME.
+Identification of these cell types are based on flow cytometry in the past, which is limited in the granularity. But now with the advance of single cell RNA-seq and spatial transcriptomics technologies, more detailed and novel cell types or subtypes are being identified. One of the key paradigm of scRNAseq and spatial is to further investigate cell types in the TIME and understand cellular heterogeneity in the TME.
 
-To quantify TILs infiltration (in bulk), estimate cellular composition (in bulk), annotate single cell types (in scRNA) or identify sample states/activities, many computational methods like cell deconvolution (CIBERSORTx), marker based annotation (CelliD) and sample scoring (singscore) are developed. But to distinguish between closely related cell types, estimate cell composition and states, a refined signature is required which typiclaly requires manual curation by domain expert. With the increasing large amount of data and cell types, this is gradually getting to be intenable and will require a different approach to automatically screen such signatures.
+To quantify TILs infiltration (in bulk), estimate cellular composition (in bulk), annotate single cell types (in scRNA) or identify sample states/activities, many computational methods like cell deconvolution (CIBERSORTx), marker based annotation (CelliD) and sample scoring (singscore) are developed. But to distinguish between closely related cell types, estimate cell composition and states, a refined signature is required which typically requires manual curation by domain expert. With the increasing large amount of data and cell types, this is gradually getting to be intenable and will require a different approach to automatically screen such signatures.
 
 mastR is a software package specifically designed to automatically screen signatures of interest for particular research questions. This automated process saves significant time and effort that would otherwise be required for manual labor.
 
@@ -157,11 +157,11 @@ The standard pool building process involves the following:
 
 mastR allows the following markers to be conveniently loaded:
 
-- `LM7` and `LM22`: CIBERSORT (LM22) and Tosolini et al (LM7) gene sets for leukocytes, get more details using `?mastR::LM7` or `?mastR::LM22`.
+- `LM7` and `LM22`: CIBERSORT (LM22) and Tosolini et al. (LM7) gene sets for leukocytes, get more details using `?mastR::LM7` or `?mastR::LM22`.
 
-- `msigdb_gobp_nk`: a 'GeneSetCollection' object, containing genesets with gene-set name matched to 'NATURAL_KILLER' in GO:BP MSigDB v7.4 database. More details `?mastR::msigdb_gobp_nk`.
+- `msigdb_gobp_nk`: a 'GeneSetCollection' object, containing gene sets with gene-set name matched to 'NATURAL_KILLER' in GO:BP MSigDB v7.4 database. More details `?mastR::msigdb_gobp_nk`.
 
-- `NK_markers`: a combination of CIBERSORT LM7, LM22 and Huntington gene list with 114 genes. ([Curson et al. 2019](https://cancerimmunolres.aacrjournals.org/content/7/7/1162.long)).
+- `NK_markers`: a combination of CIBERSORT LM7, LM22 and Huntington gene list with 114 genes. ([Cursons et al. 2019](https://cancerimmunolres.aacrjournals.org/content/7/7/1162.long)).
 
 All markers generation functions will return 'GeneSet' or 'GeneSetCollection' object.
 
@@ -200,7 +200,7 @@ Users can use `get_gsc_sig()` to generate a collection of gene sets for the biol
 
 In this case, NK cell relevant gene-sets from `msigdb_gobp_nk` are collected.
 
-```{r MSigDB genesets, warning=FALSE}
+```{r MSigDB gene sets, warning=FALSE}
 data("msigdb_gobp_nk")
 MSig <- get_gsc_sig(gsc = msigdb_gobp_nk,
                     pattern = "NATURAL_KILLER_CELL_MEDIATED")
@@ -214,7 +214,7 @@ Similarly, using `gsc_plot()` users can visualize the overlapping gene sets.
 As the gene-set names are too long, for better visualization the gene-set names are replaced with letters and shown later.
 
 ```{r show overlap}
-## cut geneset name within 11 characters
+## cut gene set name within 11 characters
 gsn <- setNames(names(MSig), LETTERS[seq_along(MSig)])
 for (i in seq_along(MSig)) {
   setName(MSig[[i]]) <- LETTERS[i]
@@ -225,10 +225,10 @@ gsc_plot(MSig)
 gsn[c("A", "M", "D")]  ## show gene-set names of top 3
 ```
 
-There're `r length(MSig)` gene-sets in MSig, which is too many for visualization. Thus, we use function `merge_markers()` to merge all gene-sets into one 'GeneSet' object. (*Note*: Users can directly use the un-merged object for subsequent analyses.)
+There are `r length(MSig)` gene-sets in MSig, which is too many for visualization. Thus, we use function `merge_markers()` to merge all gene-sets into one 'GeneSet' object. (*Note*: Users can directly use the un-merged object for subsequent analyses.)
 
 ```{r merge MSigDB}
-## merge all genesets into one
+## merge all gene sets into one
 MSig <- merge_markers(MSig)
 setName(MSig) <- "MSigDB"
 ```
@@ -388,9 +388,9 @@ head(sig_ct)
 
 ***Note:***
 
-mastR also implementes an additional feature to further increase the discriminative power of the signature between the fairly similar groups.
+mastR also implements an additional feature to further increase the discriminative power of the signature between the fairly similar groups.
 
-By setting `keep.top` and `keep.group`, the top n DEGs of specified DE comparisons can be kept (DEGs are ranked based on gene statistic setted by `Rank` param). In this case, if we want keep more distinguishable genes between NK and CD8+ T cells, we can set `keep.group = "CD8"` or `keep.group = "NK-CD8"` and use `keep.top = n` to specify how many top genes in that comparison should be kept.
+By setting `keep.top` and `keep.group`, the top n DEGs of specified DE comparisons can be kept (DEGs are ranked based on gene statistic set by `Rank` param). In this case, if we want keep more distinguishable genes between NK and CD8+ T cells, we can set `keep.group = "CD8"` or `keep.group = "NK-CD8"` and use `keep.top = n` to specify how many top genes in that comparison should be kept.
 
 
 ***Tips:***
@@ -404,7 +404,7 @@ QC plots can also be shown at the same time by setting optional param `plot = TR
 
 ## c) constrain signature within markers pool {#intersect-pool}
 
-Then intersect the signature genes `sig_ct` with the markers pool `Markers`, to constrain the final signature wthin the interested gene list. In this demo, only keep 'UP' regulated genes.
+Then intersect the signature genes `sig_ct` with the markers pool `Markers`, to constrain the final signature within the interested gene list. In this demo, only keep 'UP' regulated genes.
 
 Because the row names of `im_data_6` are ENSEMBL IDs while the markers are all gene SYMBOLs, we need to convert the IDs to the same type so that we can get the intersection.
 
@@ -614,7 +614,7 @@ To assess how well the refined signature can discriminate our target group from 
     To show if the target group can be separated from other groups and how well the separation is. Users can also know how much variance has been explained by PC1 with the signature.
 
 - `sig_heatmap()` for signature heatmap across groups and its comparison with markers pool.  
-    To validate if the signature shows clear and differential expression pattern between the target group and others, and if the pattern is clearer and cleaner after the screening when compared with un-screeed markers pool.
+    To validate if the signature shows clear and differential expression pattern between the target group and others, and if the pattern is clearer and cleaner after the refinement when compared with un-refined markers pool.
 
 - `sig_rankdensity_plot()` for signature genes rank density distribution across groups.  
     To see if the signature genes are highly expressed within each sample of the target group while lowly expressed in others.
@@ -746,9 +746,9 @@ After the Step 2d (Section \@ref(intersect-pool)), for:
 
 Instead of integrating datasets into one larger dataset to fit into one linear model, we screen signature in each dataset respectively and users can choose to aggregate the ranked lists via `RobustRankAggreg` method by setting `comb = "RRA"` (as our output of signature by screening function is ordered based on the given `Rank`).
 
-The advantage is that users can avoid over-normalizing or mis-correcting when carrying out data integration. And users can get more robust and conserved signature across datasets. It's better than "RemoveBatchEffect" sometimes.
+The advantage is that users can avoid over-normalizing or mis-correcting when carrying out data integration. And users can get more robust and conserved signature across datasets. It's better than "Remove Batch Effect" sometimes.
 
-Of course, easy way such as "union" and "intersect" is also supported besides "RRA" (Robust Rank Aggreg), by setting `comb = union` or `comb = intersect`.
+Of course, easy way such as "union" and "intersect" is also supported besides "RRA" (Robust Rank Aggregation), by setting `comb = union` or `comb = intersect`.
 
 It's better to use union when you get only a few genes screened for each dataset, while "RRA" is better to pick up significant genes from large DEG lists, "intersect" is proper for highly overlapping gene lists.
 
@@ -853,7 +853,7 @@ markers_list <- lapply(rowData(data_sim)[,paste0("DEFacGroup", 1:4)],
                        \(x) rownames(data_sim[x > 1]))
 ```
 
-Then use `pseudo_samples()` to get psudo-bulk data and create a DGEList.
+Then use `pseudo_samples()` to get pseudo-bulk data and create a DGEList.
 
 ```{r pseudo bulking, eval=FALSE}
 ## aggregate into pseudo-bulk samples

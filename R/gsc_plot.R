@@ -1,4 +1,4 @@
-#' @title Make upset plot for given genesets
+#' @title Make upset plot for given gene sets
 #'
 #' @description Plot upset diagram for overlapping genes among given gene-sets.
 #'

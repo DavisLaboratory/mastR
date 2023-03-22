@@ -169,7 +169,7 @@ draw heatmap}
 \item{...}{params for \code{\link[ComplexHeatmap:Heatmap]{ComplexHeatmap::Heatmap()}}}
 }
 \value{
-patchwork object of pheatmaps
+patchwork object of heatmap
 }
 \description{
 Compare the heatmap before and after screening.

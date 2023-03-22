@@ -212,7 +212,7 @@ target_groups, or column name of \code{\link[depmap:metadata]{depmap::depmap_met
 e.g. 'primary_disease', default NULL}
 
 \item{b_target_group}{pattern, specify the target_group of interest in bg_data,
-e.g. 'colorectal', defeault NULL}
+e.g. 'colorectal', default NULL}
 
 \item{snr}{num, the cutoff of SNR to screen markers which are not or lowly
 expressed in bg_data}

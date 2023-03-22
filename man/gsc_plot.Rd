@@ -2,7 +2,7 @@
 % Please edit documentation in R/gsc_plot.R
 \name{gsc_plot}
 \alias{gsc_plot}
-\title{Make upset plot for given genesets}
+\title{Make upset plot for given gene sets}
 \usage{
 gsc_plot(...)
 }

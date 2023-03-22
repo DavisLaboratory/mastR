@@ -419,7 +419,7 @@ plot_mean_var <- function(proc_data, span = 0.5) {
 #'                          genes < 5 for both UP and DOWN
 #' @param ... params for [DEGs_RP()] or [DEGs_Group()]
 #'
-#' @return GeneSetCollection contains UP and DOWN genesets
+#' @return GeneSetCollection contains UP and DOWN gene sets
 #' @export
 #'
 #' @examples

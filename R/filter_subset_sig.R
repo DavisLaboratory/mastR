@@ -13,7 +13,7 @@
 #'            down-expressed genes
 #' @param comb 'RRA' or Fun for combining sigs from multiple datasets, keep all
 #'             passing genes or only intersected genes, could be `union` or
-#'             `intersect` or `setdiff` or customed Fun, or could be 'RRA' to
+#'             `intersect` or `setdiff` or customized Fun, or could be 'RRA' to
 #'             use Robust Rank Aggregation method for integrating multi-lists
 #'             of sigs, default 'union'
 #' @param filter (list of) vector of 2 numbers, filter condition to remove low

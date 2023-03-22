@@ -57,7 +57,7 @@ The sub-category(s) must be one from
 \item{species}{character, species of interest, can be 'hs' or 'mm'}
 
 \item{id}{a character, representing the ID type to use ("SYM" for gene
-symbols and "EZID" for Entrez IDs)}
+SYMBOLs and "EZID" for ENTREZ IDs)}
 
 \item{version}{a character, stating the version of MSigDB to be retrieved
 (should be >= 7.2). See \code{\link[msigdb:getMsigdbVersions]{msigdb::getMsigdbVersions()}}.}
@@ -68,7 +68,7 @@ symbols and "EZID" for Entrez IDs)}
 A GeneSet object containing all matched gene-sets in MSigDB
 }
 \description{
-Collect genesets from MSigDB or given GeneSetCollection, of which the gene-set
+Collect gene sets from MSigDB or given GeneSetCollection, of which the gene-set
 names are matched to the given regex pattern by using \code{\link[=grep]{grep()}} function.
 By setting cat and subcat, matching can be constrained in the union of given
 categories and subcategories if gsc = 'msigdb'.

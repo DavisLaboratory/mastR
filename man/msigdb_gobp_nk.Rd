@@ -3,9 +3,9 @@
 \docType{data}
 \name{msigdb_gobp_nk}
 \alias{msigdb_gobp_nk}
-\title{Sub-collection of MSigDB genesets.}
+\title{Sub-collection of MSigDB gene sets.}
 \format{
-A GeneSetCollection of 55 genesets.
+A GeneSetCollection of 55 gene sets.
 }
 \source{
 \code{\link[msigdb:getMsigdb]{msigdb::getMsigdb()}}
@@ -14,7 +14,7 @@ A GeneSetCollection of 55 genesets.
 msigdb_gobp_nk
 }
 \description{
-A small GeneSetCollection object, contains genesets with geneset-name matched
+A small GeneSetCollection object, contains gene sets with gene set name matched
 to 'NATURAL_KILLER' from GO:BP MSigDB v7.4 database.
 }
 \keyword{datasets}
