@@ -15,7 +15,7 @@
 #' jsonlite::fromJSON(GSEABase::longDescription(Markers))
 merge_markers <- function(...) {
   ## input must be GeneSet or GeneSetCollection
-  if (!all(sapply(list(...), class) %in% c("GeneSet", "GeneSetCollection"))) {
+  if (!all(vapply(list(...), class, FUN.VALUE = "vector") %in% c("GeneSet", "GeneSetCollection"))) {
     stop("Only accept GeneSet or GeneSetCollection as input")
   }
 

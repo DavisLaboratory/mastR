@@ -11,7 +11,7 @@
 #' gsc_plot(mastR::msigdb_gobp_nk[1:3])
 gsc_plot <- function(...) {
   ## input must be GeneSet or GeneSetCollection
-  if (!all(sapply(list(...), class) %in% c("GeneSet", "GeneSetCollection"))) {
+  if (!all(vapply(list(...), class, FUN.VALUE = "vector") %in% c("GeneSet", "GeneSetCollection"))) {
     stop("Only accept GeneSet or GeneSetCollection as input")
   }
 

@@ -34,7 +34,6 @@ Suggests:
     RobustRankAggreg,
     rvest,
     singscore,
-    spelling,
     testthat (>= 3.0.0),
     UpSetR
 Config/testthat/edition: 3

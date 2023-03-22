@@ -82,7 +82,7 @@
 #' A test DGEList object with RNA-seq RSEM quantified TPM data of 5 CRC cell
 #' line samples from CCLE [depmap::depmap_TPM()].
 #'
-#' @format A DGEList of `r nrow(ccle_crc_5)` genes * 5 samples:
+#' @format A DGEList of `r nrow(mastR::ccle_crc_5)` genes * 5 samples:
 #' @source [depmap::depmap_TPM()]
 "ccle_crc_5"
 
@@ -91,6 +91,6 @@
 #' A small GeneSetCollection object, contains genesets with geneset-name matched
 #' to 'NATURAL_KILLER' from GO:BP MSigDB v7.4 database.
 #'
-#' @format A GeneSetCollection of `r length(msigdb_gobp_nk)` genesets.
+#' @format A GeneSetCollection of `r length(mastR::msigdb_gobp_nk)` genesets.
 #' @source [msigdb::getMsigdb()]
 "msigdb_gobp_nk"

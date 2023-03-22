@@ -5,7 +5,7 @@ test_that("get_de_table works", {
     group_col = "celltype:ch1",
     target_group = "NK"
   )
-  expect_true(all(sapply(DEG_table, is.data.frame)))
+  expect_true(all(vapply(DEG_table, is.data.frame, FUN.VALUE = TRUE)))
 
   ## test DGEList object
   data <- process_data(im_data_6,
@@ -16,7 +16,7 @@ test_that("get_de_table works", {
     group_col = "celltype.ch1",
     target_group = "NK", normalize = FALSE
   )
-  expect_true(all(sapply(DEG_table, is.data.frame)))
+  expect_true(all(vapply(DEG_table, is.data.frame, FUN.VALUE = TRUE)))
 
   ## test matrix object
   DEG_table <- get_de_table(
@@ -24,14 +24,14 @@ test_that("get_de_table works", {
     group_col = im_data_6$`celltype:ch1`,
     target_group = "NK"
   )
-  expect_true(all(sapply(DEG_table, is.data.frame)))
+  expect_true(all(vapply(DEG_table, is.data.frame, FUN.VALUE = TRUE)))
 
   ## test Matrix object
   DEG_table <- get_de_table(Matrix::Matrix(Biobase::exprs(im_data_6)),
     group_col = im_data_6$`celltype:ch1`,
     target_group = "NK"
   )
-  expect_true(all(sapply(DEG_table, is.data.frame)))
+  expect_true(all(vapply(DEG_table, is.data.frame, FUN.VALUE = TRUE)))
 
 
   ## test seurat object
@@ -43,7 +43,7 @@ test_that("get_de_table works", {
     group_col = "celltype.ch1",
     target_group = "NK"
   )
-  expect_true(all(sapply(DEG_table, is.data.frame)))
+  expect_true(all(vapply(DEG_table, is.data.frame, FUN.VALUE = TRUE)))
 
   ## test sce object
   data_sce <- Seurat::as.SingleCellExperiment(data_seurat)
@@ -51,5 +51,5 @@ test_that("get_de_table works", {
     group_col = "celltype.ch1",
     target_group = "NK"
   )
-  expect_true(all(sapply(DEG_table, is.data.frame)))
+  expect_true(all(vapply(DEG_table, is.data.frame, FUN.VALUE = TRUE)))
 })

@@ -619,7 +619,7 @@ remove_bg_exp_mat <- function(
   } else {
     sig_med <- Biobase::rowMedians(sig_mat[m1, ], na.rm = TRUE)
     bg_med <- Biobase::rowMedians(bg_mat[m1, ], na.rm = TRUE)
-    bg_sd <- sapply(m1, \(m) sd(bg_mat[m, ], na.rm = TRUE))
+    bg_sd <- apply(bg_mat[m1, ], 1, sd, na.rm = TRUE)
     snrs <- (sig_med - bg_med) / bg_sd
   }
 

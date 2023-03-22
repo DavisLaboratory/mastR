@@ -117,7 +117,7 @@ setMethod(
     data <- edgeR::DGEList(counts = data, group = group_col)
     if (!is.null(batch)) {
       data$samples <- data.frame(data$samples, batch)
-      batch <- colnames(data$samples)[-(1:3)]
+      batch <- colnames(data$samples)[-seq_len(3)]
     }
     group_col <- "group"
 
@@ -160,7 +160,7 @@ setMethod(
     data <- edgeR::DGEList(counts = data, group = group_col)
     if (!is.null(batch)) {
       data$samples <- data.frame(data$samples, batch)
-      batch <- colnames(data$samples)[-(1:3)]
+      batch <- colnames(data$samples)[-seq_len(3)]
     }
     group_col <- "group"
 

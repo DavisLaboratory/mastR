@@ -738,8 +738,9 @@ heatmap_init <- function(expr, sigs, by, markers,
 ## ---------------------------------------------------------------
 # helper: aggregate samples of the same group to one sample with mean expression
 agg_mean <- function(expr, by) {
-  expr <- sapply(split(colnames(expr), by),
-    FUN = function(x) Matrix::rowMeans(expr[, x], na.rm = TRUE)
+  expr <- vapply(split(colnames(expr), by),
+    FUN = function(x) Matrix::rowMeans(expr[, x], na.rm = TRUE),
+    FUN.VALUE = rep(1, nrow(expr))
   )
   return(expr)
 }

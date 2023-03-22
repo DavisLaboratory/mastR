@@ -76,11 +76,11 @@ setMethod(
     }))
     p_samples <- p_samples[!grepl("_$", p_samples)]
     pb <- lapply(l, function(i) {
-      sapply(i, function(j) {
+      vapply(i, function(j) {
         if (fun == "mean") {
           Matrix::rowMeans(data[, j], na.rm = TRUE)
         } else if (fun == "sum") Matrix::rowSums(data[, j], na.rm = TRUE)
-      })
+      }, FUN.VALUE = rep(1, nrow(data)))
     })
     pb <- do.call(cbind, pb)
     pb <- pb[, which(!is.na(colnames(pb)))]
