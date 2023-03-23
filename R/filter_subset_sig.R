@@ -76,28 +76,6 @@ setMethod(
       is.numeric(s_thres), is.character(gene_id)
     )
 
-    if (!is.null(markers)) {
-      stopifnot("Please provide a vector of gene symbols!" = is.vector(markers))
-      markers <- AnnotationDbi::select(
-        org.Hs.eg.db::org.Hs.eg.db,
-        markers,
-        gene_id, "SYMBOL"
-      )
-    }
-    # tryCatch(
-    #   {
-    #     markers$ENSEMBL[match(c("KLRA1P", "TRBC1", "TRDC"),
-    #                           markers$SYMBOL)] <- c(
-    #       "ENSG00000256667",
-    #       "ENSG00000211751",
-    #       "ENSG00000211829"
-    #     )
-    #   },
-    #   error = function(e) {
-    #     "not containing KLRA1P,TRBC1,TRDC"
-    #   }
-    # )
-
     if (length(group_col) == 1) {
       group_col <- rep(group_col, length(data))
     }
@@ -120,27 +98,25 @@ setMethod(
       filter <- lapply(seq_along(data), \(x) filter)
     }
 
-    NK_against_subsets <- list()
-    for (i in seq_along(data)) {
-      DEGs <- get_degs(
-        data = data[[i]], group_col = group_col[[i]],
+    NK_against_subsets <- lapply(seq_along(data), \(i) {
+      NK_against_subsets <- filter_subset_sig(
+        data = data[[i]],
+        group_col = group_col[[i]],
         target_group = target_group[[i]],
+        markers = markers,
         normalize = normalize[[i]],
-        slot = slot[[i]],
-        batch = batch[[i]],
+        dir = dir,
+        gene_id = gene_id[[i]],
         feature_selection = feature_selection,
-        markers = unique(markers$SYMBOL),
+        comb = comb,
         filter = filter[[i]],
-        gene_id = gene_id[[i]], ...
+        s_thres = s_thres,
+        batch = batch[[i]],
+        slot = slot[[i]],
+        ...
       )
-      DEGs <- GSEABase::geneIds(DEGs$DEGs[[dir]])
+    })
 
-      if (is.null(markers)) {
-        NK_against_subsets[[i]] <- DEGs
-      } else {
-        NK_against_subsets[[i]] <- markers$SYMBOL[markers[[gene_id[[i]]]] %in% DEGs]
-      }
-    }
     if ((is.character(comb)) && (comb == "RRA")) {
       if (length(NK_against_subsets) == 1) {
         return(unlist(NK_against_subsets))
@@ -177,43 +153,30 @@ setMethod(
       is.numeric(s_thres), is.character(gene_id)
     )
 
-    if (!is.null(markers)) {
-      stopifnot("Please provide a vector of gene symbols!" = is.vector(markers))
-      markers <- AnnotationDbi::select(
-        org.Hs.eg.db::org.Hs.eg.db,
-        markers,
-        gene_id, "SYMBOL"
-      )
-    }
-    # tryCatch(
-    #   {
-    #     markers$ENSEMBL[match(c("KLRA1P", "TRBC1", "TRDC"),
-    #                           markers$SYMBOL)] <- c(
-    #       "ENSG00000256667",
-    #       "ENSG00000211751",
-    #       "ENSG00000211829"
-    #     )
-    #   },
-    #   error = function(e) {
-    #     "not containing KLRA1P,TRBC1,TRDC"
-    #   }
-    # )
-
     DEGs <- get_degs(
-      data = data, group_col = group_col,
+      data = data,
+      group_col = group_col,
       target_group = target_group,
       normalize = normalize,
       feature_selection = feature_selection,
-      markers = unique(markers$SYMBOL),
+      markers = markers,
       filter = filter,
-      gene_id = gene_id, ...
+      gene_id = gene_id,
+      ...
     )
     DEGs <- GSEABase::geneIds(DEGs$DEGs[[dir]])
 
     if (is.null(markers)) {
       NK_against_subsets <- DEGs
     } else {
-      NK_against_subsets <- markers$SYMBOL[markers[[gene_id]] %in% DEGs]
+      stopifnot("Please provide a vector of gene symbols!" = is.vector(markers))
+      markers <- AnnotationDbi::select(
+        org.Hs.eg.db::org.Hs.eg.db,
+        markers,
+        gene_id, "SYMBOL"
+      )
+      idx <- na.omit(match(DEGs, markers[[gene_id]]))
+      NK_against_subsets <- markers$SYMBOL[idx]
     }
 
     return(NK_against_subsets)
@@ -244,34 +207,13 @@ setMethod(
       is.numeric(s_thres), is.character(gene_id)
     )
 
-    if (!is.null(markers)) {
-      stopifnot("Please provide a vector of gene symbols!" = is.vector(markers))
-      markers <- AnnotationDbi::select(
-        org.Hs.eg.db::org.Hs.eg.db,
-        markers,
-        gene_id, "SYMBOL"
-      )
-    }
-    # tryCatch(
-    #   {
-    #     markers$ENSEMBL[match(c("KLRA1P", "TRBC1", "TRDC"),
-    #                           markers$SYMBOL)] <- c(
-    #       "ENSG00000256667",
-    #       "ENSG00000211751",
-    #       "ENSG00000211829"
-    #     )
-    #   },
-    #   error = function(e) {
-    #     "not containing KLRA1P,TRBC1,TRDC"
-    #   }
-    # )
-
     DEGs <- get_degs(
-      data = data, group_col = group_col,
+      data = data,
+      group_col = group_col,
       target_group = target_group,
       normalize = normalize,
       feature_selection = feature_selection,
-      markers = unique(markers$SYMBOL),
+      markers = markers,
       filter = filter,
       gene_id = gene_id, ...
     )
@@ -280,7 +222,14 @@ setMethod(
     if (is.null(markers)) {
       NK_against_subsets <- DEGs
     } else {
-      NK_against_subsets <- markers$SYMBOL[markers[[gene_id]] %in% DEGs]
+      stopifnot("Please provide a vector of gene symbols!" = is.vector(markers))
+      markers <- AnnotationDbi::select(
+        org.Hs.eg.db::org.Hs.eg.db,
+        markers,
+        gene_id, "SYMBOL"
+      )
+      idx <- na.omit(match(DEGs, markers[[gene_id]]))
+      NK_against_subsets <- markers$SYMBOL[idx]
     }
 
     return(NK_against_subsets)

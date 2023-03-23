@@ -93,34 +93,38 @@ setMethod(
         is.vector(s_group_col) | is.null(s_group_col),
       "s_target_group must be a one-length regex pattern!" =
         (is.character(s_target_group) & length(s_target_group) == 1) |
-        is.null(s_target_group),
+          is.null(s_target_group),
       "b_group_col must be a vector!" =
         is.vector(b_group_col) | is.null(b_group_col),
       "b_target_group must be a one-length regex pattern!" =
         (is.character(b_target_group) & length(b_target_group) == 1) |
-        is.null(b_target_group),
+          is.null(b_target_group),
       "snr must be numeric!" = is.numeric(snr)
     )
 
     ## select target samples in sig_data
-    if(!is.null(s_group_col) & !is.null(s_target_group)) {
+    if (!is.null(s_group_col) & !is.null(s_target_group)) {
       idx <- grep(s_target_group, s_group_col, ...)
       stopifnot(
         "No matched samples in sig_data for s_target_group!" =
           length(idx) > 0
       )
       sig_data <- sig_data[, idx]
-    } else message("All samples in sig_data are used!")
+    } else {
+      message("All samples in sig_data are used!")
+    }
 
     ## select target samples in bg_data
-    if(!is.null(b_group_col) & !is.null(b_target_group)) {
+    if (!is.null(b_group_col) & !is.null(b_target_group)) {
       idx <- grep(b_target_group, b_group_col, ...)
       stopifnot(
         "No matched samples in bg_data for b_target_group!" =
           length(idx) > 0
       )
       bg_data <- bg_data[, idx]
-    } else message("All samples in bg_data are used!")
+    } else {
+      message("All samples in bg_data are used!")
+    }
 
     ## filter low expression genes for bg_data
     if (!is.null(filter)) {
@@ -164,12 +168,14 @@ setMethod(
            filter = NULL,
            gene_id = "SYMBOL",
            s_slot = "counts") {
+    stopifnot(
+      "s_group_col must be a column name!" =
+        is.character(s_group_col) | is.null(s_group_col)
+    )
 
-    stopifnot("s_group_col must be a column name!" =
-                is.character(s_group_col) | is.null(s_group_col))
-
-    if(!is.null(s_group_col))
+    if (!is.null(s_group_col)) {
       s_group_col <- sig_data$samples[[s_group_col]]
+    }
 
     final_m <- remove_bg_exp(
       bg_data = bg_data,
@@ -202,21 +208,23 @@ setMethod(
            s_group_col = NULL,
            s_target_group = NULL,
            b_group_col = NULL,
-           b_target_group= NULL,
+           b_target_group = NULL,
            snr = 1,
            ...,
            filter = NULL,
            gene_id = "SYMBOL",
            s_slot = "counts",
            b_slot = "counts") {
+    stopifnot(
+      "b_group_col must be a column name!" =
+        is.character(b_group_col) | is.null(b_group_col),
+      "sig_data must be matrix or DGEList!" =
+        is.matrix(sig_data) | is(sig_data, "DGEList")
+    )
 
-    stopifnot("b_group_col must be a column name!" =
-                is.character(b_group_col) | is.null(b_group_col),
-              "sig_data must be matrix or DGEList!" =
-                is.matrix(sig_data) | is(sig_data, "DGEList"))
-
-    if(!is.null(b_group_col))
+    if (!is.null(b_group_col)) {
       b_group_col <- bg_data$samples[[b_group_col]]
+    }
 
     final_m <- remove_bg_exp(
       bg_data = bg_data[[b_slot]],
@@ -256,14 +264,16 @@ setMethod(
            filter = NULL,
            gene_id = "SYMBOL",
            s_slot = "counts") {
+    stopifnot(
+      "b_group_col must be a column name!" =
+        is.character(b_group_col) | is.null(b_group_col),
+      "sig_data must be matrix or DGEList!" =
+        is.matrix(sig_data) | is(sig_data, "DGEList")
+    )
 
-    stopifnot("b_group_col must be a column name!" =
-                is.character(b_group_col) | is.null(b_group_col),
-              "sig_data must be matrix or DGEList!" =
-                is.matrix(sig_data) | is(sig_data, "DGEList"))
-
-    if(!is.null(b_group_col))
+    if (!is.null(b_group_col)) {
       b_group_col <- Biobase::pData(bg_data)[[b_group_col]]
+    }
 
     final_m <- remove_bg_exp(
       bg_data = Biobase::exprs(bg_data),
@@ -304,14 +314,16 @@ setMethod(
            gene_id = "SYMBOL",
            s_slot = "counts",
            b_slot = "counts") {
+    stopifnot(
+      "b_group_col must be a column name!" =
+        is.character(b_group_col) | is.null(b_group_col),
+      "sig_data must be matrix or DGEList!" =
+        is.matrix(sig_data) | is(sig_data, "DGEList")
+    )
 
-    stopifnot("b_group_col must be a column name!" =
-                is.character(b_group_col) | is.null(b_group_col),
-              "sig_data must be matrix or DGEList!" =
-                is.matrix(sig_data) | is(sig_data, "DGEList"))
-
-    if(!is.null(b_group_col))
+    if (!is.null(b_group_col)) {
       b_group_col <- SummarizedExperiment::colData(bg_data)[[b_group_col]]
+    }
 
     final_m <- remove_bg_exp(
       bg_data = SummarizedExperiment::assay(bg_data, b_slot),
@@ -352,14 +364,16 @@ setMethod(
            gene_id = "SYMBOL",
            s_slot = "counts",
            b_slot = "counts") {
+    stopifnot(
+      "b_group_col must be a column name!" =
+        is.character(b_group_col) | is.null(b_group_col),
+      "sig_data must be matrix or DGEList!" =
+        is.matrix(sig_data) | is(sig_data, "DGEList")
+    )
 
-    stopifnot("b_group_col must be a column name!" =
-                is.character(b_group_col) |  is.null(b_group_col),
-              "sig_data must be matrix or DGEList!" =
-                is.matrix(sig_data) | is(sig_data, "DGEList"))
-
-    if(!is.null(b_group_col))
+    if (!is.null(b_group_col)) {
       b_group_col <- slot(bg_data, "meta.data")[[b_group_col]]
+    }
 
     final_m <- remove_bg_exp(
       bg_data = Seurat::GetAssayData(bg_data, slot = b_slot),
@@ -418,10 +432,12 @@ setMethod(
       ccle_meta <- depmap::depmap_metadata()
     }
     ## grep target cell lines
-    if(!is.null(b_group_col) & !is.null(b_target_group)) {
+    if (!is.null(b_group_col) & !is.null(b_target_group)) {
       idx <- grep(b_target_group, ccle_meta[[b_group_col]], ...)
       ccle_meta <- ccle_meta[idx, ]
-    } else message("All cell lines in CCLE are used!")
+    } else {
+      message("All cell lines in CCLE are used!")
+    }
     ccle_tpm <- dplyr::inner_join(ccle_tpm, ccle_meta, by = "depmap_id")
 
     ## convert long data into wide matrix
@@ -553,15 +569,16 @@ remove_bg_exp_mat <- function(
     bg_mat,
     markers,
     snr = 1,
-    gene_id = "SYMBOL"
-) {
-  stopifnot("sig_mat must be a matrix!" = is.matrix(sig_mat),
-            "bg_mat must be a matrix!" = is.matrix(bg_mat),
-            "markers must be a vector of genes!" = is.vector(markers),
-            "snr must be a number!" = is.numeric(snr))
+    gene_id = "SYMBOL") {
+  stopifnot(
+    "sig_mat must be a matrix!" = is.matrix(sig_mat),
+    "bg_mat must be a matrix!" = is.matrix(bg_mat),
+    "markers must be a vector of genes!" = is.vector(markers),
+    "snr must be a number!" = is.numeric(snr)
+  )
 
   ## convert markers to the same ID type
-  if(length(union(gene_id, "SYMBOL")) == 1) {
+  if (length(union(gene_id, "SYMBOL")) == 1) {
     markers <- data.frame(SYMBOL = markers)
   } else {
     markers <- AnnotationDbi::select(
@@ -596,8 +613,9 @@ remove_bg_exp_mat <- function(
     return(unique(markers$SYMBOL))
   }
   bg_mat <- bg_mat[markers[[gene_id[2]]][idx], ]
-  if(length(idx) == 1)
+  if (length(idx) == 1) {
     bg_mat <- matrix(bg_mat, nrow = length(idx))
+  }
   m1 <- markers[idx, "SYMBOL"]
   rownames(bg_mat) <- m1
   ## get markers without valid expression in bg_mat
@@ -606,12 +624,13 @@ remove_bg_exp_mat <- function(
   ## sig_mat common genes
   idx <- na.omit(match(rownames(sig_mat), markers[[gene_id[1]]]))
   sig_mat <- sig_mat[markers[[gene_id[1]]][idx], ]
-  if(length(idx) == 1)
+  if (length(idx) == 1) {
     sig_mat <- matrix(sig_mat, nrow = length(idx))
+  }
   rownames(sig_mat) <- markers[idx, "SYMBOL"]
 
   ## compute SNR
-  if(length(m1) == 1) {
+  if (length(m1) == 1) {
     sig_med <- median(sig_mat[m1, ], na.rm = TRUE)
     bg_med <- median(bg_mat[m1, ], na.rm = TRUE)
     bg_sd <- sd(bg_mat[m1, ], na.rm = TRUE)
@@ -642,10 +661,15 @@ remove_bg_exp_mat <- function(
 #'
 #' @examples
 #' data("ccle_crc_5")
-#' ccle <- data.frame(gene_name = rownames(ccle_crc_5),
-#'                    ccle_crc_5$counts) |>
-#'   tidyr::pivot_longer(-gene_name, names_to = "depmap_id",
-#'                       values_to = "rna_expression")
+#' ccle <- data.frame(
+#'   gene_name = rownames(ccle_crc_5),
+#'   ccle_crc_5$counts
+#' ) |>
+#'   tidyr::pivot_longer(
+#'     -gene_name,
+#'     names_to = "depmap_id",
+#'     values_to = "rna_expression"
+#'   )
 #' ccle_wide <- ccle_2_wide(ccle)
 ccle_2_wide <- function(ccle) {
   ccle <- tidyr::pivot_wider(

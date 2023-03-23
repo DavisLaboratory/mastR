@@ -19,9 +19,13 @@ depmap IDs.
 }
 \examples{
 data("ccle_crc_5")
-ccle <- data.frame(gene_name = rownames(ccle_crc_5),
-                   ccle_crc_5$counts) |>
-  tidyr::pivot_longer(-gene_name, names_to = "depmap_id",
-                      values_to = "rna_expression")
+ccle <- data.frame(
+  gene_name = rownames(ccle_crc_5),
+  ccle_crc_5$counts
+) |>
+  tidyr::pivot_longer(-gene_name,
+    names_to = "depmap_id",
+    values_to = "rna_expression"
+  )
 ccle_wide <- ccle_2_wide(ccle)
 }

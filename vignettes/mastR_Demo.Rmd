@@ -52,21 +52,19 @@ For example, in cancer research, identifying marker genes that are differentiall
 
 Furthermore, marker genes can also be used in diagnostic assays to detect specific diseases or monitor treatment responses. For instance, the presence of certain marker genes in a patient's blood or tissue sample can indicate the presence or progression of a disease.
 
-Overall, identifying marker genes for specific groups is crucial for understanding biological processes, diagnosing diseases, and developing targeted therapies.
+**importance of immune cells signature in tumor micro-environment (TME)**
 
-**Why do we need immune signature (cell type)**
+In this demo, we will be using the example of immune cell signature in the context of the TME as a practical case study to showcase the application of our approach.
 
-In this demo, we will be using the example of immune cell signature in the context of the tumor micro-environment as a practical case study to showcase the application of our approach.
+TME is made up of a diverse range of cell types (fibroblasts, epithelial cells, endothelial cells, and immune cells) as well as various extracellular components (collagens, growth factors, hormones, cytokines, etc.). Tumor immune micro-environment (TIME) is reported to be highly associated with prognosis and various treatment response to many kinds of cancers.
 
-The tumor micro-environment (TME) is made up of a diverse range of cell types (fibroblasts, epithelial cells, endothelial cells, and immune cells) as well as various extracellular components (collagens, growth factors, hormones, cytokines, etc.). TIME is reported to be highly associated with prognosis and various treatment response to many kinds of cancers.
+Recent studies have highlighted the role of immune components in the TME in modulating tumor progression, making them attractive therapeutic targets. These components make up TIME, which is a subset of the TME. Subsequently, it's proved that tumor infiltrating lymphocytes (TILs) play an essential role in tumor progression, metastasis and treatment response.
 
-Recent studies have highlighted the role of immune components in the TME in modulating tumor progression, making them attractive therapeutic targets. These components make up the tumor immune micro-environment (TIME), which is a subset of the TME. Subsequently, it's proved that tumor infiltrating lymphocytes (TILs) play an essential role in tumor progression, metastasis and treatment response.
+This drives TILs to be a strong prognostic indicator for better precision therapy of cancer patients. The identification of these TILs are the subject of extensive research interest due to the roles of specific subset of immune cells acting on different tissues types.
 
-This drives TILs to be a strong prognostic indicator for better precision therapy of cancer patients. And the identification of these TILs are the subject of keen research interest due to the roles of specific subset of immune cells acting on different tissues types.
+Identification of these cell types are based on flow cytometry in the past, which has limited granularity. But now with the advance of single cell RNA-seq and spatial transcriptomics technologies, more detailed and novel cell types or subtypes can be identified. One of the key advantages of scRNA-seq and spatial technologies is the ability to investigate cell types in the TIME and understand cellular heterogeneity in the TME.
 
-Identification of these cell types are based on flow cytometry in the past, which is limited in the granularity. But now with the advance of single cell RNA-seq and spatial transcriptomics technologies, more detailed and novel cell types or subtypes are being identified. One of the key paradigm of scRNAseq and spatial is to further investigate cell types in the TIME and understand cellular heterogeneity in the TME.
-
-To quantify TILs infiltration (in bulk), estimate cellular composition (in bulk), annotate single cell types (in scRNA) or identify sample states/activities, many computational methods like cell deconvolution (CIBERSORTx), marker based annotation (CelliD) and sample scoring (singscore) are developed. But to distinguish between closely related cell types, estimate cell composition and states, a refined signature is required which typically requires manual curation by domain expert. With the increasing large amount of data and cell types, this is gradually getting to be intenable and will require a different approach to automatically screen such signatures.
+To quantify TILs infiltration (in bulk), estimate cellular composition (in bulk), annotate single cell types (in scRNA) or identify sample states/activities, many computational methods like cell deconvolution (CIBERSORTx), marker based annotation (CelliD) and sample scoring (singscore) are developed. But to distinguish between closely related cell types, estimate cell composition and states, a refined signature is required which typically requires manual curation by domain expert. With the increasing large amount of data and cell types, this is gradually getting to be untenable and will require a different approach to automatically screen such signatures.
 
 mastR is a software package specifically designed to automatically screen signatures of interest for particular research questions. This automated process saves significant time and effort that would otherwise be required for manual labor.
 
@@ -78,7 +76,7 @@ With mastR, users can simply input their expression data containing the groups o
 
 While there are many tools available for generating cell type-specific markers, they are primarily designed for scRNA-seq data and often rely on machine learning algorithms to select relevant features for classification. However, these methods may lack robustness and consistency across datasets when compared to using statistical methods like empirical Bayesian in `limma`. Furthermore, some of these tools may return a signature even when the data does not contain any, leading to potential inaccuracies.
 
-Although differential expression (DE) analysis can also be done on scRNA data, like `Seurat::FindMarkers()`, it's reported that DE analysis done on peudo-bulk scRNA data is more robust and reliable than directly done on scRNA data.
+Although differential expression (DE) analysis can also be done on scRNA data, like `Seurat::FindMarkers()`, it's reported that DE analysis done on pseudo-bulk scRNA data is more robust and reliable than directly done on scRNA data.
 
 Thus, mastR is designed to generate a more refined list of signature genes from multiple group comparisons based on the results from `edgeR` and `limma` DE analysis workflow. The final signature is selected by rank product score test for picking up genes with high ranks in the most of comparisons. The rank can be ordered by any gene statistic generated by limma analysis. Signature can be further refined by keeping the top n DEGs in the specified comparison(s), which can help to improve the discrimination between fairly similar cell types.
 
@@ -121,7 +119,7 @@ The most updated version of `mastR` is hosted on GitHub and can be installed usi
 #   devtools::install_github("Gene233/mastR")
 # }
 
-if (!requireNamespace("BiocManager", quietly=TRUE)) {
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
   install.packages("BiocManager")
 }
 if (!requireNamespace("mastR", quietly = TRUE)) {
@@ -203,8 +201,10 @@ In this case, NK cell relevant gene-sets from `msigdb_gobp_nk` are collected.
 
 ```{r MSigDB gene sets, warning=FALSE}
 data("msigdb_gobp_nk")
-MSig <- get_gsc_sig(gsc = msigdb_gobp_nk,
-                    pattern = "NATURAL_KILLER_CELL_MEDIATED")
+MSig <- get_gsc_sig(
+  gsc = msigdb_gobp_nk,
+  pattern = "NATURAL_KILLER_CELL_MEDIATED"
+)
 MSig
 ```
 
@@ -212,7 +212,7 @@ MSig
 
 Similarly, using `gsc_plot()` users can visualize the overlapping gene sets.
 
-As the gene-set names are too long, for better visualization the gene-set names are replaced with letters and shown later.
+As the gene-set names are too long, for better visualization the gene-set names are replaced with letters and shown below.
 
 ```{r show overlap, warning=FALSE}
 ## cut gene set name within 11 characters
@@ -223,7 +223,7 @@ for (i in seq_along(MSig)) {
 
 ## show upset diagram of collected gene-sets
 gsc_plot(MSig)
-gsn[c("A", "M", "D")]  ## show gene-set names of top 3
+gsn[c("A", "M", "D")] ## show gene-set names of top 3
 ```
 
 There are `r length(MSig)` gene-sets in MSig, which is too many for visualization. Thus, we use function `merge_markers()` to merge all gene-sets into one 'GeneSet' object. (*Note*: Users can directly use the un-merged object for subsequent analyses.)
@@ -271,8 +271,9 @@ nk_markers
 
 ## convert NK markers into 'GeneSet' object
 nk_m <- GeneSet(nk_markers$HGNC_Symbol,
-                geneIdType = SymbolIdentifier(),
-                setName = "NK_markers")
+  geneIdType = SymbolIdentifier(),
+  setName = "NK_markers"
+)
 ```
 
 ## Pool Markers from Sources
@@ -308,58 +309,58 @@ For group specificity, there are 3 main steps:
   b)  feature selection: select differentially expressed genes based on rank product score;  
   c)  constrain selected genes within the markers pool.
 
-***Note***: External data is accepted in many formats (e.g. DGEList, eSet, matrix). All input data must be raw counts data or log-transformed expression data.
+***Note***: External data is accepted in different formats (e.g. DGEList, eSet, matrix). Input data must be raw counts or log-transformed expression data.
 
-In this demo, we use the imported example data `im_data_6` from [GSE60424](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE60424), consisting of healthy individuals and immune cells. Downloaded using `GEOquery::getGEO()`.
+In this demo, we use the imported example data `im_data_6` from [GSE60424](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE60424) (Download using `GEOquery::getGEO()`), consisting of immune cells from healthy individuals.
 
-`im_data_6` is a eSet object, containing RNA-seq TMM normalized counts data of 6 sorted immune cell subsets \* 4 samples. More details in `?mastR::im_data_6`.
+`im_data_6` is a eSet object, containing RNA-seq TMM normalized counts data of 6 sorted immune cell types each with 4 samples. More details in `?mastR::im_data_6`.
 
 ```{r im_data_6}
 data("im_data_6")
 im_data_6
 ```
 
-## a) processing the data {#process}
+## a) data processing {#process}
 
 To screen signature for the group specificity, the data needs to be pre-processed.
 
 `process_data()` in mastR does the End-to-End differential expression analysis using `edgeR` and `limma` pipeline as a single function call.
 
-Process under the hood:
+Processes under the hood:
 
-- Data filtered by the given cutoff, all gene with low expression will be removed by edgeR.
+- Filter data by the given cutoff, genes with low expression will be removed by edgeR.
 
-- If the given data is raw count data (`normalize = TRUE`), further normalization 'TMM' and `limma::voom()` fit is conducted, otherwise `trend` of limma is applied.
+- If data is raw counts (`normalize = TRUE`), normalize data by 'TMM' and fit it using `limma::voom()`. Otherwise apply `trend` of limma on normalized data.
 
-- Final linear model is fitted.
+- Fit linear model.
 
-- gene statistic for differential expression analysis are computed by `limma::treat()`.
+- Compute gene statistic for differential expression analysis using `limma::treat()`.
 
-Let's see what cell types are in `im_data_6`.
+`im_data_6` has 6 immune cell types:
 
 ```{r type names}
 table(im_data_6$`celltype:ch1`)
 ```
 
-An expression data with sample group labels (containing interested target group) is needed for `process_data()`.
+`process_data()` requires an expression matrix and group labels of the samples. This returns a `DGEList` object with processed data.
 
-Then it will return a `DGEList` object with filtered counts (unfiltered counts data will be saved under "original"), vfit (`limma::voom()` is done), tfit (`limma::lmFit()` and `limma::treat()` are done).
+To keep consistent with `Markers`, use param `gene_id` to convert ENSEMBL IDs of `im_data_6` to SYMBOLs for intersection.
 
-mastR provides the gene ID conversion feature using param `gene_id` when the gene ID of input data is not SYMBOL.
-
-Optional param details can be found in `help(proc_data)`.
+Refer to `help(proc_data)` for optional parameters.
 
 ```{r process data}
 proc_data <- process_data(
-  data = im_data_6,  
+  data = im_data_6,
   group_col = "celltype:ch1",
-  target_group = "NK", 
+  target_group = "NK",
   markers = geneIds(Markers),
   gene_id = "ENSEMBL" ## rownames of im_data_6 is ENSEMBL ID
 )
+
+attributes(proc_data)
 ```
 
-Now we save the expression data after limma::voom pipeline under the `proc_data` for subsequent analysis.
+For ease of process later in this demo, add the expression matrix 'E' fitted by `limma::voom()` as 'voomE' into `proc_data`.
 
 ```{r save voom E}
 ## add voom fitted expression as a new list of proc_data for use
@@ -368,16 +369,16 @@ proc_data$voomE <- proc_data$vfit$E
 
 ***Note:***
 
-mastR provides visualization functions to compare the data before and after `process_data()` and see how well the QC has been carried out by using `plot_diagnostics()` and `plot_mean_var()`.
+mastR provides visualization functions to compare the data before and after `process_data()` and assess the quality control (QC) by using `plot_diagnostics()` and `plot_mean_var()`.
 
-To assess the removal of the low quality genes, `plot_diagnostics()` can be used to show the expression distribution, RLE and MDS plots.
+To assess the removal of the low quality genes, use `plot_diagnostics()` to show the expression distribution, RLE and MDS plots.
 
 
 ## b) signature selection based on differential expression {#selection}
 
-Now with the processed data `proc_data`, use `select_sig()` function to further select genes based on the DE results using rank product score. Group specific signature is therefore determined.
+For selection of group specific signature, pass `proc_data` to `select_sig()` function. Genes with high rank product score in DE results are selected.
 
-`feature_selection`: Default "auto" will perform "rankproduct" and switch to "none" if the number of final "UP" (up-regulated genes) and "DOWN" (down-regulated genes) genes are < 5.
+mastR automatically determines if feature selection is required, the default approach (`feature_selection = "auto"`) performs rank product scoring to select genes. But if the numbers of the result are < 5, no feature selection will be conducted (switch to `feature_selection = "none"`).
 
 ```{r select sig}
 ## get the same result as there's permutation test for rank product
@@ -389,86 +390,88 @@ head(sig_ct)
 
 ***Note:***
 
-mastR also implements an additional feature to further increase the discriminative power of the signature between the fairly similar groups.
-
-By setting `keep.top` and `keep.group`, the top n DEGs of specified DE comparisons can be kept (DEGs are ranked based on gene statistic set by `Rank` param). In this case, if we want keep more distinguishable genes between NK and CD8+ T cells, we can set `keep.group = "CD8"` or `keep.group = "NK-CD8"` and use `keep.top = n` to specify how many top genes in that comparison should be kept.
+mastR also implements a feature to further optimize the discriminative power of the signature between fairly similar groups by using params `keep.top` and `keep.group`. More details in `help(select_sig)`.
 
 
 ***Tips:***
 
-All above steps from \@ref(process) to \@ref(selection) for refining group signature can be done by one integrated function `get_degs()`.
+All above steps from \@ref(process) to \@ref(selection) for refining group signature can be done using an integrated function `get_degs()`.
 
 It will return a list of a processed data `proc_data` and a 'GeneSetCollection' `DEGs` with 'UP' and 'DOWN' regulated genes.
 
-QC plots can also be shown at the same time by setting optional param `plot = TRUE`.
+QC plots can also be shown by setting optional param `plot = TRUE`.
 
 
 ## c) constrain signature within markers pool {#intersect-pool}
 
-Then intersect the signature genes `sig_ct` with the markers pool `Markers`, to constrain the final signature within the interested gene list. In this demo, only keep 'UP' regulated genes.
+To constrain the final signature within the interested gene list, intersect the signature genes `sig_ct` with the markers pool `Markers`. In this demo, only the 'UP' regulated genes are kept.
 
-Because the row names of `im_data_6` are ENSEMBL IDs while the markers are all gene SYMBOLs, we need to convert the IDs to the same type so that we can get the intersection.
+For consistency with `Markers` type, convert ENSEMBL IDs of `im_data_6` to gene SYMBOLs.
 
 ```{r markers for cell type, fig.width=8, fig.height=6}
 ## convert ensembl IDs into symbols to match markers pool
-deg_up <- mapIds(org.Hs.eg.db::org.Hs.eg.db,
-                 geneIds(sig_ct[["UP"]]),
-                 "SYMBOL", "ENSEMBL")
+deg_up <- mapIds(
+  org.Hs.eg.db::org.Hs.eg.db,
+  geneIds(sig_ct[["UP"]]),
+  "SYMBOL", "ENSEMBL"
+)
 deg_up <- na.omit(deg_up)
 ## markers specific for NK cells
 m_ct <- intersect(geneIds(Markers), deg_up)
-names(m_ct) <- names(deg_up)[match(m_ct, deg_up)]  ## set ensembl ID as names for downstream visualization
+names(m_ct) <- names(deg_up)[match(m_ct, deg_up)] ## set ensembl ID as names for downstream visualization
 
 head(m_ct)
 ```
 
 Users can use `pca_matrix_plot()` to assess the group separation.
 
-It's clear the intersected genes explain more variance in PC1 compared with all 'UP' DEGs.
+Looking at the variance of PC1 shown below, it's clear the intersected genes explain more variance in PC1 compared with all 'UP' DEGs.
 
 ```{r PCA on sig}
 ## PCA shows clear separation of NK cells
 ## after intersection
 pca_matrix_plot(proc_data,
-                features = m_ct,
-                group_by = "celltype.ch1",
-                slot = "voomE",
-                n = 3,
-                gene_id = "ENSEMBL") +
+  features = m_ct,
+  group_by = "celltype.ch1",
+  slot = "voomE",
+  n = 3,
+  gene_id = "ENSEMBL"
+) +
   patchwork::plot_annotation("Intersected UP DEGs")
 ## before intersection
 pca_matrix_plot(proc_data,
-                features = as.vector(deg_up),
-                group_by = "celltype.ch1",
-                slot = "voomE",
-                n = 3,
-                gene_id = "ENSEMBL") +
+  features = as.vector(deg_up),
+  group_by = "celltype.ch1",
+  slot = "voomE",
+  n = 3,
+  gene_id = "ENSEMBL"
+) +
   patchwork::plot_annotation("All UP DEGs")
 ```
 
 ***Note***:
 
-There's a wrapper function `filter_subset_sig()` which can directly do the whole Step 2 in one step. The result would be the same as running the above workflow step by step.
+Wrapper function `filter_subset_sig()` can complete all processes in Step 2 using a single function. The result would be the same.
 
-`filter_subset_sig()` is helpful when you have multiple datasets (more details in Section \@ref(multi-data)). It can output final signature after aggregating signature lists from all datasets.
+`filter_subset_sig()` is helpful when users have multiple datasets (more details in Section \@ref(multi-data)). It can output the final signature after aggregating signature lists from all datasets.
 
 
 # Step 3. Signature Refinement by Background Expression in Tissue (optional)
 
 ------------------------------------------------------------------------
 
-Now the signature is specific to the target group, further refinement can be achieved by eliminating genes with strong signal in cancer cells or tissues, regarded as background expression.
+Further refinement can be achieved by eliminating genes with strong signal in the cancer cells or tissues, regarded as background expression.
 
-mastR utilized a signal-to-noise ratio (SNR) approach to filter out genes with low SNR values which are considered to have low discriminative power between the group of interest and the background. This removes tumor purity as a factor in the identified signature markers.
+mastR utilizes a signal-to-noise ratio (SNR) approach to filter out genes with low SNR values that have low discriminative power between the group of interest and the background. This removes tumor purity as a factor in the identified signature markers.
 
-Here the signal is the expression of signature in signal data and the noise is the expression of the signature in background data.
+Here the signal is the expression of the signature in signal data and the noise is the expression of the signature in background data.
 
-Two input datasets are needed:
+Two input datasets are required:
 
-- signal data (data for signature identification after process, `proc_data`) 
-- background data (data of tissues or cancers of interest)
+- signal data (`proc_data` from Step 2)
+- background data (target context)
 
-***Note***: Both of signal data and background data should be log-normalized.
+***Note***: Both of signal data and background data must be log-normalized.
 
 The signal data should be the result generated by `process_data()` function.
 
@@ -478,51 +481,49 @@ The refinement consists of:
   II) data filtration
   III) markers removal
 
-## I) data subset
+## I) data subsetting
 
-Customized data can be loaded as matrix, here use `ccle_crc_5` built in mastR as background data, use 'voomE' in `proc_data` as signal data.
+To remove genes with background expression, subset the samples based on the context. In this demo, we are looking to remove CRC-specific signal.
 
-`ccle_crc_5` is a DGEList object only contains 5 CRC cell line samples from [CCLE](https://depmap.org/portal/download/). More details for `help(ccle_crc_5)`.
+Here we choose to load in-built `ccle_crc_5` as the background data. The CRC adherent cell lines data is extracted (`bg_mat`).
 
-[DepMap CCLE](https://depmap.org/portal/download/) is a large database containing RSEM quantified TPM data of more than 1,000 cancer cell lines.
-
-The first step is to subset the samples of interest.
+The signal data is in 'voomE' of `proc_data` and NK cells data is extracted (`sig_mat`).
 
 ```{r subset customized bg data}
 data("ccle_crc_5")
 
-## subset all NK cells of sig data
-sig_mat <- proc_data$voomE[,proc_data$samples$celltype.ch1 == "NK"]
 ## subset CRC cell lines of bg data
 bg_mat <- ccle_crc_5$counts[, ccle_crc_5$samples$cancer == "CRC"]
+## subset all NK cells of sig data
+sig_mat <- proc_data$voomE[, proc_data$samples$celltype.ch1 == "NK"]
 ```
+
+***Note:*** 
+
+`ccle_crc_5` is a DGEList object contains 5 CRC cell line samples from [CCLE](https://depmap.org/portal/download/). More details for `help(ccle_crc_5)`.
+
+[DepMap CCLE](https://depmap.org/portal/download/) is a large database containing RSEM quantified TPM data of more than 1,000 cancer cell lines.
 
 ## II) data filtration
 
-With the subset of matrices, low expression genes need to be removed first as SNR is computed using scaled expression across genes.
+Because SNR is computed using scaled expression across genes, low-expression genes must be removed.
 
-In this case, `sig_mat` from `proc_data` has been already filtered, only filter background data.
+In this case, `sig_mat` from `proc_data` has already been filtered, therefore background data (`bg_mat`) needs to be filtered.
 
-As `bg_mat` only has 5 samples, keep the genes with logTPM > 1 within more than 2 samples.
+`bg_mat` has only 5 samples, genes with logTPM > 1 within more than 2 samples are kept.
 
 ```{r bg data filtration}
-## set cutoff for filtration
-filter <- c(1, 2)
-keep <- rowSums(bg_mat > filter[1], na.rm = TRUE) > filter[2]
-bg_mat <- bg_mat[keep,]
+keep <- rowSums(bg_mat > 1, na.rm = TRUE) > 2
+bg_mat <- bg_mat[keep, ]
 ```
 
-## III) markers pool filtration
+## III) markers pool refinement
 
-Now users can use `remove_bg_exp_mat()` to refine the markers pool.
+To refine the markers pool, use `remove_bg_exp_mat()` to keep genes from `Markers` with high expression in `sig_mat` and low expression in `bg_mat`.
 
-Genes highly expressed in corresponding background data (in this case CRC adherent cell lines) will be removed. 
+This ensures the specificity of the markers minimizing the context effect.
 
-As markers and row names of `bg_mat` are gene SYMBOLs while `sig_mat` has ENSEMBL IDs as row names, mastR provides the gene ID conversion feature in most of the in-built functions by param `gene_id` to meet the mis-matched ID types of markers and input data.
-
-`remove_bg_exp_mat()` allows to specify the gene ID types using parameter `gene_id`, the 1st element will be used as the ID type of signal data, and the 2nd one will be used for background data.
-
-***Note***: Both of `bg_mat` and `sig_mat` should be log-normalized.
+Similarly, use `gene_id` to convert gene IDs of input to the same type (SYMBOL). As `sig_mat` uses ENSEMBL IDs, `gene_id` types have to be defined in the order: `sig_mat`, `bg_mat`.
 
 ```{r remove bg in customized}
 m_ccl <- remove_bg_exp_mat(
@@ -537,26 +538,30 @@ head(m_ccl)
 
 ## use CCLE as background data
 
-[CCLE](https://depmap.org/portal/download/) downloaded by `depmap::depmap_TPM()` is also available for the refinement.
+Users can also use [CCLE](https://depmap.org/portal/download/) downloaded by `depmap::depmap_TPM()` for the refinement.
 
-As the whole CCLE is quite large, use `ccle_crc_5` to construct a small pseudo CCLE data with similar format.
+The entire CCLE data is quite large, thus use `ccle_crc_5` to construct a small pseudo-CCLE data `ccle` with similar format.
 
 ```{r ccle construction}
 ccle <- data.frame(ccle_crc_5$counts,
-                   gene_name = rownames(ccle_crc_5),
-                   primary_disease = "CRC") |> 
+  gene_name = rownames(ccle_crc_5),
+  primary_disease = "CRC"
+) |>
   tidyr::pivot_longer(-c(gene_name, primary_disease),
-                      names_to = "depmap_id",
-                      values_to = "rna_expression")
+    names_to = "depmap_id",
+    values_to = "rna_expression"
+  )
 
 ccle
 ```
 
-Because `ccle` is a long data, subsetting needs to be done before converting data into matrix.
+Because `ccle` is a long data, subsetting needs to be done before converting it into matrix.
+
+In this demo, we still extract CRC adherent cell lines data from it.
 
 ```{r subset sig and bg data}
 ## subset CRC cell lines of bg data
-ccle <- ccle[ccle$primary_disease == "CRC",]
+ccle <- ccle[ccle$primary_disease == "CRC", ]
 ```
 
 As `remove_bg_exp_mat()` can only accept matrix in wide format, users can use `ccle_2_wide()` to convert `ccle` into wide matrix.
@@ -567,14 +572,14 @@ ccle <- ccle_2_wide(ccle = ccle)
 ccle[1:3, 1:3]
 ```
 
-Then the same cutoff of filtration is used for `ccle`.
+Then the same filtration cutoff of `bg_mat` as above is used for `ccle`.
 
 ```{r ccle filtration}
-keep <- rowSums(ccle > filter[1], na.rm = TRUE) > filter[2]
-ccle <- ccle[keep,]
+keep <- rowSums(ccle > 1, na.rm = TRUE) > 2
+ccle <- ccle[keep, ]
 ```
 
-The refined markers pool is returned now. As we use `ccle_crc_5` to construct pseudo `ccle`, the result should be the same as above.
+Use `remove_bg_exp_mat()` to refine the markers pool based on `ccle`. As we use `ccle_crc_5` to construct `ccle`, the result should be the same.
 
 ```{r remove bg in ccle}
 m_ccl <- remove_bg_exp_mat(
@@ -589,25 +594,21 @@ head(m_ccl)
 
 ***Note:***
 
-mastR provides a wrapper function `remove_bg_exp()` to do Step 3. I) II) III) all in one single function call.
+Wrapper function `remove_bg_exp()` can complete Step 3. I) II) III) all in one single function.
 
-CCLE long data is also accepted by setting param `bg_data = 'CCLE'` and pass CCLE data to param `ccle_tpm` and `ccle_meta`. Without the latter 2 parameters, users can use the whole CCLE from DepMap without loading it. More details in `help(remove_bg_exp)`.
+Users can use the entire CCLE data from DepMap without loading it by using param `bg_data = 'CCLE'`. More details in `help(remove_bg_exp)`.
 
 
 ## Combine with Signature
 
-Then we combine the result with the signature `m_ct` we get from Step 2.
-
-Use intersection to get the final signature, which is specific to the target group as well as less affected by the background expression (tissue purity).
+To get the final signature with high group specificity and low background expression, intersect the result `m_ccl` with the signature `m_ct` we get from Step 2.
 
 ```{r final signatures}
 sig_NK_CRC <- intersect(m_ct, m_ccl)
 head(sig_NK_CRC)
 ```
 
-Here, if we directly use `m_ct` instead of `Markers` as input `markers` for `remove_bg_exp_mat()` or `remove_bg_exp()`, then `m_ccl` is already the intersection result of original `m_ccl` and `m_ct`, so we can skip this.
-
-Now we get the final signature specific for both cell type and cancer type!
+Here, if we directly use `m_ct` instead of `Markers` as input `markers` for `remove_bg_exp_mat()` or `remove_bg_exp()`, `m_ccl` will already be the intersection result of the original `m_ccl` and `m_ct`, then we can skip this.
 
 
 # Step 4. Visualization of Final Results
@@ -616,38 +617,37 @@ Now we get the final signature specific for both cell type and cancer type!
 
 To assess how well the refined signature can discriminate our target group from others, mastR provides the following visualization functions for different purposes:
 
-- `pca_matrix_plot()` for matrix of PCA plots with top n PCs.
-    To show if the target group can be separated from other groups and how well the separation is. Users can also know how much variance has been explained by PC1 with the signature.
+- `pca_matrix_plot()`: matrix of PCA plots with top n PCs.
+    Show if the target group can be separated from other groups and how well the separation is. Users can also know how much variance has been explained by PC1 with the signature.
 
-- `sig_heatmap()` for signature heatmap across groups and its comparison with markers pool.  
-    To validate if the signature shows clear and differential expression pattern between the target group and others, and if the pattern is clearer and cleaner after the refinement when compared with un-refined markers pool.
+- `sig_heatmap()`: signature heatmap across groups and its comparison with un-refined markers pool.  
+    Validate if the signature shows clear and differential expression pattern between the target group and others. Show if the pattern is clearer and cleaner after the refinement compared with un-refined markers pool.
 
-- `sig_rankdensity_plot()` for signature genes rank density distribution across groups.  
-    To see if the signature genes are highly expressed within each sample of the target group while lowly expressed in others.
+- `sig_rankdensity_plot()`: rank density distribution of signature genes across groups.  
+    Show if the signature genes are highly expressed within each sample of the target group while lowly expressed in others.
 
-- `sig_boxplot()` for signature expression or singscore boxplot across groups.  
-    To test the overall performance of the whole signature when applying it for scoring, singscore is used to compute the rank score with the whole signature. The boxplot across groups can be used to test if the whole signature is powerful enough to distinguish the target group from others on scoring level. Median expression of each signature gene is also allowed to plot.
+- `sig_boxplot()`: boxplot of signature expression or singscore across groups.  
+    Test the overall performance of the whole signature when applying it for scoring, singscore is used to compute the rank score using the whole signature. The boxplot across groups can be used to test if the whole signature is powerful enough to distinguish the target group from others on scoring level. Median expression of each signature gene is also allowed to be plotted.
 
-- `sig_scatter_plot()` for signature scaled expression scatter plot of the target group vs all other groups respectively.  
-    To visualize the correlation of the signature between the target and other groups, the row-scaled gene expression is computed to make the scatter plot. Based on it, we can easily see the co-expression correlation and signature's specificity.
+- `sig_scatter_plot()`: scatter plot of signature scaled expression of the target group vs all other groups respectively.  
+    Visualize the correlation of the signature between the target and other groups, the row-scaled gene expression is computed to make the scatter plot. Based on it, we can easily see the co-expression correlation and signature's specificity.
 
-- `sig_gseaplot()` for gene-set enrichment analysis result display.  
-    To further validate if the signature is significantly enriched in our target group compared with other groups, `clusterProfiler::GSEA()` analysis is done inside this function. Users can choose to display 'dotplot' or gseaplot' by `clusterProfiler::GSEA()`.
+- `sig_gseaplot()`: gene set enrichment analysis (GSEA) result display.  
+    Validate the enrichment significance of signature in our target group compared with other groups, using `clusterProfiler::GSEA()` analysis. Users can display 'dotplot' or gseaplot'.
 
 
 ## Heatmap
 
-`sig_heatmap()` function can plot the original NK cells markers and curated signatures expression pattern heatmaps in immune datasets.
+Use `sig_heatmap()` function to compare the expression pattern between the original markers pool and the final signature in `proc_data`.
 
-- `sigs`: the final curated signature symbols (or list of multiple signatures).
-- `markers`: is the original markers pool (optional).
-- `scale`: specify the `column` or `row` to be scaled or no scaling by `none`.
+- `sigs`: final signature (or list of multiple signatures).
+- `markers`: original markers pool (optional).
 
 ```{r heatmap, warning=FALSE, fig.width=10, fig.height=7}
 sig_heatmap(
-  data = proc_data, 
+  data = proc_data,
   sigs = sig_NK_CRC,
-  group_col = "celltype.ch1", 
+  group_col = "celltype.ch1",
   markers = geneIds(Markers),
   gene_id = "ENSEMBL",
   slot = "voomE",
@@ -664,36 +664,38 @@ The expression pattern of the signature is more distinguishable in NK cells.
 
 ## Signature Score Boxplot
 
-To see if the curated signature have evident higher abundance in NK cells than other immune cell subsets, use `sig_boxplot()` function to make a boxplot of NK scores for all cell subsets in the data. NK score is calculated by `singscore` package.
+To see if the final signature can distinguish NK cells from other immune cells, use `sig_boxplot()` function to make a boxplot of NK scores using `sig_NK_CRC`. Scores are calculated by `singscore` package.
 
-***Note***: Boxplot of median expression of each gene can be plotted by setting param `type = "expression"`.
+***Note***:
+
+Boxplot of median expression of each gene can be plotted using param `type = "expression"`.
 
 ```{r score boxplot, warning=FALSE}
 sig_boxplot(
-  data = proc_data, 
+  data = proc_data,
   sigs = sig_NK_CRC,
-  group_col = "celltype.ch1", 
-  target_group = "NK", 
+  group_col = "celltype.ch1",
+  target_group = "NK",
   gene_id = "ENSEMBL",
   slot = "voomE"
 )
 ```
 
-Obviously, the signature shows significantly higher score in NK cells.
+Obviously, the signature shows significantly higher score level in NK cells.
 
 
 ## Signature Abundance Scatter Plot
 
-To see if the curated signature shows higher specificity to NK cells than other immune cell subsets. Use `sig_scatter_plot()` function to make scatter plot of the signature scaled abundance for all cell subsets in the data.
+To validate the specificity of the final signature to NK cells, use `sig_scatter_plot()` function to make the scatter plot of the signature z-scored expression in `proc_data`.
 
-If the signature shows specificity to NK, then most of signature genes should appear in left-top region (scaled expression > 1 in NK, < 1 in other), while the gene present in right-top region should represent the co-expression in the both groups.
+If the signature is highly specific to NK cells, most of the signature genes should appear in left-top region (scaled expression > 1 in NK, < 1 in others). The gene present in right-top region should represent the co-expression in both groups.
 
 ```{r abundance scatter plot, warning=FALSE, fig.width=8, fig.height=5}
 ## before refinement
 sig_scatter_plot(
   data = proc_data,
   sigs = geneIds(Markers),
-  group_col = "celltype.ch1", 
+  group_col = "celltype.ch1",
   target_group = "NK",
   gene_id = "ENSEMBL",
   slot = "voomE"
@@ -703,25 +705,27 @@ sig_scatter_plot(
 sig_scatter_plot(
   data = proc_data,
   sigs = sig_NK_CRC,
-  group_col = "celltype.ch1", 
+  group_col = "celltype.ch1",
   target_group = "NK",
   gene_id = "ENSEMBL",
   slot = "voomE"
 ) + ggtitle("After Refinement")
 ```
 
-Based on the scatter plot result, further filtration can be done to improve signature specificity by removing signature genes present in right bottom or left bottom region.
+Almost all of non-specific genes are filtered by mastR.
+
+Further optimization can be done by removing signature genes present in the right bottom or left bottom region based on the scatter plot.
 
 ## Signature GSEA plot
 
-To see if the curated signature is enriched in NK cells than other immune cell subsets. Use `sig_gseaplot()` function to make GSEA plot. Dotplot can be plotted by setting `method = "dotplot"`.
+To assess the enrichment significance of the final signature in NK cells, use `sig_gseaplot()` function to display GSEA result. Dotplot can be plotted by using `method = "dotplot"`.
 
 ```{r gseaplot, warning=FALSE, message=FALSE, fig.width=10, fig.height=7}
 ## gseaplot
 sig_gseaplot(
-  data = proc_data, 
+  data = proc_data,
   sigs = list(sig = sig_NK_CRC, markers = geneIds(Markers)),
-  group_col = "celltype.ch1", 
+  group_col = "celltype.ch1",
   target_group = "NK",
   gene_id = "ENSEMBL",
   slot = "voomE",
@@ -729,7 +733,7 @@ sig_gseaplot(
 )
 ```
 
-It's clear that the refined signature is enriched in all comparisons, and mastR successfully removed the long tail from the markers pool.
+The refined signature is enriched in all comparisons and mastR successfully removed the long tail from the markers pool.
 
 
 # Working with Extension Data Input
@@ -738,31 +742,33 @@ It's clear that the refined signature is enriched in all comparisons, and mastR 
 
 ------------------------------------------------------------------------
 
-Till now, the whole workflow of mastR usage is complete.
+The standard workflow of mastR usage is complete.
 
-But this demo is just a show case on single dataset, mastR can also be applied on multiple datasets.
+But the above is just a show case of single dataset, mastR can also be applied to multiple datasets.
 
-After the Step 2d (Section \@ref(intersect-pool)), for:
+After the Step 2c (Section \@ref(intersect-pool)), for:
 
 1) single dataset  
-    Return the intersection result as the signature.
+    Return the final result as the signature.
 
 2) multiple datasets  
-    After Step 2d, choose one combination method (`union` default) to aggregate signature lists generated from different datasets. Robust Rank Aggregation ("RRA") is another method to select in mastR, which detects genes that are ranked consistently better than expected under null hypothesis of uncorrelated inputs and assigns a significance score for each gene.
+    After Step 2c, choose one combination method (`union` default) to aggregate signature lists generated from different datasets. Robust Rank Aggregation ("RRA") is another method to select in mastR, which detects genes that are ranked consistently better than expected under null hypothesis of uncorrelated inputs and assigns a significance score for each gene.
 
-Instead of integrating datasets into one larger dataset to fit into one linear model, we screen signature in each dataset respectively and users can choose to aggregate the ranked lists via `RobustRankAggreg` method by setting `comb = "RRA"` (as our output of signature by screening function is ordered based on the given `Rank`).
+Instead of integrating datasets into one larger dataset and fit it into one linear model, mastR refines signature in each dataset respectively and the aggregation method can be defined using param `comb` (e.g. `comb = "RRA"`).
 
-The advantage is that users can avoid over-normalizing or mis-correcting when carrying out data integration. And users can get more robust and conserved signature across datasets. It's better than "Remove Batch Effect" sometimes.
+The advantage of this is to avoid over-normalizing or mis-correcting when carrying out data integration. More robust and conserved signature across datasets can be obtained. It's better than "Remove Batch Effect" sometimes.
 
-Of course, easy way such as "union" and "intersect" is also supported besides "RRA" (Robust Rank Aggregation), by setting `comb = union` or `comb = intersect`.
+Simple combination methods like "union" and "intersect" are also supported (e.g. `comb = union`).
 
-It's better to use union when you get only a few genes screened for each dataset, while "RRA" is better to pick up significant genes from large DEG lists, "intersect" is proper for highly overlapping gene lists.
+It's better to use "union" when only a few genes are refined for each dataset, while "RRA" is better for robust gene selection from large DEG lists, and "intersect" is proper for highly overlapping gene lists.
 
-***Note:*** All signature visualization functions in mastR support multiple datasets. More details in `help` function.
+***Note:***
 
-Repeatedly use `im_data_6` as an example here.
+All signature visualization functions in mastR support multiple datasets. More details in `help()`.
 
-```{r screen multiple datasets, eval=FALSE}
+To demonstrate the usage on multiple datasets, repeatedly use `im_data_6` as an example.
+
+```{r refine multiple datasets, eval=FALSE}
 ## In the demo, we just repeatedly use im_data_6 as a show case
 set.seed(123)
 m_ct_m <- filter_subset_sig(
@@ -775,27 +781,35 @@ m_ct_m <- filter_subset_sig(
   gene_id = "ENSEMBL",
   comb = union
 )
+```
 
+The signature `m_ct_m` is the same as `m_ct` as "union" is set as combination method.
+
+```{r union sig, eval=FALSE}
 ## we will get exactly the same list
 ## if we choose 'union' or 'intersect' as combination
 setequal(m_ct_m, m_ct)
+```
 
+By using `comb = "RRA"`, only the genes at the top rank across signature lists are kept. The cutoff of "RRA" can be set with param `s_thres`.
+
+```{r rra sig, eval=FALSE}
 ## but we will only get the genes appear at top rank across gene lists
 ## if we choose 'RRA', s_thres is to determine the threshold for ranking score
 set.seed(123)
 m_ct_m <- filter_subset_sig(
-  data = list(A = im_data_6, B = im_data_6), 
+  data = list(A = im_data_6, B = im_data_6),
   markers = geneIds(Markers),
   group_col = "celltype:ch1",
   target_group = "NK",
   feature_selection = "auto",
   dir = "UP", ## specify to keep "UP" or "DOWN" regulated genes
   gene_id = "ENSEMBL",
-  comb = "RRA",  ## change this to use different strategy, default is "union"
-  s_thres = 0.5  ## only work when comb = "RRA", set a threshold for ranking score
+  comb = "RRA", ## change this to use different strategy, default is "union"
+  s_thres = 0.5 ## only work when comb = "RRA", set a threshold for ranking score
 )
 
-## we can get only 8 signature genes this time
+## fewer signature genes this time
 m_ct_m
 ```
 
@@ -803,9 +817,9 @@ m_ct_m
 
 ------------------------------------------------------------------------
 
-Although mastR is developed for bulk RNA data, to make use of abundant scRNA resource, mastR also provides `pseudo_samples()` function to help convert scRNA data into pseudo-bulk data, which can then be used in the above workflow.
+Although mastR is designed for bulk RNA-seq data, to make use of abundant scRNA resource, mastR provides `pseudo_samples()` function to help convert scRNA-seq data into pseudo-bulk data, which can then be used in mastR workflow.
 
-`pseudo_samples()` can help aggregate cells into pseudo-sample according to the given factor(s).
+`pseudo_samples()` can aggregate cells into pseudo-bulk samples according to the given factor(s) using param `by`. Then use `filter_subset_sig()` to get the signature from scRNA-seq data.
 
 ```{r pseudo-bulk, eval=FALSE}
 ## create a test scRNA object of 100 genes x 100 cells
@@ -830,9 +844,9 @@ filter_subset_sig(pb, group_col = "group", target_group = "A")
 
 # Applications {.tabset .tabset-fade .tabset-pills}
 
-After getting the signature, users can apply it in multiple ways. In this short demo, we will just show 3 simple applications of it, but not run here.
+Users can apply the signature in multiple ways. In this short demo, we will just show 3 simple applications of it, but not run here.
 
-First simulate a scRNA data using `splatter` package. 
+Firstly, simulate a scRNA data using `splatter` package. 
 
 ```{r simulation, eval=FALSE}
 library(splatter)
@@ -855,8 +869,10 @@ data_sim <- splatSimulate(sim_params, method = "groups")
 Markers list for each group can be obtained from the simulated scRNA data.
 
 ```{r get markers list, eval=FALSE}
-markers_list <- lapply(rowData(data_sim)[,paste0("DEFacGroup", 1:4)],
-                       \(x) rownames(data_sim[x > 1]))
+markers_list <- lapply(
+  rowData(data_sim)[, paste0("DEFacGroup", 1:4)],
+  \(x) rownames(data_sim[x > 1])
+)
 ```
 
 Then use `pseudo_samples()` to get pseudo-bulk data and create a DGEList.
@@ -864,17 +880,20 @@ Then use `pseudo_samples()` to get pseudo-bulk data and create a DGEList.
 ```{r pseudo bulking, eval=FALSE}
 ## aggregate into pseudo-bulk samples
 pb <- pseudo_samples(data_sim,
-                     by = c("Batch", "Group"),
-                     min.cells = 50, max.cells = 100)
+  by = c("Batch", "Group"),
+  min.cells = 50, max.cells = 100
+)
 dge <- DGEList(
   counts = pb,
-  samples = data.frame(group = gsub(".*\\.(.*)_.*", "\\1",colnames(pb)),
-                       Batch = gsub("(.*)\\..*", "\\1",colnames(pb)),
-                       sampleID = gsub("(.*)_.*", "\\1",colnames(pb)))
+  samples = data.frame(
+    group = gsub(".*\\.(.*)_.*", "\\1", colnames(pb)),
+    Batch = gsub("(.*)\\..*", "\\1", colnames(pb)),
+    sampleID = gsub("(.*)_.*", "\\1", colnames(pb))
+  )
 )
 ```
 
-Use mastR wrapper function to get signature lists for each group. No markers pool of interest and no background here.
+Use mastR wrapper function `filter_subset_sig()` to get the signature for each group. No markers pool of interest and no background here.
 
 ```{r get sigs, eval=FALSE, fig.height=4}
 set.seed(123)
@@ -889,18 +908,22 @@ sig_ls <- lapply(paste0("Group", 1:4), \(x) {
 names(sig_ls) <- paste0("Group", 1:4)
 ```
 
-Show the overlapping of the signature lists generated by mastR and the markers lists from simulation.
+Show the overlapping of the signature lists generated by mastR and the markers lists from the simulation.
 
 ```{r venn plot, eval=FALSE}
 ## venn plot
-p <- lapply(1:4, \(i) ggvenn::ggvenn(list(sig = sig_ls[[i]],
-                                          marker = markers_list[[i]]),
-                                     show_percentage = FALSE) +
-              ggtitle(names(sig_ls)[i]))
+p <- lapply(1:4, \(i) ggvenn::ggvenn(
+  list(
+    sig = sig_ls[[i]],
+    marker = markers_list[[i]]
+  ),
+  show_percentage = FALSE
+) +
+  ggtitle(names(sig_ls)[i]))
 patchwork::wrap_plots(p)
 ```
 
-Use `sig_heatmap()` to compare the expression of signatures and markers. 
+Use `sig_heatmap()` to compare the expression of signatures and markers lists. 
 
 ```{r app heatmap, eval=FALSE}
 ## heatmap
@@ -928,9 +951,11 @@ data_sim$rand_idx <- sample.int(30, ncol(data_sim), replace = TRUE)
 pb_r <- pseudo_samples(data_sim, by = c("Batch", "rand_idx"))
 dge_r <- DGEList(
   counts = pb_r,
-  samples = data.frame(group = gsub(".*\\.(.*)_.*", "\\1",colnames(pb_r)),
-                       Batch = gsub("(.*)\\..*", "\\1",colnames(pb_r)),
-                       sampleID = gsub("(.*)_.*", "\\1",colnames(pb_r)))
+  samples = data.frame(
+    group = gsub(".*\\.(.*)_.*", "\\1", colnames(pb_r)),
+    Batch = gsub("(.*)\\..*", "\\1", colnames(pb_r)),
+    sampleID = gsub("(.*)_.*", "\\1", colnames(pb_r))
+  )
 )
 ```
 
@@ -943,18 +968,18 @@ tmp <- as.data.frame(colData(data_sim)) |>
   summarise(count = n()) |>
   pivot_wider(names_from = Group, values_from = count) |>
   mutate(rand_idx = factor(rand_idx))
-tmp[,-1] <- signif(tmp[,-1] / rowSums(tmp[,-1]), 2)
+tmp[, -1] <- signif(tmp[, -1] / rowSums(tmp[, -1]), 2)
 dge_r$samples <- left_join(dge_r$samples, tmp, by = c("group" = "rand_idx"))
 
 ## data process
 keep <- filterByExpr(dge_r)
-dge_r <- dge_r[keep,, keep.lib.sizes = FALSE]
+dge_r <- dge_r[keep, , keep.lib.sizes = FALSE]
 dge_r <- calcNormFactors(dge_r, method = "TMM")
 ```
 
 ## Score
 
-Multiple scores are calculated by `singscore` package using signatures and markers. Use scatter plot to show the correlation between the score and the actual cellular proportion.
+Multiple scores are calculated by `singscore` package using signatures and markers lists. Make scatter plot to compare the correlation between the score and the actual cellular proportion.
 
 For signatures generated by mastR:
 
@@ -966,12 +991,14 @@ rank_data <- rankGenes(edgeR::cpm(dge_r, log = TRUE))
 ## score based on sig_ls
 scores <- multiScore(rank_data, upSetColc = gls2gsc(sig_ls))
 
-tmp <- pivot_longer(cbind(Sample = colnames(dge_r), dge_r$samples[,6:9]),
-                    -Sample, names_to = "Group", values_to = "Prop")
+tmp <- pivot_longer(cbind(Sample = colnames(dge_r), dge_r$samples[, 6:9]),
+  -Sample,
+  names_to = "Group", values_to = "Prop"
+)
 
-tmp <- t(scores$Scores) |> 
-  data.frame(Sample = colnames(scores$Scores)) |> 
-  pivot_longer(-Sample, names_to = "Group", values_to = "Score") |> 
+tmp <- t(scores$Scores) |>
+  data.frame(Sample = colnames(scores$Scores)) |>
+  pivot_longer(-Sample, names_to = "Group", values_to = "Score") |>
   left_join(tmp)
 
 ggplot(tmp, aes(x = Prop, y = Score, col = Group)) +
@@ -987,13 +1014,15 @@ For markers list from simulation:
 ## score based on markers_list
 scores <- multiScore(rank_data, upSetColc = gls2gsc(markers_list))
 
-tmp <- pivot_longer(cbind(Sample = colnames(dge_r), dge_r$samples[,6:9]),
-                    -Sample, names_to = "Group", values_to = "Prop")
+tmp <- pivot_longer(cbind(Sample = colnames(dge_r), dge_r$samples[, 6:9]),
+  -Sample,
+  names_to = "Group", values_to = "Prop"
+)
 tmp$Group <- paste0("DEFac", tmp$Group)
 
-tmp <- t(scores$Scores) |> 
-  data.frame(Sample = colnames(scores$Scores)) |> 
-  pivot_longer(-Sample, names_to = "Group", values_to = "Score") |> 
+tmp <- t(scores$Scores) |>
+  data.frame(Sample = colnames(scores$Scores)) |>
+  pivot_longer(-Sample, names_to = "Group", values_to = "Score") |>
   left_join(tmp)
 
 ggplot(tmp, aes(x = Prop, y = Score, col = Group)) +
@@ -1007,21 +1036,21 @@ ggplot(tmp, aes(x = Prop, y = Score, col = Group)) +
 
 Use `DWLS` package for cellular deconvolution.
 
-Use signatures to subset scRNA reference data and build the signature profile on it. Cellular proportion can be obtained based on it.
+Use signatures to subset scRNA reference data and build its signature profile. Cellular proportion can be estimated based on it.
 
 ```{r deconv, eval=FALSE}
 sig_matrix <- DWLS::buildSignatureMatrixMAST(
-  scdata = counts(data_sim)[unique(unlist(sig_ls)),],
+  scdata = counts(data_sim)[unique(unlist(sig_ls)), ],
   id = data_sim$Group,
   path = tempdir()
 )
 
-res <- DWLS::solveDampenedWLS(sig_matrix, pb_r[rownames(sig_matrix),])
+res <- DWLS::solveDampenedWLS(sig_matrix, pb_r[rownames(sig_matrix), ])
 ```
 
 ## Annotation
 
-Use `singscore` as a marker-based annotation method, calculate the scores based on signatures and markers list, then assign each cell to the cell type with the highest score. Compare the result of signatures and markers list.
+Use `singscore` as a marker-based annotation method. Calculate the scores based on the signatures and markers lists, then assign each cell to the cell type with the highest score. Compare the result based on signatures and markers lists.
 
 Using signatures:
 
@@ -1039,7 +1068,7 @@ data_sim$Pred <- paste0("Group", apply(scores$Scores, 2, which.max))
 table(data_sim$Pred == data_sim$Group)
 ```
 
-Using markers list:
+Using markers lists:
 
 ```{r markers annotation, eval=FALSE}
 ## score using markers_list

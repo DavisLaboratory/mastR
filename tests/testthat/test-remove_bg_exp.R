@@ -38,7 +38,7 @@ test_that("remove_bg_exp works", {
 
   m <- remove_bg_exp(
     bg_data = Biobase::exprs(im_data_6),
-    sig_data= ccle_crc_5,
+    sig_data = ccle_crc_5,
     b_group_col = im_data_6$`celltype:ch1`,
     b_target_group = "NK",
     s_group_col = "cancer",

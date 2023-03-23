@@ -58,4 +58,4 @@ get_lm_sig <- function(lm7.pattern, lm22.pattern, ...) {
   return(gs)
 }
 
-utils::globalVariables(c( "lm7", "lm22"))
+utils::globalVariables(c("lm7", "lm22"))
