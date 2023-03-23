@@ -22,10 +22,10 @@ NULL
 #' @return patchwork or ggplot of boxplot
 #'
 #' @examples
-#' data("im_data_6", "NK_markers")
+#' data("im_data_6", "nk_markers")
 #' p <- sig_boxplot(
 #'   im_data_6,
-#'   sigs = NK_markers$HGNC_Symbol[1:30],
+#'   sigs = nk_markers$HGNC_Symbol[1:30],
 #'   group_col = "celltype:ch1", target_group = "NK",
 #'   gene_id = "ENSEMBL"
 #' )

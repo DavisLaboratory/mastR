@@ -247,13 +247,13 @@ Specify signatures against specific tissues or cell lines by
 removing genes with high expression in the background.
 }
 \examples{
-data("NK_markers", "ccle_crc_5")
+data("im_data_6", "nk_markers", "ccle_crc_5")
 remove_bg_exp(
   sig_data = Biobase::exprs(im_data_6),
   bg_data = ccle_crc_5,
   im_data_6$`celltype:ch1`, "NK", ## for sig_data
   "cancer", "CRC", ## for bg_data
-  markers = NK_markers$HGNC_Symbol[40:50],
+  markers = nk_markers$HGNC_Symbol[40:50],
   filter = c(1, 2),
   gene_id = c("ENSEMBL", "SYMBOL")
 )

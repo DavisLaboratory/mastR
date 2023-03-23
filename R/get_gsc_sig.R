@@ -26,6 +26,7 @@
 #' @export
 #'
 #' @examples
+#' data("msigdb_gobp_nk")
 #' get_gsc_sig(
 #'   gsc = msigdb_gobp_nk,
 #'   pattern = "natural_killer_cell_mediated",

@@ -19,12 +19,12 @@ NULL
 #' @return patchwork object for all comparisons
 #'
 #' @examples
-#' data("im_data_6", "NK_markers")
+#' data("im_data_6", "nk_markers")
 #' sig_gseaplot(
 #'   sigs = list(
-#'     A = NK_markers$HGNC_Symbol[1:15],
-#'     B = NK_markers$HGNC_Symbol[20:40],
-#'     C = NK_markers$HGNC_Symbol[60:75]
+#'     A = nk_markers$HGNC_Symbol[1:15],
+#'     B = nk_markers$HGNC_Symbol[20:40],
+#'     C = nk_markers$HGNC_Symbol[60:75]
 #'   ),
 #'   data = im_data_6, group_col = "celltype:ch1",
 #'   target_group = "NK", gene_id = "ENSEMBL"

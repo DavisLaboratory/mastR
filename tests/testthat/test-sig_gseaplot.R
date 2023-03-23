@@ -1,10 +1,10 @@
 test_that("sig_gseaplot works", {
-  data("im_data_6", "NK_markers")
+  data("im_data_6", "nk_markers")
   ## test matrix object
   suppressWarnings(
     p <- sig_gseaplot(
       Biobase::exprs(im_data_6),
-      sigs = NK_markers$HGNC_Symbol[1:20],
+      sigs = nk_markers$HGNC_Symbol[1:20],
       group_col = im_data_6$`celltype:ch1`,
       target_group = "NK",
       gene_id = "ENSEMBL"
@@ -17,7 +17,7 @@ test_that("sig_gseaplot works", {
   suppressWarnings(
     p <- sig_gseaplot(
       im_data_6,
-      sigs = NK_markers$HGNC_Symbol[1:20],
+      sigs = nk_markers$HGNC_Symbol[1:20],
       group_col = "celltype:ch1", target_group = "NK",
       gene_id = "ENSEMBL"
     )
@@ -32,7 +32,7 @@ test_that("sig_gseaplot works", {
   suppressWarnings(
     p <- sig_gseaplot(
       dge,
-      sigs = NK_markers$HGNC_Symbol[1:20],
+      sigs = nk_markers$HGNC_Symbol[1:20],
       group_col = "group", target_group = "NK",
       gene_id = "ENSEMBL"
     )
@@ -47,7 +47,7 @@ test_that("sig_gseaplot works", {
   suppressWarnings(
     p <- sig_gseaplot(
       data_seurat,
-      sigs = NK_markers$HGNC_Symbol[1:20],
+      sigs = nk_markers$HGNC_Symbol[1:20],
       group_col = "group", target_group = "NK",
       gene_id = "ENSEMBL"
     )
@@ -59,8 +59,8 @@ test_that("sig_gseaplot works", {
     p <- sig_gseaplot(
       list(A = im_data_6, B = im_data_6),
       sigs = list(
-        a = NK_markers$HGNC_Symbol[1:20],
-        b = NK_markers$HGNC_Symbol[21:35]
+        a = nk_markers$HGNC_Symbol[1:20],
+        b = nk_markers$HGNC_Symbol[21:35]
       ),
       group_col = "celltype:ch1", target_group = "NK",
       gene_id = "ENSEMBL"
@@ -72,7 +72,7 @@ test_that("sig_gseaplot works", {
   suppressWarnings(
     p <- sig_gseaplot(
       im_data_6,
-      sigs = NK_markers$HGNC_Symbol[1:20],
+      sigs = nk_markers$HGNC_Symbol[1:20],
       group_col = "celltype:ch1", target_group = "NK",
       gene_id = "ENSEMBL", method = "gseaplot"
     )

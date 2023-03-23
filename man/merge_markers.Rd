@@ -19,6 +19,7 @@ indicate which DB each gene is from, this can be shown via
 \code{\link[jsonlite:fromJSON]{jsonlite::fromJSON()}}.
 }
 \examples{
-Markers <- merge_markers(mastR::msigdb_gobp_nk[1:3])
+data("msigdb_gobp_nk")
+Markers <- merge_markers(msigdb_gobp_nk[1:3])
 jsonlite::fromJSON(GSEABase::longDescription(Markers))
 }

@@ -74,6 +74,7 @@ By setting cat and subcat, matching can be constrained in the union of given
 categories and subcategories if gsc = 'msigdb'.
 }
 \examples{
+data("msigdb_gobp_nk")
 get_gsc_sig(
   gsc = msigdb_gobp_nk,
   pattern = "natural_killer_cell_mediated",

@@ -28,11 +28,11 @@ a vector of genes after filtration
 Remove genes show high signal in the background expression data from markers.
 }
 \examples{
-data("NK_markers", "ccle_crc_5")
+data("im_data_6", "nk_markers", "ccle_crc_5")
 remove_bg_exp_mat(
   sig_mat = Biobase::exprs(im_data_6),
   bg_mat = ccle_crc_5$counts,
-  markers = NK_markers$HGNC_Symbol[30:40],
+  markers = nk_markers$HGNC_Symbol[30:40],
   gene_id = c("ENSEMBL", "SYMBOL")
 )
 }

@@ -17,7 +17,9 @@ NULL
 #' @export
 #'
 #' @examples
-#' proc_data <- process_data(mastR::im_data_6,
+#' data("im_data_6")
+#' proc_data <- process_data(
+#'   im_data_6,
 #'   group_col = "celltype:ch1",
 #'   target_group = "NK"
 #' )
@@ -331,6 +333,7 @@ setMethod(
 #' @export
 #'
 #' @examples
+#' data("im_data_6")
 #' dge <- edgeR::DGEList(
 #'   counts = Biobase::exprs(im_data_6),
 #'   samples = Biobase::pData(im_data_6)
@@ -393,7 +396,9 @@ plot_diagnostics <- function(expr1, expr2, group_col, abl = 2) {
 #' @export
 #'
 #' @examples
-#' proc_data <- process_data(im_data_6,
+#' data("im_data_6")
+#' proc_data <- process_data(
+#'   im_data_6,
 #'   group_col = "celltype:ch1",
 #'   target_group = "NK"
 #' )
@@ -423,7 +428,9 @@ plot_mean_var <- function(proc_data, span = 0.5) {
 #' @export
 #'
 #' @examples
-#' proc_data <- process_data(im_data_6,
+#' data("im_data_6")
+#' proc_data <- process_data(
+#'   im_data_6,
 #'   group_col = "celltype:ch1",
 #'   target_group = "NK"
 #' )

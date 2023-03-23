@@ -15,8 +15,9 @@
 #'   \item{MoMaDC}{gene median expression in MoMaDC cells}
 #'   \item{granulocytes}{gene median expression in granulocytes}
 #' }
+#' @usage data(lm7)
 #' @source \url{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5384348/}
-"LM7"
+"lm7"
 
 #' LM22 matrix for CIBERSORT.
 #'
@@ -50,8 +51,9 @@
 #'   \item{Eosinophils}{0 or 1}
 #'   \item{Neutrophils}{0 or 1}
 #' }
+#' @usage data(lm22)
 #' @source \url{https://cibersort.stanford.edu/}
-"LM22"
+"lm22"
 
 #' NK cell markers combination.
 #'
@@ -65,15 +67,17 @@
 #'   \item{LM7}{if included in LM7}
 #'   \item{Huntington}{if included in orthologs}
 #' }
+#' @usage data(nk_markers)
 #' @source \url{https://cancerimmunolres.aacrjournals.org/content/7/7/1162.long}
-"NK_markers"
+"nk_markers"
 
 #' RNA-seq TMM normalized counts data of 6 sorted immune subsets.
 #'
 #' A list of ExpressionSet objects containing 6 immune subsets (B-cells, CD4,
 #' CD8, Monocytes, Neutrophils, NK) from healthy individuals.
 #'
-#' @format A list of ExpressionSet objects of 6*4 samples:
+#' @format A list of ExpressionSet objects of 6*4 samples.
+#' @usage data(im_data_6)
 #' @source \url{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE60424}
 "im_data_6"
 
@@ -82,7 +86,8 @@
 #' A test DGEList object with RNA-seq RSEM quantified TPM data of 5 CRC cell
 #' line samples from CCLE [depmap::depmap_TPM()].
 #'
-#' @format A DGEList of `r nrow(mastR::ccle_crc_5)` genes * 5 samples:
+#' @format A DGEList of `r nrow(mastR::ccle_crc_5)` genes * 5 samples.
+#' @usage data(ccle_crc_5)
 #' @source [depmap::depmap_TPM()]
 "ccle_crc_5"
 
@@ -92,5 +97,6 @@
 #' to 'NATURAL_KILLER' from GO:BP MSigDB v7.4 database.
 #'
 #' @format A GeneSetCollection of `r length(mastR::msigdb_gobp_nk)` gene sets.
+#' @usage data(msigdb_gobp_nk)
 #' @source [msigdb::getMsigdb()]
 "msigdb_gobp_nk"

@@ -8,7 +8,8 @@
 #' @export
 #'
 #' @examples
-#' gsc_plot(mastR::msigdb_gobp_nk[1:3])
+#' data("msigdb_gobp_nk")
+#' gsc_plot(msigdb_gobp_nk[1:3])
 gsc_plot <- function(...) {
   ## input must be GeneSet or GeneSetCollection
   if (!all(vapply(list(...), class, FUN.VALUE = "vector") %in% c("GeneSet", "GeneSetCollection"))) {

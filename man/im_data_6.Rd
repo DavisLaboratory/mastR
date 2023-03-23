@@ -5,13 +5,13 @@
 \alias{im_data_6}
 \title{RNA-seq TMM normalized counts data of 6 sorted immune subsets.}
 \format{
-A list of ExpressionSet objects of 6*4 samples:
+A list of ExpressionSet objects of 6*4 samples.
 }
 \source{
 \url{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE60424}
 }
 \usage{
-im_data_6
+data(im_data_6)
 }
 \description{
 A list of ExpressionSet objects containing 6 immune subsets (B-cells, CD4,

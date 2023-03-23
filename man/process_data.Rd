@@ -153,7 +153,9 @@ filter low expression genes, normalize data by 'TMM' and apply
 \code{\link[limma:voom]{limma::voom()}}, \code{\link[limma:lmFit]{limma::lmFit()}} and \code{\link[limma:ebayes]{limma::treat()}} on normalized data
 }
 \examples{
-proc_data <- process_data(mastR::im_data_6,
+data("im_data_6")
+proc_data <- process_data(
+  im_data_6,
   group_col = "celltype:ch1",
   target_group = "NK"
 )

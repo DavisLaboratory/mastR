@@ -72,7 +72,7 @@ mastR is a software package specifically designed to automatically screen signat
 
 **What this package does**
 
-*mastR*, MArkers Screening Tool in R, is a package to automatically derive signature for specific group of interest in specific tissue.
+**mastR**, **MA**rkers **S**creening **T**ool in **R**, is a package to automatically derive signature for specific group of interest in specific tissue.
 
 With mastR, users can simply input their expression data containing the groups of interest, along with group labels, to obtain a list of marker genes (signature) for the target group.
 
@@ -158,11 +158,11 @@ The standard pool building process involves the following:
 
 mastR allows the following markers to be conveniently loaded:
 
-- `LM7` and `LM22`: CIBERSORT (LM22) and Tosolini et al. (LM7) gene sets for leukocytes, get more details using `?mastR::LM7` or `?mastR::LM22`.
+- `lm7` and `lm22`: CIBERSORT (LM22) and Tosolini et al. (LM7) gene sets for leukocytes, get more details using `?mastR::lm7` or `?mastR::lm22`.
 
 - `msigdb_gobp_nk`: a 'GeneSetCollection' object, containing gene sets with gene-set name matched to 'NATURAL_KILLER' in GO:BP MSigDB v7.4 database. More details `?mastR::msigdb_gobp_nk`.
 
-- `NK_markers`: a combination of CIBERSORT LM7, LM22 and Huntington gene list with 114 genes. ([Cursons et al. 2019](https://cancerimmunolres.aacrjournals.org/content/7/7/1162.long)).
+- `nk_markers`: a combination of CIBERSORT LM7, LM22 and Huntington gene list with 114 genes. ([Cursons et al. 2019](https://cancerimmunolres.aacrjournals.org/content/7/7/1162.long)).
 
 All markers generation functions will return 'GeneSet' or 'GeneSetCollection' object.
 
@@ -174,12 +174,12 @@ In this demo, we will load some some publicly available example datasets.
 
 ### i) Leukocyte gene signature Matrix (LM)
 
-`LM7/LM22` are immune cells signature matrices from CIBERSORT, contains 7 or 22 immune cell types.
+`lm7/lm22` are immune cells signature matrices from CIBERSORT, contains 7 or 22 immune cell types.
 
-Users can use function `get_lm_sig()` to generate immune cells markers from LM7 and/or LM22.
+Users can use function `get_lm_sig()` to generate immune cells markers from LM7 and/or lm22.
 
 ```{r LM markers}
-data("LM7", "LM22")
+data("lm7", "lm22")
 
 ## collect both LM7 and LM22
 LM <- get_lm_sig(lm7.pattern = "^NK", lm22.pattern = "NK cells")
@@ -262,15 +262,15 @@ Panglao
 
 Customized markers can be imported as a 'GeneSet' object.
 
-Here we demonstrate this by loading the in-built `NK_markers` markers dataset and convert it into 'GeneSet' object.
+Here we demonstrate this by loading the in-built `nk_markers` markers dataset and convert it into 'GeneSet' object.
 
-```{r NK_markers}
-## show what NK_markers looks like:
-data("NK_markers")
-NK_markers
+```{r nk_markers}
+## show what nk_markers looks like:
+data("nk_markers")
+nk_markers
 
 ## convert NK markers into 'GeneSet' object
-nk_m <- GeneSet(NK_markers$HGNC_Symbol,
+nk_m <- GeneSet(nk_markers$HGNC_Symbol,
                 geneIdType = SymbolIdentifier(),
                 setName = "NK_markers")
 ```

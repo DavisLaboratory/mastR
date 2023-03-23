@@ -18,7 +18,9 @@ comparison plot of mean-variance of voom and final model
 plot Mean-variance trend after voom and after final linear fit
 }
 \examples{
-proc_data <- process_data(im_data_6,
+data("im_data_6")
+proc_data <- process_data(
+  im_data_6,
   group_col = "celltype:ch1",
   target_group = "NK"
 )

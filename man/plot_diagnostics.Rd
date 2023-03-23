@@ -22,6 +22,7 @@ multiple plots
 plot diagnostics before and after \code{\link[=process_data]{process_data()}}
 }
 \examples{
+data("im_data_6")
 dge <- edgeR::DGEList(
   counts = Biobase::exprs(im_data_6),
   samples = Biobase::pData(im_data_6)

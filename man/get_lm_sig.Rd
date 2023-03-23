@@ -25,6 +25,6 @@ provided, the output would be a 'GeneSetCollection' class object with
 setName: LM7, LM22.
 }
 \examples{
-data("LM7", "LM22")
+data("lm7", "lm22")
 get_lm_sig(lm7.pattern = "NK", lm22.pattern = "NK cells")
 }

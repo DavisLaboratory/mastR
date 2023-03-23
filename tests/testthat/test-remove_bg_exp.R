@@ -1,10 +1,10 @@
 test_that("remove_bg_exp works", {
-  data("NK_markers", "ccle_crc_5", "im_data_6")
+  data("nk_markers", "ccle_crc_5", "im_data_6")
   ## test matrix
   m1 <- remove_bg_exp(
     bg_data = ccle_crc_5$counts,
     sig_data = Biobase::exprs(im_data_6),
-    markers = NK_markers$HGNC_Symbol[40:50],
+    markers = nk_markers$HGNC_Symbol[40:50],
     gene_id = c("ENSEMBL", "SYMBOL")
   )
   expect_true(is.vector(m1))
@@ -16,7 +16,7 @@ test_that("remove_bg_exp works", {
     b_target_group = "CRC",
     s_group_col = im_data_6$`celltype:ch1`,
     s_target_group = "NK",
-    markers = NK_markers$HGNC_Symbol[40:50],
+    markers = nk_markers$HGNC_Symbol[40:50],
     gene_id = c("ENSEMBL", "SYMBOL")
   )
   expect_true(is.vector(m1))
@@ -29,7 +29,7 @@ test_that("remove_bg_exp works", {
     b_target_group = "CRC",
     s_group_col = im_data_6$`celltype:ch1`,
     s_target_group = "NK",
-    markers = NK_markers$HGNC_Symbol[40:50],
+    markers = nk_markers$HGNC_Symbol[40:50],
     gene_id = c("ENSEMBL", "SYMBOL")
   )
   expect_true(is.vector(m2))
@@ -43,7 +43,7 @@ test_that("remove_bg_exp works", {
     b_target_group = "NK",
     s_group_col = "cancer",
     s_target_group = "CRC",
-    markers = NK_markers$HGNC_Symbol[40:50],
+    markers = nk_markers$HGNC_Symbol[40:50],
     gene_id = c("SYMBOL", "ENSEMBL")
   )
   expect_true(is.vector(m))
@@ -56,7 +56,7 @@ test_that("remove_bg_exp works", {
     b_target_group = "CD4",
     s_group_col = im_data_6$`celltype:ch1`,
     s_target_group = "NK",
-    markers = NK_markers$HGNC_Symbol[40:50],
+    markers = nk_markers$HGNC_Symbol[40:50],
     gene_id = "ENSEMBL"
   )
   expect_true(is.vector(m))
@@ -73,7 +73,7 @@ test_that("remove_bg_exp works", {
     b_target_group = "CRC",
     s_group_col = im_data_6$`celltype:ch1`,
     s_target_group = "NK",
-    markers = NK_markers$HGNC_Symbol[40:50],
+    markers = nk_markers$HGNC_Symbol[40:50],
     gene_id = c("ENSEMBL", "SYMBOL")
   )
   expect_true(is.vector(m))
@@ -86,7 +86,7 @@ test_that("remove_bg_exp works", {
     b_target_group = "colorectal",
     s_group_col = im_data_6$`celltype:ch1`,
     s_target_group = "NK",
-    markers = NK_markers$HGNC_Symbol[40:50],
+    markers = nk_markers$HGNC_Symbol[40:50],
     gene_id = c("ENSEMBL", "SYMBOL"),
     filter = c(1, 10),
     ignore.case = TRUE

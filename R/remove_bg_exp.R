@@ -37,13 +37,13 @@
 #' @return a vector of genes after filtration
 #'
 #' @examples
-#' data("NK_markers", "ccle_crc_5")
+#' data("im_data_6", "nk_markers", "ccle_crc_5")
 #' remove_bg_exp(
 #'   sig_data = Biobase::exprs(im_data_6),
 #'   bg_data = ccle_crc_5,
 #'   im_data_6$`celltype:ch1`, "NK", ## for sig_data
 #'   "cancer", "CRC", ## for bg_data
-#'   markers = NK_markers$HGNC_Symbol[40:50],
+#'   markers = nk_markers$HGNC_Symbol[40:50],
 #'   filter = c(1, 2),
 #'   gene_id = c("ENSEMBL", "SYMBOL")
 #' )
@@ -541,11 +541,11 @@ setMethod(
 #' @export
 #'
 #' @examples
-#' data("NK_markers", "ccle_crc_5")
+#' data("im_data_6", "nk_markers", "ccle_crc_5")
 #' remove_bg_exp_mat(
 #'   sig_mat = Biobase::exprs(im_data_6),
 #'   bg_mat = ccle_crc_5$counts,
-#'   markers = NK_markers$HGNC_Symbol[30:40],
+#'   markers = nk_markers$HGNC_Symbol[30:40],
 #'   gene_id = c("ENSEMBL", "SYMBOL")
 #' )
 remove_bg_exp_mat <- function(
@@ -641,6 +641,7 @@ remove_bg_exp_mat <- function(
 #' @export
 #'
 #' @examples
+#' data("ccle_crc_5")
 #' ccle <- data.frame(gene_name = rownames(ccle_crc_5),
 #'                    ccle_crc_5$counts) |>
 #'   tidyr::pivot_longer(-gene_name, names_to = "depmap_id",

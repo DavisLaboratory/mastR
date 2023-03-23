@@ -1,10 +1,10 @@
 test_that("sig_rankdensity_plot works", {
-  data("im_data_6", "NK_markers")
+  data("im_data_6", "nk_markers")
   ## test matrix object
   ### test aggregate = FALSE
   p <- sig_rankdensity_plot(
     Biobase::exprs(im_data_6),
-    sigs = NK_markers$HGNC_Symbol[1:20],
+    sigs = nk_markers$HGNC_Symbol[1:20],
     group_col = im_data_6$`celltype:ch1`,
     gene_id = "ENSEMBL"
   )
@@ -13,7 +13,7 @@ test_that("sig_rankdensity_plot works", {
   ### test aggregate = TRUE
   p <- sig_rankdensity_plot(
     Biobase::exprs(im_data_6),
-    sigs = NK_markers$HGNC_Symbol[1:20],
+    sigs = nk_markers$HGNC_Symbol[1:20],
     group_col = im_data_6$`celltype:ch1`,
     gene_id = "ENSEMBL",
     aggregate = TRUE
@@ -24,7 +24,7 @@ test_that("sig_rankdensity_plot works", {
   ### test expression boxplot
   p <- sig_rankdensity_plot(
     im_data_6,
-    sigs = NK_markers$HGNC_Symbol[1:20],
+    sigs = nk_markers$HGNC_Symbol[1:20],
     group_col = "celltype:ch1",
     gene_id = "ENSEMBL"
   )
@@ -33,7 +33,7 @@ test_that("sig_rankdensity_plot works", {
   ### test score boxplot
   p <- sig_rankdensity_plot(
     im_data_6,
-    sigs = NK_markers$HGNC_Symbol[1:20],
+    sigs = nk_markers$HGNC_Symbol[1:20],
     group_col = "celltype:ch1",
     gene_id = "ENSEMBL"
   )
@@ -46,7 +46,7 @@ test_that("sig_rankdensity_plot works", {
   )
   p <- sig_rankdensity_plot(
     dge,
-    sigs = NK_markers$HGNC_Symbol[1:20],
+    sigs = nk_markers$HGNC_Symbol[1:20],
     group_col = "group",
     gene_id = "ENSEMBL"
   )
@@ -59,7 +59,7 @@ test_that("sig_rankdensity_plot works", {
   )
   p <- sig_rankdensity_plot(
     data_seurat,
-    sigs = NK_markers$HGNC_Symbol[1:20],
+    sigs = nk_markers$HGNC_Symbol[1:20],
     group_col = "group",
     gene_id = "ENSEMBL"
   )
@@ -68,7 +68,7 @@ test_that("sig_rankdensity_plot works", {
   ## test list objects
   p <- sig_rankdensity_plot(
     list(A = im_data_6, B = im_data_6),
-    sigs = NK_markers$HGNC_Symbol[1:20],
+    sigs = nk_markers$HGNC_Symbol[1:20],
     group_col = "celltype:ch1",
     gene_id = "ENSEMBL"
   )

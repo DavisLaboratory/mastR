@@ -1,11 +1,11 @@
 test_that("sig_heatmap works", {
-  data("im_data_6", "NK_markers")
+  data("im_data_6", "nk_markers")
   ## test matrix object
   p <- sig_heatmap(
     Biobase::exprs(im_data_6),
-    sigs = NK_markers$HGNC_Symbol[1:20],
+    sigs = nk_markers$HGNC_Symbol[1:20],
     group_col = im_data_6$`celltype:ch1`,
-    markers = NK_markers$HGNC_Symbol,
+    markers = nk_markers$HGNC_Symbol,
     gene_id = "ENSEMBL"
   )
   expect_true(is.ggplot(p))
@@ -14,7 +14,7 @@ test_that("sig_heatmap works", {
   ### test expression boxplot
   p <- sig_heatmap(
     im_data_6,
-    sigs = NK_markers$HGNC_Symbol[1:20],
+    sigs = nk_markers$HGNC_Symbol[1:20],
     group_col = "celltype:ch1",
     gene_id = "ENSEMBL"
   )
@@ -27,7 +27,7 @@ test_that("sig_heatmap works", {
   )
   p <- sig_heatmap(
     dge,
-    sigs = NK_markers$HGNC_Symbol[1:20],
+    sigs = nk_markers$HGNC_Symbol[1:20],
     group_col = "group",
     gene_id = "ENSEMBL"
   )
@@ -40,7 +40,7 @@ test_that("sig_heatmap works", {
   )
   p <- sig_heatmap(
     data_seurat,
-    sigs = NK_markers$HGNC_Symbol[1:20],
+    sigs = nk_markers$HGNC_Symbol[1:20],
     group_col = "group",
     gene_id = "ENSEMBL"
   )
@@ -49,9 +49,9 @@ test_that("sig_heatmap works", {
   ## test list objects
   p <- sig_heatmap(
     list(A = im_data_6, B = im_data_6),
-    sigs = NK_markers$HGNC_Symbol[1:20],
+    sigs = nk_markers$HGNC_Symbol[1:20],
     group_col = "celltype:ch1",
-    markers = NK_markers$HGNC_Symbol,
+    markers = nk_markers$HGNC_Symbol,
     gene_id = "ENSEMBL"
   )
   expect_true(is.ggplot(p))
@@ -60,8 +60,8 @@ test_that("sig_heatmap works", {
   p <- sig_heatmap(
     im_data_6,
     sigs = list(
-      A = NK_markers$HGNC_Symbol[1:10],
-      B = NK_markers$HGNC_Symbol[21:40]
+      A = nk_markers$HGNC_Symbol[1:10],
+      B = nk_markers$HGNC_Symbol[21:40]
     ),
     group_col = "celltype:ch1",
     gene_id = "ENSEMBL",

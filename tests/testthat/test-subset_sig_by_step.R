@@ -1,6 +1,7 @@
 test_that("subset_sig_by_step works", {
+  data("im_data_6")
   ## test process_data()
-  proc_data <- process_data(mastR::im_data_6,
+  proc_data <- process_data(im_data_6,
     group_col = "celltype:ch1",
     target_group = "NK"
   )

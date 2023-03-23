@@ -11,7 +11,7 @@ A GeneSetCollection of 55 gene sets.
 \code{\link[msigdb:getMsigdb]{msigdb::getMsigdb()}}
 }
 \usage{
-msigdb_gobp_nk
+data(msigdb_gobp_nk)
 }
 \description{
 A small GeneSetCollection object, contains gene sets with gene set name matched

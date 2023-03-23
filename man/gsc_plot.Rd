@@ -16,5 +16,6 @@ upset plot object
 Plot upset diagram for overlapping genes among given gene-sets.
 }
 \examples{
-gsc_plot(mastR::msigdb_gobp_nk[1:3])
+data("msigdb_gobp_nk")
+gsc_plot(msigdb_gobp_nk[1:3])
 }

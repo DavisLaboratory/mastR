@@ -5,13 +5,13 @@
 \alias{ccle_crc_5}
 \title{RNA-seq TPM data of 5 CRC cell line samples from CCLE.}
 \format{
-A DGEList of 19177 genes * 5 samples:
+A DGEList of 19177 genes * 5 samples.
 }
 \source{
 \code{\link[depmap:TPM]{depmap::depmap_TPM()}}
 }
 \usage{
-ccle_crc_5
+data(ccle_crc_5)
 }
 \description{
 A test DGEList object with RNA-seq RSEM quantified TPM data of 5 CRC cell

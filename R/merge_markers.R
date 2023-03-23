@@ -11,7 +11,8 @@
 #' @export
 #'
 #' @examples
-#' Markers <- merge_markers(mastR::msigdb_gobp_nk[1:3])
+#' data("msigdb_gobp_nk")
+#' Markers <- merge_markers(msigdb_gobp_nk[1:3])
 #' jsonlite::fromJSON(GSEABase::longDescription(Markers))
 merge_markers <- function(...) {
   ## input must be GeneSet or GeneSetCollection

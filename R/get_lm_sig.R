@@ -15,7 +15,7 @@
 #' @export
 #'
 #' @examples
-#' data("LM7", "LM22")
+#' data("lm7", "lm22")
 #' get_lm_sig(lm7.pattern = "NK", lm22.pattern = "NK cells")
 get_lm_sig <- function(lm7.pattern, lm22.pattern, ...) {
   if (missing(lm7.pattern) && missing(lm22.pattern)) {
@@ -26,7 +26,7 @@ get_lm_sig <- function(lm7.pattern, lm22.pattern, ...) {
   if (!missing(lm7.pattern)) {
     stopifnot(is.character(lm7.pattern))
 
-    LM7 <- mastR::LM7
+    LM7 <- lm7
     idx <- grep(lm7.pattern, LM7$Subset, ...)
     gs_7 <- LM7$Gene[idx]
     gs_7 <- GSEABase::GeneSet(gs_7,
@@ -40,7 +40,7 @@ get_lm_sig <- function(lm7.pattern, lm22.pattern, ...) {
   if (!missing(lm22.pattern)) {
     stopifnot(is.character(lm22.pattern))
 
-    LM22 <- mastR::LM22
+    LM22 <- lm22
     idx <- grep(lm22.pattern, colnames(LM22)[-1], ...)
     idx <- as.logical(Reduce(function(x, y) {
       x == 1 | y == 1
@@ -57,3 +57,5 @@ get_lm_sig <- function(lm7.pattern, lm22.pattern, ...) {
   }
   return(gs)
 }
+
+utils::globalVariables(c( "lm7", "lm22"))

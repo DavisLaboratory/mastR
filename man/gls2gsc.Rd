@@ -22,5 +22,6 @@ GeneSetCollection
 Convert gene-set list into GeneSetCollection
 }
 \examples{
-gls2gsc(GSEABase::geneIds(mastR::msigdb_gobp_nk[1:3]))
+data("msigdb_gobp_nk")
+gls2gsc(GSEABase::geneIds(msigdb_gobp_nk[1:3]))
 }

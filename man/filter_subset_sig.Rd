@@ -125,9 +125,9 @@ either "union", "intersect" or "RRA" can be specified when input is a list
 of datasets to integrate the signatures into one.
 }
 \examples{
-data("im_data_6", "NK_markers")
+data("im_data_6", "nk_markers")
 sigs <- filter_subset_sig(im_data_6, "celltype:ch1", "NK",
-  markers = NK_markers$HGNC_Symbol,
+  markers = nk_markers$HGNC_Symbol,
   gene_id = "ENSEMBL"
 )
 
