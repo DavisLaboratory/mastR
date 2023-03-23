@@ -22,19 +22,13 @@
     <loc>/index.html</loc>
   </url>
   <url>
+    <loc>/news/index.html</loc>
+  </url>
+  <url>
     <loc>/reference/DEGs_Group.html</loc>
   </url>
   <url>
     <loc>/reference/DEGs_RP.html</loc>
-  </url>
-  <url>
-    <loc>/reference/LM22.html</loc>
-  </url>
-  <url>
-    <loc>/reference/LM7.html</loc>
-  </url>
-  <url>
-    <loc>/reference/NK_markers.html</loc>
   </url>
   <url>
     <loc>/reference/ccle_2_wide.html</loc>
@@ -82,6 +76,12 @@
     <loc>/reference/list_panglao_types.html</loc>
   </url>
   <url>
+    <loc>/reference/lm22.html</loc>
+  </url>
+  <url>
+    <loc>/reference/lm7.html</loc>
+  </url>
+  <url>
     <loc>/reference/mastR_Package.html</loc>
   </url>
   <url>
@@ -89,6 +89,9 @@
   </url>
   <url>
     <loc>/reference/msigdb_gobp_nk.html</loc>
+  </url>
+  <url>
+    <loc>/reference/nk_markers.html</loc>
   </url>
   <url>
     <loc>/reference/pca_matrix_plot.html</loc>

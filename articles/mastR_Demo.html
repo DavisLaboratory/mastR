@@ -54,6 +54,9 @@
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -100,7 +103,7 @@ Medical Research, Parkville, VIC 3052,
 Australia<br><a class="author_email" href="mailto:#"></a><a href="mailto:cwtan@wehi.edu.au" class="email">cwtan@wehi.edu.au</a>
       </address>
                   
-            <h4 data-toc-skip class="date">22 Mar 2023</h4>
+            <h4 data-toc-skip class="date">23 Mar 2023</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DavisLaboratory/mastR/blob/HEAD/vignettes/mastR_Demo.Rmd" class="external-link"><code>vignettes/mastR_Demo.Rmd</code></a></small>
       <div class="hidden name"><code>mastR_Demo.Rmd</code></div>
@@ -183,9 +186,10 @@ screen signatures of interest for particular research questions. This
 automated process saves significant time and effort that would otherwise
 be required for manual labor.</p>
 <p><strong>What this package does</strong></p>
-<p><em>mastR</em>, MArkers Screening Tool in R, is a package to
-automatically derive signature for specific group of interest in
-specific tissue.</p>
+<p><strong>mastR</strong>, <strong>MA</strong>rkers
+<strong>S</strong>creening <strong>T</strong>ool in <strong>R</strong>,
+is a package to automatically derive signature for specific group of
+interest in specific tissue.</p>
 <p>With mastR, users can simply input their expression data containing
 the groups of interest, along with group labels, to obtain a list of
 marker genes (signature) for the target group.</p>
@@ -318,14 +322,14 @@ edgeR.</p>
 </ol>
 <p>mastR allows the following markers to be conveniently loaded:</p>
 <ul>
-<li><p><code>LM7</code> and <code>LM22</code>: CIBERSORT (LM22) and
+<li><p><code>lm7</code> and <code>lm22</code>: CIBERSORT (LM22) and
 Tosolini et al. (LM7) gene sets for leukocytes, get more details using
-<code><a href="../reference/LM7.html">?mastR::LM7</a></code> or <code><a href="../reference/LM22.html">?mastR::LM22</a></code>.</p></li>
+<code><a href="../reference/lm7.html">?mastR::lm7</a></code> or <code><a href="../reference/lm22.html">?mastR::lm22</a></code>.</p></li>
 <li><p><code>msigdb_gobp_nk</code>: a ‘GeneSetCollection’ object,
 containing gene sets with gene-set name matched to ‘NATURAL_KILLER’ in
 <a href="GO:BP" class="uri">GO:BP</a> MSigDB v7.4 database. More details
 <code><a href="../reference/msigdb_gobp_nk.html">?mastR::msigdb_gobp_nk</a></code>.</p></li>
-<li><p><code>NK_markers</code>: a combination of CIBERSORT LM7, LM22 and
+<li><p><code>nk_markers</code>: a combination of CIBERSORT LM7, LM22 and
 Huntington gene list with 114 genes. (<a href="https://cancerimmunolres.aacrjournals.org/content/7/7/1162.long" class="external-link">Cursons
 et al. 2019</a>).</p></li>
 </ul>
@@ -342,12 +346,12 @@ datasets.</p>
 <div class="section level4">
 <h4 id="i-leukocyte-gene-signature-matrix-lm">i) Leukocyte gene signature Matrix (LM)<a class="anchor" aria-label="anchor" href="#i-leukocyte-gene-signature-matrix-lm"></a>
 </h4>
-<p><code>LM7/LM22</code> are immune cells signature matrices from
+<p><code>lm7/lm22</code> are immune cells signature matrices from
 CIBERSORT, contains 7 or 22 immune cell types.</p>
 <p>Users can use function <code><a href="../reference/get_lm_sig.html">get_lm_sig()</a></code> to generate immune
-cells markers from LM7 and/or LM22.</p>
+cells markers from LM7 and/or lm22.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"LM7"</span>, <span class="st">"LM22"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"lm7"</span>, <span class="st">"lm22"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## collect both LM7 and LM22</span></span>
 <span><span class="va">LM</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_lm_sig.html">get_lm_sig</a></span><span class="op">(</span>lm7.pattern <span class="op">=</span> <span class="st">"^NK"</span>, lm22.pattern <span class="op">=</span> <span class="st">"NK cells"</span><span class="op">)</span></span>
@@ -450,12 +454,12 @@ PanglaoDB, thus not run in this demo.</p>
 </h4>
 <p>Customized markers can be imported as a ‘GeneSet’ object.</p>
 <p>Here we demonstrate this by loading the in-built
-<code>NK_markers</code> markers dataset and convert it into ‘GeneSet’
+<code>nk_markers</code> markers dataset and convert it into ‘GeneSet’
 object.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## show what NK_markers looks like:</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"NK_markers"</span><span class="op">)</span></span>
-<span><span class="va">NK_markers</span></span>
+<code class="sourceCode R"><span><span class="co">## show what nk_markers looks like:</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"nk_markers"</span><span class="op">)</span></span>
+<span><span class="va">nk_markers</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 114 × 4</span></span></span>
 <span><span class="co">#&gt;    HGNC_Symbol LM22  LM7   Huntington</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span></span>
@@ -472,7 +476,7 @@ object.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># … with 104 more rows</span></span></span>
 <span></span>
 <span><span class="co">## convert NK markers into 'GeneSet' object</span></span>
-<span><span class="va">nk_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-methods.html" class="external-link">GeneSet</a></span><span class="op">(</span><span class="va">NK_markers</span><span class="op">$</span><span class="va">HGNC_Symbol</span>,</span>
+<span><span class="va">nk_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-methods.html" class="external-link">GeneSet</a></span><span class="op">(</span><span class="va">nk_markers</span><span class="op">$</span><span class="va">HGNC_Symbol</span>,</span>
 <span>                geneIdType <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneIdentifierType-constructors.html" class="external-link">SymbolIdentifier</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>                setName <span class="op">=</span> <span class="st">"NK_markers"</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -1557,7 +1561,7 @@ signatures and markers list.</p>
 <span><span class="co">#&gt; [187] desc_1.4.2                  munsell_0.5.0              </span></span>
 <span><span class="co">#&gt; [189] GetoptLong_1.0.5            GenomeInfoDbData_1.2.9     </span></span>
 <span><span class="co">#&gt; [191] iterators_1.0.14            reshape2_1.4.4             </span></span>
-<span><span class="co">#&gt; [193] gtable_0.3.2                Seurat_4.3.0</span></span></code></pre></div>
+<span><span class="co">#&gt; [193] gtable_0.3.3                Seurat_4.3.0</span></span></code></pre></div>
 </div>
   </div>
 
