@@ -1,9 +1,9 @@
 ---
-title: "mastR: an R package for automatical signature screening"
+title: "mastR: Markers Automated Screening Tool in R"
 author:
   - name: Jinjin Chen
     affiliation:
-      - Bioinformatics Division, Walter and Eliza Hall Institute of Medical Research, Parkville, VIC 3052, Australia
+      - Bioinformatics Division, Walter and Eliza Hall Institute of Medical Research, Parkville, VIC 3052, Australia  
       - Department of Medical Biology, University of Melbourne, Parkville, VIC 3010, Australia
     email: chen.j@wehi.edu.au
   - name: Ahmed Mohamed
@@ -70,7 +70,7 @@ mastR is a software package specifically designed to automatically screen signat
 
 **What this package does**
 
-**mastR**, **MA**rkers **S**creening **T**ool in **R**, is a package to automatically derive signature for specific group of interest in specific tissue.
+**mastR**, **M**arkers **A**utomated **S**creening **T**ool in **R**, is a package to automatically derive signature for specific group of interest in specific tissue.
 
 With mastR, users can simply input their expression data containing the groups of interest, along with group labels, to obtain a list of marker genes (signature) for the target group.
 
@@ -456,7 +456,7 @@ Wrapper function `filter_subset_sig()` can complete all processes in Step 2 usin
 `filter_subset_sig()` is helpful when users have multiple datasets (more details in Section \@ref(multi-data)). It can output the final signature after aggregating signature lists from all datasets.
 
 
-# Step 3. Signature Refinement by Background Expression in Tissue (optional)
+# Step 3. Signature Refinement by Background Expression in Tissue
 
 ------------------------------------------------------------------------
 
@@ -480,6 +480,7 @@ The refinement consists of:
   I) data subset
   II) data filtration
   III) markers removal
+  IV) combination with the signature
 
 ## I) data subsetting
 
@@ -536,7 +537,7 @@ m_ccl <- remove_bg_exp_mat(
 head(m_ccl)
 ```
 
-## use CCLE as background data
+## use CCLE as background data (optional)
 
 Users can also use [CCLE](https://depmap.org/portal/download/) downloaded by `depmap::depmap_TPM()` for the refinement.
 
@@ -572,7 +573,7 @@ ccle <- ccle_2_wide(ccle = ccle)
 ccle[1:3, 1:3]
 ```
 
-Then the same filtration cutoff of `bg_mat` as above is used for `ccle`.
+The same filtration cutoff used in `bg_mat` above is used for `ccle`.
 
 ```{r ccle filtration}
 keep <- rowSums(ccle > 1, na.rm = TRUE) > 2
@@ -594,12 +595,12 @@ head(m_ccl)
 
 ***Note:***
 
-Wrapper function `remove_bg_exp()` can complete Step 3. I) II) III) all in one single function.
+Wrapper function `remove_bg_exp()` can complete Step 3. I) II) III) all using one single function.
 
 Users can use the entire CCLE data from DepMap without loading it by using param `bg_data = 'CCLE'`. More details in `help(remove_bg_exp)`.
 
 
-## Combine with Signature
+## IV) combination with Signature
 
 To get the final signature with high group specificity and low background expression, intersect the result `m_ccl` with the signature `m_ct` we get from Step 2.
 
@@ -627,10 +628,10 @@ To assess how well the refined signature can discriminate our target group from 
     Show if the signature genes are highly expressed within each sample of the target group while lowly expressed in others.
 
 - `sig_boxplot()`: boxplot of signature expression or singscore across groups.  
-    Test the overall performance of the whole signature when applying it for scoring, singscore is used to compute the rank score using the whole signature. The boxplot across groups can be used to test if the whole signature is powerful enough to distinguish the target group from others on scoring level. Median expression of each signature gene is also allowed to be plotted.
+    Test the overall performance of the whole signature when applying it for scoring, singscore is used to compute the rank score using the whole signature. The boxplot across groups can be used to test if the whole signature is powerful enough to distinguish the target group from others. Median expression of each signature gene can also be plotted.
 
 - `sig_scatter_plot()`: scatter plot of signature scaled expression of the target group vs all other groups respectively.  
-    Visualize the correlation of the signature between the target and other groups, the row-scaled gene expression is computed to make the scatter plot. Based on it, we can easily see the co-expression correlation and signature's specificity.
+    Visualize the correlation of the signature between the target and other groups, the row-scaled gene expression is computed to make the scatter plot. Based on it, the co-expression correlation and signature's specificity can be assessed.
 
 - `sig_gseaplot()`: gene set enrichment analysis (GSEA) result display.  
     Validate the enrichment significance of signature in our target group compared with other groups, using `clusterProfiler::GSEA()` analysis. Users can display 'dotplot' or gseaplot'.
@@ -681,14 +682,14 @@ sig_boxplot(
 )
 ```
 
-Obviously, the signature shows significantly higher score level in NK cells.
+It's clear that the signature shows significantly higher score level in NK cells.
 
 
 ## Signature Abundance Scatter Plot
 
 To validate the specificity of the final signature to NK cells, use `sig_scatter_plot()` function to make the scatter plot of the signature z-scored expression in `proc_data`.
 
-If the signature is highly specific to NK cells, most of the signature genes should appear in left-top region (scaled expression > 1 in NK, < 1 in others). The gene present in right-top region should represent the co-expression in both groups.
+If the signature is highly specific to NK cells, most of the signature genes should appear in top left region (scaled expression > 1 in NK, < 1 in others). The genes in top right region should represent the co-expression in both groups.
 
 ```{r abundance scatter plot, warning=FALSE, fig.width=8, fig.height=5}
 ## before refinement
@@ -714,7 +715,7 @@ sig_scatter_plot(
 
 Almost all of non-specific genes are filtered by mastR.
 
-Further optimization can be done by removing signature genes present in the right bottom or left bottom region based on the scatter plot.
+Further optimization can be performed by removing signature genes present in the bottom right or bottom left region based on the scatter plot.
 
 ## Signature GSEA plot
 
@@ -733,7 +734,7 @@ sig_gseaplot(
 )
 ```
 
-The refined signature is enriched in all comparisons and mastR successfully removed the long tail from the markers pool.
+The refined signature is enriched in all comparisons and mastR successfully removed the trailing tail from the markers pool.
 
 
 # Working with Extension Data Input
@@ -742,31 +743,31 @@ The refined signature is enriched in all comparisons and mastR successfully remo
 
 ------------------------------------------------------------------------
 
-The standard workflow of mastR usage is complete.
+The standard workflow of mastR usage is as described above.
 
-But the above is just a show case of single dataset, mastR can also be applied to multiple datasets.
+The above is a show case of single dataset, mastR can also be applied to multiple datasets.
 
 After the Step 2c (Section \@ref(intersect-pool)), for:
 
 1) single dataset  
-    Return the final result as the signature.
+    Returns the final result as the signature.
 
 2) multiple datasets  
-    After Step 2c, choose one combination method (`union` default) to aggregate signature lists generated from different datasets. Robust Rank Aggregation ("RRA") is another method to select in mastR, which detects genes that are ranked consistently better than expected under null hypothesis of uncorrelated inputs and assigns a significance score for each gene.
+    After Step 2c, choose one combination method (`union` default) to aggregate signature lists generated from different datasets. The method Robust Rank Aggregation ("RRA") can also be selected in mastR, which detects genes that are ranked consistently better than expected under null hypothesis of uncorrelated inputs and assigns a significance score for each gene.
 
-Instead of integrating datasets into one larger dataset and fit it into one linear model, mastR refines signature in each dataset respectively and the aggregation method can be defined using param `comb` (e.g. `comb = "RRA"`).
+Instead of integrating datasets into one larger dataset and fit it into one linear model, mastR refines signature in each dataset independently and the aggregation method can be defined using param `comb` (e.g. `comb = "RRA"`).
 
-The advantage of this is to avoid over-normalizing or mis-correcting when carrying out data integration. More robust and conserved signature across datasets can be obtained. It's better than "Remove Batch Effect" sometimes.
+The advantage of this is that it avoids over-normalizing or mis-correcting when carrying out data integration. More robust and conserved signature across datasets can be obtained. In some cases, it's better than using "Remove Batch Effect".
 
 Simple combination methods like "union" and "intersect" are also supported (e.g. `comb = union`).
 
-It's better to use "union" when only a few genes are refined for each dataset, while "RRA" is better for robust gene selection from large DEG lists, and "intersect" is proper for highly overlapping gene lists.
+It's recommended to use "union" when only a few genes are refined for each dataset, while "RRA" is better for robust gene selection from large DEG lists, "intersect" is proper for highly overlapping gene lists.
 
 ***Note:***
 
 All signature visualization functions in mastR support multiple datasets. More details in `help()`.
 
-To demonstrate the usage on multiple datasets, repeatedly use `im_data_6` as an example.
+To demonstrate the usage on multiple datasets, `im_data_6` is used as an example.
 
 ```{r refine multiple datasets, eval=FALSE}
 ## In the demo, we just repeatedly use im_data_6 as a show case
@@ -817,9 +818,9 @@ m_ct_m
 
 ------------------------------------------------------------------------
 
-Although mastR is designed for bulk RNA-seq data, to make use of abundant scRNA resource, mastR provides `pseudo_samples()` function to help convert scRNA-seq data into pseudo-bulk data, which can then be used in mastR workflow.
+Although mastR is designed for bulk RNA-seq data, in order to support usage of abundant scRNA resources, mastR provides `pseudo_samples()` function to help convert scRNA-seq data into pseudo-bulk data, which can then be used in mastR workflow.
 
-`pseudo_samples()` can aggregate cells into pseudo-bulk samples according to the given factor(s) using param `by`. Then use `filter_subset_sig()` to get the signature from scRNA-seq data.
+`pseudo_samples()` aggregates cells into pseudo-bulk samples according to the factor(s) provided using param `by`. Then use `filter_subset_sig()` to get the signature from scRNA-seq data.
 
 ```{r pseudo-bulk, eval=FALSE}
 ## create a test scRNA object of 100 genes x 100 cells
@@ -844,7 +845,11 @@ filter_subset_sig(pb, group_col = "group", target_group = "A")
 
 # Applications {.tabset .tabset-fade .tabset-pills}
 
-Users can apply the signature in multiple ways. In this short demo, we will just show 3 simple applications of it, but not run here.
+Users can apply the signature in multiple ways. In this short demo, we will show 3 simple applications.
+
+***Note:***
+
+These examples are not run in this demo.
 
 Firstly, simulate a scRNA data using `splatter` package. 
 
@@ -875,7 +880,7 @@ markers_list <- lapply(
 )
 ```
 
-Then use `pseudo_samples()` to get pseudo-bulk data and create a DGEList.
+Use `pseudo_samples()` to get pseudo-bulk data and create a DGEList.
 
 ```{r pseudo bulking, eval=FALSE}
 ## aggregate into pseudo-bulk samples
@@ -893,7 +898,7 @@ dge <- DGEList(
 )
 ```
 
-Use mastR wrapper function `filter_subset_sig()` to get the signature for each group. No markers pool of interest and no background here.
+Use mastR wrapper function `filter_subset_sig()` to get the signature for each group. In this case, there are no markers pool of interest and no background.
 
 ```{r get sigs, eval=FALSE, fig.height=4}
 set.seed(123)
@@ -908,7 +913,7 @@ sig_ls <- lapply(paste0("Group", 1:4), \(x) {
 names(sig_ls) <- paste0("Group", 1:4)
 ```
 
-Show the overlapping of the signature lists generated by mastR and the markers lists from the simulation.
+Show the overlap of the signature lists generated by mastR and the markers lists from the simulation.
 
 ```{r venn plot, eval=FALSE}
 ## venn plot
@@ -939,7 +944,7 @@ sig_heatmap(
 )
 ```
 
-Then randomly aggregate scRNA data to generate pseudo bulk data for scoring and deconvolution.
+Randomly aggregate scRNA data to generate pseudo bulk data for scoring and deconvolution.
 
 ```{r random pseudo-bulk, eval=FALSE}
 library(dplyr)
@@ -1034,9 +1039,9 @@ ggplot(tmp, aes(x = Prop, y = Score, col = Group)) +
 
 ## Deconvolution
 
-Use `DWLS` package for cellular deconvolution.
+Use the `DWLS` package for cellular deconvolution.
 
-Use signatures to subset scRNA reference data and build its signature profile. Cellular proportion can be estimated based on it.
+Subset the scRNA reference data using the generated signatures and build its signature profile. Cellular proportion can be estimated from this.
 
 ```{r deconv, eval=FALSE}
 sig_matrix <- DWLS::buildSignatureMatrixMAST(
@@ -1050,7 +1055,7 @@ res <- DWLS::solveDampenedWLS(sig_matrix, pb_r[rownames(sig_matrix), ])
 
 ## Annotation
 
-Use `singscore` as a marker-based annotation method. Calculate the scores based on the signatures and markers lists, then assign each cell to the cell type with the highest score. Compare the result based on signatures and markers lists.
+Use `singscore` as a marker-based annotation method. Calculate the scores based on the signatures and markers lists, then assign each cell with the cell type having the highest score. Compare the results.
 
 Using signatures:
 
