@@ -1,17 +1,21 @@
 Package: mastR
-Title: MArker Screening Tool in R
-Version: 0.9.0
+Title: Markers Automated Screening Tool in R
+Version: 0.99.0
 Authors@R: 
-    person("Jinjin", "Chen", , "chen.j@wehi.edu.au", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0001-7923-5723"))
-Description: This package enables screening immune cells signatures for specific 
-    cancer or tissue type. Imported NK cell markers are based on LM22 and LM7
-    and human orthologs in mice. MSigDB genesets of relevant terms and Panglao 
-    DB markers can also be retrieved by this package. Users can choose to use
-    sorted immune cell bulk RNA-seq data and CCLE adherent cell line RNA-seq
-    data (CCLE) to screen signatures or use customized data. This package also
-    provides pseudo bulking function to deal with scRNA-seq data. Multiple 
-    visualization functions are implemented in this package.
+    c(
+     person("Jinjin", "Chen", email = "chen.j@wehi.edu.au", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-7923-5723")),
+     person("Ahmed", "Mohamed", email = "mohamed.a@wehi.edu.au", role = c("aut", "ctb"), comment = c(ORCID = "0000-0001-6507-5300")),
+     person("Chin Wee", "Tan", email = "cwtan@wehi.edu.au", role = c("ctb"), comment = c(ORCID = "0000-0001-9695-7218"))
+    )
+Description: mastR is an R package designed for automated screening of
+    signatures of interest for specific research questions. The package is
+    developed for generating refined lists of signature genes from multiple
+    group comparisons based on the results from edgeR and limma differential
+    expression (DE) analysis workflow. It also takes into account the background
+    noise of tissue-specificity, which is often ignored by other marker
+    generation tools. This package is particularly useful for the identification
+    of group markers in various biological and medical applications, including
+    cancer research and developmental biology.
 biocViews: Software, GeneExpression, Transcriptomics, 
     DifferentialExpression, Visualization
 License: MIT + file LICENSE

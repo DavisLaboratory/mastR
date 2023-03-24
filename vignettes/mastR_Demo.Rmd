@@ -3,7 +3,7 @@ title: "mastR: Markers Automated Screening Tool in R"
 author:
   - name: Jinjin Chen
     affiliation:
-      - Bioinformatics Division, Walter and Eliza Hall Institute of Medical Research, Parkville, VIC 3052, Australia  
+      - Bioinformatics Division, Walter and Eliza Hall Institute of Medical Research, Parkville, VIC 3052, Australia
       - Department of Medical Biology, University of Melbourne, Parkville, VIC 3010, Australia
     email: chen.j@wehi.edu.au
   - name: Ahmed Mohamed
@@ -52,7 +52,7 @@ For example, in cancer research, identifying marker genes that are differentiall
 
 Furthermore, marker genes can also be used in diagnostic assays to detect specific diseases or monitor treatment responses. For instance, the presence of certain marker genes in a patient's blood or tissue sample can indicate the presence or progression of a disease.
 
-**importance of immune cells signature in tumor micro-environment (TME)**
+**Importance of immune cells signature in tumor micro-environment (TME)**
 
 In this demo, we will be using the example of immune cell signature in the context of the TME as a practical case study to showcase the application of our approach.
 
