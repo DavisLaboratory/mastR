@@ -599,7 +599,7 @@ remove_bg_exp_mat <- function(
   if (length(m_out) > 0) {
     warning(paste("Gene", m_out, "is not in the sig_mat! So remove it!\n"))
   }
-  markers <- markers[markers$SYMBOL %in% m_in, ]
+  markers <- subset(markers, SYMBOL %in% m_in)
 
   ## scale data by column
   bg_mat <- scale_0_1(bg_mat)
