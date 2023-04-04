@@ -693,4 +693,4 @@ scale_0_1 <- function(mat) {
 }
 
 
-utils::globalVariables(c("gene_name", "rna_expression"))
+utils::globalVariables(c("gene_name", "rna_expression", "SYMBOL"))
