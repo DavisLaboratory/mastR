@@ -3,3 +3,4 @@ inst/doc
 .RData
 .Rhistory
 .DS_Store
+*.Rproj
