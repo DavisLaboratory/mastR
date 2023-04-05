@@ -6,13 +6,13 @@
 \alias{mastR}
 \title{Screen Immune Cells Signature for Specific Cancer or Tissue Type}
 \description{
-\code{mastR} This package enables screening immune cells signatures
-for specific cancer or tissue type. Imported NK cell markers are based on
-LM22 and LM7 and human orthologs in mice. MSigDB gene sets of relevant terms
-and Panglao DB markers can also be retrieved by this package. Users can
-choose to use sorted immune cell bulk RNA-seq data and CCLE adherent cell
-line RNA-seq data (CCLE) to screen signatures or use customized data.
-This package also provides pseudo bulking function to deal with scRNA-seq data. Multiple
+\code{mastR} This package enables automated screening of group specific signature
+for specific tissues. The package is developed for generating refined lists
+of signature genes from multiple group comparisons based on the results
+from edgeR and limma differential expression (DE) analysis workflow. It
+also takes into account the background expression of tissue-specificity,
+which is often ignored by other markers generation tools. This package also
+provides pseudo bulking function to deal with scRNA-seq data. Multiple
 visualization functions are implemented in this package.
 }
 \author{

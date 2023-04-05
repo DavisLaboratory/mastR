@@ -427,8 +427,10 @@ pca_matrix_plot_init <- function(data,
     grobs = c(p, list(p0), p1),
     layout_matrix = layout_mat
   )
+  p <- ggpubr::as_ggplot(p)
+
   if (!is.null(group_by)) {
-    p <- ggpubr::as_ggplot(p) + p3 + patchwork::plot_layout(widths = c(5, 1))
+    p <- p + p3 + patchwork::plot_layout(widths = c(5, 1))
   }
 
   return(p)

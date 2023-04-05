@@ -64,7 +64,6 @@ Imports:
     utils
 Collate: 
     'DE_functions.R'
-    'data.R'
     'plot.R'
     'de_table_generic.R'
     'degs_generic.R'
