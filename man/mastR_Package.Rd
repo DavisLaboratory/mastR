@@ -5,6 +5,9 @@
 \alias{mastR_Package}
 \alias{mastR}
 \title{Screen Immune Cells Signature for Specific Cancer or Tissue Type}
+\value{
+Automated screened signature
+}
 \description{
 \code{mastR} This package enables automated screening of group specific signature
 for specific tissues. The package is developed for generating refined lists

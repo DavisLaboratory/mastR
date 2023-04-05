@@ -35,6 +35,7 @@ NULL
 #' @docType package
 #' @aliases mastR mastR_Package
 #' @keywords internal
+#' @return Automated screened signature
 #'
 NULL
 
