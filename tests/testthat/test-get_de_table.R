@@ -35,7 +35,7 @@ test_that("get_de_table works", {
 
 
   ## test seurat object
-  data_seurat <- Seurat::CreateSeuratObject(
+  data_seurat <- SeuratObject::CreateSeuratObject(
     counts = Biobase::exprs(im_data_6),
     meta.data = data$samples
   )
@@ -46,7 +46,10 @@ test_that("get_de_table works", {
   expect_true(all(vapply(DEG_table, is.data.frame, FUN.VALUE = TRUE)))
 
   ## test sce object
-  data_sce <- Seurat::as.SingleCellExperiment(data_seurat)
+  data_sce <- SingleCellExperiment::SingleCellExperiment(
+    assays = list(counts = Biobase::exprs(im_data_6)),
+    colData = data$samples
+  )
   DEG_table <- get_de_table(data_sce,
     group_col = "celltype.ch1",
     target_group = "NK"

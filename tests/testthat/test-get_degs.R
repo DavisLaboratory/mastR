@@ -28,7 +28,7 @@ test_that("get_degs works", {
   expect_identical(names(DEGs), c("DEGs", "proc_data"))
 
   ## test seurat object
-  data_seurat <- Seurat::CreateSeuratObject(
+  data_seurat <- SeuratObject::CreateSeuratObject(
     counts = Biobase::exprs(im_data_6),
     meta.data = data$samples
   )
@@ -39,7 +39,10 @@ test_that("get_degs works", {
   expect_identical(names(DEGs), c("DEGs", "proc_data"))
 
   ## test sce object
-  data_sce <- Seurat::as.SingleCellExperiment(data_seurat)
+  data_sce <- SingleCellExperiment::SingleCellExperiment(
+    assays = list(counts = Biobase::exprs(im_data_6)),
+    colData = data$samples
+  )
   DEGs <- get_degs(data_sce,
     group_col = "celltype.ch1",
     target_group = "NK"

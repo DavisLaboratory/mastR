@@ -324,14 +324,14 @@ setMethod(
            ...) {
     if (missing(markers)) {
       p <- sig_heatmap(
-        data = Seurat::GetAssayData(data, slot = slot),
+        data = SeuratObject::GetAssayData(data, slot = slot),
         sigs = sigs, group_col = slot(data, "meta.data")[[group_col]],
         scale = scale, gene_id = gene_id,
         ranks_plot = ranks_plot, ...
       )
     } else {
       p <- sig_heatmap(
-        data = Seurat::GetAssayData(data, slot = slot),
+        data = SeuratObject::GetAssayData(data, slot = slot),
         sigs = sigs, group_col = slot(data, "meta.data")[[group_col]],
         markers = markers,
         scale = scale, gene_id = gene_id,

@@ -62,7 +62,7 @@ test_that("remove_bg_exp works", {
   expect_true(is.vector(m))
 
   ## test seurat
-  data_seurat <- Seurat::CreateSeuratObject(
+  data_seurat <- SeuratObject::CreateSeuratObject(
     counts = ccle_crc_5$counts,
     meta.data = ccle_crc_5$samples
   )

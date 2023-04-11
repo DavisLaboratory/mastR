@@ -56,7 +56,7 @@ Imports:
     msigdb,
     org.Hs.eg.db,
     patchwork,
-    Seurat,
+    SeuratObject,
     SingleCellExperiment,
     stats,
     SummarizedExperiment,

@@ -839,7 +839,7 @@ pb <- edgeR::DGEList(counts = pb, group = gsub("\\..*", "", colnames(pb)))
 filter_subset_sig(pb, group_col = "group", target_group = "A")
 
 ## Seurat or SCE object are also accepted
-# scRNA <- Seurat::CreateSeuratObject(counts = counts, meta.data = meta)
+# scRNA <- SeuratObject::CreateSeuratObject(counts = counts, meta.data = meta)
 # pseudo_samples(scRNA, by = c("subset","level"))
 ```
 

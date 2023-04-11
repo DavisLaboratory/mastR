@@ -243,7 +243,7 @@ setMethod(
            slot = "counts",
            gene_id = "SYMBOL") {
     p <- sig_boxplot(
-      data = Seurat::GetAssayData(data, slot = slot),
+      data = SeuratObject::GetAssayData(data, slot = slot),
       sigs = sigs,
       group_col = slot(data, "meta.data")[[group_col]],
       target_group = target_group,

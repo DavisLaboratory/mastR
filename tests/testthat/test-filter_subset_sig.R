@@ -33,7 +33,7 @@ test_that("filter_subset_sig works", {
   expect_true(all(sig %in% nk_markers$HGNC_Symbol))
 
   ## test seurat object
-  data_seurat <- Seurat::CreateSeuratObject(
+  data_seurat <- SeuratObject::CreateSeuratObject(
     counts = Biobase::exprs(im_data_6),
     meta.data = dge$samples
   )

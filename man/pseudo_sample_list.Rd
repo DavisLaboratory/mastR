@@ -34,7 +34,7 @@ meta <- data.frame(
   level = rep(1:4, each = 25)
 )
 rownames(meta) <- 1:100
-scRNA <- Seurat::CreateSeuratObject(counts = counts, meta.data = meta)
+scRNA <- SeuratObject::CreateSeuratObject(counts = counts, meta.data = meta)
 pseudo_sample_list(scRNA,
   by = c("subset", "level"),
   min.cells = 10, max.cells = 20

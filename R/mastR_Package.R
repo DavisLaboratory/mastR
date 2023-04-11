@@ -10,7 +10,7 @@
 #' @import msigdb
 #' @import GSEABase
 #' @importFrom utils head stack globalVariables
-#' @importFrom Seurat GetAssayData
+#' @importFrom SeuratObject GetAssayData
 #' @importFrom SingleCellExperiment SingleCellExperiment
 #' @importFrom SummarizedExperiment assay colData
 #' @importFrom grDevices colorRampPalette

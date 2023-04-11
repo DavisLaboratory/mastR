@@ -376,7 +376,7 @@ setMethod(
     }
 
     final_m <- remove_bg_exp(
-      bg_data = Seurat::GetAssayData(bg_data, slot = b_slot),
+      bg_data = SeuratObject::GetAssayData(bg_data, slot = b_slot),
       sig_data = sig_data,
       b_group_col = b_group_col,
       b_target_group = b_target_group,

@@ -378,8 +378,6 @@ pca_matrix_plot_init <- function(data,
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90))
 
   ## top n PCs matrix plot
-  p <- list(NA)
-  k <- 1
   p1 <- lapply(seq_len(n), function(x) {
     ggplot2::ggplot() +
       ggplot2::geom_text(
@@ -395,20 +393,18 @@ pca_matrix_plot_init <- function(data,
       ggplot2::theme_void()
   })
 
+  dims <- lapply(seq_len(n-1), seq_len)
+  names(dims) <- seq_len(n)[-1]
+  dims <- apply(stack(dims), c(1, 2), as.numeric)
+  dims <- dims[,2:1]
   ## plot multi-PCs PCA
-  for (i in seq_len(n - 1)) {
-    for (j in (i + 1):n) {
-      p[[k]] <- plotPCAbiplot(
-        prcomp = tmp,
-        loading = loading,
-        n_loadings = n_loadings,
-        dims = c(j, i),
-        group_by = group_by
-      )
-      p[[k]] <- p[[k]] + ggplot2::guides(col = "none")
-      k <- k + 1
-    }
-  }
+  p2 <- lapply(seq_len(nrow(dims)), \(i) plotPCAbiplot(
+    prcomp = tmp,
+    loading = loading,
+    n_loadings = n_loadings,
+    dims = dims[i,],
+    group_by = group_by
+  ) + theme(legend.position = "none"))
 
   p3 <- ggpubr::as_ggplot(ggpubr::get_legend(
     ggplot() +
@@ -418,13 +414,12 @@ pca_matrix_plot_init <- function(data,
   )) ## get legend
 
   layout_mat <- matrix(NA, n, n)
-  layout_mat[lower.tri(layout_mat)] <- seq_along(p)
-  layout_mat <- Matrix::t(layout_mat)
-  layout_mat[(ceiling(n / 2) + 1):n, seq_len(floor(n / 2))] <- length(p) + 1
-  diag(layout_mat) <- (length(p) + 2):(length(p) + 1 + n)
+  layout_mat[upper.tri(layout_mat)] <- seq_along(p2)
+  layout_mat[(ceiling(n / 2) + 1):n, seq_len(floor(n / 2))] <- length(p2) + 1
+  diag(layout_mat) <- (length(p2) + 2):(length(p2) + 1 + n)
 
   p <- gridExtra::arrangeGrob(
-    grobs = c(p, list(p0), p1),
+    grobs = c(p2, list(p0), p1),
     layout_matrix = layout_mat
   )
   p <- ggpubr::as_ggplot(p)

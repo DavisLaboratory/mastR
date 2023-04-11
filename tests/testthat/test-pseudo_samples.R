@@ -17,8 +17,9 @@ test_that("pseudo_samples works", {
 
   # test seurat
   ## generate scRNA data
-  scRNA <- Seurat::CreateSeuratObject(counts = counts, meta.data = meta)
-  pb <- pseudo_samples(scRNA,
+  scRNA <- SeuratObject::CreateSeuratObject(counts = counts, meta.data = meta)
+  pb <- pseudo_samples(
+    scRNA,
     by = c("subset", "level"),
     min.cells = 10, max.cells = 20
   )
@@ -26,7 +27,12 @@ test_that("pseudo_samples works", {
   expect_true(ncol(pb) == 8)
 
   # test sce
-  pb <- pseudo_samples(Seurat::as.SingleCellExperiment(scRNA),
+  scRNA <- SingleCellExperiment::SingleCellExperiment(
+    assays = list(counts = counts),
+    colData = meta
+  )
+  pb <- pseudo_samples(
+    scRNA,
     by = c("subset", "level"),
     min.cells = 10, max.cells = 20
   )

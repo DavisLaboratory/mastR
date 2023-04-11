@@ -34,7 +34,7 @@ test_that("sig_heatmap works", {
   expect_true(is(p, "Heatmap"))
 
   ## test seurat object
-  data_seurat <- Seurat::CreateSeuratObject(
+  data_seurat <- SeuratObject::CreateSeuratObject(
     counts = Biobase::exprs(im_data_6),
     meta.data = dge$samples
   )

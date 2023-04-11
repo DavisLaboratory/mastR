@@ -27,7 +27,7 @@
 #'   level = rep(1:4, each = 25)
 #' )
 #' rownames(meta) <- 1:100
-#' scRNA <- Seurat::CreateSeuratObject(counts = counts, meta.data = meta)
+#' scRNA <- SeuratObject::CreateSeuratObject(counts = counts, meta.data = meta)
 #' pseudo_samples(scRNA,
 #'   by = c("subset", "level"),
 #'   min.cells = 10, max.cells = 20
@@ -138,7 +138,7 @@ setMethod(
       is.numeric(max.cells), is.character(slot)
     )
 
-    expr <- as.matrix(Seurat::GetAssayData(data, slot = slot))
+    expr <- as.matrix(SeuratObject::GetAssayData(data, slot = slot))
     coldata <- slot(data, "meta.data")[, by]
     rm(data)
 
@@ -207,7 +207,7 @@ setMethod(
 #'   level = rep(1:4, each = 25)
 #' )
 #' rownames(meta) <- 1:100
-#' scRNA <- Seurat::CreateSeuratObject(counts = counts, meta.data = meta)
+#' scRNA <- SeuratObject::CreateSeuratObject(counts = counts, meta.data = meta)
 #' pseudo_sample_list(scRNA,
 #'   by = c("subset", "level"),
 #'   min.cells = 10, max.cells = 20
