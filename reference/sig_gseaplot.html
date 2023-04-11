@@ -221,7 +221,8 @@ size when method = "dotplot"</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"im_data_6"</span>, <span class="st">"nk_markers"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"im_data_6"</span>, <span class="st">"nk_markers"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">sig_gseaplot</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  sigs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    A <span class="op">=</span> <span class="va">nk_markers</span><span class="op">$</span><span class="va">HGNC_Symbol</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">15</span><span class="op">]</span>,</span></span>
@@ -231,44 +232,7 @@ size when method = "dotplot"</p></dd>
 <span class="r-in"><span>  data <span class="op">=</span> <span class="va">im_data_6</span>, group_col <span class="op">=</span> <span class="st">"celltype:ch1"</span>,</span></span>
 <span class="r-in"><span>  target_group <span class="op">=</span> <span class="st">"NK"</span>, gene_id <span class="op">=</span> <span class="st">"ENSEMBL"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 'select()' returned 1:many mapping between keys and columns</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        NK-Neutrophils NK-Monocytes NK-B.cells NK-CD4 NK-CD8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Down             4009         3946       3143   2698   2153</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NotSig           1486         2683       4418   4991   6191</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Up               4926         3792       2860   2732   2077</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 'select()' returned 1:many mapping between keys and columns</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> preparing geneSet collections...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> GSEA analysis...</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There are ties in the preranked stats (1.72% of the list).</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> The order of those tied genes will be arbitrary, which may produce unexpected results.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> leading edge analysis...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> done...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> preparing geneSet collections...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> GSEA analysis...</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There are ties in the preranked stats (1.16% of the list).</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> The order of those tied genes will be arbitrary, which may produce unexpected results.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> leading edge analysis...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> done...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> preparing geneSet collections...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> GSEA analysis...</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There are ties in the preranked stats (0.81% of the list).</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> The order of those tied genes will be arbitrary, which may produce unexpected results.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> leading edge analysis...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> done...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> preparing geneSet collections...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> GSEA analysis...</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There are ties in the preranked stats (1.85% of the list).</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> The order of those tied genes will be arbitrary, which may produce unexpected results.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> leading edge analysis...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> done...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> preparing geneSet collections...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> GSEA analysis...</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There are ties in the preranked stats (2.03% of the list).</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> The order of those tied genes will be arbitrary, which may produce unexpected results.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> leading edge analysis...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> done...</span>
-<span class="r-plt img"><img src="sig_gseaplot-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
