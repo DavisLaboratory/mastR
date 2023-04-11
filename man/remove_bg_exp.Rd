@@ -208,7 +208,7 @@ target_groups, or column name of group, default NULL}
 sig_data, default NULL}
 
 \item{b_group_col}{vector or character, to specify the group of background
-target_groups, or column name of \code{\link[depmap:depmap_metadata]{depmap::depmap_metadata()}},
+target_groups, or column name of \code{\link[depmap:metadata]{depmap::depmap_metadata()}},
 e.g. 'primary_disease', default NULL}
 
 \item{b_target_group}{pattern, specify the target_group of interest in bg_data,
@@ -233,10 +233,10 @@ object for sig_data, optional, default 'counts'}
 \item{b_slot}{character, specify which slot to use of DGEList, sce or seurat
 object for bg_data, optional, default 'counts'}
 
-\item{ccle_tpm}{ccle_tpm data from \code{\link[depmap:depmap_TPM]{depmap::depmap_TPM()}}, only used when
+\item{ccle_tpm}{ccle_tpm data from \code{\link[depmap:TPM]{depmap::depmap_TPM()}}, only used when
 data = 'CCLE', default NULL}
 
-\item{ccle_meta}{ccle_meta data from \code{\link[depmap:depmap_metadata]{depmap::depmap_metadata()}}, only used
+\item{ccle_meta}{ccle_meta data from \code{\link[depmap:metadata]{depmap::depmap_metadata()}}, only used
 when data = 'CCLE', default NULL}
 }
 \value{

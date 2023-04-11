@@ -7,13 +7,13 @@
 ccle_2_wide(ccle)
 }
 \arguments{
-\item{ccle}{CCLE data downloaded by \code{\link[depmap:depmap_TPM]{depmap::depmap_TPM()}}}
+\item{ccle}{CCLE data downloaded by \code{\link[depmap:TPM]{depmap::depmap_TPM()}}}
 }
 \value{
 a matrix
 }
 \description{
-Convert CCLE data downloaded by \code{\link[depmap:depmap_TPM]{depmap::depmap_TPM()}} from long
+Convert CCLE data downloaded by \code{\link[depmap:TPM]{depmap::depmap_TPM()}} from long
 data into wide matrix, with row names are gene names and column names are
 depmap IDs.
 }
