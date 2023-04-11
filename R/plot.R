@@ -705,7 +705,8 @@ heatmap_init <- function(expr, sigs, by, markers,
   ## kepp common genes
   idx <- sigs[[gene_id]] %in% rownames(expr)
   if (any(idx == FALSE)) {
-    message(paste("Gene", sigs$values[!idx], "is not in data\n"))
+    ms <- paste("Gene", sigs$values[!idx], "is not in data.\n")
+    message(ms)
   }
   sigs <- sigs[idx, ]
 
