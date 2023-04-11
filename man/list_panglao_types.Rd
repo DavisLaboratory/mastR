@@ -17,7 +17,5 @@ Show the name and number of each cell type in PanglaoDB. Help users
 know which subset(s) marker list(s) could be retrieved by PanglaoDB.
 }
 \examples{
-\dontrun{
 list_panglao_types(organ = "Immune system")
-}
 }

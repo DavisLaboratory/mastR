@@ -1,56 +1,6 @@
 #' @include plot.R
 NULL
 
-#' Visualize GSEA result with input list of gene symbols.
-#'
-#' Visualize GSEA result with multiple lists of genes by using `clusterProfiler`.
-#'
-#' @inheritParams sig_boxplot
-#' @param sigs a vector of signature (Symbols) or a list of signatures
-#' @param method one of "gseaplot" and "dotplot", how to plot GSEA result
-#' @param col column name of [clusterProfiler::GSEA()] result, used for dot
-#'            col when method = "dotplot"
-#' @param size column name of [clusterProfiler::GSEA()] result, used for dot
-#'             size when method = "dotplot"
-#' @param pvalue_table logical, if to add p value table if method = "gseaplot"
-#' @param digits num, specify the number of significant digits of pvalue table
-#' @param ... params for function [get_de_table()]
-#'
-#' @return patchwork object for all comparisons
-#'
-#' @examples
-#' \dontrun{
-#' data("im_data_6", "nk_markers")
-#' sig_gseaplot(
-#'   sigs = list(
-#'     A = nk_markers$HGNC_Symbol[1:15],
-#'     B = nk_markers$HGNC_Symbol[20:40],
-#'     C = nk_markers$HGNC_Symbol[60:75]
-#'   ),
-#'   data = im_data_6, group_col = "celltype:ch1",
-#'   target_group = "NK", gene_id = "ENSEMBL"
-#' )
-#' }
-#'
-#' @export
-setGeneric(
-  "sig_gseaplot",
-  function(data,
-           sigs,
-           group_col,
-           target_group,
-           gene_id = "SYMBOL",
-           slot = "counts",
-           method = c("dotplot", "gseaplot"),
-           col = "-log10(p.adjust)",
-           size = "enrichmentScore",
-           pvalue_table = FALSE,
-           digits = 2,
-           ...) {
-    standardGeneric("sig_gseaplot")
-  }
-)
-
 #' @rdname sig_gseaplot
 setMethod(
   "sig_gseaplot", signature(

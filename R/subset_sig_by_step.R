@@ -1,45 +1,6 @@
 #' @include DE_functions.R plot.R
 NULL
 
-#' @title process data
-#'
-#' @description filter low expression genes, normalize data by 'TMM' and apply
-#'     [limma::voom()], [limma::lmFit()] and [limma::treat()] on normalized data
-#'
-#' @inheritParams de_analysis
-#' @param data expression object
-#' @param slot character, specify which slot to use only for DGEList, sce or
-#'             seurat object, optional, default 'counts'
-#' @param ... params for [voom_fit_treat()]
-#'
-#' @return A DGEList containing vfit by [limma::voom()] (if normalize = TRUE)
-#'         and tfit by [limma::treat()]
-#' @export
-#'
-#' @examples
-#' data("im_data_6")
-#' proc_data <- process_data(
-#'   im_data_6,
-#'   group_col = "celltype:ch1",
-#'   target_group = "NK"
-#' )
-setGeneric(
-  "process_data",
-  function(data,
-           group_col,
-           target_group,
-           normalize = TRUE,
-           filter = c(10, 10),
-           lfc = 0,
-           p = 0.05,
-           markers = NULL,
-           gene_id = "SYMBOL",
-           slot = "counts",
-           ...) {
-    standardGeneric("process_data")
-  }
-)
-
 #' @rdname process_data
 setMethod(
   "process_data", signature(
@@ -333,7 +294,6 @@ setMethod(
 #' @export
 #'
 #' @examples
-#' \dontrun{
 #' data("im_data_6")
 #' dge <- edgeR::DGEList(
 #'   counts = Biobase::exprs(im_data_6),
@@ -347,7 +307,6 @@ setMethod(
 #' plot_diagnostics(proc_data$logCPM, proc_data$vfit$E,
 #'   group_col = proc_data$samples$group
 #' )
-#' }
 plot_diagnostics <- function(expr1, expr2, group_col, abl = 2) {
   stopifnot(
     "expr1 must be matrix!" = is(expr1, "matrix") | is(expr1, "Matrix"),

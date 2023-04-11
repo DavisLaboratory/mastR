@@ -1,34 +1,6 @@
 #' @include DE_functions.R plot.R
 NULL
 
-#' @title Get DE analysis result table(s) with statistics
-#'
-#' @description This function uses edgeR and limma to get DE analysis results
-#'   lists for multiple comparisons. Filter out low expressed genes and obtain
-#'   DE statistics by using limma::voom and limma::treat, and also create an
-#'   object `proc_data` to store processed data.
-#'
-#' @inheritParams get_degs
-#' @param ... params for function [de_analysis()]
-#'
-#' @return A list of DE result table of all comparisons.
-#'
-#' @examples
-#' data("im_data_6")
-#' DE_tables <- get_de_table(im_data_6, group_col = "celltype:ch1", target_group = "NK")
-#'
-#' @export
-setGeneric(
-  "get_de_table",
-  function(data,
-           group_col,
-           target_group,
-           slot = "counts",
-           ...) {
-    standardGeneric("get_de_table")
-  }
-)
-
 #' @rdname get_de_table
 setMethod(
   "get_de_table", signature(

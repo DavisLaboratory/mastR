@@ -1,35 +1,6 @@
 #' @include plot.R
 NULL
 
-#' @title Make a matrix plot of PCA with top PCs
-#'
-#' @inheritParams pca_matrix_plot_init
-#' @param data expression data, can be matrix, eSet, seurat...
-#' @param slot character, specify the slot name of expression to be used,
-#'             optional
-#'
-#' @return matrix plot of PCA
-#'
-#' @examples
-#' data("im_data_6")
-#' pca_matrix_plot(data = im_data_6, scale = FALSE)
-#'
-#' @export
-setGeneric(
-  "pca_matrix_plot",
-  function(data,
-           features = "all",
-           slot = "counts",
-           group_by = NULL,
-           scale = TRUE,
-           n = 4,
-           loading = FALSE,
-           n_loadings = 10,
-           gene_id = "SYMBOL") {
-    standardGeneric("pca_matrix_plot")
-  }
-)
-
 #' @rdname pca_matrix_plot
 setMethod(
   "pca_matrix_plot", signature(

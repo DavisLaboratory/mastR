@@ -2,49 +2,6 @@
 #' @import ggplot2
 NULL
 
-#' Boxplot of median expression or scores of signature
-#'
-#' Make boxplot and show expression or score level of signature across subsets.
-#'
-#' @param data expression data, can be matrix, DGEList, eSet, seurat, sce...
-#' @param sigs a vector of signature (Symbols)
-#' @param group_col character or vector, specify the column name to compare in coldata
-#' @param target_group pattern, specify the group of interest as reference
-#' @param type one of "score" and "expression", to plot score or expression of
-#'             the signature
-#' @param method a character string indicating which method to be used for
-#'               `stat_compare_means()` to compare the means across groups,
-#'               could be "t.test", 'wilcox.test', 'anova'..., default "t.test"
-#' @param slot character, indicate which slot used as expression, optional
-#' @param gene_id character, indicate the ID type of rowname of expression data's ,
-#'                could be one of 'ENSEMBL', 'SYMBOL', ... default 'SYMBOL'
-#'
-#' @return patchwork or ggplot of boxplot
-#'
-#' @examples
-#' data("im_data_6", "nk_markers")
-#' p <- sig_boxplot(
-#'   im_data_6,
-#'   sigs = nk_markers$HGNC_Symbol[1:30],
-#'   group_col = "celltype:ch1", target_group = "NK",
-#'   gene_id = "ENSEMBL"
-#' )
-#'
-#' @export
-setGeneric(
-  "sig_boxplot",
-  function(data,
-           sigs,
-           group_col,
-           target_group,
-           type = c("score", "expression"),
-           method = "t.test",
-           slot = "counts",
-           gene_id = "SYMBOL") {
-    standardGeneric("sig_boxplot")
-  }
-)
-
 #' @rdname sig_boxplot
 setMethod(
   "sig_boxplot", signature(

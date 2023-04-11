@@ -1,53 +1,6 @@
 #' @include DE_functions.R plot.R
 NULL
 
-#' @title Get differentially expressed genes by comparing specified groups
-#'
-#' @description This function uses edgeR and limma to get 'UP' and 'DOWN' DEG
-#'   lists, for multiple comparisons, DEGs can be obtained from intersection of
-#'   all DEGs or by using product of p value ranks for multiple
-#'   comparisons. Filter out low expressed genes and extract DE genes by using
-#'   limma::voom and limma::treat, and also create an object `proc_data` to
-#'   store processed data.
-#'
-#' @inheritParams process_data
-#' @inheritParams select_sig
-#' @param data expression object
-#' @param group_col vector or character, specify the group factor or column name of
-#'           coldata for DE comparisons
-#' @param slot character, specify which slot to use only for DGEList, sce or
-#'             seurat object, optional, default 'counts'
-#' @param batch vector of column name(s) or dataframe, specify the batch effect
-#'              factor(s), default NULL
-#' @param ... params for [process_data()] and [select_sig()]
-#'
-#' @return A list of 'UP', 'DOWN' gene set of all differentially expressed
-#'         genes, and a DGEList 'proc_data' containing data after process
-#'         (filtration, normalization and voom fit). Both 'UP' and 'DOWN' are
-#'         ordered by rank product or 'Rank' variable if keep.top is NULL
-#'
-#' @examples
-#' data("im_data_6")
-#' DEGs <- get_degs(im_data_6,
-#'   group_col = "celltype:ch1",
-#'   target_group = "NK", gene_id = "ENSEMBL"
-#' )
-#'
-#' @export
-setGeneric(
-  "get_degs",
-  function(data,
-           group_col,
-           target_group,
-           normalize = TRUE,
-           feature_selection = c("auto", "rankproduct", "none"),
-           slot = "counts",
-           batch = NULL,
-           ...) {
-    standardGeneric("get_degs")
-  }
-)
-
 #' @rdname get_degs
 setMethod(
   "get_degs", signature(

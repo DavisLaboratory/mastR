@@ -1,33 +1,3 @@
-#' Plot rank density
-#'
-#' Show the rank density of given signature in the given comparison.
-#'
-#' @inheritParams sig_boxplot
-#' @param aggregate logical, if to aggregate expression according to `group_col`,
-#'                  default FALSE
-#'
-#' @return ggplot or patchwork
-#'
-#' @examples
-#' data("im_data_6", "nk_markers")
-#' sig_rankdensity_plot(
-#'   data = im_data_6, sigs = nk_markers$HGNC_Symbol[1:10],
-#'   group_col = "celltype:ch1", gene_id = "ENSEMBL"
-#' )
-#'
-#' @export
-setGeneric(
-  "sig_rankdensity_plot",
-  function(data,
-           sigs,
-           group_col,
-           aggregate = FALSE,
-           slot = "counts",
-           gene_id = "SYMBOL") {
-    standardGeneric("sig_rankdensity_plot")
-  }
-)
-
 #' @rdname sig_rankdensity_plot
 setMethod(
   "sig_rankdensity_plot", signature(

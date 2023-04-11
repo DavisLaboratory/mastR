@@ -2,40 +2,6 @@
 #' @import ggplot2
 NULL
 
-#' @title Scatter plot of signature for specific subset vs others
-#'
-#' @description  Scatter plot depicts mean expression for each signature gene in
-#'   the specific subset against other cell types.
-#'
-#' @inheritParams sig_boxplot
-#' @param xint intercept of vertical dashed line, default 1
-#' @param yint intercept of horizontal dashed line, default 1
-#'
-#' @return patchwork or ggplot of scatter plot of median expression
-#'
-#' @examples
-#' data("im_data_6", "nk_markers")
-#' sig_scatter_plot(
-#'   sigs = nk_markers$HGNC_Symbol, data = im_data_6,
-#'   group_col = "celltype:ch1", target_group = "NK",
-#'   gene_id = "ENSEMBL"
-#' )
-#'
-#' @export
-setGeneric(
-  "sig_scatter_plot",
-  function(data,
-           sigs,
-           group_col,
-           target_group,
-           slot = "counts",
-           xint = 1,
-           yint = 1,
-           gene_id = "SYMBOL") {
-    standardGeneric("sig_scatter_plot")
-  }
-)
-
 #' @rdname sig_scatter_plot
 setMethod(
   "sig_scatter_plot", signature(

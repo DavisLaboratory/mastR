@@ -2,45 +2,6 @@
 #' @import ggplot2 patchwork
 NULL
 
-#' Heatmap original markers and screened signature
-#'
-#' Compare the heatmap before and after screening.
-#'
-#' @inheritParams sig_gseaplot
-#' @inheritParams sig_boxplot
-#' @param markers a vector of gene names, listed the gene symbols of original
-#'                markers pool
-#' @param scale could be one of 'none' (default), 'row' or 'column'
-#' @param ranks_plot logical, if to use ranks instead of expression of genes to
-#'                   draw heatmap
-#' @param ... params for [ComplexHeatmap::Heatmap()]
-#'
-#' @return patchwork object of heatmap
-#'
-#' @examples
-#' data("im_data_6", "nk_markers")
-#' sig_heatmap(
-#'   data = im_data_6, sigs = nk_markers$HGNC_Symbol[1:10],
-#'   group_col = "celltype:ch1",
-#'   gene_id = "ENSEMBL"
-#' )
-#'
-#' @export
-setGeneric(
-  "sig_heatmap",
-  function(data,
-           sigs,
-           group_col,
-           markers,
-           scale = c("none", "row", "column"),
-           gene_id = "SYMBOL",
-           ranks_plot = FALSE,
-           slot = "counts",
-           ...) {
-    standardGeneric("sig_heatmap")
-  }
-)
-
 #' @rdname sig_heatmap
 setMethod(
   "sig_heatmap", signature(

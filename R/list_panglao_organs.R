@@ -7,9 +7,7 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
 #' list_panglao_organs()
-#' }
 list_panglao_organs <- function() {
   web <- rvest::read_html("https://panglaodb.se/markers.html?cell_type=%27choose%27")
 

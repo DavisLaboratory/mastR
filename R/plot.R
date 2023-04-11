@@ -393,16 +393,16 @@ pca_matrix_plot_init <- function(data,
       ggplot2::theme_void()
   })
 
-  dims <- lapply(seq_len(n-1), seq_len)
+  dims <- lapply(seq_len(n - 1), seq_len)
   names(dims) <- seq_len(n)[-1]
   dims <- apply(stack(dims), c(1, 2), as.numeric)
-  dims <- dims[,2:1]
+  dims <- dims[, 2:1]
   ## plot multi-PCs PCA
   p2 <- lapply(seq_len(nrow(dims)), \(i) plotPCAbiplot(
     prcomp = tmp,
     loading = loading,
     n_loadings = n_loadings,
-    dims = dims[i,],
+    dims = dims[i, ],
     group_by = group_by
   ) + theme(legend.position = "none"))
 

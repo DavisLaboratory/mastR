@@ -1,20 +1,3 @@
-#' Convert gene-set list into GeneSetCollection
-#'
-#' @param ... vector of genes or list of genes
-#'
-#' @return GeneSetCollection
-#' @export
-#'
-#' @examples
-#' data("msigdb_gobp_nk")
-#' gls2gsc(GSEABase::geneIds(msigdb_gobp_nk[1:3]))
-setGeneric(
-  "gls2gsc",
-  function(...) {
-    standardGeneric("gls2gsc")
-  }
-)
-
 #' @rdname gls2gsc
 setMethod(
   "gls2gsc", signature(

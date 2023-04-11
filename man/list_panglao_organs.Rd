@@ -14,7 +14,5 @@ Show the name of organs available in PanglaoDB. Help users know which organs
 could be retrieved by PanglaoDB.
 }
 \examples{
-\dontrun{
 list_panglao_organs()
-}
 }

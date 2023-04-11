@@ -147,4 +147,3 @@ NULL
 #' @return GeneSetCollection
 #' @source [msigdb::getMsigdb()]
 "msigdb_gobp_nk"
-
