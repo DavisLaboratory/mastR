@@ -19,6 +19,7 @@ NULL
 #' @return patchwork object for all comparisons
 #'
 #' @examples
+#' \dontrun{
 #' data("im_data_6", "nk_markers")
 #' sig_gseaplot(
 #'   sigs = list(
@@ -29,6 +30,7 @@ NULL
 #'   data = im_data_6, group_col = "celltype:ch1",
 #'   target_group = "NK", gene_id = "ENSEMBL"
 #' )
+#' }
 #'
 #' @export
 setGeneric(

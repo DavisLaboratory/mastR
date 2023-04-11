@@ -333,6 +333,7 @@ setMethod(
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' data("im_data_6")
 #' dge <- edgeR::DGEList(
 #'   counts = Biobase::exprs(im_data_6),
@@ -346,6 +347,7 @@ setMethod(
 #' plot_diagnostics(proc_data$logCPM, proc_data$vfit$E,
 #'   group_col = proc_data$samples$group
 #' )
+#' }
 plot_diagnostics <- function(expr1, expr2, group_col, abl = 2) {
   stopifnot(
     "expr1 must be matrix!" = is(expr1, "matrix") | is(expr1, "Matrix"),

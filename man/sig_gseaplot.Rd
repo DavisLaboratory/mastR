@@ -134,6 +134,7 @@ patchwork object for all comparisons
 Visualize GSEA result with multiple lists of genes by using \code{clusterProfiler}.
 }
 \examples{
+\dontrun{
 data("im_data_6", "nk_markers")
 sig_gseaplot(
   sigs = list(
@@ -144,5 +145,6 @@ sig_gseaplot(
   data = im_data_6, group_col = "celltype:ch1",
   target_group = "NK", gene_id = "ENSEMBL"
 )
+}
 
 }
