@@ -28,4 +28,4 @@
 
 # mastR 0.99.7
 
-* Improved test coverage depth and modified demo vignette.
+* Improved test coverage depth, modified demo vignette and update Suggests packages.
