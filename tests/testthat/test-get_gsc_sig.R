@@ -2,6 +2,7 @@ test_that("get_gsc_sig works", {
   data("msigdb_gobp_nk")
   MSig <- get_gsc_sig(
     gsc = msigdb_gobp_nk,
+    cat = "c5",
     pattern = "natural_killer_cell_mediated",
     ignore.case = TRUE
   )
@@ -17,5 +18,9 @@ test_that("get_gsc_sig works", {
       "NATURAL_KILLER_CELL_MEDIATED",
       "T_CELL"
     )
+  ))
+  expect_error(get_gsc_sig(
+    gsc = "msigdb_gobp_nk",
+    pattern = "natural_killer_cell_mediated"
   ))
 })

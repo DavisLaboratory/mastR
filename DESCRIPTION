@@ -1,6 +1,6 @@
 Package: mastR
 Title: Markers Automated Screening Tool in R
-Version: 0.99.6
+Version: 0.99.7
 Authors@R: 
     c(
      person("Jinjin", "Chen", email = "chen.j@wehi.edu.au", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-7923-5723")),
@@ -25,6 +25,7 @@ RoxygenNote: 7.2.3
 Depends: 
     R (>= 4.3.0)
 Suggests: 
+    BiocStyle,
     clusterProfiler,
     ComplexHeatmap,
     depmap,
