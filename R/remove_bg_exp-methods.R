@@ -525,7 +525,8 @@ remove_bg_exp_mat <- function(
   stopifnot("No gene in markers is in sig_mat!" = length(m_in) > 0)
   m_out <- setdiff(markers$SYMBOL, m_in)
   if (length(m_out) > 0) {
-    warning(paste("Gene", m_out, "is not in the sig_mat! So remove it!\n"))
+    ms <- paste("Gene", m_out, "is not in the sig_mat! So remove it!\n")
+    warning(ms)
   }
   markers <- subset(markers, SYMBOL %in% m_in)
 

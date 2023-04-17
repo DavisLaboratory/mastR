@@ -29,3 +29,7 @@
 # mastR 0.99.7
 
 * Improved test coverage depth, modified demo vignette and update Suggests packages.
+
+# mastR 0.99.8
+
+* Linked external packages in vignette using `BiocStyle` functions, fixed the note of using `paste` in conditions.
