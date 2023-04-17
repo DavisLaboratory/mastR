@@ -33,3 +33,7 @@
 # mastR 0.99.8
 
 * Linked external packages in vignette using `BiocStyle` functions, fixed the note of using `paste` in conditions.
+
+# mastR 0.99.9
+
+* Updated vignette for `BiocStyle` packages link functions.
