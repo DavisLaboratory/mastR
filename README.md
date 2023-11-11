@@ -1,6 +1,7 @@
 # mastR: Markers Automated Screening Tool in R
 
 [![R-CMD-check](https://github.com/DavisLaboratory/mastR/workflows/R-CMD-check-bioc/badge.svg)](https://github.com/DavisLaboratory/mastR/actions)
+[![Coverage status](https://codecov.io/gh/DavisLaboratory/mastR/branch/main/graph/badge.svg)](https://codecov.io/github/DavisLaboratory/mastR?branch=main)
 [![BioC status](https://bioconductor.org/shields/years-in-bioc/mastR.svg)](https://bioconductor.org/packages/mastR/)
 
 An R package for automatically screening group specific signature for specific tissues.
