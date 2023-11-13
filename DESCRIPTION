@@ -57,7 +57,7 @@ Imports:
     grDevices,
     GSEABase,
     limma,
-    Matrix (== 1.6.1.1),
+    Matrix (<= 1.6.1.1),
     methods,
     msigdb,
     org.Hs.eg.db,
