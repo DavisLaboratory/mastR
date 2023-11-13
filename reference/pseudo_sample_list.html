@@ -19,7 +19,7 @@ size. (min.cells &amp;lt;= size &amp;lt;= max.cells)"><!-- mathjax --><script sr
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mastR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.1</span>
       </span>
     </div>
 
@@ -108,36 +108,36 @@ to each pseudo-sample</p></dd>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">meta</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">100</span></span></span>
 <span class="r-in"><span><span class="va">scRNA</span> <span class="op">&lt;-</span> <span class="fu">SeuratObject</span><span class="fu">::</span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/CreateSeuratObject.html" class="external-link">CreateSeuratObject</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="va">counts</span>, meta.data <span class="op">=</span> <span class="va">meta</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Data is of class matrix. Coercing to dgCMatrix.</span>
 <span class="r-in"><span><span class="fu">pseudo_sample_list</span><span class="op">(</span><span class="va">scRNA</span>,</span></span>
 <span class="r-in"><span>  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"subset"</span>, <span class="st">"level"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  min.cells <span class="op">=</span> <span class="fl">10</span>, max.cells <span class="op">=</span> <span class="fl">20</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $level</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $level$`1`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "34" "30" "12" "22" "54" "10" "80" "64" "20" "62" "50" "4"  "42" "88" "24"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [16] "92" "16" "40"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "24" "16" "68" "40" "46" "94" "50" "36" "6"  "2"  "92" "58" "18" "74"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $level$`2`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "28"  "100" "84"  "14"  "6"   "46"  "74"  "78"  "58"  "76"  "86"  "66" </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] "52"  "32"  "70"  "48"  "2"  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "34" "26" "4"  "76" "70" "44" "52" "78" "88" "60" "98" "84" "64" "12" "90"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16] "54" "62" "72" "82"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $level$`3`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "8"  "18" "26" "36" "38" "44" "56" "60" "68" "72" "82" "90" "94" "96" "98"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "8"   "10"  "14"  "20"  "22"  "28"  "30"  "32"  "38"  "42"  "48"  "56" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] "66"  "80"  "86"  "96"  "100"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $subset</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $subset$`1`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "33" "13" "25" "17" "9"  "11" "63" "85" "83" "49" "39" "99" "79" "3"  "77"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [16] "31"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "49" "51" "85" "95" "73" "59" "79" "13" "27" "81" "15" "91"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $subset$`2`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "5"  "81" "93" "7"  "69" "27" "21" "95" "71" "53"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "99" "9"  "25" "97" "57" "43" "7"  "3"  "83" "1"  "63" "11" "35"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $subset$`3`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "19" "51" "43" "87" "41" "75" "1"  "65" "89" "55" "61" "67" "57"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "5"  "87" "77" "31" "47" "55" "45" "17" "19" "69" "21"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $subset$`4`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "15" "23" "29" "35" "37" "45" "47" "59" "73" "91" "97"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "23" "29" "33" "37" "39" "41" "53" "61" "65" "67" "71" "75" "89" "93"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
