@@ -1,7 +1,11 @@
 Package: mastR
 Title: Markers Automated Screening Tool in R
 <<<<<<< HEAD
+<<<<<<< HEAD
 Version: 1.3.0
+=======
+Version: 1.2.1
+>>>>>>> 150fe54... Update NEWS.md and add bump version for build.
 =======
 Version: 1.2.1
 >>>>>>> 150fe54... Update NEWS.md and add bump version for build.
