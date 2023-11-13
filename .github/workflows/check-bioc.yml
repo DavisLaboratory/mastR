@@ -34,8 +34,8 @@ name: R-CMD-check-bioc
 ## Note that you can always run a GHA test without the cache by using the word
 ## "/nocache" in the commit message.
 env:
-  has_testthat: 'false'
-  run_covr: 'false'
+  has_testthat: 'true'
+  run_covr: 'true'
   run_pkgdown: 'true'
   has_RUnit: 'false'
   cache-version: 'cache-v1'
@@ -52,10 +52,11 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - { os: ubuntu-latest, r: 'devel', bioc: '3.17', cont: "bioconductor/bioconductor_docker:devel", rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest" }
-          # - { os: ubuntu-latest, r: '4.2.3', bioc: '3.16', cont: "bioconductor/bioconductor_docker:RELEASE_3_16", rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest" }
-          # - { os: macOS-latest, r: '4.2.3', bioc: '3.16'}
-          # - { os: windows-latest, r: '4.2.3', bioc: '3.16'}
+          - { os: ubuntu-latest, r: 'devel', bioc: '3.19', cont: "bioconductor/bioconductor_docker:devel", rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest" }
+          # - { os: ubuntu-latest, r: 'devel', bioc: '3.18', cont: "bioconductor/bioconductor_docker:RELEASE_3_18", rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest" }
+          # - { os: ubuntu-latest, r: '4.3.2', bioc: '3.18', cont: "bioconductor/bioconductor_docker:RELEASE_3_18", rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest" }
+          - { os: macOS-latest, r: '4.3.2', bioc: '3.18'}
+          - { os: windows-latest, r: '4.3.2', bioc: '3.18'}
           ## Check https://github.com/r-lib/actions/tree/master/examples
           ## for examples using the http-user-agent
     env:
@@ -65,6 +66,7 @@ jobs:
       TZ: UTC
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      UPGRADE_PKGS: ${{ matrix.config.bioc >= '3.18' }}
 
     steps:
 
@@ -203,6 +205,16 @@ jobs:
           remotes::install_local(dependencies = TRUE, repos = BiocManager::repositories(), build_vignettes = TRUE, upgrade = TRUE, force = TRUE)
         shell: Rscript {0}
 
+      - name: install Matrix 1.6.1.1 for BiocVersion >= 3.18
+        if: ${{ matrix.config.bioc }} == "3.18" && ${{ env.UPGRADE_PKGS }}
+        run: |
+          Sys.getenv("UPGRADE_PKGS")
+          if (Sys.getenv("UPGRADE_PKGS")) {
+            install.packages("remotes")
+            remotes::install_version(package = "Matrix", version = "1.6.1.1")
+          }
+        shell: Rscript {0}
+
       - name: Install BiocGenerics
         if:  env.has_RUnit == 'true'
         run: |
@@ -272,6 +284,11 @@ jobs:
           covr::codecov()
         shell: Rscript {0}
 
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
       - name: Install package
         if: github.ref == 'refs/heads/main' && env.run_pkgdown == 'true' && runner.os == 'Linux'
         run: R CMD INSTALL .
@@ -302,7 +319,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@master
         with:
-          name: ${{ runner.os }}-biocversion-RELEASE_3_16-r-4.2-results
+          name: ${{ runner.os }}-biocversion-RELEASE_3_18-r-4.3-results
           path: check
 
         ## Note that DOCKER_PASSWORD is really a token for your dockerhub
