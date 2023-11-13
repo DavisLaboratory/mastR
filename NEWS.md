@@ -37,3 +37,7 @@
 # mastR 0.99.9
 
 * Updated vignette for `BiocStyle` packages link functions.
+
+# mastR 1.2.0
+
+* Specify Matrix (== 1.6.1.1) to avoid conflicts between SeuratObject and Matrix. Will fix to update to the latest version later.
