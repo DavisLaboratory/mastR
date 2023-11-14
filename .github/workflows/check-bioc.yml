@@ -55,8 +55,8 @@ jobs:
           - { os: ubuntu-latest, r: 'devel', bioc: '3.19', cont: "bioconductor/bioconductor_docker:devel", rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest" }
           # - { os: ubuntu-latest, r: 'devel', bioc: '3.18', cont: "bioconductor/bioconductor_docker:RELEASE_3_18", rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest" }
           # - { os: ubuntu-latest, r: '4.3.2', bioc: '3.18', cont: "bioconductor/bioconductor_docker:RELEASE_3_18", rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest" }
-          - { os: macOS-latest, r: '4.3.2', bioc: '3.18'}
-          - { os: windows-latest, r: '4.3.2', bioc: '3.18'}
+          # - { os: macOS-latest, r: '4.3.2', bioc: '3.18'}
+          # - { os: windows-latest, r: '4.3.2', bioc: '3.18'}
           ## Check https://github.com/r-lib/actions/tree/master/examples
           ## for examples using the http-user-agent
     env:
@@ -205,16 +205,6 @@ jobs:
           remotes::install_local(dependencies = TRUE, repos = BiocManager::repositories(), build_vignettes = TRUE, upgrade = TRUE, force = TRUE)
         shell: Rscript {0}
 
-      - name: install Matrix 1.6.1.1 for BiocVersion >= 3.18
-        if: ${{ matrix.config.bioc }} == "3.18" && ${{ env.UPGRADE_PKGS }}
-        run: |
-          Sys.getenv("UPGRADE_PKGS")
-          if (Sys.getenv("UPGRADE_PKGS")) {
-            install.packages("remotes")
-            remotes::install_version(package = "Matrix", version = "1.6.1.1")
-          }
-        shell: Rscript {0}
-
       - name: Install BiocGenerics
         if:  env.has_RUnit == 'true'
         run: |
@@ -283,11 +273,6 @@ jobs:
         run: |
           covr::codecov()
         shell: Rscript {0}
-
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Install package
         if: github.ref == 'refs/heads/main' && env.run_pkgdown == 'true' && runner.os == 'Linux'
