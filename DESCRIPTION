@@ -1,6 +1,6 @@
 Package: mastR
 Title: Markers Automated Screening Tool in R
-Version: 1.2.1
+Version: 1.2.2
 Authors@R: 
     c(
      person("Jinjin", "Chen", email = "chen.j@wehi.edu.au", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-7923-5723")),
@@ -57,7 +57,7 @@ Imports:
     grDevices,
     GSEABase,
     limma,
-    Matrix (<= 1.6.1.1),
+    Matrix,
     methods,
     msigdb,
     org.Hs.eg.db,

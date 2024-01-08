@@ -41,3 +41,7 @@
 # mastR 1.2.1
 
 * Specify Matrix (<= 1.6.1.1) to avoid conflicts between SeuratObject and Matrix 1.6-2. Will fix to update to the latest version in BiocVersion 3.19.
+
+# mastR 1.2.2
+
+* Update function `voom_fit_treat()` to allow pass user-defined contrast matrix. And remove maximum version of package Matrix.
