@@ -81,20 +81,31 @@ voom_fit_treat <- function(dge,
     )
   }
 
-  ## make contrast design
+  ## make design
   form <- formula(paste(c("~0", "group", batch), collapse = "+"))
   design <- model.matrix(form, dge$samples)
-  colnames(design) <- gsub("group", "", colnames(design))
+  colnames(design) <- sub("group", "", colnames(design))
   rownames(design) <- colnames(dge)
-  contrast.mat <- limma::makeContrasts(
-    contrasts = c(paste(levels(dge$samples$group)[1],
-      levels(dge$samples$group)[-1],
-      sep = "-"
-    )),
-    ## target_group vs all the rest respectively
-    ## if group = TRUE, it's target_group vs Others
-    levels = design
-  )
+
+  ## make contrast matrix
+  if("contrast_mat" %in% names(list(...))) {
+    contrast.mat <- list(...)[["contrast_mat"]]
+    ## check contrast.mat validity
+    stopifnot("contrast.mat must be a matrix!" = is.matrix(contrast.mat),
+              "contrast.mat levels/rownames are not consistent with design matrix!" =
+                identical(sort(rownames(contrast.mat)), sort(colnames(design))))
+  }else {
+    contrast.mat <- limma::makeContrasts(
+      contrasts = c(paste(levels(dge$samples$group)[1],
+                          levels(dge$samples$group)[-1],
+                          sep = "-"
+                          )),
+      ## target_group vs all the rest respectively
+      ## if group = TRUE, it's target_group vs Others
+      levels = design
+    )
+  }
+
 
   ## voom fit if data is raw counts data
   if (normalize == TRUE) {
