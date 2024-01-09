@@ -49,3 +49,7 @@
 # mastR 1.3.2
 
 * Update function `voom_fit_treat()` to allow pass user-defined contrast matrix.
+
+# mastR 1.3.3
+
+* Fix names mismatch problem when passing user-defined contrast matrix to DE analysis functions.
