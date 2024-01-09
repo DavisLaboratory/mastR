@@ -62,22 +62,10 @@ voom_fit_treat <- function(dge,
       make.names(target_group),
       "Others"
     )
-    ## set target_group to be the first level
-    dge$samples$group <- factor(dge$samples$group,
-      levels = c(make.names(target_group), "Others")
-    )
   } else {
     dge$samples$group <- ifelse(grepl(target_group, dge$samples[[group_col]]),
       make.names(target_group),
       make.names(dge$samples[[group_col]])
-    )
-    ## set target_group to be the first level
-    dge$samples$group <- factor(
-      dge$samples$group,
-      levels = c(
-        make.names(target_group),
-        unique(dge$samples$group[dge$samples$group != make.names(target_group)])
-      )
     )
   }
 
@@ -92,14 +80,14 @@ voom_fit_treat <- function(dge,
     contrast.mat <- list(...)[["contrast_mat"]]
     ## check contrast.mat validity
     stopifnot("contrast.mat must be a matrix!" = is.matrix(contrast.mat),
-              "contrast.mat levels/rownames are not consistent with design matrix!" =
-                identical(sort(rownames(contrast.mat)), sort(colnames(design))))
+              "contrast.mat levels/rownames don't match design matrix!" =
+                identical(rownames(contrast.mat), colnames(design)))
   }else {
     contrast.mat <- limma::makeContrasts(
-      contrasts = c(paste(levels(dge$samples$group)[1],
-                          levels(dge$samples$group)[-1],
-                          sep = "-"
-                          )),
+      contrasts = c(sprintf("%s-%s",
+                            make.names(target_group),
+                            make.names(setdiff(dge$samples$group, make.names(target_group)))
+                  )),
       ## target_group vs all the rest respectively
       ## if group = TRUE, it's target_group vs Others
       levels = design
