@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mastR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.4</span>
       </span>
     </div>
 
@@ -75,6 +75,7 @@
 <span>  size <span class="op">=</span> <span class="st">"enrichmentScore"</span>,</span>
 <span>  pvalue_table <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  digits <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  rank_stat <span class="op">=</span> <span class="st">"logFC"</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -91,6 +92,7 @@
 <span>  size <span class="op">=</span> <span class="st">"enrichmentScore"</span>,</span>
 <span>  pvalue_table <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  digits <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  rank_stat <span class="op">=</span> <span class="st">"logFC"</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -107,6 +109,7 @@
 <span>  size <span class="op">=</span> <span class="st">"enrichmentScore"</span>,</span>
 <span>  pvalue_table <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  digits <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  rank_stat <span class="op">=</span> <span class="st">"logFC"</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -123,6 +126,7 @@
 <span>  size <span class="op">=</span> <span class="st">"enrichmentScore"</span>,</span>
 <span>  pvalue_table <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  digits <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  rank_stat <span class="op">=</span> <span class="st">"logFC"</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -139,6 +143,7 @@
 <span>  size <span class="op">=</span> <span class="st">"enrichmentScore"</span>,</span>
 <span>  pvalue_table <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  digits <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  rank_stat <span class="op">=</span> <span class="st">"logFC"</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -155,6 +160,7 @@
 <span>  size <span class="op">=</span> <span class="st">"enrichmentScore"</span>,</span>
 <span>  pvalue_table <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  digits <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  rank_stat <span class="op">=</span> <span class="st">"logFC"</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -208,8 +214,13 @@ size when method = "dotplot"</p></dd>
 <dd><p>num, specify the number of significant digits of pvalue table</p></dd>
 
 
+<dt>rank_stat</dt>
+<dd><p>character, specify which metric used to rank for GSEA,
+default "logFC"</p></dd>
+
+
 <dt>...</dt>
-<dd><p>params for function <code><a href="get_de_table.html">get_de_table()</a></code></p></dd>
+<dd><p>params for function <code><a href="get_de_table.html">get_de_table()</a></code> and function <code><a href="https://rdrr.io/pkg/enrichplot/man/gseaplot2.html" class="external-link">enrichplot::gseaplot2()</a></code></p></dd>
 
 </dl></div>
     <div id="value">
@@ -240,31 +251,31 @@ size when method = "dotplot"</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> preparing geneSet collections...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> GSEA analysis...</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There are ties in the preranked stats (1.72% of the list).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There are ties in the preranked stats (0.88% of the list).</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> The order of those tied genes will be arbitrary, which may produce unexpected results.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> leading edge analysis...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> done...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> preparing geneSet collections...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> GSEA analysis...</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There are ties in the preranked stats (1.16% of the list).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There are ties in the preranked stats (1.05% of the list).</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> The order of those tied genes will be arbitrary, which may produce unexpected results.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> leading edge analysis...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> done...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> preparing geneSet collections...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> GSEA analysis...</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There are ties in the preranked stats (0.81% of the list).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There are ties in the preranked stats (1.35% of the list).</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> The order of those tied genes will be arbitrary, which may produce unexpected results.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> leading edge analysis...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> done...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> preparing geneSet collections...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> GSEA analysis...</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There are ties in the preranked stats (1.85% of the list).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There are ties in the preranked stats (2.2% of the list).</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> The order of those tied genes will be arbitrary, which may produce unexpected results.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> leading edge analysis...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> done...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> preparing geneSet collections...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> GSEA analysis...</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There are ties in the preranked stats (2.03% of the list).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There are ties in the preranked stats (2.31% of the list).</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> The order of those tied genes will be arbitrary, which may produce unexpected results.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> leading edge analysis...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> done...</span>
