@@ -484,7 +484,7 @@ setGeneric(
 #' @param digits num, specify the number of significant digits of pvalue table
 #' @param rank_stat character, specify which metric used to rank for GSEA,
 #'                  default "logFC"
-#' @param ... params for function [get_de_table()]
+#' @param ... params for function [get_de_table()] and function [enrichplot::gseaplot2()]
 #'
 #' @return patchwork object for all comparisons
 #'

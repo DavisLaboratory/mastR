@@ -134,7 +134,7 @@ size when method = "dotplot"}
 \item{rank_stat}{character, specify which metric used to rank for GSEA,
 default "logFC"}
 
-\item{...}{params for function \code{\link[=get_de_table]{get_de_table()}}}
+\item{...}{params for function \code{\link[=get_de_table]{get_de_table()}} and function \code{\link[enrichplot:gseaplot2]{enrichplot::gseaplot2()}}}
 }
 \value{
 patchwork object for all comparisons

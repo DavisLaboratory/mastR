@@ -45,7 +45,7 @@ setMethod(
     )
 
     if (method == "gseaplot") {
-      p <- gsea_plot_init(gse, pvalue_table = pvalue_table)
+      p <- gsea_plot_init(gse, pvalue_table = pvalue_table, ...)
     } else {
       p <- gsea_dotplot_init(gse, col = col, size = size)
     }
@@ -103,7 +103,7 @@ setMethod(
     )
 
     if (method == "gseaplot") {
-      p <- gsea_plot_init(gse, pvalue_table = pvalue_table)
+      p <- gsea_plot_init(gse, pvalue_table = pvalue_table, ...)
     } else {
       p <- gsea_dotplot_init(gse, col = col, size = size)
     }

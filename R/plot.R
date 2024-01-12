@@ -615,18 +615,26 @@ gsea_analysis <- function(tDEG, gsets, gene_id = "SYMBOL",
   return(gse)
 }
 ## gseaplot
-gsea_plot_init <- function(gse, pvalue_table = FALSE) {
+gsea_plot_init <- function(gse, pvalue_table = FALSE, ...) {
+  ## check params
+  pars_def <- formals(enrichplot::gseaplot2)
+  pars <- modifyList(
+    pars_def, ## default params for gseaplot2 function
+    list(...) ## new params list
+  )
+  pars <- pars[names(pars) %in% names(pars_def)]
+
   p <- lapply(names(gse), function(n) {
     if (is.null(gse[[n]])) {
       ms <- paste("No term was found enriched in", n, ".")
       message(ms)
       p <- ggpubr::as_ggplot(grid::textGrob(ms))
     } else {
-      p <- enrichplot::gseaplot2(gse[[n]],
-        geneSetID = seq_len(nrow(gse[[n]])),
-        pvalue_table = pvalue_table,
-        title = n
-      )
+      pars_new <- modifyList(pars, list(x = gse[[n]],
+                                        geneSetID = seq_len(nrow(gse[[n]])),
+                                        pvalue_table = pvalue_table,
+                                        title = n))
+      p <- do.call(enrichplot::gseaplot2, pars_new)
       p <- patchwork::wrap_elements(patchwork::wrap_plots(p, ncol = 1))
       # ## add pvalue_table
       # p <- p - patchwork::inset_element(gridExtra::tableGrob(
