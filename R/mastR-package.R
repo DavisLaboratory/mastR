@@ -9,7 +9,7 @@
 #' @import org.Hs.eg.db
 #' @import msigdb
 #' @import GSEABase
-#' @importFrom utils head stack globalVariables
+#' @importFrom utils head stack globalVariables modifyList
 #' @importFrom SeuratObject GetAssayData
 #' @importFrom SingleCellExperiment SingleCellExperiment
 #' @importFrom SummarizedExperiment assay colData
