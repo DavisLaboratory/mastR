@@ -53,3 +53,7 @@
 # mastR 1.3.3
 
 * Fix names mismatch problem when passing user-defined contrast matrix to DE analysis functions.
+
+# mastR 1.3.4
+
+* Update function `sig_gseaplot()` to allow more custom arguments for `enrichplot::gseaplot2()`.
