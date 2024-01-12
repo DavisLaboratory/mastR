@@ -587,9 +587,10 @@ score_boxplot_init <- function(scores, by, target_group, method) {
 ## GSEA plot for signatures
 ## ---------------------------------------------------------------
 ## gse analysis
-gsea_analysis <- function(tDEG, gsets, gene_id = "SYMBOL", digits = 2) {
+gsea_analysis <- function(tDEG, gsets, gene_id = "SYMBOL",
+                          digits = 2, rank_stat = "logFC") {
   gse <- lapply(names(tDEG), function(n) {
-    glist <- tDEG[[n]][, "logFC"]
+    glist <- tDEG[[n]][, rank_stat]
     names(glist) <- rownames(tDEG[[n]])
     glist <- sort(glist, decreasing = TRUE)
 

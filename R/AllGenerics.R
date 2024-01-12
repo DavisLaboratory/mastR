@@ -482,6 +482,8 @@ setGeneric(
 #'             size when method = "dotplot"
 #' @param pvalue_table logical, if to add p value table if method = "gseaplot"
 #' @param digits num, specify the number of significant digits of pvalue table
+#' @param rank_stat character, specify which metric used to rank for GSEA,
+#'                  default "logFC"
 #' @param ... params for function [get_de_table()]
 #'
 #' @return patchwork object for all comparisons
@@ -513,6 +515,7 @@ setGeneric(
            size = "enrichmentScore",
            pvalue_table = FALSE,
            digits = 2,
+           rank_stat = "logFC",
            ...) {
     standardGeneric("sig_gseaplot")
   }

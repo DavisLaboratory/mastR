@@ -21,6 +21,7 @@ sig_gseaplot(
   size = "enrichmentScore",
   pvalue_table = FALSE,
   digits = 2,
+  rank_stat = "logFC",
   ...
 )
 
@@ -36,6 +37,7 @@ sig_gseaplot(
   size = "enrichmentScore",
   pvalue_table = FALSE,
   digits = 2,
+  rank_stat = "logFC",
   ...
 )
 
@@ -51,6 +53,7 @@ sig_gseaplot(
   size = "enrichmentScore",
   pvalue_table = FALSE,
   digits = 2,
+  rank_stat = "logFC",
   ...
 )
 
@@ -66,6 +69,7 @@ sig_gseaplot(
   size = "enrichmentScore",
   pvalue_table = FALSE,
   digits = 2,
+  rank_stat = "logFC",
   ...
 )
 
@@ -81,6 +85,7 @@ sig_gseaplot(
   size = "enrichmentScore",
   pvalue_table = FALSE,
   digits = 2,
+  rank_stat = "logFC",
   ...
 )
 
@@ -96,6 +101,7 @@ sig_gseaplot(
   size = "enrichmentScore",
   pvalue_table = FALSE,
   digits = 2,
+  rank_stat = "logFC",
   ...
 )
 }
@@ -124,6 +130,9 @@ size when method = "dotplot"}
 \item{pvalue_table}{logical, if to add p value table if method = "gseaplot"}
 
 \item{digits}{num, specify the number of significant digits of pvalue table}
+
+\item{rank_stat}{character, specify which metric used to rank for GSEA,
+default "logFC"}
 
 \item{...}{params for function \code{\link[=get_de_table]{get_de_table()}}}
 }

@@ -15,6 +15,7 @@ setMethod(
            size = "enrichmentScore",
            pvalue_table = FALSE,
            digits = 2,
+           rank_stat = "logFC",
            ...) {
     stopifnot(is.character(gene_id), is.numeric(digits))
     method <- match.arg(method)
@@ -39,7 +40,8 @@ setMethod(
     ## gsea
     gse <- gsea_analysis(
       tDEG = tDEG, gsets = gsets,
-      gene_id = gene_id, digits = digits
+      gene_id = gene_id, digits = digits,
+      rank_stat = rank_stat
     )
 
     if (method == "gseaplot") {
@@ -67,6 +69,7 @@ setMethod(
            size = "enrichmentScore",
            pvalue_table = FALSE,
            digits = 2,
+           rank_stat = "logFC",
            ...) {
     stopifnot(is.character(gene_id), is.numeric(digits))
     method <- match.arg(method)
@@ -95,7 +98,8 @@ setMethod(
     ## gsea
     gse <- gsea_analysis(
       tDEG = tDEG, gsets = gsets,
-      gene_id = gene_id, digits = digits
+      gene_id = gene_id, digits = digits,
+      rank_stat = rank_stat
     )
 
     if (method == "gseaplot") {
@@ -128,6 +132,7 @@ setMethod(
            size = "enrichmentScore",
            pvalue_table = FALSE,
            digits = 2,
+           rank_stat = "logFC",
            ...) {
     stopifnot(is.character(gene_id), is.numeric(digits))
     method <- match.arg(method)
@@ -152,6 +157,7 @@ setMethod(
       size = size,
       pvalue_table = pvalue_table,
       digits = digits,
+      rank_stat = rank_stat,
       ...
     )
     return(p)
@@ -177,6 +183,7 @@ setMethod(
            size = "enrichmentScore",
            pvalue_table = FALSE,
            digits = 2,
+           rank_stat = "logFC",
            ...) {
     stopifnot(is.character(gene_id), is.numeric(digits))
     method <- match.arg(method)
@@ -199,6 +206,7 @@ setMethod(
       size = size,
       pvalue_table = pvalue_table,
       digits = digits,
+      rank_stat = rank_stat,
       ...
     )
     return(p)
@@ -224,6 +232,7 @@ setMethod(
            size = "enrichmentScore",
            pvalue_table = FALSE,
            digits = 2,
+           rank_stat = "logFC",
            ...) {
     stopifnot(is.character(gene_id), is.numeric(digits))
     method <- match.arg(method)
@@ -255,6 +264,7 @@ setMethod(
         size = size,
         pvalue_table = pvalue_table,
         digits = digits,
+        rank_stat = rank_stat,
         ...
       )
       p[[i]] <- ggpubr::as_ggplot(patchwork::patchworkGrob(p[[i]]))
