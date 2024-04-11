@@ -76,18 +76,21 @@ voom_fit_treat <- function(dge,
   rownames(design) <- colnames(dge)
 
   ## make contrast matrix
-  if("contrast_mat" %in% names(list(...))) {
+  if ("contrast_mat" %in% names(list(...))) {
     contrast.mat <- list(...)[["contrast_mat"]]
     ## check contrast.mat validity
-    stopifnot("contrast.mat must be a matrix!" = is.matrix(contrast.mat),
-              "contrast.mat levels/rownames don't match design matrix!" =
-                identical(rownames(contrast.mat), colnames(design)))
-  }else {
+    stopifnot(
+      "contrast.mat must be a matrix!" = is.matrix(contrast.mat),
+      "contrast.mat levels/rownames don't match design matrix!" =
+        identical(rownames(contrast.mat), colnames(design))
+    )
+  } else {
     contrast.mat <- limma::makeContrasts(
-      contrasts = c(sprintf("%s-%s",
-                            make.names(target_group),
-                            make.names(setdiff(dge$samples$group, make.names(target_group)))
-                  )),
+      contrasts = c(sprintf(
+        "%s-%s",
+        make.names(target_group),
+        make.names(setdiff(dge$samples$group, make.names(target_group)))
+      )),
       ## target_group vs all the rest respectively
       ## if group = TRUE, it's target_group vs Others
       levels = design

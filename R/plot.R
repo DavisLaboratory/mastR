@@ -630,10 +630,12 @@ gsea_plot_init <- function(gse, pvalue_table = FALSE, ...) {
       message(ms)
       p <- ggpubr::as_ggplot(grid::textGrob(ms))
     } else {
-      pars_new <- modifyList(pars, list(x = gse[[n]],
-                                        geneSetID = seq_len(nrow(gse[[n]])),
-                                        pvalue_table = pvalue_table,
-                                        title = n))
+      pars_new <- modifyList(pars, list(
+        x = gse[[n]],
+        geneSetID = seq_len(nrow(gse[[n]])),
+        pvalue_table = pvalue_table,
+        title = n
+      ))
       p <- do.call(enrichplot::gseaplot2, pars_new)
       p <- patchwork::wrap_elements(patchwork::wrap_plots(p, ncol = 1))
       # ## add pvalue_table

@@ -7,9 +7,9 @@
 remove_bg_exp_mat(sig_mat, bg_mat, markers, snr = 1, gene_id = "SYMBOL")
 }
 \arguments{
-\item{sig_mat}{expression matrix of interested signal data}
+\item{sig_mat}{log-transformed expression matrix of interested signal data}
 
-\item{bg_mat}{expression matrix of interested background data}
+\item{bg_mat}{log-transformed expression matrix of interested background data}
 
 \item{markers}{vector, a vector of gene names, listed the gene symbols to be
 filtered. Must be gene SYMBOLs.}

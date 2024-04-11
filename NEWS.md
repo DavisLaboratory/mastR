@@ -57,3 +57,7 @@
 # mastR 1.3.4
 
 * Update function `sig_gseaplot()` to allow more custom arguments for `enrichplot::gseaplot2()`.
+
+# mastR 1.3.5
+
+* Update function `remove_bg_exp()` using Gaussian distribution percentiles to replace min-max scaling as relative exppression within each sample..

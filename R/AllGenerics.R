@@ -196,8 +196,9 @@ setGeneric(
 #' @description Specify signatures against specific tissues or cell lines by
 #'   removing genes with high expression in the background.
 #'
-#' @param sig_data expression object, can be matrix or DGEList, as signal data
-#' @param bg_data 'CCLE' or expression object as background data
+#' @param sig_data log-transformed expression object, can be matrix or DGEList,
+#'                 as signal data
+#' @param bg_data 'CCLE' or log-transformed expression object as background data
 #' @param markers vector, a vector of gene names, listed the gene symbols to be
 #'                filtered. Must be gene SYMBOLs
 #' @param s_group_col vector or character, to specify the group of signal

@@ -194,9 +194,10 @@ remove_bg_exp(
 )
 }
 \arguments{
-\item{sig_data}{expression object, can be matrix or DGEList, as signal data}
+\item{sig_data}{log-transformed expression object, can be matrix or DGEList,
+as signal data}
 
-\item{bg_data}{'CCLE' or expression object as background data}
+\item{bg_data}{'CCLE' or log-transformed expression object as background data}
 
 \item{markers}{vector, a vector of gene names, listed the gene symbols to be
 filtered. Must be gene SYMBOLs}

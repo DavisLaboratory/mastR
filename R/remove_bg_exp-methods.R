@@ -471,8 +471,8 @@ setMethod(
 
 #' Remove genes show high signal in the background expression data from markers.
 #'
-#' @param sig_mat expression matrix of interested signal data
-#' @param bg_mat expression matrix of interested background data
+#' @param sig_mat log-transformed expression matrix of interested signal data
+#' @param bg_mat log-transformed expression matrix of interested background data
 #' @param markers vector, a vector of gene names, listed the gene symbols to be
 #'                filtered. Must be gene SYMBOLs.
 #' @param snr num, the cutoff of SNR to screen markers which are not or lowly
@@ -530,9 +530,13 @@ remove_bg_exp_mat <- function(
   }
   markers <- subset(markers, SYMBOL %in% m_in)
 
-  ## scale data by column
-  bg_mat <- scale_0_1(bg_mat)
-  sig_mat <- scale_0_1(sig_mat)
+  # ## scale data by column
+  # bg_mat <- scale_0_1(bg_mat)
+  # sig_mat <- scale_0_1(sig_mat)
+
+  ## transform data into Gaussian percentile by column
+  bg_mat <- percent_norm(bg_mat)
+  sig_mat <- percent_norm(sig_mat)
 
   ## select markers
   ## bg_mat common genes
@@ -618,6 +622,16 @@ scale_0_1 <- function(mat) {
   mins <- apply(mat, 2, min)
   maxs <- apply(mat, 2, max)
   mat <- scale(mat, center = mins, scale = maxs - mins)
+  return(mat)
+}
+
+# helper: transform data into percentile of normal distribution
+percent_norm <- function(mat) {
+  mus <- colMeans(mat, na.rm = TRUE)
+  sds <- apply(mat, 2, sd, na.rm = TRUE) * sqrt((nrow(mat) - 1) / nrow(mat))
+
+  # mat <- pnorm(mat, mean = rep(mus, each = nrow(mat)), sd = rep(sds, each = nrow(mat)))
+  mat <- t(pnorm(t(mat), mean = mus, sd = sds)) # faster
   return(mat)
 }
 
