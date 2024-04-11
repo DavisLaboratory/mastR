@@ -1,7 +1,7 @@
 pandoc: 3.1.1
-pkgdown: 2.0.7
+pkgdown: 2.0.8
 pkgdown_sha: ~
 articles:
   mastR_Demo: mastR_Demo.html
-last_built: 2024-01-12T09:57Z
+last_built: 2024-04-11T16:34Z
 
