@@ -1,0 +1,32 @@
+pkgVer <- function(pkg) {
+    if (!exists("meta") || is.null(meta)) meta <- packageDescription(pkg)
+    ver <- meta$Version
+    paste0('https://github.com/DavisLaboratory/mastR/', pkg, ' - R package version ', ver)
+}
+
+c(
+
+    bibentry(bibtype="manual",
+        title = "mastR: Markers Automated Screening Tool in R",
+        author = c(
+            person("Jinjin", "Chen"),
+            person("Ahmed", "Mohamed")
+        ),
+        year = format(Sys.Date(), "%Y"),
+        url = "http://www.bioconductor.org/packages/mastR",
+        note = pkgVer('mastR'),
+        doi = '10.18129/B9.bioc.mastR'
+    ),
+    bibentry(bibtype="article",
+        title = "mastR: Marker Automated Screening Tool for multi-omics data",
+        author = c(person("Jinjin", "Chen"),
+  		 		   person("Ahmed", "Mohamed"),
+  		 		   person("Dharmesh D.", "Bhuva"),
+  		 		   person("Melissa J.", "Davis"),
+  		 		   person("Chin Wee", "Tan")),
+        year = 2024,
+        journal = "bioRxiv",
+        doi = "10.1101/2024.04.24.590691",
+        url = "https://biorxiv.org/cgi/content/short/2024.04.24.590691v1"
+    )
+)

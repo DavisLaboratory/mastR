@@ -60,4 +60,8 @@
 
 # mastR 1.3.5
 
-* Update function `remove_bg_exp()` using Gaussian distribution percentiles to replace min-max scaling as relative exppression within each sample..
+* Update function `remove_bg_exp()` using Gaussian distribution percentiles to replace min-max scaling as relative exppression within each sample.
+
+# mastR 1.3.6
+
+* Add bioRxiv citation for mastR package.
