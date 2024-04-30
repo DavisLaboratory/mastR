@@ -1,6 +1,6 @@
 Package: mastR
 Title: Markers Automated Screening Tool in R
-Version: 1.4.0
+Version: 1.5.0
 Authors@R: 
     c(
      person("Jinjin", "Chen", email = "chen.j@wehi.edu.au", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-7923-5723")),
