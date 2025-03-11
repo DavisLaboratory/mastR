@@ -24,3 +24,7 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
 
 BiocManager::install("mastR")
 ```
+
+## Overall workflow
+
+<img src="man/figures/mastR_workflow.png">
