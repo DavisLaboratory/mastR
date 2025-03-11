@@ -65,7 +65,7 @@ jsonlite::fromJSON()."><!-- mathjax --><script src="https://cdnjs.cloudflare.com
     <p>Merge markers collected from different DB into one 'GeneSet' object, saved a
 data.frame in json format under <code>longDescription</code> with 'TRUE' and '-' to
 indicate which DB each gene is from, this can be shown via
-<code><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html" class="external-link">jsonlite::fromJSON()</a></code>.</p>
+<code><a href="https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html" class="external-link">jsonlite::fromJSON()</a></code>.</p>
     </div>
 
     <div id="ref-usage">
@@ -89,7 +89,7 @@ indicate which DB each gene is from, this can be shown via
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"msigdb_gobp_nk"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">Markers</span> <span class="op">&lt;-</span> <span class="fu">merge_markers</span><span class="op">(</span><span class="va">msigdb_gobp_nk</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">jsonlite</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html" class="external-link">fromJSON</a></span><span class="op">(</span><span class="fu">GSEABase</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">longDescription</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">jsonlite</span><span class="fu">::</span><span class="fu"><a href="https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html" class="external-link">fromJSON</a></span><span class="op">(</span><span class="fu">GSEABase</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/GSEABase/man/GeneSet-class.html" class="external-link">longDescription</a></span><span class="op">(</span><span class="va">Markers</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      Gene HP_ABNORMAL_NATURAL_KILLER_CELL_MORPHOLOGY</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1   AP3B1                                       TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2    CD70                                       TRUE</span>
