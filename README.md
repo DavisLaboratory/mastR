@@ -28,3 +28,10 @@ BiocManager::install("mastR")
 ## Overall workflow
 
 <img src="man/figures/mastR_workflow.png">
+
+## References
+
+Chen J, Mohamed A, Bhuva DD, Davis MJ, Tan CW (2025). “an R package for
+automated identification of tissue-specific gene signatures in multi-group
+differential expression analysis.” *Bioinformatics*, btaf114. doi:
+[10.1093/bioinformatics/btaf114](https://doi.org/10.1093/bioinformatics/btaf114).

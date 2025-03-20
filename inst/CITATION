@@ -6,6 +6,18 @@ pkgVer <- function(pkg) {
 
 c(
 
+    bibentry(bibtype="article",
+        title = "mastR: an R package for automated identification of tissue-specific gene signatures in multi-group differential expression analysis",
+        author = c(person("Jinjin", "Chen"),
+  		 		   person("Ahmed", "Mohamed"),
+  		 		   person("Dharmesh D.", "Bhuva"),
+  		 		   person("Melissa J.", "Davis"),
+  		 		   person("Chin Wee", "Tan")),
+        year = 2025,
+        journal = "Bioinformatics",
+        doi = "10.1093/bioinformatics/btaf114",
+        url = "https://doi.org/10.1093/bioinformatics/btaf114"
+    ),
     bibentry(bibtype="manual",
         title = "mastR: Markers Automated Screening Tool in R",
         author = c(
@@ -16,17 +28,5 @@ c(
         url = "http://www.bioconductor.org/packages/mastR",
         note = pkgVer('mastR'),
         doi = '10.18129/B9.bioc.mastR'
-    ),
-    bibentry(bibtype="article",
-        title = "mastR: Marker Automated Screening Tool for multi-omics data",
-        author = c(person("Jinjin", "Chen"),
-  		 		   person("Ahmed", "Mohamed"),
-  		 		   person("Dharmesh D.", "Bhuva"),
-  		 		   person("Melissa J.", "Davis"),
-  		 		   person("Chin Wee", "Tan")),
-        year = 2024,
-        journal = "bioRxiv",
-        doi = "10.1101/2024.04.24.590691",
-        url = "https://www.biorxiv.org/content/10.1101/2024.04.24.590691v1"
     )
 )

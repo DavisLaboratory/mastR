@@ -2,6 +2,7 @@
 % Please edit documentation in R/mastR-package.R
 \docType{package}
 \name{mastR_Package}
+\alias{mastR-package}
 \alias{mastR_Package}
 \alias{mastR}
 \title{Screen Immune Cells Signature for Specific Cancer or Tissue Type}
@@ -17,6 +18,14 @@ also takes into account the background expression of tissue-specificity,
 which is often ignored by other markers generation tools. This package also
 provides pseudo bulking function to deal with scRNA-seq data. Multiple
 visualization functions are implemented in this package.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://davislaboratory.github.io/mastR}
+  \item Report bugs at \url{https://github.com/DavisLaboratory/mastR/issues}
+}
+
 }
 \author{
 Jinjin Chen \email{chen.j@wehi.edu.au}
