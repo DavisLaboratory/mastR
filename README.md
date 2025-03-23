@@ -1,4 +1,4 @@
-# mastR: Markers Automated Screening Tool in R <img src="https://github.com/Gene233/BiocStickers/blob/devel/mastR/mastR.svg" alt="logo" align="right" height="140" width="120"/>
+# mastR: Markers Automated Screening Tool in R <img src="https://github.com/Bioconductor/BiocStickers/blob/devel/mastR/mastR.svg" alt="logo" align="right" height="140" width="120"/>
 
 [![R-CMD-check](https://github.com/DavisLaboratory/mastR/workflows/R-CMD-check-bioc/badge.svg)](https://github.com/DavisLaboratory/mastR/actions)
 [![Coverage status](https://codecov.io/gh/DavisLaboratory/mastR/branch/main/graph/badge.svg)](https://codecov.io/github/DavisLaboratory/mastR?branch=main)
