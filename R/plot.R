@@ -675,7 +675,7 @@ gsea_dotplot_init <- function(gse,
       )) +
       labs(x = "Comparison", y = "Signature") +
       theme_bw() +
-      scale_color_viridis_c() +
+      ggplot2::scale_color_viridis_c() +
       theme(axis.text.x = element_text(angle = 90))
   }
 

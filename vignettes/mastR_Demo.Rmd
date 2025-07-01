@@ -1083,7 +1083,7 @@ Use the `r BiocStyle::CRANpkg("BisqueRNA")` package for cellular deconvolution.
 
 Cellular proportion can be estimated from this.
 
-```{r deconv, eval=TRUE}
+```{r deconv, eval=FALSE}
 if (!requireNamespace("BisqueRNA", quietly = TRUE)) {
   # install.packages("BisqueRNA")
   stop("Install 'BisqueRNA'!")
@@ -1113,7 +1113,7 @@ rownames(res_mar$bulk.props) <- gsub("DEFac", "", rownames(res_mar$bulk.props))
 
 Similarly, use scatter plot to visualize the correlation between estimated proportions and actual proportions.
 
-```{r vis deconv sigs, eval=TRUE}
+```{r vis deconv sigs, eval=FALSE}
 tmp <- pivot_longer(cbind(Sample = colnames(dge_r), dge_r$samples[, 6:9]),
   -Sample,
   names_to = "Group", values_to = "Prop"
@@ -1131,7 +1131,7 @@ ggplot(tmp, aes(x = Prop, y = Estimate, col = Group)) +
   theme_classic()
 ```
 
-```{r vis deconv markers, eval=TRUE}
+```{r vis deconv markers, eval=FALSE}
 tmp <- pivot_longer(cbind(Sample = colnames(dge_r), dge_r$samples[, 6:9]),
   -Sample,
   names_to = "Group", values_to = "Prop"

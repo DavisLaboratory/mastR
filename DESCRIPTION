@@ -27,7 +27,6 @@ Depends:
 Suggests: 
     BiocManager,
     BiocStyle,
-    BisqueRNA,
     clusterProfiler,
     ComplexHeatmap,
     depmap,

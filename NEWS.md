@@ -65,3 +65,7 @@
 # mastR 1.3.6
 
 * Add bioRxiv citation for mastR package.
+
+# mastR 1.9.1
+
+* Add Bioinformatics citation for mastR package, add sticker and remove BisqueRNA dependency.
