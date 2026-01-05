@@ -33,6 +33,7 @@ Suggests:
     enrichplot,
     ggrepel,
     ggvenn,
+    Glimma,
     gridExtra,
     jsonlite,
     knitr,
