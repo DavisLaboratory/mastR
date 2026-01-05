@@ -1,6 +1,6 @@
 Package: mastR
 Title: Markers Automated Screening Tool in R
-Version: 1.11.0
+Version: 1.11.1
 Authors@R: 
     c(
      person("Jinjin", "Chen", email = "chen.j@wehi.edu.au", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-7923-5723")),
@@ -61,7 +61,7 @@ Imports:
     msigdb,
     org.Hs.eg.db,
     patchwork,
-    SeuratObject,
+    SeuratObject (< 5.0.0),
     SingleCellExperiment,
     stats,
     SummarizedExperiment,

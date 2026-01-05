@@ -1,0 +1,233 @@
+---
+title: "mastR: Simplified Customized Design For Differential Expression Analysis"
+author:
+  - name: Jinjin Chen
+    affiliation:
+      - Bioinformatics Division, Walter and Eliza Hall Institute of Medical Research, Parkville, VIC 3052, Australia
+      - Department of Medical Biology, University of Melbourne, Parkville, VIC 3010, Australia
+    email: chen.j@wehi.edu.au
+  - name: Ahmed Mohamed
+    affiliation:
+      - Bioinformatics Division, Walter and Eliza Hall Institute of Medical Research, Parkville, VIC 3052, Australia
+    email: mohamed.a@wehi.edu.au
+  - name: Chin Wee Tan
+    affiliation:
+      - Bioinformatics Division, Walter and Eliza Hall Institute of Medical Research, Parkville, VIC 3052, Australia
+    email: cwtan@wehi.edu.au
+date: "`r format(Sys.time(), '%d %b %Y')`"
+output: 
+  BiocStyle::html_document:
+    toc: true
+    number_sections: true
+vignette: >
+  %\VignetteIndexEntry{mastR_Demo}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 8,
+  fig.height = 5
+)
+```
+
+# Introduction
+
+------------------------------------------------------------------------
+
+**Simplified Customized Design For Differential Expression Analysis**
+
+`mastR` provides a simplified customized contrast design for differential expression analysis, which can help users handle the complex experimental design and data structure in one simple function call.
+
+The function `process_data()` in `mastR` allows users to pass a customized contrast matrix to the function, which can give users more flexibility.
+
+# Installation
+
+------------------------------------------------------------------------
+
+`mastR` R package can be installed from Bioconductor or [GitHub](https://github.com/DavisLaboratory/mastR).
+
+The most updated version of `mastR` is hosted on GitHub and can be installed using `devtools::install_github()` function provided by [devtools](https://cran.r-project.org/package=devtools).
+
+```{r installation, eval=FALSE}
+# if (!requireNamespace("devtools", quietly = TRUE)) {
+#   install.packages("devtools")
+# }
+# if (!requireNamespace("mastR", quietly = TRUE)) {
+#   devtools::install_github("DavisLaboratory/mastR")
+# }
+
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+  install.packages("BiocManager")
+}
+if (!requireNamespace("mastR", quietly = TRUE)) {
+  BiocManager::install("mastR")
+}
+packages <- c(
+  "BiocStyle",
+  "clusterProfiler",
+  "ComplexHeatmap",
+  "depmap",
+  "enrichplot",
+  "ggrepel",
+  "Glimma",
+  "gridExtra",
+  "jsonlite",
+  "knitr",
+  "rmarkdown",
+  "RobustRankAggreg",
+  "rvest",
+  "singscore",
+  "UpSetR"
+)
+for (i in packages) {
+  if (!requireNamespace(i, quietly = TRUE)) {
+    install.packages(i)
+  }
+  if (!requireNamespace(i, quietly = TRUE)) {
+    BiocManager::install(i)
+  }
+}
+```
+
+```{r lib, message=FALSE}
+library(mastR)
+library(edgeR)
+library(ggplot2)
+library(GSEABase)
+```
+
+# Example
+
+------------------------------------------------------------------------
+
+Here we use the example data `im_data_6` from [GSE60424](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE60424) (Download using `GEOquery::getGEO()`), consisting of immune cells from healthy individuals.
+
+`im_data_6` is a `eSet` object, containing RNA-seq TMM normalized counts data of 6 sorted immune cell types each with 4 samples. More details in `?mastR::im_data_6`.
+
+```{r im_data_6}
+data("im_data_6")
+im_data_6
+```
+
+## 1. Customized contrast matrix
+
+The customized contrast matrix can be created using `makeContrasts()` function from `r BiocStyle::Biocpkg("limma")` package.
+
+Users can create the customized contrast matrix manually by specifying the contrast names and the levels of the groups.
+
+```{r customized contrast matrix}
+## DE of NK vs B and B vs T
+con_mat <- makeContrasts(
+  'NK-CD4' = 'NK - CD4',
+  'NK-T' = 'NK - (CD4 + CD8)/2',
+  levels = levels(factor(make.names(im_data_6$`celltype:ch1`)))
+)
+con_mat
+```
+
+However, it is important to note that the levels of the groups should be consistent with the levels of the groups in the expression matrix. Otherwise, the contrast matrix will not be correct and the analysis will stop with an error.
+
+So it is recommended and safer to create the customized contrast matrix from the design matrix generated from `process_data()` function.
+
+What we need to do is to first process the data using `process_data()` function with random target group, then extract the design matrix from the `proc_data` object.
+
+Next, we can create the customized contrast matrix from the design matrix.
+
+```{r customized contrast matrix from design matrix}
+proc_data <- mastR::process_data(
+  im_data_6,
+  group_col = 'celltype:ch1',
+  target_group = 'NK',
+  summary = FALSE,
+  gene_id = "ENSEMBL" ## rownames of im_data_6 is ENSEMBL ID
+)
+con_mat2 <- makeContrasts(
+  'NK-CD4' = 'NK - CD4',
+  'NK-T' = 'NK - (CD4 + CD8)/2',
+  levels = proc_data$vfit$design
+)
+con_mat2
+
+identical(con_mat, con_mat2)
+```
+
+## 2. Process data
+
+Then, we can use the `process_data()` function to obtain the DE results with the customized contrast design.
+
+At this point, the DE analysis is performed based on the customized contrast design, regardless of the target group.
+
+```{r process data}
+proc_data <- mastR::process_data(
+  im_data_6,
+  group_col = 'celltype:ch1',
+  target_group = 'NK',
+  contrast_mat = con_mat, ## specify contrast of NK vs B and B vs T
+  summary = TRUE,
+  gene_id = "ENSEMBL" ## rownames of im_data_6 is ENSEMBL ID
+)
+
+## plot mean-var
+mastR::plot_mean_var(proc_data)
+```
+
+## 3. Results
+
+The DE results are stored in the `proc_data` object and can be easily accessed via `proc_data$tfit`.
+
+```{r DE results}
+## contrast names
+colnames(proc_data$tfit)
+
+## DE results for 'NK-B' contrast
+na.omit(limma::topTreat(
+  proc_data$tfit,
+  coef = 1, # or 'NK-B' for the first contrast
+  number = Inf # get all DE results
+)) |> head()
+```
+
+Of course, users can also use the `get_de_table()` function to easily get all DE result tables for all contrasts on a single call.
+
+```{r DE results from proc_data}
+## DE results for all contrasts
+DE_table <- mastR::get_de_table(
+  im_data_6,
+  group_col = 'celltype:ch1',
+  target_group = 'NK',
+  contrast_mat = con_mat, ## specify contrast of NK vs B and B vs T
+  summary = TRUE,
+  gene_id = "ENSEMBL" ## rownames of im_data_6 is ENSEMBL ID
+)
+names(DE_table)
+
+head(DE_table[[1]])
+```
+
+## Visualization
+
+Users can use the `glimmaMDS()`, `glimmaMA()`, and `glimmaVolcano()` functions from `r BiocStyle::Biocpkg("Glimma")` package to visualize the data and DE results interactively.
+
+```{r visualization}
+## MDS plot
+Glimma::glimmaMDS(proc_data)
+
+## MA plot
+Glimma::glimmaMA(proc_data$tfit, dge = proc_data)
+
+## volcano plot
+Glimma::glimmaVolcano(proc_data$tfit, dge = proc_data)
+
+```
+
+# Session Info
+
+------------------------------------------------------------------------
+
+```{r session info}
+sessionInfo()
+```

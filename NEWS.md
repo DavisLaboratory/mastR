@@ -69,3 +69,7 @@
 # mastR 1.9.1
 
 * Add Bioinformatics citation for mastR package, add sticker and remove BisqueRNA dependency.
+
+# mastR 1.11.1
+
+* Fix the problems caused by Seurat v5 and added a new vignette.
