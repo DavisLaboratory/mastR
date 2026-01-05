@@ -212,7 +212,7 @@ head(DE_table[[1]])
 
 Users can use the `glimmaMDS()`, `glimmaMA()`, and `glimmaVolcano()` functions from `r BiocStyle::Biocpkg("Glimma")` package to visualize the data and DE results interactively.
 
-```{r visualization}
+```{r visualization, eval=FALSE}
 ## MDS plot
 Glimma::glimmaMDS(proc_data)
 
