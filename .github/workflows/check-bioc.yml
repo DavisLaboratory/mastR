@@ -209,8 +209,9 @@ jobs:
       - name: install SeuratObject 4.1.4 to avoid v5 problems
         run: |
           ## Install SeuratObject < v5
+          remove.packages("SeuratObject")
           install.packages("remotes")
-          remotes::install_version(package = "SeuratObject", version = "4.1.4")
+          remotes::install_version(package = "SeuratObject", version = "4.1.4", force = TRUE)
         shell: Rscript {0}
 
       - name: Install BiocGenerics
