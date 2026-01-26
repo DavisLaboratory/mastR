@@ -73,3 +73,7 @@
 # mastR 1.11.1
 
 * Fix the problems caused by Seurat v5 and added a new vignette.
+
+# mastR 1.11.2
+
+* Fix the problems caused by SeuratObject v5.
