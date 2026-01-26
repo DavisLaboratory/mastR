@@ -127,7 +127,7 @@ setMethod(
            yint = 1,
            gene_id = "SYMBOL") {
     p <- sig_scatter_plot(
-      data = SeuratObject::GetAssayData(data, slot = slot),
+      data = SeuratObject::GetAssayData(data, layer = slot),
       sigs = sigs,
       group_col = slot(data, "meta.data")[[group_col]],
       target_group = target_group,

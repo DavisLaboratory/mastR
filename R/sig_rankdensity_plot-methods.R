@@ -132,7 +132,7 @@ setMethod(
     stopifnot(is.character(gene_id), is.logical(aggregate))
 
     p <- sig_rankdensity_plot(
-      data = SeuratObject::GetAssayData(data, slot = slot),
+      data = SeuratObject::GetAssayData(data, layer = slot),
       sigs = sigs, group_col = slot(data, "meta.data")[[group_col]],
       aggregate = aggregate,
       gene_id = gene_id

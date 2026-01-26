@@ -256,7 +256,7 @@ setMethod(
            batch = NULL,
            ...) {
     data <- edgeR::DGEList(
-      counts = SeuratObject::GetAssayData(data, slot = slot),
+      counts = SeuratObject::GetAssayData(data, layer = slot),
       samples = slot(data, "meta.data"),
       group = slot(data, "meta.data")[[group_col]]
     )

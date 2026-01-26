@@ -173,7 +173,7 @@ setMethod(
     if (is.character(group_by)) {
       group_by <- slot(data, "meta.data")[[group_by]]
     }
-    data <- SeuratObject::GetAssayData(data, slot = slot)
+    data <- SeuratObject::GetAssayData(data, layer = slot)
 
     p <- pca_matrix_plot(
       data = data, features = features,

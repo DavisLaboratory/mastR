@@ -89,7 +89,7 @@ setMethod(
       is.numeric(max.cells), is.character(slot)
     )
 
-    expr <- as.matrix(SeuratObject::GetAssayData(data, slot = slot))
+    expr <- as.matrix(SeuratObject::GetAssayData(data, layer = slot))
     coldata <- slot(data, "meta.data")[, by]
     rm(data)
 

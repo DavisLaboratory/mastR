@@ -234,7 +234,7 @@ setMethod(
            slot = "counts",
            batch = NULL,
            ...) {
-    expr <- SeuratObject::GetAssayData(data, slot = slot)
+    expr <- SeuratObject::GetAssayData(data, layer = slot)
     coldata <- slot(data, "meta.data")
 
     DGE <- edgeR::DGEList(
