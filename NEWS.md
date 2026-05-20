@@ -77,3 +77,7 @@
 # mastR 1.11.2
 
 * Fix the problems caused by SeuratObject v5.
+  
+# mastR 1.13.1
+
+* Update vignette name to avoid repeated names.

@@ -20,7 +20,7 @@ output:
     toc: true
     number_sections: true
 vignette: >
-  %\VignetteIndexEntry{mastR_Demo}
+  %\VignetteIndexEntry{mastR_customized_design}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
